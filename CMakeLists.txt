@@ -57,8 +57,14 @@ set(SPAGHETTI_SOURCES
   elements/logic/const_bool.h
   elements/logic/const_int.cc
   elements/logic/const_int.h
+  elements/logic/nand.cc
+  elements/logic/nand.h
+  elements/logic/nor.cc
+  elements/logic/nor.h
   elements/logic/not.cc
   elements/logic/not.h
+  elements/logic/or.cc
+  elements/logic/or.h
   elements/logic/switch.cc
   elements/logic/switch.h
   elements/element.cc

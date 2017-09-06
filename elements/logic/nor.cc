@@ -20,33 +20,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "core/registry.h"
+#include "elements/logic/nor.h"
 #include "elements/package.h"
-#include "elements/logic/all.h"
 
-namespace core {
+namespace elements {
+namespace logic {
 
-Registry& Registry::get()
+Nor::Nor()
+  : Element{}
 {
-  static Registry s_registry{};
-  return s_registry;
+  setMinInputs(2);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(Type::eBool, "#1");
+  addInput(Type::eBool, "#2");
+  addOutput(Type::eBool, "#1");
 }
 
-void register_internal_elements()
+bool Nor::calculate()
 {
-  Registry &registry{ Registry::get() };
+  bool const currentState{ std::get<bool>(m_outputs[0].value) };
 
-  using namespace elements;
+  bool somethingSet{ false };
+  for (auto &input : m_inputs) {
+    if (!input.value) return false; // TODO(awyszynski): continue instead?
+    bool const v{ std::get<bool>(*input.value) };
+    somethingSet |= v;
+    if (v) break;
+  }
 
-  registry.registerElement<Package>("package");
-  registry.registerElement<logic::Nand>("logic/nand");
-  registry.registerElement<logic::And>("logic/and");
-  registry.registerElement<logic::Nor>("logic/nor");
-  registry.registerElement<logic::Or>("logic/or");
-  registry.registerElement<logic::Not>("logic/not");
-  registry.registerElement<logic::ConstBool>("logic/const_bool");
-  registry.registerElement<logic::ConstInt>("logic/const_int");
-  registry.registerElement<logic::Switch>("logic/switch");
+  somethingSet = !somethingSet;
+
+  if (somethingSet != currentState)
+    m_outputs[0].value = somethingSet;
+
+  return somethingSet != currentState;
 }
 
-} // namespace core
+} // namespace logic
+} // namespace elements

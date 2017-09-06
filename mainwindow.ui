@@ -14,13 +14,13 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>82</x>
       <y>123</y>
-      <width>319</width>
-      <height>106</height>
+      <width>390</width>
+      <height>134</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -54,7 +54,7 @@
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>AndGate A</string>
+              <string>Nand</string>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -67,7 +67,7 @@
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>NotGate</string>
+              <string>Not</string>
              </property>
             </widget>
            </item>
@@ -101,7 +101,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>AndGate B</string>
+            <string>Nor</string>
            </property>
           </widget>
          </item>
@@ -115,7 +115,7 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>AndGatge C</string>
+        <string>And</string>
        </property>
       </widget>
      </item>

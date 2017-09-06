@@ -20,33 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "core/registry.h"
-#include "elements/package.h"
-#include "elements/logic/all.h"
+#ifndef ELEMENTS_LOGIC_NOR_H
+#define ELEMENTS_LOGIC_NOR_H
 
-namespace core {
+#include "elements/element.h"
+#include "elements/types.h"
 
-Registry& Registry::get()
-{
-  static Registry s_registry{};
-  return s_registry;
-}
+namespace elements {
+namespace logic {
 
-void register_internal_elements()
-{
-  Registry &registry{ Registry::get() };
+class Nor final : public Element {
+ public:
+  Nor();
+  bool calculate() override;
+  size_t type() const noexcept override { return Types::eNor; }
+};
 
-  using namespace elements;
+} // namespace logic
+} // namespace elements
 
-  registry.registerElement<Package>("package");
-  registry.registerElement<logic::Nand>("logic/nand");
-  registry.registerElement<logic::And>("logic/and");
-  registry.registerElement<logic::Nor>("logic/nor");
-  registry.registerElement<logic::Or>("logic/or");
-  registry.registerElement<logic::Not>("logic/not");
-  registry.registerElement<logic::ConstBool>("logic/const_bool");
-  registry.registerElement<logic::ConstInt>("logic/const_int");
-  registry.registerElement<logic::Switch>("logic/switch");
-}
-
-} // namespace core
+#endif // ELEMENTS_LOGIC_NOR_H

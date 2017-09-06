@@ -47,8 +47,8 @@ MainWindow::MainWindow(QWidget *a_parent)
   el1->setName("Switch A");
   auto el2 = m_package.add("logic/switch");
   el2->setName("Switch B");
-  auto el3 = m_package.add("logic/and");
-  el3->setName("AndGate A");
+  auto el3 = m_package.add("logic/nand");
+  el3->setName("Nand A");
   el3->onChange([this](Element *const a_element) {
     bool const v{ std::get<bool>(a_element->outputs()[0].value) };
     m_ui->ag1->setCheckState(v ? Qt::Checked : Qt::Unchecked);
@@ -57,7 +57,7 @@ MainWindow::MainWindow(QWidget *a_parent)
   el3->connect(el2->id(), 0, 1);
 
   auto ng1 = m_package.add("logic/not");
-  ng1->setName("NotGate");
+  ng1->setName("Not");
   ng1->onChange([this](Element *const a_element) {
     bool const v{ std::get<bool>(a_element->outputs()[0].value) };
     m_ui->ng->setCheckState(v ? Qt::Checked : Qt::Unchecked);
@@ -68,8 +68,8 @@ MainWindow::MainWindow(QWidget *a_parent)
   el4->setName("Switch C");
   auto el5 = m_package.add("logic/switch");
   el5->setName("Switch D");
-  auto el6 = m_package.add("logic/and");
-  el6->setName("AndGate B");
+  auto el6 = m_package.add("logic/nor");
+  el6->setName("Nor");
   el6->onChange([this](Element *const a_element) {
     bool const v{ std::get<bool>(a_element->outputs()[0].value) };
     m_ui->ag2->setCheckState(v ? Qt::Checked : Qt::Unchecked);
@@ -78,7 +78,7 @@ MainWindow::MainWindow(QWidget *a_parent)
   el6->connect(el5->id(), 0, 1);
 
   auto el7 = m_package.add("logic/and");
-  el7->setName("AndGate C");
+  el7->setName("And C");
   el7->onChange([this](Element *const a_element) {
     bool const v{ std::get<bool>(a_element->outputs()[0].value) };
     m_ui->ag3->setCheckState(v ? Qt::Checked : Qt::Unchecked);

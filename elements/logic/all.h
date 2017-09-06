@@ -26,7 +26,10 @@
 #include "elements/logic/and.h"
 #include "elements/logic/const_bool.h"
 #include "elements/logic/const_int.h"
+#include "elements/logic/nand.h"
+#include "elements/logic/nor.h"
 #include "elements/logic/not.h"
+#include "elements/logic/or.h"
 #include "elements/logic/switch.h"
 
 #endif // ELEMENTS_LOGIC_ALL_H

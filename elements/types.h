@@ -26,53 +26,54 @@
 namespace Types {
 
 enum {
-  ePackage      = 0,
-  eNand         = 1,
-  eAnd          = 2,
-  eOr           = 3,
-  eNot          = 4,
+  ePackage            = 0,
+  eNand               = 1,
+  eAnd                = 2,
+  eNor                = 3,
+  eOr                 = 4,
+  eNot                = 5,
 
-  eConstBool    = 5,
-  eConstInt     = 6,
-  eConstFloat   = 7,
+  eConstBool          = 6,
+  eConstInt           = 7,
+  eConstFloat         = 8,
 
-  eSwitchBool   = 8,
-  eSwitchInt    = 9,
-  eSwitchFloat  = 10,
+  eSwitchBool         = 9,
+  eSwitchInt          = 10,
+  eSwitchFloat        = 11,
 
-  eMultiplexerBool  = 11,
-  eMultiplexerInt   = 12,
-  eMultiplexerFloat = 13,
+  eMultiplexerBool    = 12,
+  eMultiplexerInt     = 13,
+  eMultiplexerFloat   = 14,
 
-  eMaxInt           = 14,
-  eMaxFloat         = 15,
-  eMinInt           = 16,
-  eMinFloat         = 17,
+  eMaxInt             = 15,
+  eMaxFloat           = 16,
+  eMinInt             = 17,
+  eMinFloat           = 18,
 
-  eClampInt         = 18,
-  eClampFloat       = 19,
+  eClampInt           = 19,
+  eClampFloat         = 20,
 
-  eMapRangeInt      = 20,
-  eMapRangeFloat    = 21,
+  eMapRangeInt        = 21,
+  eMapRangeFloat      = 22,
 
-  eConvertIntFloat  = 22,
-  eConvertFloatInt  = 23,
+  eConvertIntFloat    = 23,
+  eConvertFloatInt    = 24,
 
-  eGreaterEqualInt    = 24,
-  eGreaterEqualFloat  = 25,
-  eGreaterInt         = 26,
-  eGreaterFloat       = 27,
-  eEqualInt           = 28,
-  eEqualFloat         = 29,
-  eLowerInt           = 30,
-  eLowerFloat         = 31,
-  eLowerEqualInt      = 32,
-  eLowerEqualFloat    = 33,
+  eGreaterEqualInt    = 25,
+  eGreaterEqualFloat  = 26,
+  eGreaterInt         = 27,
+  eGreaterFloat       = 28,
+  eEqualInt           = 29,
+  eEqualFloat         = 30,
+  eLowerInt           = 31,
+  eLowerFloat         = 32,
+  eLowerEqualInt      = 33,
+  eLowerEqualFloat    = 34,
 
-  eScaleInt           = 34,
-  eScaleFloat         = 35,
+  eScaleInt           = 35,
+  eScaleFloat         = 36,
 
-  eUser         = 1000
+  eUser               = 1000
 };
 
 }
