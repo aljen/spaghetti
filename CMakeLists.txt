@@ -34,7 +34,7 @@ endif ()
 
 if (UNIX)
 #  set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=-cppcoreguidelines-pro-type-const-cast")
-  set(FLAGS_ARCH "-march=native")
+  set(FLAGS_COMMON "-march=native")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${FLAGS_COMMON}")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS_COMMON}")
 endif ()
