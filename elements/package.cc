@@ -30,7 +30,9 @@ namespace elements {
 Element* Package::add(string::hash_t a_hash)
 {
   core::Registry &registry{ core::Registry::get() };
+
   Element *const element{ registry.create(a_hash) };
+  assert(element);
 
   size_t index{};
   if (m_free.empty()) {
@@ -52,6 +54,7 @@ Element* Package::add(string::hash_t a_hash)
 void Package::remove(size_t a_id)
 {
   assert(a_id < m_data.size());
+  assert(std::find(std::begin(m_free), std::end(m_free), a_id) == std::end(m_free));
 
   delete m_data[a_id];
   m_data[a_id] = nullptr;
@@ -61,6 +64,7 @@ void Package::remove(size_t a_id)
 Element *Package::get(size_t a_id) const
 {
   assert(a_id < m_data.size());
+  assert(std::find(std::begin(m_free), std::end(m_free), a_id) == std::end(m_free));
   return m_data[a_id];
 }
 
