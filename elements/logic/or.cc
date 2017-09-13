@@ -28,11 +28,7 @@ namespace logic {
 
 core::MetaData &Or::metaData()
 {
-  static core::MetaData metaData {
-    "OR",
-    "logic/or",
-    "qrc://elements/logic/or.png"
-  };
+  static core::MetaData metaData{ "OR", "logic/or", "qrc://elements/logic/or.png" };
 
   return metaData;
 }
@@ -60,8 +56,7 @@ bool Or::calculate()
     if (v) break;
   }
 
-  if (somethingSet != currentState)
-    m_outputs[0].value = somethingSet;
+  if (somethingSet != currentState) m_outputs[0].value = somethingSet;
 
   return somethingSet != currentState;
 }

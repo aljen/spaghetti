@@ -28,11 +28,7 @@ namespace logic {
 
 core::MetaData &Switch::metaData()
 {
-  static core::MetaData metaData {
-    "Switch (Int)",
-    "logic/switch",
-    "qrc://elements/logic/switch.png"
-  };
+  static core::MetaData metaData{ "Switch (Int)", "logic/switch", "qrc://elements/logic/switch.png" };
 
   return metaData;
 }
@@ -46,7 +42,7 @@ Switch::Switch()
   addOutput(Type::eBool, "#1");
 }
 
-//bool Switch::calculate()
+// bool Switch::calculate()
 //{
 //  return true;
 //}

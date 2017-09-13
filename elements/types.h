@@ -23,6 +23,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+// clang-format off
+
 namespace Types {
 
 enum {
@@ -77,5 +79,7 @@ enum {
 };
 
 }
+
+// clang-format on
 
 #endif // TYPES_H

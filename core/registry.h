@@ -33,12 +33,12 @@ namespace core {
 class Registry final {
   struct Info {
     MetaData *data;
-    using CloneFunc = elements::Element* (*)();
+    using CloneFunc = elements::Element *(*)();
     CloneFunc clone{};
   };
 
  public:
-  static Registry& get();
+  static Registry &get();
 
   template<typename T>
   void registerElement()
@@ -52,12 +52,9 @@ class Registry final {
     m_registry[hash] = info;
   }
 
-  elements::Element* create(char const *const a_name)
-  {
-    return create(string::hash(a_name));
-  }
+  elements::Element *create(char const *const a_name) { return create(string::hash(a_name)); }
 
-  elements::Element* create(string::hash_t const a_hash)
+  elements::Element *create(string::hash_t const a_hash)
   {
     if (m_registry.find(a_hash) == std::end(m_registry)) return nullptr;
     assert(m_registry[a_hash].clone);
@@ -68,7 +65,7 @@ class Registry final {
   Registry() = default;
 
   template<typename T>
-  static elements::Element* clone()
+  static elements::Element *clone()
   {
     return new T;
   }

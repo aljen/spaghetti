@@ -33,7 +33,7 @@ template<typename Data, typename Id>
 class IdManager {
  public:
   template<typename Type, typename... Args>
-  Id acquire(Args&&... args) noexcept
+  Id acquire(Args &&... args) noexcept
   {
     uint32_t index{};
 

@@ -23,10 +23,10 @@
 #ifndef ELEMENTS_ELEMENT_H
 #define ELEMENTS_ELEMENT_H
 
-#include <set>
-#include <thread>
 #include <functional>
+#include <set>
 #include <string>
+#include <thread>
 #include <variant>
 #include <vector>
 
@@ -39,7 +39,7 @@ class Package;
 class Element {
  public:
   using Value = std::variant<bool, int32_t, float>;
-  enum class Type{ eBool, eInt, eFloat };
+  enum class Type { eBool, eInt, eFloat };
 
   struct Input {
     Value *value{};
@@ -71,8 +71,8 @@ class Element {
   void setName(std::string a_name) { m_name = a_name; }
   std::string_view name() const noexcept { return m_name; }
 
-  Inputs const& inputs() const { return m_inputs; }
-  Outputs const& outputs() const { return m_outputs; }
+  Inputs const &inputs() const { return m_inputs; }
+  Outputs const &outputs() const { return m_outputs; }
 
   bool addInput(Type a_type, std::string a_name);
   bool addOutput(Type a_type, std::string a_name);
@@ -80,7 +80,7 @@ class Element {
   bool connect(size_t a_sourceId, uint8_t a_outputId, uint8_t a_inputId);
 
   using CallbackFunction = std::function<void(Element *const)>;
-  void onChange(CallbackFunction&& a_callback) { m_callback = a_callback; }
+  void onChange(CallbackFunction &&a_callback) { m_callback = a_callback; }
 
  protected:
   void setMinInputs(uint8_t a_min);

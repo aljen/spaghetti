@@ -21,12 +21,12 @@
 // SOFTWARE.
 
 #include "core/registry.h"
-#include "elements/package.h"
 #include "elements/logic/all.h"
+#include "elements/package.h"
 
 namespace core {
 
-Registry& Registry::get()
+Registry &Registry::get()
 {
   static Registry s_registry{};
   return s_registry;

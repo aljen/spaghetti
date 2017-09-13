@@ -28,11 +28,7 @@ namespace logic {
 
 core::MetaData &Nand::metaData()
 {
-  static core::MetaData metaData {
-    "NAND",
-    "logic/nand",
-    "qrc://elements/logic/nand.png"
-  };
+  static core::MetaData metaData{ "NAND", "logic/nand", "qrc://elements/logic/nand.png" };
 
   return metaData;
 }
@@ -64,8 +60,7 @@ bool Nand::calculate()
 
   allSets = !allSets;
 
-  if (allSets != currentState)
-    m_outputs[0].value = allSets;
+  if (allSets != currentState) m_outputs[0].value = allSets;
 
   return allSets != currentState;
 }

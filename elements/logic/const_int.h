@@ -35,7 +35,7 @@ class ConstInt final : public Element {
 
   ConstInt();
 
-//  bool calculate();
+  //  bool calculate();
   size_t type() const noexcept override { return Types::eConstInt; }
 
   void set(int32_t a_value);

@@ -28,11 +28,7 @@ namespace logic {
 
 core::MetaData &And::metaData()
 {
-  static core::MetaData metaData {
-    "AND",
-    "logic/and",
-    "qrc://elements/logic/and.png"
-  };
+  static core::MetaData metaData{ "AND", "logic/and", "qrc://elements/logic/and.png" };
 
   return metaData;
 }
@@ -62,8 +58,7 @@ bool And::calculate()
     }
   }
 
-  if (allSets != currentState)
-    m_outputs[0].value = allSets;
+  if (allSets != currentState) m_outputs[0].value = allSets;
 
   return allSets != currentState;
 }

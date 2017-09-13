@@ -31,7 +31,10 @@
 
 namespace string {
 
-constexpr size_t length(char const *const a_string) { return *a_string ? 1 + length(a_string + 1) : 0; }
+constexpr size_t length(char const *const a_string)
+{
+  return *a_string ? 1 + length(a_string + 1) : 0;
+}
 
 // fnv1a hash
 
@@ -45,8 +48,7 @@ constexpr hash_t FNV_OFFSET{ 0xcbf29ce484222325 };
 constexpr hash_t FNV_PRIME{ 0x100000001b3 };
 #endif
 
-constexpr hash_t
-hash(char const *const a_key, hash_t const &a_offset = FNV_OFFSET, hash_t const &a_prime = FNV_PRIME)
+constexpr hash_t hash(char const *const a_key, hash_t const &a_offset = FNV_OFFSET, hash_t const &a_prime = FNV_PRIME)
 {
   hash_t value{ a_offset };
   size_t const size{ length(a_key) };

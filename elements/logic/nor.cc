@@ -28,11 +28,7 @@ namespace logic {
 
 core::MetaData &Nor::metaData()
 {
-  static core::MetaData metaData {
-    "NOR",
-    "logic/nor",
-    "qrc://elements/logic/nor.png"
-  };
+  static core::MetaData metaData{ "NOR", "logic/nor", "qrc://elements/logic/nor.png" };
 
   return metaData;
 }
@@ -62,8 +58,7 @@ bool Nor::calculate()
 
   somethingSet = !somethingSet;
 
-  if (somethingSet != currentState)
-    m_outputs[0].value = somethingSet;
+  if (somethingSet != currentState) m_outputs[0].value = somethingSet;
 
   return somethingSet != currentState;
 }

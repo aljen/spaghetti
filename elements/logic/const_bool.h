@@ -35,7 +35,7 @@ class ConstBool final : public Element {
 
   ConstBool();
 
-//  bool calculate() override;
+  //  bool calculate() override;
   size_t type() const noexcept override { return Types::eConstBool; }
 
   void toggle();

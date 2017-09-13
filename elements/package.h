@@ -23,8 +23,8 @@
 #ifndef ELEMENTS_PACKAGE_H
 #define ELEMENTS_PACKAGE_H
 
-#include <sparsepp/spp.h>
 #include <concurrentqueue.h>
+#include <sparsepp/spp.h>
 
 #include "core/id_manager.h"
 #include "core/strings.h"
@@ -39,10 +39,10 @@ class Package final : public Element {
 
   size_t type() const noexcept override { return Types::ePackage; }
 
-  Element* add(char const *const a_name) { return add(string::hash(a_name)); }
-  Element* add(string::hash_t a_hash);
+  Element *add(char const *const a_name) { return add(string::hash(a_name)); }
+  Element *add(string::hash_t a_hash);
   void remove(size_t a_id);
-  Element* get(size_t a_id) const;
+  Element *get(size_t a_id) const;
 
   bool connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, uint8_t a_inputId);
 
@@ -58,7 +58,7 @@ class Package final : public Element {
   void dispatch(size_t a_id);
 
  private:
-  std::vector<Element*> m_data{};
+  std::vector<Element *> m_data{};
   std::vector<uint32_t> m_free{};
 
   moodycamel::ConcurrentQueue<size_t> m_queue{};

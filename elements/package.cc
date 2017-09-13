@@ -22,23 +22,19 @@
 
 #include <iostream>
 
-#include "elements/package.h"
 #include "core/registry.h"
+#include "elements/package.h"
 
 namespace elements {
 
 core::MetaData &Package::metaData()
 {
-  static core::MetaData metaData {
-    "Package",
-    "package",
-    "qrc://elements/package.png"
-  };
+  static core::MetaData metaData{ "Package", "package", "qrc://elements/package.png" };
 
   return metaData;
 }
 
-Element* Package::add(string::hash_t a_hash)
+Element *Package::add(string::hash_t a_hash)
 {
   core::Registry &registry{ core::Registry::get() };
 
@@ -90,12 +86,11 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   target->m_inputs[a_inputId].value = &source->m_outputs[a_outputId].value;
 
   std::cout << "Notifying " << a_targetId << " (" << target->name() << ")";
-  std::cout << "@" << static_cast<int32_t>(a_inputId) << " when " << a_sourceId  << " (" << source->name() << ")";
+  std::cout << "@" << static_cast<int32_t>(a_inputId) << " when " << a_sourceId << " (" << source->name() << ")";
   std::cout << "@" << static_cast<int32_t>(a_outputId) << " changes.." << std::endl;
   m_callbacks[a_sourceId].insert(a_targetId);
 
-  if (target->calculate())
-    elementChanged(a_targetId);
+  if (target->calculate()) elementChanged(a_targetId);
 
   return true;
 }
@@ -104,8 +99,7 @@ void Package::threadFunction()
 {
   std::cout << __PRETTY_FUNCTION__ << ">" << std::endl;
   while (!m_quit) {
-    if (!tryDispatch())
-      std::this_thread::yield();
+    if (!tryDispatch()) std::this_thread::yield();
   }
   std::cout << __PRETTY_FUNCTION__ << "<" << std::endl;
 }
@@ -135,25 +129,27 @@ bool Package::tryDispatch()
 void Package::dispatch(size_t a_id)
 {
   Element *const source{ get(a_id) };
-  if (source->m_callback)
-    source->m_callback(source);
+  if (source->m_callback) source->m_callback(source);
 
   if (!m_callbacks.contains(a_id)) {
-    std::cout << "Callbacks list for id: " << a_id << " (" << source->name() << ")" << " don't exist." << std::endl;
+    std::cout << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
+              << " don't exist." << std::endl;
     return;
   }
 
   if (m_callbacks[a_id].empty()) {
-    std::cout << "Callbacks list for id: " << a_id << " (" << source->name() << ")" << " is empty." << std::endl;
+    std::cout << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
+              << " is empty." << std::endl;
     return;
   }
 
   std::cout << "Dispatching dependencies for id: " << a_id << " (" << source->name() << ")" << std::endl;
   for (auto id : m_callbacks[a_id]) {
     Element *const element{ get(id) };
-    std::cout << "Recalculating id: " << id << " (" << element->name() << ")" << " because id: " << a_id << " (" << source->name() << ")" << " changed." << std::endl;
-    if (element->calculate())
-        elementChanged(id);
+    std::cout << "Recalculating id: " << id << " (" << element->name() << ")"
+              << " because id: " << a_id << " (" << source->name() << ")"
+              << " changed." << std::endl;
+    if (element->calculate()) elementChanged(id);
   }
 }
 

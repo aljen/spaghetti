@@ -26,18 +26,14 @@
 namespace elements {
 namespace logic {
 
-//bool ConstInt::calculate()
+// bool ConstInt::calculate()
 //{
 //  return true;
 //}
 
 core::MetaData &ConstInt::metaData()
 {
-  static core::MetaData metaData {
-    "Const (Int)",
-    "logic/const_int",
-    "qrc://elements/logic/const_int.png"
-  };
+  static core::MetaData metaData{ "Const (Int)", "logic/const_int", "qrc://elements/logic/const_int.png" };
 
   return metaData;
 }

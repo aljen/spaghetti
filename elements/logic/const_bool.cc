@@ -26,18 +26,14 @@
 namespace elements {
 namespace logic {
 
-//bool ConstBool::calculate()
+// bool ConstBool::calculate()
 //{
 //  return true;
 //}
 
 core::MetaData &ConstBool::metaData()
 {
-  static core::MetaData metaData {
-    "Const (Bool)",
-    "logic/const_bool",
-    "qrc://elements/logic/const_bool.png"
-  };
+  static core::MetaData metaData{ "Const (Bool)", "logic/const_bool", "qrc://elements/logic/const_bool.png" };
 
   return metaData;
 }
