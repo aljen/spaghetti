@@ -31,6 +31,8 @@ namespace logic {
 
 class Nor final : public Element {
  public:
+  static core::MetaData &metaData();
+
   Nor();
   bool calculate() override;
   size_t type() const noexcept override { return Types::eNor; }

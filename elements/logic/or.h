@@ -31,6 +31,8 @@ namespace logic {
 
 class Or final : public Element {
  public:
+  static core::MetaData &metaData();
+
   Or();
   bool calculate() override;
   size_t type() const noexcept override { return Types::eOr; }

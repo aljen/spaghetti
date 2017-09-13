@@ -26,6 +26,17 @@
 namespace elements {
 namespace logic {
 
+core::MetaData &Or::metaData()
+{
+  static core::MetaData metaData {
+    "OR",
+    "logic/or",
+    "qrc://elements/logic/or.png"
+  };
+
+  return metaData;
+}
+
 Or::Or()
   : Element{}
 {

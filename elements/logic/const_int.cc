@@ -31,6 +31,17 @@ namespace logic {
 //  return true;
 //}
 
+core::MetaData &ConstInt::metaData()
+{
+  static core::MetaData metaData {
+    "Const (Int)",
+    "logic/const_int",
+    "qrc://elements/logic/const_int.png"
+  };
+
+  return metaData;
+}
+
 ConstInt::ConstInt()
 {
   setMinInputs(0);

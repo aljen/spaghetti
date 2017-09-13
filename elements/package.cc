@@ -27,6 +27,17 @@
 
 namespace elements {
 
+core::MetaData &Package::metaData()
+{
+  static core::MetaData metaData {
+    "Package",
+    "package",
+    "qrc://elements/package.png"
+  };
+
+  return metaData;
+}
+
 Element* Package::add(string::hash_t a_hash)
 {
   core::Registry &registry{ core::Registry::get() };

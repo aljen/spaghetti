@@ -31,6 +31,8 @@ namespace logic {
 
 class ConstInt final : public Element {
  public:
+  static core::MetaData &metaData();
+
   ConstInt();
 
 //  bool calculate();

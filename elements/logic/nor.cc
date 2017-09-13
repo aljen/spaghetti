@@ -26,6 +26,17 @@
 namespace elements {
 namespace logic {
 
+core::MetaData &Nor::metaData()
+{
+  static core::MetaData metaData {
+    "NOR",
+    "logic/nor",
+    "qrc://elements/logic/nor.png"
+  };
+
+  return metaData;
+}
+
 Nor::Nor()
   : Element{}
 {

@@ -31,6 +31,8 @@ namespace logic {
 
 class ConstBool final : public Element {
  public:
+  static core::MetaData &metaData();
+
   ConstBool();
 
 //  bool calculate() override;

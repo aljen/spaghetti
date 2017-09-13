@@ -31,6 +31,8 @@ namespace logic {
 
 class And final : public Element {
  public:
+  static core::MetaData &metaData();
+
   And();
   bool calculate() override;
   size_t type() const noexcept override { return Types::eAnd; }

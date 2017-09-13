@@ -31,6 +31,8 @@ namespace logic {
 
 class Switch final : public Element {
  public:
+  static core::MetaData &metaData();
+
   Switch();
 
   //  bool calculate() override;

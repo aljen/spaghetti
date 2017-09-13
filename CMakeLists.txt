@@ -55,6 +55,7 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 set(SPAGHETTI_SOURCES
   core/id_manager.h
+  core/metadata.h
   core/registry.cc
   core/registry.h
   core/strings.h

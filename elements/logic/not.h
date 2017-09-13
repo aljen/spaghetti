@@ -31,6 +31,8 @@ namespace logic {
 
 class Not final : public Element {
  public:
+  static core::MetaData &metaData();
+
   Not();
   bool calculate() override;
   size_t type() const noexcept override { return Types::eNot; }

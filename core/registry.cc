@@ -38,15 +38,15 @@ void register_internal_elements()
 
   using namespace elements;
 
-  registry.registerElement<Package>("package");
-  registry.registerElement<logic::Nand>("logic/nand");
-  registry.registerElement<logic::And>("logic/and");
-  registry.registerElement<logic::Nor>("logic/nor");
-  registry.registerElement<logic::Or>("logic/or");
-  registry.registerElement<logic::Not>("logic/not");
-  registry.registerElement<logic::ConstBool>("logic/const_bool");
-  registry.registerElement<logic::ConstInt>("logic/const_int");
-  registry.registerElement<logic::Switch>("logic/switch");
+  registry.registerElement<Package>();
+  registry.registerElement<logic::Nand>();
+  registry.registerElement<logic::And>();
+  registry.registerElement<logic::Nor>();
+  registry.registerElement<logic::Or>();
+  registry.registerElement<logic::Not>();
+  registry.registerElement<logic::ConstBool>();
+  registry.registerElement<logic::ConstInt>();
+  registry.registerElement<logic::Switch>();
 }
 
 } // namespace core

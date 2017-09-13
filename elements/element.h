@@ -30,6 +30,8 @@
 #include <variant>
 #include <vector>
 
+#include "core/metadata.h"
+
 namespace elements {
 
 class Package;

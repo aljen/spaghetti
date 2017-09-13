@@ -31,6 +31,8 @@ namespace logic {
 
 class Nand final : public Element {
  public:
+  static core::MetaData &metaData();
+
   Nand();
   bool calculate() override;
   size_t type() const noexcept override { return Types::eNand; }

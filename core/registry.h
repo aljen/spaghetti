@@ -24,26 +24,32 @@
 #define CORE_REGISTRY_H
 
 #include <sparsepp/spp.h>
+#include "core/metadata.h"
 #include "core/strings.h"
 #include "elements/element.h"
 
 namespace core {
 
 class Registry final {
+  struct Info {
+    MetaData *data;
+    using CloneFunc = elements::Element* (*)();
+    CloneFunc clone{};
+  };
+
  public:
   static Registry& get();
 
   template<typename T>
-  void registerElement(char const *const a_name)
+  void registerElement()
   {
-    registerElement<T>(string::hash(a_name));
-  }
+    MetaData &metaData{ T::metaData() };
+    string::hash_t const hash{ string::hash(metaData.path) };
 
-  template<typename T>
-  void registerElement(string::hash_t const a_hash)
-  {
-    if (m_registry.find(a_hash) != std::end(m_registry)) return;
-    m_registry[a_hash] = &clone<T>;
+    if (m_registry.find(hash) != std::end(m_registry)) return;
+
+    Info info{ &metaData, &clone<T> };
+    m_registry[hash] = info;
   }
 
   elements::Element* create(char const *const a_name)
@@ -54,7 +60,8 @@ class Registry final {
   elements::Element* create(string::hash_t const a_hash)
   {
     if (m_registry.find(a_hash) == std::end(m_registry)) return nullptr;
-    return m_registry[a_hash]();
+    assert(m_registry[a_hash].clone);
+    return m_registry[a_hash].clone();
   }
 
  private:
@@ -67,8 +74,7 @@ class Registry final {
   }
 
  private:
-  using CreateElementFunc = elements::Element* (*)();
-  spp::sparse_hash_map<string::hash_t, CreateElementFunc> m_registry{};
+  spp::sparse_hash_map<string::hash_t, Info> m_registry{};
 };
 
 void register_internal_elements();

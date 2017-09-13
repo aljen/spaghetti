@@ -31,6 +31,17 @@ namespace logic {
 //  return true;
 //}
 
+core::MetaData &ConstBool::metaData()
+{
+  static core::MetaData metaData {
+    "Const (Bool)",
+    "logic/const_bool",
+    "qrc://elements/logic/const_bool.png"
+  };
+
+  return metaData;
+}
+
 ConstBool::ConstBool()
 {
   setMinInputs(0);
