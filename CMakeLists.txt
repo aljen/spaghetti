@@ -51,7 +51,7 @@ set(VENDOR_ROOT ${PROJECT_ROOT}/vendor)
 include_directories(SYSTEM ${VENDOR_ROOT})
 
 find_package(Threads REQUIRED)
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 set(SPAGHETTI_SOURCES
   core/id_manager.h
