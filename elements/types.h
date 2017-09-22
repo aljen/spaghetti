@@ -29,28 +29,32 @@ namespace Types {
 
 enum {
   ePackage            = 0,
-  eNand               = 1,
-  eAnd                = 2,
-  eNor                = 3,
-  eOr                 = 4,
-  eNot                = 5,
+  eClock              = 1,
+  eNand               = 2,
+  eAnd                = 3,
+  eNor                = 4,
+  eOr                 = 5,
+  eNot                = 6,
 
-  eConstBool          = 6,
-  eConstInt           = 7,
-  eConstFloat         = 8,
+  eConstBool          = 7,
+  eConstInt           = 8,
+  eConstFloat         = 9,
 
-  eSwitchBool         = 9,
-  eSwitchInt          = 10,
-  eSwitchFloat        = 11,
+  eRandomBool         = 10,
 
-  eMultiplexerBool    = 12,
-  eMultiplexerInt     = 13,
-  eMultiplexerFloat   = 14,
+  eSwitchBool         = 11,
+  eSwitchInt          = 12,
+  eSwitchFloat        = 13,
 
-  eMaxInt             = 15,
-  eMaxFloat           = 16,
-  eMinInt             = 17,
-  eMinFloat           = 18,
+#if 0
+  eMultiplexerBool    = 13,
+  eMultiplexerInt     = 14,
+  eMultiplexerFloat   = 15,
+
+  eMaxInt             = 16,
+  eMaxFloat           = 17,
+  eMinInt             = 18,
+  eMinFloat           = 19,
 
   eClampInt           = 19,
   eClampFloat         = 20,
@@ -74,6 +78,7 @@ enum {
 
   eScaleInt           = 35,
   eScaleFloat         = 36,
+#endif
 
   eUser               = 1000
 };
