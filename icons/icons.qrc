@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>elements/logic/and.png</file>
+        <file>elements/logic/not.png</file>
+        <file>elements/logic/or.png</file>
+        <file>elements/logic/switch.png</file>
+        <file>elements/logic/nand.png</file>
+        <file>elements/logic/nor.png</file>
+        <file>elements/logic/const_value.png</file>
+        <file>elements/logic/package.png</file>
+        <file>elements/logic/clock.png</file>
+    </qresource>
+</RCC>

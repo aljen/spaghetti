@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100"
+   height="50"
+   viewBox="0 0 26.458333 13.229167"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   sodipodi:docname="clock.svg"
+   inkscape:export-filename="/home/aljen/Develop/Sim/spaghetti/icons/elements/logic/clock.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="7.9195959"
+     inkscape:cx="42.686158"
+     inkscape:cy="23.78844"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     showguides="false"
+     inkscape:window-width="1885"
+     inkscape:window-height="1016"
+     inkscape:window-x="35"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-283.77082)">
+    <circle
+       style="fill:none;fill-opacity:1;stroke:#cbd951;stroke-width:0.88238543;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path19537"
+       cx="13.229167"
+       cy="290.38541"
+       r="5.9227681" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#cbd951;stroke-width:0.39687499;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect24033"
+       width="0.047717538"
+       height="4.5093117"
+       x="13.214858"
+       y="285.7742" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#cbd951;stroke-width:0.39687499;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect24033-3"
+       width="0.03817749"
+       height="4.6327515"
+       x="290.3638"
+       y="-17.841608"
+       transform="rotate(90)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#cbd951;fill-opacity:1;stroke:#cbd951;stroke-width:0.14964096;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path20"
+       sodipodi:sides="3"
+       sodipodi:cx="8.0593395"
+       sodipodi:cy="0.65456682"
+       sodipodi:r1="1.6118679"
+       sodipodi:r2="0.80593395"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="-0.002"
+       d="M 9.6689455,0.65262648 7.255478,2.0491836 l 2.96e-5,-2.78753473 z"
+       transform="translate(12.137895,289.72986)"
+       inkscape:transform-center-x="-0.40119157"
+       inkscape:transform-center-y="0.00031980331" />
+  </g>
+</svg>
