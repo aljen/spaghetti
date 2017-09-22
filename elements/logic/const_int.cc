@@ -33,7 +33,7 @@ namespace logic {
 
 core::MetaData &ConstInt::metaData()
 {
-  static core::MetaData metaData{ "Const (Int)", "logic/const_int", "qrc://elements/logic/const_int.png" };
+  static core::MetaData metaData{ "Const value (Int)", "logic/const_int", ":/elements/logic/const_value.png" };
 
   return metaData;
 }

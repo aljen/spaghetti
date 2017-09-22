@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 #include <iostream>
+#include <string_view>
 
 #include "core/registry.h"
 #include "elements/package.h"
@@ -29,7 +30,7 @@ namespace elements {
 
 core::MetaData &Package::metaData()
 {
-  static core::MetaData metaData{ "Package", "package", "qrc://elements/package.png" };
+  static core::MetaData metaData{ "Package", "logic/package", ":/elements/logic/package.png" };
 
   return metaData;
 }

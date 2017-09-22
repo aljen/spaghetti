@@ -33,7 +33,7 @@ namespace logic {
 
 core::MetaData &ConstBool::metaData()
 {
-  static core::MetaData metaData{ "Const (Bool)", "logic/const_bool", "qrc://elements/logic/const_bool.png" };
+  static core::MetaData metaData{ "Const value (Bool)", "logic/const_bool", ":/elements/logic/const_value.png" };
 
   return metaData;
 }

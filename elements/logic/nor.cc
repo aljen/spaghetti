@@ -28,7 +28,7 @@ namespace logic {
 
 core::MetaData &Nor::metaData()
 {
-  static core::MetaData metaData{ "NOR", "logic/nor", "qrc://elements/logic/nor.png" };
+  static core::MetaData metaData{ "NOR (Bool)", "logic/nor", ":/elements/logic/nor.png" };
 
   return metaData;
 }

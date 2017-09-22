@@ -28,17 +28,18 @@ namespace logic {
 
 core::MetaData &Switch::metaData()
 {
-  static core::MetaData metaData{ "Switch (Int)", "logic/switch", "qrc://elements/logic/switch.png" };
+  static core::MetaData metaData{ "Switch (Int)", "logic/switch", ":/elements/logic/switch.png" };
 
   return metaData;
 }
 
 Switch::Switch()
 {
-  setMinInputs(0);
-  setMaxInputs(0);
+  setMinInputs(1);
+  setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+  addInput(Type::eBool, "#1");
   addOutput(Type::eBool, "#1");
 }
 

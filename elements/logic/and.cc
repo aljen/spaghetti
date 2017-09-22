@@ -28,7 +28,7 @@ namespace logic {
 
 core::MetaData &And::metaData()
 {
-  static core::MetaData metaData{ "AND", "logic/and", "qrc://elements/logic/and.png" };
+  static core::MetaData metaData{ "AND (Bool)", "logic/and", ":/elements/logic/and.png" };
 
   return metaData;
 }

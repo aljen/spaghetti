@@ -28,7 +28,7 @@ namespace logic {
 
 core::MetaData &Not::metaData()
 {
-  static core::MetaData metaData{ "NOT", "logic/not", "qrc://elements/logic/not.png" };
+  static core::MetaData metaData{ "NOT (Bool)", "logic/not", ":/elements/logic/not.png" };
 
   return metaData;
 }
