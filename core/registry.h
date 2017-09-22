@@ -24,9 +24,14 @@
 #define CORE_REGISTRY_H
 
 #include <sparsepp/spp.h>
+#include <map>
 #include "core/metadata.h"
 #include "core/strings.h"
 #include "elements/element.h"
+
+#define REGISTRY_SPP_MAP 1
+#define REGISTRY_STD_MAP 2
+#define REGISTRY_MAP REGISTRY_SPP_MAP
 
 namespace core {
 
@@ -38,6 +43,12 @@ class Registry final {
   };
 
  public:
+#if REGISTRY_MAP == REGISTRY_SPP_MAP
+  using Elements = spp::sparse_hash_map<string::hash_t, Info>;
+#elif REGISTRY_MAP == REGISTRY_STD_MAP
+  using Elements = std::map<string::hash_t, Info>;
+#endif
+
   static Registry &get();
 
   template<typename T>
@@ -46,20 +57,22 @@ class Registry final {
     MetaData &metaData{ T::metaData() };
     string::hash_t const hash{ string::hash(metaData.path) };
 
-    if (m_registry.find(hash) != std::end(m_registry)) return;
+    if (m_elements.find(hash) != std::end(m_elements)) return;
 
     Info info{ &metaData, &clone<T> };
-    m_registry[hash] = info;
+    m_elements[hash] = info;
   }
 
   elements::Element *create(char const *const a_name) { return create(string::hash(a_name)); }
 
   elements::Element *create(string::hash_t const a_hash)
   {
-    if (m_registry.find(a_hash) == std::end(m_registry)) return nullptr;
-    assert(m_registry[a_hash].clone);
-    return m_registry[a_hash].clone();
+    if (m_elements.find(a_hash) == std::end(m_elements)) return nullptr;
+    assert(m_elements[a_hash].clone);
+    return m_elements[a_hash].clone();
   }
+
+  Elements const &elements() const { return m_elements; }
 
  private:
   Registry() = default;
@@ -71,7 +84,7 @@ class Registry final {
   }
 
  private:
-  spp::sparse_hash_map<string::hash_t, Info> m_registry{};
+  Elements m_elements{};
 };
 
 void register_internal_elements();
