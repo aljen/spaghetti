@@ -1,0 +1,12 @@
+if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+  set(CLANG 0)
+  set(GCC 1)
+elseif (${CMAKE_C_COMPILER_ID} STREQUAL "Clang" AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+  set(CLANG 1)
+  set(GCC 0)
+elseif (MSVC)
+  set(CLANG 0)
+  set(GCC 0)
+endif ()
+
+message(STATUS "Compiler: ${CMAKE_C_COMPILER_ID}")
