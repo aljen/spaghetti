@@ -44,9 +44,6 @@ set(SPAGHETTI_SOURCES
   elements/package.h
   elements/types.h
   main.cc
-  mainwindow.cc
-  mainwindow.h
-  mainwindow.ui
   )
 
 add_executable(Spaghetti ${SPAGHETTI_SOURCES})

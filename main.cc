@@ -23,15 +23,9 @@
 #include <QApplication>
 #include <QObject>
 
-#include "mainwindow.h"
-
 int main(int argc, char **argv)
 {
   QApplication app{ argc, argv };
-
-  MainWindow window{};
-  QObject::connect(&app, &QApplication::aboutToQuit, &window, &MainWindow::aboutToQuit);
-  window.show();
 
   return app.exec();
 }
