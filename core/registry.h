@@ -23,6 +23,7 @@
 #ifndef CORE_REGISTRY_H
 #define CORE_REGISTRY_H
 
+#include <type_traits>
 #include <sparsepp/spp.h>
 #include <map>
 #include "core/metadata.h"
@@ -52,7 +53,8 @@ class Registry final {
   static Registry &get();
 
   template<typename T>
-  void registerElement()
+  typename std::enable_if_t<std::is_base_of_v<elements::Element, T>>
+  registerElement()
   {
     MetaData &metaData{ T::metaData() };
     string::hash_t const hash{ string::hash(metaData.path) };
