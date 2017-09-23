@@ -40,7 +40,7 @@ Element *Package::add(string::hash_t a_hash)
 {
   core::Registry &registry{ core::Registry::get() };
 
-  Element *const element{ registry.create(a_hash) };
+  Element *const element{ registry.createElement(a_hash) };
   assert(element);
 
   size_t index{};
