@@ -33,6 +33,10 @@
 
 namespace elements {
 
+namespace logic {
+class Clock;
+} // namespace logic
+
 class Package final : public Element {
  public:
   static core::MetaData &metaData();
@@ -60,6 +64,8 @@ class Package final : public Element {
  private:
   std::vector<Element *> m_data{};
   std::vector<uint32_t> m_free{};
+
+  std::vector<logic::Clock *> m_clocks{};
 
   moodycamel::ConcurrentQueue<size_t> m_queue{};
   spp::sparse_hash_map<size_t, std::set<size_t>> m_callbacks{};

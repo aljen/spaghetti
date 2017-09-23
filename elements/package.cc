@@ -25,6 +25,7 @@
 
 #include "core/registry.h"
 #include "elements/package.h"
+#include "elements/logic/clock.h"
 
 namespace elements {
 
@@ -56,6 +57,13 @@ Element *Package::add(string::hash_t a_hash)
   element->m_package = this;
   element->m_id = index;
 
+  if (element->type() == Types::eClock) {
+    using logic::Clock;
+    Clock *const clock{ reinterpret_cast<Clock *const>(element) };
+    clock->reset(Clock::clock_t::now());
+    m_clocks.push_back(clock);
+  }
+
   return element;
 }
 
@@ -63,6 +71,9 @@ void Package::remove(size_t a_id)
 {
   assert(a_id < m_data.size());
   assert(std::find(std::begin(m_free), std::end(m_free), a_id) == std::end(m_free));
+
+  if (m_data[a_id]->type() == Types::eClock)
+    std::remove(std::begin(m_clocks), std::end(m_clocks), m_data[a_id]);
 
   delete m_data[a_id];
   m_data[a_id] = nullptr;
@@ -100,7 +111,13 @@ void Package::threadFunction()
 {
   std::cout << __PRETTY_FUNCTION__ << ">" << std::endl;
   while (!m_quit) {
-    if (!tryDispatch()) std::this_thread::yield();
+    auto const now = logic::Clock::clock_t::now();
+    for (auto &&clock : m_clocks) {
+      clock->update(now);
+    }
+
+    if (!tryDispatch())
+      std::this_thread::yield();
   }
   std::cout << __PRETTY_FUNCTION__ << "<" << std::endl;
 }
