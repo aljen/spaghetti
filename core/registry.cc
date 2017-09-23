@@ -36,17 +36,18 @@ void register_internal_elements()
 {
   Registry &registry{ Registry::get() };
 
-  using namespace elements;
-
-  registry.registerElement<Package>();
-  registry.registerElement<logic::Nand>();
-  registry.registerElement<logic::And>();
-  registry.registerElement<logic::Nor>();
-  registry.registerElement<logic::Or>();
-  registry.registerElement<logic::Not>();
-  registry.registerElement<logic::ConstBool>();
-  registry.registerElement<logic::ConstInt>();
-  registry.registerElement<logic::Switch>();
+  registry.registerElement<elements::Package, nodes::Package>();
+  registry.registerElement<elements::logic::Clock, nodes::logic::Test>();
+  registry.registerElement<elements::logic::Nand, nodes::logic::Test>();
+  registry.registerElement<elements::logic::And, nodes::logic::Test>();
+  registry.registerElement<elements::logic::Nor, nodes::logic::Test>();
+  registry.registerElement<elements::logic::Or, nodes::logic::Test>();
+  registry.registerElement<elements::logic::Not, nodes::logic::Test>();
+  registry.registerElement<elements::logic::ConstBool, nodes::logic::Test>();
+  registry.registerElement<elements::logic::ConstFloat, nodes::logic::Test>();
+  registry.registerElement<elements::logic::ConstInt, nodes::logic::Test>();
+  registry.registerElement<elements::logic::RandomBool, nodes::logic::Test>();
+  registry.registerElement<elements::logic::Switch, nodes::logic::Test>();
 }
 
 } // namespace core

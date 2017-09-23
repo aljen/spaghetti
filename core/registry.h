@@ -29,6 +29,7 @@
 #include "core/metadata.h"
 #include "core/strings.h"
 #include "elements/element.h"
+#include "nodes/node.h"
 
 #define REGISTRY_SPP_MAP 1
 #define REGISTRY_STD_MAP 2
@@ -39,8 +40,10 @@ namespace core {
 class Registry final {
   struct Info {
     MetaData *data;
-    using CloneFunc = elements::Element *(*)();
-    CloneFunc clone{};
+    template<typename T>
+    using CloneFunc = T *(*)();
+    CloneFunc<elements::Element> cloneElement{};
+    CloneFunc<nodes::Node> cloneNode{};
   };
 
  public:
@@ -52,26 +55,33 @@ class Registry final {
 
   static Registry &get();
 
-  template<typename T>
-  typename std::enable_if_t<std::is_base_of_v<elements::Element, T>>
+  template<typename Element, typename Node>
+  typename std::enable_if_t<(std::is_base_of_v<elements::Element, Element> && std::is_base_of_v<nodes::Node, Node>)>
   registerElement()
   {
-    MetaData &metaData{ T::metaData() };
+    MetaData &metaData{ Element::metaData() };
     string::hash_t const hash{ string::hash(metaData.path) };
 
     if (m_elements.find(hash) != std::end(m_elements)) return;
 
-    Info info{ &metaData, &clone<T> };
+    Info info{ &metaData, &cloneElement<Element>, &cloneNode<Node> };
     m_elements[hash] = info;
   }
 
-  elements::Element *create(char const *const a_name) { return create(string::hash(a_name)); }
-
-  elements::Element *create(string::hash_t const a_hash)
+  elements::Element *createElement(char const *const a_name) { return createElement(string::hash(a_name)); }
+  elements::Element *createElement(string::hash_t const a_hash)
   {
     if (m_elements.find(a_hash) == std::end(m_elements)) return nullptr;
-    assert(m_elements[a_hash].clone);
-    return m_elements[a_hash].clone();
+    assert(m_elements[a_hash].cloneElement);
+    return m_elements[a_hash].cloneElement();
+  }
+
+  nodes::Node *createNode(char const *const a_name) { return createNode(string::hash(a_name)); }
+  nodes::Node *createNode(string::hash_t const a_hash)
+  {
+    if (m_elements.find(a_hash) == std::end(m_elements)) return nullptr;
+    assert(m_elements[a_hash].cloneNode);
+    return m_elements[a_hash].cloneNode();
   }
 
   Elements const &elements() const { return m_elements; }
@@ -80,7 +90,13 @@ class Registry final {
   Registry() = default;
 
   template<typename T>
-  static elements::Element *clone()
+  static elements::Element *cloneElement()
+  {
+    return new T;
+  }
+
+  template<typename T>
+  static nodes::Node *cloneNode()
   {
     return new T;
   }
