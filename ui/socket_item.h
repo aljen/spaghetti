@@ -1,53 +1,58 @@
 #ifndef SOCKETITEM_H
 #define SOCKETITEM_H
 
-#include <QPainter>
 #include <QGraphicsItem>
+#include <QPainter>
 #include <QVector>
 
 class LinkItem;
 
 class SocketItem : public QGraphicsItem {
  public:
-  enum class Type {
-    eInput,
-    eOutput
-  };
+  enum class Type { eInput, eOutput };
 
   constexpr static int SIZE{ 16 };
 
-  SocketItem(Type aType, QGraphicsItem* aParent = nullptr);
+  SocketItem(Type aType, QGraphicsItem *const a_parent = nullptr);
 
-  bool isInput() const{ return m_type == Type::eInput; }
-  bool isOutput() const{ return m_type == Type::eOutput; }
+  bool isInput() const { return m_type == Type::eInput; }
+  bool isOutput() const { return m_type == Type::eOutput; }
 
   QRectF boundingRect() const override;
 
-  void paint(QPainter* aPainter, QStyleOptionGraphicsItem const* aOption, QWidget* aWidget) override;
+  void paint(QPainter *aPainter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget) override;
 
-  void hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent) override;
-  void hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent) override;
+  void hoverEnterEvent(QGraphicsSceneHoverEvent *a_event) override;
+  void hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event) override;
 
-  void dragEnterEvent(QGraphicsSceneDragDropEvent* aEvent) override;
-  void dragLeaveEvent(QGraphicsSceneDragDropEvent* aEvent) override;
-  void dragMoveEvent(QGraphicsSceneDragDropEvent* aEvent) override;
-  void dropEvent(QGraphicsSceneDragDropEvent* aEvent) override;
+  void dragEnterEvent(QGraphicsSceneDragDropEvent *a_event) override;
+  void dragLeaveEvent(QGraphicsSceneDragDropEvent *a_event) override;
+  void dragMoveEvent(QGraphicsSceneDragDropEvent *a_event) override;
+  void dropEvent(QGraphicsSceneDragDropEvent *a_event) override;
 
-  void mousePressEvent(QGraphicsSceneMouseEvent* aEvent) override;
-  void mouseMoveEvent(QGraphicsSceneMouseEvent* aEvent) override;
-  void mouseReleaseEvent(QGraphicsSceneMouseEvent* aEvent) override;
+  void mousePressEvent(QGraphicsSceneMouseEvent *a_event) override;
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *a_event) override;
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent *a_event) override;
 
-  QVariant itemChange(GraphicsItemChange aChange, const QVariant &aValue) override;
+  QVariant itemChange(GraphicsItemChange a_change, const QVariant &a_value) override;
 
-  void setHover(bool aHover) { m_isHover = aHover; update(); }
+  void setHover(bool a_hover)
+  {
+    m_isHover = a_hover;
+    update();
+  }
 
   QString name() const { return m_name; }
-  void setName(QString aName) { m_name = aName; }
+  void setName(QString a_name) { m_name = a_name; }
 
   void showName() { m_nameHidden = false; }
   void hideName() { m_nameHidden = true; }
 
-  void markAsUsed() { m_used = true; update(); }
+  void markAsUsed()
+  {
+    m_used = true;
+    update();
+  }
 
   int nameWidth() const;
 
@@ -76,7 +81,7 @@ class SocketItem : public QGraphicsItem {
   bool m_used{};
   bool m_nameHidden{};
 
-  QVector<LinkItem*> m_links{};
+  QVector<LinkItem *> m_links{};
 };
 
 #endif // SOCKETITEM_H

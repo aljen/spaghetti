@@ -1,8 +1,8 @@
 #include "nodes/node.h"
 
+#include "elements/types.h"
 #include "ui/config.h"
 #include "ui/socket_item.h"
-#include "elements/types.h"
 
 #include <iostream>
 
@@ -49,7 +49,7 @@ void Node::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, 
   (void)a_widget;
 
   Config const &config{ Config::get() };
-//  QPen pen{ color };
+  //  QPen pen{ color };
   QPen pen{ config.getColor(Config::Color::eSocketBorder) };
   pen.setWidth(2);
   QColor color{ 105, 105, 105, 128 };
@@ -59,7 +59,7 @@ void Node::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, 
   a_painter->drawRoundedRect(m_boundingRect, ROUND_FACTOR, ROUND_FACTOR);
 
   //  pen.setColor(QColor(54, 54, 54, 255));
-//  pen.setColor(isSelected() ? QColor(95, 124, 136, 255) : QColor(58, 66, 71, 255));
+  //  pen.setColor(isSelected() ? QColor(95, 124, 136, 255) : QColor(58, 66, 71, 255));
   pen.setColor(isSelected() ? QColor(156, 156, 156, 255) : QColor(58, 66, 71, 255));
   pen.setWidth(2);
   a_painter->setPen(pen);
@@ -121,8 +121,7 @@ void Node::setElement(elements::Element *const a_element)
           m_outputs[static_cast<int>(i)]->setSignal(signal);
           break;
         }
-        default:
-          break;
+        default: break;
       }
     }
   });
@@ -139,10 +138,8 @@ void Node::iconify()
 {
   m_mode = Mode::eIconified;
 
-  for (auto &&input : m_inputs)
-    input->hideName();
-  for (auto &&output : m_outputs)
-    output->hideName();
+  for (auto &&input : m_inputs) input->hideName();
+  for (auto &&output : m_outputs) output->hideName();
 
   prepareGeometryChange();
   calculateBoundingRect();
@@ -152,10 +149,8 @@ void Node::expand()
 {
   m_mode = Mode::eExpanded;
 
-  for (auto &&input : m_inputs)
-    input->showName();
-  for (auto &&output : m_outputs)
-    output->showName();
+  for (auto &&input : m_inputs) input->showName();
+  for (auto &&output : m_outputs) output->showName();
 
   prepareGeometryChange();
   calculateBoundingRect();
@@ -164,7 +159,7 @@ void Node::expand()
 void Node::addInput(uint8_t const a_id, elements::Element::Input const &a_input)
 {
   QString const name{ QString::fromStdString(a_input.name) };
-//  qDebug() << "Adding input" << name << a_id << "for element" << m_element->id();
+  //  qDebug() << "Adding input" << name << a_id << "for element" << m_element->id();
   auto *const socket{ new SocketItem{ SocketItem::Type::eInput, this } };
   socket->setElementId(m_element->id());
   socket->setSocketId(a_id);
@@ -176,10 +171,12 @@ void Node::addInput(uint8_t const a_id, elements::Element::Input const &a_input)
       socket->setColors(config.getColor(Config::Color::eBoolSignalOff), config.getColor(Config::Color::eBoolSignalOn));
       break;
     case elements::Element::Type::eFloat:
-      socket->setColors(config.getColor(Config::Color::eFloatSignalOff), config.getColor(Config::Color::eFloatSignalOn));
+      socket->setColors(config.getColor(Config::Color::eFloatSignalOff),
+                        config.getColor(Config::Color::eFloatSignalOn));
       break;
     case elements::Element::Type::eInt:
-      socket->setColors(config.getColor(Config::Color::eIntegerSignalOff), config.getColor(Config::Color::eIntegerSignalOn));
+      socket->setColors(config.getColor(Config::Color::eIntegerSignalOff),
+                        config.getColor(Config::Color::eIntegerSignalOn));
       break;
   }
 
@@ -190,7 +187,7 @@ void Node::addInput(uint8_t const a_id, elements::Element::Input const &a_input)
 void Node::addOutput(uint8_t const a_id, elements::Element::Output const &a_output)
 {
   QString const name{ QString::fromStdString(a_output.name) };
-//  qDebug() << "Adding output" << name << a_id << "for element" << m_element->id();
+  //  qDebug() << "Adding output" << name << a_id << "for element" << m_element->id();
   auto *const socket{ new SocketItem{ SocketItem::Type::eOutput, this } };
   socket->setElementId(m_element->id());
   socket->setSocketId(a_id);
@@ -202,10 +199,12 @@ void Node::addOutput(uint8_t const a_id, elements::Element::Output const &a_outp
       socket->setColors(config.getColor(Config::Color::eBoolSignalOff), config.getColor(Config::Color::eBoolSignalOn));
       break;
     case elements::Element::Type::eFloat:
-      socket->setColors(config.getColor(Config::Color::eFloatSignalOff), config.getColor(Config::Color::eFloatSignalOn));
+      socket->setColors(config.getColor(Config::Color::eFloatSignalOff),
+                        config.getColor(Config::Color::eFloatSignalOn));
       break;
     case elements::Element::Type::eInt:
-      socket->setColors(config.getColor(Config::Color::eIntegerSignalOff), config.getColor(Config::Color::eIntegerSignalOn));
+      socket->setColors(config.getColor(Config::Color::eIntegerSignalOff),
+                        config.getColor(Config::Color::eIntegerSignalOn));
       break;
   }
 

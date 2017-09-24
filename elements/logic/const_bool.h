@@ -26,8 +26,7 @@
 #include "elements/element.h"
 #include "elements/types.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 class ConstBool final : public Element {
  public:
@@ -35,14 +34,12 @@ class ConstBool final : public Element {
 
   ConstBool();
 
-  //  bool calculate() override;
   size_t type() const noexcept override { return Types::eConstBool; }
 
   void toggle();
   void set(bool a_state);
 };
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic
 
 #endif // ELEMENTS_LOGIC_CONST_BOOL_H

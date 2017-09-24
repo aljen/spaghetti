@@ -26,8 +26,7 @@
 #include "elements/element.h"
 #include "elements/types.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 class Switch final : public Element {
  public:
@@ -35,14 +34,12 @@ class Switch final : public Element {
 
   Switch();
 
-  //  bool calculate() override;
   size_t type() const noexcept override { return Types::eSwitchBool; }
 
   void toggle();
   void set(bool a_state);
 };
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic
 
 #endif // ELEMENTS_LOGIC_SWITCH_H

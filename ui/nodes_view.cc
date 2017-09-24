@@ -8,11 +8,11 @@
 #include <QTimeLine>
 
 #include "core/registry.h"
+#include "elements/package.h"
 #include "nodes/node.h"
-#include "ui/package_view.h"
 #include "ui/elements_list.h"
 #include "ui/link_item.h"
-#include "elements/package.h"
+#include "ui/package_view.h"
 
 NodesView::NodesView(PackageView *a_parent)
   : QGraphicsView{ a_parent }
@@ -88,7 +88,8 @@ void NodesView::dragLeaveEvent(QDragLeaveEvent *a_event)
 void NodesView::dragMoveEvent(QDragMoveEvent *a_event)
 {
   auto const dropPosition = mapToScene(a_event->pos());
-  if (m_dragNode) m_dragNode->setPos(dropPosition);
+  if (m_dragNode)
+    m_dragNode->setPos(dropPosition);
   else if (m_dragLink) {
     QGraphicsView::dragMoveEvent(a_event);
     m_dragLink->setTo(mapToScene(a_event->pos()));
@@ -112,7 +113,7 @@ void NodesView::dropEvent(QDropEvent *a_event)
   QGraphicsView::dropEvent(a_event);
 }
 
-void NodesView::keyReleaseEvent(QKeyEvent* a_event)
+void NodesView::keyReleaseEvent(QKeyEvent *a_event)
 {
   qDebug() << a_event;
 
@@ -124,7 +125,7 @@ void NodesView::keyReleaseEvent(QKeyEvent* a_event)
   }
 }
 
-void NodesView::wheelEvent(QWheelEvent* a_event)
+void NodesView::wheelEvent(QWheelEvent *a_event)
 {
   qDebug() << a_event;
   int32_t const numDegrees{ a_event->delta() / 8 };
@@ -132,8 +133,7 @@ void NodesView::wheelEvent(QWheelEvent* a_event)
 
   m_scheduledScalings += numSteps;
 
-  if (m_scheduledScalings * numSteps < 0)
-    m_scheduledScalings = numSteps;
+  if (m_scheduledScalings * numSteps < 0) m_scheduledScalings = numSteps;
 
   QTimeLine *const animation{ new QTimeLine{ 350, this } };
   animation->setUpdateInterval(20);
@@ -142,16 +142,14 @@ void NodesView::wheelEvent(QWheelEvent* a_event)
     qreal const factor{ 1.0 + static_cast<qreal>(m_scheduledScalings) / 300.0 };
     QMatrix temp{ matrix() };
     temp.scale(factor, factor);
-    if (temp.m11() >= 0.3 && temp.m11() < 3.0)
-      scale(factor, factor);
+    if (temp.m11() >= 0.3 && temp.m11() < 3.0) scale(factor, factor);
   });
   connect(animation, &QTimeLine::finished, [&]() {
     if (m_scheduledScalings > 0)
       m_scheduledScalings--;
     else
       m_scheduledScalings++;
-    if (sender())
-      sender()->deleteLater();
+    if (sender()) sender()->deleteLater();
   });
 
   animation->start();

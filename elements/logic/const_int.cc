@@ -23,13 +23,7 @@
 #include "elements/logic/const_int.h"
 #include "elements/package.h"
 
-namespace elements {
-namespace logic {
-
-// bool ConstInt::calculate()
-//{
-//  return true;
-//}
+namespace elements::logic {
 
 core::MetaData &ConstInt::metaData()
 {
@@ -57,5 +51,4 @@ void ConstInt::set(int32_t a_value)
   m_package->elementChanged(id());
 }
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic

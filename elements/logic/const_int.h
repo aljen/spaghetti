@@ -26,8 +26,7 @@
 #include "elements/element.h"
 #include "elements/types.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 class ConstInt final : public Element {
  public:
@@ -35,13 +34,11 @@ class ConstInt final : public Element {
 
   ConstInt();
 
-  //  bool calculate();
   size_t type() const noexcept override { return Types::eConstInt; }
 
   void set(int32_t a_value);
 };
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic
 
 #endif // ELEMENTS_LOGIC_CONST_INT_H

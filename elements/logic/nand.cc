@@ -23,8 +23,7 @@
 #include "elements/logic/nand.h"
 #include "elements/package.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 core::MetaData &Nand::metaData()
 {
@@ -65,5 +64,4 @@ bool Nand::calculate()
   return allSets != currentState;
 }
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic

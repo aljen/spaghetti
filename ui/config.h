@@ -34,7 +34,7 @@ class Config {
 
   Config();
 
-  static Config const& get();
+  static Config const &get();
 
   inline QColor getColor(Color aColor) const { return m_colors[static_cast<char>(aColor)]; }
 

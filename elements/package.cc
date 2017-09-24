@@ -24,8 +24,8 @@
 #include <string_view>
 
 #include "core/registry.h"
-#include "elements/package.h"
 #include "elements/logic/clock.h"
+#include "elements/package.h"
 
 namespace elements {
 
@@ -72,8 +72,7 @@ void Package::remove(size_t a_id)
   assert(a_id < m_data.size());
   assert(std::find(std::begin(m_free), std::end(m_free), a_id) == std::end(m_free));
 
-  if (m_data[a_id]->type() == Types::eClock)
-    std::remove(std::begin(m_clocks), std::end(m_clocks), m_data[a_id]);
+  if (m_data[a_id]->type() == Types::eClock) std::remove(std::begin(m_clocks), std::end(m_clocks), m_data[a_id]);
 
   delete m_data[a_id];
   m_data[a_id] = nullptr;
@@ -115,8 +114,7 @@ void Package::threadFunction()
       clock->update(now);
     }
 
-    if (!tryDispatch())
-      std::this_thread::yield();
+    if (!tryDispatch()) std::this_thread::yield();
   }
 }
 

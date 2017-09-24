@@ -33,7 +33,7 @@ class NodesView : public QGraphicsView {
   void acceptDragLink();
   void cancelDragLink();
 
-  PackageView* packageView() const { return m_packageView; }
+  PackageView *packageView() const { return m_packageView; }
 
  private:
   PackageView *m_packageView{};

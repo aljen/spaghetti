@@ -23,28 +23,32 @@
 #ifndef CORE_REGISTRY_H
 #define CORE_REGISTRY_H
 
+#include <boost/dll.hpp>
 #include <cassert>
 #include <type_traits>
-#include <boost/dll.hpp>
 
 #ifdef _MSC_VER
-#  include <unordered_map>
+# include <unordered_map>
 #else
-#  include <sparsepp/spp.h>
+# include <sparsepp/spp.h>
 #endif
 
 #include "core/metadata.h"
 #include "core/strings.h"
 
-namespace elements { class Element; }
-namespace nodes { class Node; }
+namespace elements {
+class Element;
+}
+namespace nodes {
+class Node;
+}
 
 #define REGISTRY_SPP_MAP 1
-#define REGISTRY_STD_UNORDERED_MAP 2
+# define REGISTRY_STD_UNORDERED_MAP 2
 #ifdef _MSC_VER
-#  define REGISTRY_MAP REGISTRY_STD_UNORDERED_MAP
+# define REGISTRY_MAP REGISTRY_STD_UNORDERED_MAP
 #else
-#  define REGISTRY_MAP REGISTRY_SPP_MAP
+# define REGISTRY_MAP REGISTRY_SPP_MAP
 #endif
 
 namespace core {

@@ -23,8 +23,7 @@
 #include "elements/logic/and.h"
 #include "elements/package.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 core::MetaData &And::metaData()
 {
@@ -63,5 +62,4 @@ bool And::calculate()
   return allSets != currentState;
 }
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic

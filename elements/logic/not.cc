@@ -23,8 +23,7 @@
 #include "elements/logic/not.h"
 #include "elements/package.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 core::MetaData &Not::metaData()
 {
@@ -51,5 +50,4 @@ bool Not::calculate()
   return true;
 }
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic

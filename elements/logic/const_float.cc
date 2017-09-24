@@ -23,13 +23,7 @@
 #include "elements/logic/const_float.h"
 #include "elements/package.h"
 
-namespace elements {
-namespace logic {
-
-// bool ConstInt::calculate()
-//{
-//  return true;
-//}
+namespace elements::logic {
 
 core::MetaData &ConstFloat::metaData()
 {
@@ -57,5 +51,4 @@ void ConstFloat::set(float a_value)
   m_package->elementChanged(id());
 }
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic

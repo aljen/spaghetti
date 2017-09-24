@@ -4,31 +4,32 @@
 #include <QCursor>
 #include <QDebug>
 #include <QDrag>
-#include <QGraphicsWidget>
-#include <QWidget>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsWidget>
 #include <QMimeData>
+#include <QWidget>
 
 #include "elements/package.h"
-#include "ui/nodes_view.h"
-#include "ui/link_item.h"
 #include "ui/config.h"
+#include "ui/link_item.h"
+#include "ui/nodes_view.h"
 #include "ui/package_view.h"
 
-SocketItem::SocketItem(Type aType, QGraphicsItem* aParent)
-  : QGraphicsItem{ aParent }
-  , m_type{ aType }
+SocketItem::SocketItem(Type a_type, QGraphicsItem *const a_parent)
+  : QGraphicsItem{ a_parent }
+  , m_type{ a_type }
 {
   m_font.setFamily("Consolas");
   m_font.setPointSize(12);
 
-  setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsFocusable | QGraphicsItem::ItemSendsScenePositionChanges);
+  setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsFocusable |
+           QGraphicsItem::ItemSendsScenePositionChanges);
   setAcceptHoverEvents(true);
   setAcceptedMouseButtons(Qt::LeftButton);
 
   setZValue(1);
 
-  if (aType == Type::eOutput)
+  if (a_type == Type::eOutput)
     setCursor(Qt::OpenHandCursor);
   else
     setAcceptDrops(true);
@@ -39,10 +40,10 @@ QRectF SocketItem::boundingRect() const
   return QRectF{ -(static_cast<qreal>(SIZE) / 2.), 0, static_cast<qreal>(SIZE), static_cast<qreal>(SIZE) };
 }
 
-void SocketItem::paint(QPainter *aPainter, const QStyleOptionGraphicsItem *aOption, QWidget *aWidget)
+void SocketItem::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_option, QWidget *a_widget)
 {
-  Q_UNUSED(aOption);
-  Q_UNUSED(aWidget);
+  Q_UNUSED(a_option);
+  Q_UNUSED(a_widget);
 
   QRectF const rect{ boundingRect() };
   Config const &config{ Config::get() };
@@ -59,74 +60,72 @@ void SocketItem::paint(QPainter *aPainter, const QStyleOptionGraphicsItem *aOpti
     brush.setColor(m_colorSignalOn);
   else if (!m_isSignalOn)
     brush.setColor(m_colorSignalOff);
-//  else if (m_type == Type::eInput)
-//    brush.setColor(config.getColor(Config::Color::eSocketInput));
-//  else if (m_type == Type::eOutput)
-//    brush.setColor(config.getColor(Config::Color::eSocketOutput));
+  //  else if (m_type == Type::eInput)
+  //    brush.setColor(config.getColor(Config::Color::eSocketInput));
+  //  else if (m_type == Type::eOutput)
+  //    brush.setColor(config.getColor(Config::Color::eSocketOutput));
   brush.setStyle(Qt::SolidPattern);
 
-  aPainter->setPen(pen);
-  aPainter->setBrush(brush);
-  aPainter->drawEllipse(rect);
+  a_painter->setPen(pen);
+  a_painter->setBrush(brush);
+  a_painter->drawEllipse(rect);
 
   if (m_used) {
-    aPainter->save();
-    aPainter->setPen(Qt::NoPen);
-    aPainter->setBrush(pen.color());
-    aPainter->drawEllipse(rect.adjusted(4, 4, -4, -4));
-    aPainter->restore();
+    a_painter->save();
+    a_painter->setPen(Qt::NoPen);
+    a_painter->setBrush(pen.color());
+    a_painter->drawEllipse(rect.adjusted(4, 4, -4, -4));
+    a_painter->restore();
   }
 
   if (!m_nameHidden) {
     pen.setColor(config.getColor(Config::Color::eFontName));
-    aPainter->setPen(pen);
-    QFont font{ aPainter->font() };
+    a_painter->setPen(pen);
+    QFont font{ a_painter->font() };
     font.setPointSize(12);
-    aPainter->setFont(font);
+    a_painter->setFont(font);
 
     QFontMetrics const metrics{ font };
 
     if (m_type == Type::eInput)
-      aPainter->drawText(static_cast<int>(rect.width()) - 2, 13, m_name);
+      a_painter->drawText(static_cast<int>(rect.width()) - 2, 13, m_name);
     else
-      aPainter->drawText(-metrics.width(m_name) - 14, 13, m_name);
+      a_painter->drawText(-metrics.width(m_name) - 14, 13, m_name);
   }
 }
 
-void SocketItem::hoverEnterEvent(QGraphicsSceneHoverEvent *aEvent)
+void SocketItem::hoverEnterEvent(QGraphicsSceneHoverEvent *a_event)
 {
-  Q_UNUSED(aEvent);
+  Q_UNUSED(a_event);
 
   m_isHover = true;
 
-  for (auto link : m_links)
-    link->setHover(m_isHover);
+  for (auto link : m_links) link->setHover(m_isHover);
 
   update();
 }
 
-void SocketItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *aEvent)
+void SocketItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event)
 {
-  Q_UNUSED(aEvent);
+  Q_UNUSED(a_event);
 
   m_isHover = false;
 
-  for (auto link : m_links)
-    link->setHover(m_isHover);
+  for (auto link : m_links) link->setHover(m_isHover);
 
   update();
 }
 
-void SocketItem::dragEnterEvent(QGraphicsSceneDragDropEvent *aEvent)
+void SocketItem::dragEnterEvent(QGraphicsSceneDragDropEvent *a_event)
 {
-  Q_UNUSED(aEvent);
+  Q_UNUSED(a_event);
 
   if (m_used) {
-    aEvent->ignore();
+    a_event->ignore();
     return;
   }
 
-  NodesView *view{ reinterpret_cast<NodesView*>(scene()->views()[0]) };
+  NodesView *view{ reinterpret_cast<NodesView *>(scene()->views()[0]) };
 
   LinkItem *const linkItem{ view->dragLink() };
   if (!linkItem) return;
@@ -137,13 +136,13 @@ void SocketItem::dragEnterEvent(QGraphicsSceneDragDropEvent *aEvent)
   update();
 }
 
-void SocketItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *aEvent)
+void SocketItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *a_event)
 {
-  Q_UNUSED(aEvent);
+  Q_UNUSED(a_event);
 
   m_isDrop = false;
 
-  NodesView *view{ reinterpret_cast<NodesView*>(scene()->views()[0]) };
+  NodesView *view{ reinterpret_cast<NodesView *>(scene()->views()[0]) };
 
   LinkItem *const linkItem{ view->dragLink() };
   if (!linkItem) return;
@@ -152,16 +151,16 @@ void SocketItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *aEvent)
   update();
 }
 
-void SocketItem::dragMoveEvent(QGraphicsSceneDragDropEvent *aEvent)
+void SocketItem::dragMoveEvent(QGraphicsSceneDragDropEvent *a_event)
 {
-  Q_UNUSED(aEvent);
+  Q_UNUSED(a_event);
 }
 
-void SocketItem::dropEvent(QGraphicsSceneDragDropEvent *aEvent)
+void SocketItem::dropEvent(QGraphicsSceneDragDropEvent *a_event)
 {
-  Q_UNUSED(aEvent);
+  Q_UNUSED(a_event);
 
-  NodesView *view{ reinterpret_cast<NodesView*>(scene()->views()[0]) };
+  NodesView *view{ reinterpret_cast<NodesView *>(scene()->views()[0]) };
 
   LinkItem *const linkItem{ view->dragLink() };
   if (!linkItem) return;
@@ -183,30 +182,31 @@ void SocketItem::dropEvent(QGraphicsSceneDragDropEvent *aEvent)
   update();
 }
 
-void SocketItem::mousePressEvent(QGraphicsSceneMouseEvent *aEvent)
+void SocketItem::mousePressEvent(QGraphicsSceneMouseEvent *a_event)
 {
-  Q_UNUSED(aEvent);
+  Q_UNUSED(a_event);
 
   if (m_type == Type::eInput) return;
 
   setCursor(Qt::ClosedHandCursor);
 }
 
-void SocketItem::mouseMoveEvent(QGraphicsSceneMouseEvent *aEvent)
+void SocketItem::mouseMoveEvent(QGraphicsSceneMouseEvent *a_event)
 {
-  Q_UNUSED(aEvent);
+  Q_UNUSED(a_event);
 
   if (m_type == Type::eInput) return;
 
-  if (QLineF(aEvent->screenPos(), aEvent->buttonDownScreenPos(Qt::LeftButton)).length() < QApplication::startDragDistance())
+  if (QLineF(a_event->screenPos(), a_event->buttonDownScreenPos(Qt::LeftButton)).length() <
+      QApplication::startDragDistance())
     return;
 
-//  QRectF const rect{ boundingRect() };
+  //  QRectF const rect{ boundingRect() };
 
-  QDrag *const drag = new QDrag(aEvent->widget());
+  QDrag *const drag = new QDrag(a_event->widget());
 
   QMimeData *const mime = new QMimeData;
-//  mime->setData("data/x-element", QByteArray());
+  //  mime->setData("data/x-element", QByteArray());
   drag->setMimeData(mime);
 
   LinkItem *linkItem{ new LinkItem };
@@ -215,7 +215,7 @@ void SocketItem::mouseMoveEvent(QGraphicsSceneMouseEvent *aEvent)
 
   scene()->addItem(linkItem);
 
-  NodesView *view{ reinterpret_cast<NodesView*>(scene()->views()[0]) };
+  NodesView *view{ reinterpret_cast<NodesView *>(scene()->views()[0]) };
   view->setDragLink(linkItem);
 
   Qt::DropAction const action{ drag->exec() };
@@ -230,22 +230,21 @@ void SocketItem::mouseMoveEvent(QGraphicsSceneMouseEvent *aEvent)
   setCursor(Qt::OpenHandCursor);
 }
 
-void SocketItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *aEvent)
+void SocketItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *a_event)
 {
-  Q_UNUSED(aEvent);
+  Q_UNUSED(a_event);
 
   if (m_type == Type::eInput) return;
 
   setCursor(Qt::OpenHandCursor);
 }
 
-QVariant SocketItem::itemChange(QGraphicsItem::GraphicsItemChange aChange, const QVariant &aValue)
+QVariant SocketItem::itemChange(QGraphicsItem::GraphicsItemChange a_change, const QVariant &a_value)
 {
-  if (aChange == QGraphicsItem::ItemScenePositionHasChanged) {
-    for (LinkItem *const link : m_links)
-      link->trackNodes();
+  if (a_change == QGraphicsItem::ItemScenePositionHasChanged) {
+    for (LinkItem *const link : m_links) link->trackNodes();
   }
-  return QGraphicsItem::itemChange(aChange, aValue);
+  return QGraphicsItem::itemChange(a_change, a_value);
 }
 
 int SocketItem::nameWidth() const
@@ -266,7 +265,6 @@ void SocketItem::setSignal(const bool a_signal)
   update();
 
   if (m_type == Type::eOutput) {
-    for (LinkItem *const link : m_links)
-      link->setSignal(a_signal);
+    for (LinkItem *const link : m_links) link->setSignal(a_signal);
   }
 }

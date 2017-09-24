@@ -25,9 +25,9 @@
 
 #include <concurrentqueue.h>
 #ifdef _MSC_VER
-#  include <unordered_map>
+# include <unordered_map>
 #else
-#  include <sparsepp/spp.h>
+# include <sparsepp/spp.h>
 #endif
 
 #include "core/id_manager.h"
@@ -38,9 +38,9 @@
 #define PACKAGE_SPP_MAP 1
 #define PACKAGE_STD_UNORDERED_MAP 2
 #ifdef _MSC_VER
-#  define PACKAGE_MAP PACKAGE_STD_UNORDERED_MAP
+# define PACKAGE_MAP PACKAGE_STD_UNORDERED_MAP
 #else
-#  define PACKAGE_MAP PACKAGE_SPP_MAP
+# define PACKAGE_MAP PACKAGE_SPP_MAP
 #endif
 
 namespace elements {

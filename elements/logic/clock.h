@@ -28,8 +28,7 @@
 #include "elements/element.h"
 #include "elements/types.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 class Clock final : public Element {
  public:
@@ -44,14 +43,13 @@ class Clock final : public Element {
 
   void setDuration(duration_t a_duration) { m_duration = a_duration; }
   void reset(time_point_t a_timePoint) { m_lastTimePoint = a_timePoint; }
-  void update(time_point_t const& a_timePoint);
+  void update(time_point_t const &a_timePoint);
 
  private:
   time_point_t m_lastTimePoint{};
   duration_t m_duration{ 500 };
 };
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic
 
 #endif // ELEMENTS_LOGIC_CLOCK_H

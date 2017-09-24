@@ -23,8 +23,7 @@
 #include "elements/logic/or.h"
 #include "elements/package.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 core::MetaData &Or::metaData()
 {
@@ -61,5 +60,4 @@ bool Or::calculate()
   return somethingSet != currentState;
 }
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic

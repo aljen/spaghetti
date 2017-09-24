@@ -20,16 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <random>
 #include "elements/logic/random_bool.h"
+#include <random>
 #include "elements/package.h"
 
 std::random_device g_random{};
 std::mt19937 g_generator{ g_random() };
 std::bernoulli_distribution g_distrib(0.47);
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 core::MetaData &RandomBool::metaData()
 {
@@ -53,10 +52,8 @@ bool RandomBool::calculate()
 {
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
   bool const newState{ g_distrib(g_generator) };
-  if (newState != currentState)
-    m_outputs[0].value = newState;
+  if (newState != currentState) m_outputs[0].value = newState;
   return newState != currentState;
 }
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic

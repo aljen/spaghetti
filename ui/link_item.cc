@@ -40,9 +40,8 @@ void LinkItem::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_opti
   Config const &config{ Config::get() };
   //  aPainter->setClipRect(aOption->exposedRect);
   QColor const signalColor{ m_isSignalOn ? m_colorSignalOn : m_colorSignalOff };
-  QColor const notActive{ isSelected() ? config.getColor(Config::Color::eSelected)
-                                       : signalColor };
-//                                       : config.getColor(Config::Color::eLink) };
+  QColor const notActive{ isSelected() ? config.getColor(Config::Color::eSelected) : signalColor };
+  //                                       : config.getColor(Config::Color::eLink) };
   QColor const hover{ config.getColor(Config::Color::eSocketHover) };
   QPen pen{ (m_isHover ? hover : notActive) };
   pen.setStyle(m_to ? Qt::SolidLine : Qt::DashDotLine);
@@ -109,8 +108,7 @@ void LinkItem::setSignal(bool const a_signal)
 {
   m_isSignalOn = a_signal;
 
-  if (m_to)
-    m_to->setSignal(a_signal);
+  if (m_to) m_to->setSignal(a_signal);
 
   update();
 }

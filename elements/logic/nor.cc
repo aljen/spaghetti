@@ -23,8 +23,7 @@
 #include "elements/logic/nor.h"
 #include "elements/package.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 core::MetaData &Nor::metaData()
 {
@@ -63,5 +62,4 @@ bool Nor::calculate()
   return somethingSet != currentState;
 }
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic

@@ -23,8 +23,7 @@
 #include "elements/logic/switch.h"
 #include "elements/package.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 core::MetaData &Switch::metaData()
 {
@@ -43,11 +42,6 @@ Switch::Switch()
   addOutput(Type::eBool, "#1");
 }
 
-// bool Switch::calculate()
-//{
-//  return true;
-//}
-
 void Switch::toggle()
 {
   m_outputs[0].value = !std::get<bool>(m_outputs[0].value);
@@ -65,5 +59,4 @@ void Switch::set(bool a_state)
   m_package->elementChanged(id());
 }
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic

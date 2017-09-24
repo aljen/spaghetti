@@ -26,8 +26,7 @@
 #include "elements/element.h"
 #include "elements/types.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 class RandomBool final : public Element {
  public:
@@ -39,7 +38,6 @@ class RandomBool final : public Element {
   size_t type() const noexcept override { return Types::eRandomBool; }
 };
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic
 
 #endif // ELEMENTS_LOGIC_RANDOM_BOOL_H

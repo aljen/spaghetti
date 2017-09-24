@@ -23,13 +23,7 @@
 #include "elements/logic/const_bool.h"
 #include "elements/package.h"
 
-namespace elements {
-namespace logic {
-
-// bool ConstBool::calculate()
-//{
-//  return true;
-//}
+namespace elements::logic {
 
 core::MetaData &ConstBool::metaData()
 {
@@ -64,5 +58,4 @@ void ConstBool::set(bool a_state)
   m_package->elementChanged(id());
 }
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic

@@ -23,8 +23,8 @@
 #include <boost/filesystem.hpp>
 
 #include "core/registry.h"
-#include "elements/logic/all.h"
 #include "elements/element.h"
+#include "elements/logic/all.h"
 #include "elements/package.h"
 #include "nodes/node.h"
 

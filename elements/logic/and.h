@@ -26,8 +26,7 @@
 #include "elements/element.h"
 #include "elements/types.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 class And final : public Element {
  public:
@@ -38,7 +37,6 @@ class And final : public Element {
   size_t type() const noexcept override { return Types::eAnd; }
 };
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic
 
 #endif // ELEMENTS_LOGIC_AND_H

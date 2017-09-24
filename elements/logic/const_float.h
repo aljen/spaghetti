@@ -26,8 +26,7 @@
 #include "elements/element.h"
 #include "elements/types.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 class ConstFloat final : public Element {
  public:
@@ -35,13 +34,11 @@ class ConstFloat final : public Element {
 
   ConstFloat();
 
-  //  bool calculate();
   size_t type() const noexcept override { return Types::eConstFloat; }
 
   void set(float a_value);
 };
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic
 
 #endif // ELEMENTS_LOGIC_CONST_FLOAT_H

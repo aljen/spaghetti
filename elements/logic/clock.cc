@@ -25,8 +25,7 @@
 #include "elements/logic/clock.h"
 #include "elements/package.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 core::MetaData &Clock::metaData()
 {
@@ -50,7 +49,7 @@ bool Clock::calculate()
   return false;
 }
 
-void Clock::update(time_point_t const& a_timePoint)
+void Clock::update(time_point_t const &a_timePoint)
 {
   auto const diff = a_timePoint - m_lastTimePoint;
   if (diff >= m_duration) {
@@ -61,5 +60,4 @@ void Clock::update(time_point_t const& a_timePoint)
   }
 }
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic

@@ -26,8 +26,7 @@
 #include "elements/element.h"
 #include "elements/types.h"
 
-namespace elements {
-namespace logic {
+namespace elements::logic {
 
 class Not final : public Element {
  public:
@@ -38,7 +37,6 @@ class Not final : public Element {
   size_t type() const noexcept override { return Types::eNot; }
 };
 
-} // namespace logic
-} // namespace elements
+} // namespace elements::logic
 
 #endif // ELEMENTS_LOGIC_NOT_H

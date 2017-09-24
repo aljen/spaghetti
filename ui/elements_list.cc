@@ -1,7 +1,7 @@
 #include "ui/elements_list.h"
 
-#include "ui/package_view.h"
 #include "ui/editor.h"
+#include "ui/package_view.h"
 
 #include <QDebug>
 #include <QDrag>
@@ -59,11 +59,7 @@ void ElementsList::startDrag(Qt::DropActions a_supportedActions)
 
   auto const ret = drag->exec(Qt::CopyAction);
   switch (ret) {
-    case Qt::CopyAction:
-      qDebug() << "Item" << path << "added!";
-      break;
-    default:
-      qDebug() << Q_FUNC_INFO << "ret:" << ret;
-      break;
+    case Qt::CopyAction: qDebug() << "Item" << path << "added!"; break;
+    default: qDebug() << Q_FUNC_INFO << "ret:" << ret; break;
   }
 }

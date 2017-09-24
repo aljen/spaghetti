@@ -45,7 +45,7 @@ class Node : public QGraphicsItem {
   QRectF m_boundingRect{};
   elements::Element *m_element{};
 
-  using Sockets = QVector<SocketItem*>;
+  using Sockets = QVector<SocketItem *>;
   Sockets m_inputs{};
   Sockets m_outputs{};
 };
