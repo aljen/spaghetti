@@ -15,7 +15,7 @@ include_directories(SYSTEM ${VENDOR_ROOT})
 find_package(Threads REQUIRED)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-set(SPAGHETTI_SOURCES
+set(LIBSPAGHETTI_SOURCES
   core/id_manager.h
   core/metadata.h
   core/registry.cc
@@ -67,8 +67,14 @@ set(SPAGHETTI_SOURCES
   ui/package_view.h
   ui/socket_item.cc
   ui/socket_item.h
+  )
+
+set(SPAGHETTI_SOURCES
   main.cc
   )
 
-add_executable(Spaghetti ${SPAGHETTI_SOURCES})
-target_link_libraries(Spaghetti Qt5::Widgets ${CMAKE_THREAD_LIBS_INIT})
+add_library(Spaghetti STATIC ${LIBSPAGHETTI_SOURCES})
+target_link_libraries(Spaghetti PUBLIC Qt5::Widgets PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(SpaghettiEditor ${SPAGHETTI_SOURCES})
+target_link_libraries(SpaghettiEditor Spaghetti)
