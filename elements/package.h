@@ -24,12 +24,24 @@
 #define ELEMENTS_PACKAGE_H
 
 #include <concurrentqueue.h>
-#include <sparsepp/spp.h>
+#ifdef _MSC_VER
+#  include <unordered_map>
+#else
+#  include <sparsepp/spp.h>
+#endif
 
 #include "core/id_manager.h"
 #include "core/strings.h"
 #include "elements/element.h"
 #include "elements/types.h"
+
+#define PACKAGE_SPP_MAP 1
+#define PACKAGE_STD_UNORDERED_MAP 2
+#ifdef _MSC_VER
+#  define PACKAGE_MAP PACKAGE_STD_UNORDERED_MAP
+#else
+#  define PACKAGE_MAP PACKAGE_SPP_MAP
+#endif
 
 namespace elements {
 
@@ -63,12 +75,19 @@ class Package final : public Element {
 
  private:
   std::vector<Element *> m_data{};
-  std::vector<uint32_t> m_free{};
+  std::vector<size_t> m_free{};
 
   std::vector<logic::Clock *> m_clocks{};
 
   moodycamel::ConcurrentQueue<size_t> m_queue{};
-  spp::sparse_hash_map<size_t, std::set<size_t>> m_callbacks{};
+
+#if PACKAGE_MAP == PACKAGE_SPP_MAP
+  using Callbacks = spp::sparse_hash_map<size_t, std::set<size_t>>;
+#elif PACKAGE_MAP == PACKAGE_STD_UNORDERED_MAP
+  using Callbacks = std::unordered_map<size_t, std::set<size_t>>;
+#endif
+
+  Callbacks m_callbacks{};
   std::thread m_thread{};
 
   bool m_quit{};

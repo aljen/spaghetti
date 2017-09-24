@@ -109,7 +109,6 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
 
 void Package::threadFunction()
 {
-  std::cout << __PRETTY_FUNCTION__ << ">" << std::endl;
   while (!m_quit) {
     auto const now = logic::Clock::clock_t::now();
     for (auto &&clock : m_clocks) {
@@ -119,7 +118,6 @@ void Package::threadFunction()
     if (!tryDispatch())
       std::this_thread::yield();
   }
-  std::cout << __PRETTY_FUNCTION__ << "<" << std::endl;
 }
 
 void Package::startDispatchThread()
@@ -149,7 +147,7 @@ void Package::dispatch(size_t a_id)
   Element *const source{ get(a_id) };
   if (source->m_callback) source->m_callback(source);
 
-  if (!m_callbacks.contains(a_id)) {
+  if (m_callbacks.find(a_id) == std::end(m_callbacks)) {
     std::cout << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
               << " don't exist." << std::endl;
     return;

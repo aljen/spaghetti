@@ -25,8 +25,6 @@ elseif (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
   set(RELEASE 0)
   set(MIN_SIZE_REL 0)
   set(REL_WITH_DEB_INFO 1)
-else ()
-  message(FATAL_ERROR "Unknown build type")
 endif ()
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")

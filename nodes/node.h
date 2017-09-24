@@ -33,8 +33,8 @@ class Node : public QGraphicsItem {
   void expand();
 
  private:
-  void addInput(size_t const a_id, elements::Element::Input const &a_input);
-  void addOutput(size_t const a_id, elements::Element::Output const &a_output);
+  void addInput(uint8_t const a_id, elements::Element::Input const &a_input);
+  void addOutput(uint8_t const a_id, elements::Element::Output const &a_output);
   void calculateBoundingRect();
 
  private:

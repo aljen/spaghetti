@@ -109,8 +109,8 @@ void Node::setElement(elements::Element *const a_element)
 
   auto const &inputs = m_element->inputs();
   auto const &outputs = m_element->outputs();
-  for (size_t i = 0; i < inputs.size(); ++i) addInput(i, inputs[i]);
-  for (size_t i = 0; i < outputs.size(); ++i) addOutput(i, outputs[i]);
+  for (size_t i = 0; i < inputs.size(); ++i) addInput(static_cast<uint8_t>(i), inputs[i]);
+  for (size_t i = 0; i < outputs.size(); ++i) addOutput(static_cast<uint8_t>(i), outputs[i]);
 
   m_element->onChange([&](elements::Element *const a_element) {
     auto const &outputs = a_element->outputs();
@@ -118,7 +118,7 @@ void Node::setElement(elements::Element *const a_element)
       switch (outputs[i].type) {
         case elements::Element::Type::eBool: {
           bool const signal{ std::get<bool>(outputs[i].value) };
-          m_outputs[i]->setSignal(signal);
+          m_outputs[static_cast<int>(i)]->setSignal(signal);
           break;
         }
         default:
@@ -161,7 +161,7 @@ void Node::expand()
   calculateBoundingRect();
 }
 
-void Node::addInput(size_t const a_id, elements::Element::Input const &a_input)
+void Node::addInput(uint8_t const a_id, elements::Element::Input const &a_input)
 {
   QString const name{ QString::fromStdString(a_input.name) };
 //  qDebug() << "Adding input" << name << a_id << "for element" << m_element->id();
@@ -187,7 +187,7 @@ void Node::addInput(size_t const a_id, elements::Element::Input const &a_input)
   m_inputs.push_back(socket);
 }
 
-void Node::addOutput(size_t const a_id, elements::Element::Output const &a_output)
+void Node::addOutput(uint8_t const a_id, elements::Element::Output const &a_output)
 {
   QString const name{ QString::fromStdString(a_output.name) };
 //  qDebug() << "Adding output" << name << a_id << "for element" << m_element->id();

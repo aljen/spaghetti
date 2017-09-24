@@ -7,7 +7,7 @@
 #include "ui/config.h"
 #include "ui/elements_list.h"
 
-#include <json/json.hpp>
+//#include <json/json.hpp>
 
 #include <QPainterPath>
 #include <QGraphicsItem>
@@ -197,7 +197,8 @@ void Editor::populateElementsList()
   core::Registry const &registry{ core::Registry::get() };
   auto const &elements{ registry.elements() };
 
-  for (auto &&[hash, info] : elements) {
+  for (auto &&element : elements) {
+    auto const &info = element.second;
     std::string const path{ info.data->path };
     std::string category{ path };
 

@@ -53,8 +53,8 @@ class SocketItem : public QGraphicsItem {
 
   void setElementId(size_t const a_elementId) { m_elementId = a_elementId; }
   size_t elementId() const { return m_elementId; }
-  void setSocketId(size_t const a_socketId) { m_socketId = a_socketId; }
-  size_t socketId() const { return m_socketId; }
+  void setSocketId(uint8_t const a_socketId) { m_socketId = a_socketId; }
+  uint8_t socketId() const { return m_socketId; }
 
   void setColors(QColor const a_signalOff, QColor const a_signalOn);
   void setSignal(bool const a_signal);
@@ -64,7 +64,7 @@ class SocketItem : public QGraphicsItem {
   QFont m_font{};
 
   size_t m_elementId{};
-  size_t m_socketId{};
+  uint8_t m_socketId{};
 
   QColor m_colorSignalOn{};
   QColor m_colorSignalOff{};

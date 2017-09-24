@@ -23,17 +23,25 @@
 #ifndef CORE_REGISTRY_H
 #define CORE_REGISTRY_H
 
+#include <cassert>
 #include <type_traits>
-#include <sparsepp/spp.h>
-#include <map>
+#ifdef _MSC_VER
+#  include <unordered_map>
+#else
+#  include <sparsepp/spp.h>
+#endif
 #include "core/metadata.h"
 #include "core/strings.h"
 #include "elements/element.h"
 #include "nodes/node.h"
 
 #define REGISTRY_SPP_MAP 1
-#define REGISTRY_STD_MAP 2
-#define REGISTRY_MAP REGISTRY_SPP_MAP
+#define REGISTRY_STD_UNORDERED_MAP 2
+#ifdef _MSC_VER
+#  define REGISTRY_MAP REGISTRY_STD_UNORDERED_MAP
+#else
+#  define REGISTRY_MAP REGISTRY_SPP_MAP
+#endif
 
 namespace core {
 
@@ -49,8 +57,8 @@ class Registry final {
  public:
 #if REGISTRY_MAP == REGISTRY_SPP_MAP
   using Elements = spp::sparse_hash_map<string::hash_t, Info>;
-#elif REGISTRY_MAP == REGISTRY_STD_MAP
-  using Elements = std::map<string::hash_t, Info>;
+#elif REGISTRY_MAP == REGISTRY_STD_UNORDERED_MAP
+  using Elements = std::unordered_map<string::hash_t, Info>;
 #endif
 
   static Registry &get();
