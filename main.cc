@@ -52,6 +52,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 
   core::Registry &registry{ core::Registry::get() };
   registry.registerInternalElements();
+  registry.loadPlugins();
 
   Editor editor{};
   QObject::connect(&app, &QApplication::aboutToQuit, &editor, &Editor::aboutToQuit);

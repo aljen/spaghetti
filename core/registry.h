@@ -25,6 +25,7 @@
 
 #include <cassert>
 #include <type_traits>
+#include <boost/dll.hpp>
 
 #ifdef _MSC_VER
 #  include <unordered_map>
@@ -67,6 +68,7 @@ class Registry final {
   static Registry &get();
 
   void registerInternalElements();
+  void loadPlugins();
 
   template<typename Element, typename Node>
   typename std::enable_if_t<(std::is_base_of_v<elements::Element, Element> && std::is_base_of_v<nodes::Node, Node>)>
@@ -115,7 +117,9 @@ class Registry final {
   }
 
  private:
+  using Plugins = std::vector<std::shared_ptr<boost::dll::shared_library>>;
   Elements m_elements{};
+  Plugins m_plugins{};
 };
 
 } // namespace core

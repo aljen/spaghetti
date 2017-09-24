@@ -20,11 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <boost/filesystem.hpp>
+
 #include "core/registry.h"
 #include "elements/logic/all.h"
 #include "elements/element.h"
 #include "elements/package.h"
 #include "nodes/node.h"
+
+namespace fs = boost::filesystem;
+namespace dll = boost::dll;
 
 inline void init_resources()
 {
@@ -55,6 +60,27 @@ void Registry::registerInternalElements()
   registerElement<elements::logic::ConstInt, nodes::logic::Test>();
   registerElement<elements::logic::RandomBool, nodes::logic::Test>();
   registerElement<elements::logic::Switch, nodes::logic::Test>();
+}
+
+void Registry::loadPlugins()
+{
+  fs::path const pluginsDir{ "../plugins" };
+
+  if (!fs::is_directory(pluginsDir)) return;
+
+  for (auto const &entry : fs::directory_iterator(pluginsDir)) {
+    if (!fs::is_regular_file(entry)) continue;
+
+    boost::system::error_code error{};
+    auto plugin = std::make_shared<dll::shared_library>(entry, error, dll::load_mode::append_decorations);
+
+    if (error != 0 || !plugin->has("register_plugin")) continue;
+
+    auto registerPlugin = plugin->get<void(core::Registry &)>("register_plugin");
+    registerPlugin(*this);
+
+    m_plugins.emplace_back(std::move(plugin));
+  }
 }
 
 } // namespace core
