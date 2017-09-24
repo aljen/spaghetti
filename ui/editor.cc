@@ -42,8 +42,6 @@ Editor::Editor(QWidget* a_parent)
 
   Config::get();
 
-  core::register_internal_elements();
-
   populateElementsList();
   newPackage();
 

@@ -25,15 +25,18 @@
 
 #include <cassert>
 #include <type_traits>
+
 #ifdef _MSC_VER
 #  include <unordered_map>
 #else
 #  include <sparsepp/spp.h>
 #endif
+
 #include "core/metadata.h"
 #include "core/strings.h"
-#include "elements/element.h"
-#include "nodes/node.h"
+
+namespace elements { class Element; }
+namespace nodes { class Node; }
 
 #define REGISTRY_SPP_MAP 1
 #define REGISTRY_STD_UNORDERED_MAP 2
@@ -62,6 +65,8 @@ class Registry final {
 #endif
 
   static Registry &get();
+
+  void registerInternalElements();
 
   template<typename Element, typename Node>
   typename std::enable_if_t<(std::is_base_of_v<elements::Element, Element> && std::is_base_of_v<nodes::Node, Node>)>
@@ -112,8 +117,6 @@ class Registry final {
  private:
   Elements m_elements{};
 };
-
-void register_internal_elements();
 
 } // namespace core
 

@@ -25,6 +25,7 @@
 #include <QStyleFactory>
 #include <iostream>
 
+#include "core/registry.h"
 #include "ui/editor.h"
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
@@ -48,6 +49,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   darkPalette.setColor(QPalette::HighlightedText, Qt::black);
   app.setPalette(darkPalette);
   app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
+
+  core::Registry &registry{ core::Registry::get() };
+  registry.registerInternalElements();
 
   Editor editor{};
   QObject::connect(&app, &QApplication::aboutToQuit, &editor, &Editor::aboutToQuit);

@@ -22,7 +22,14 @@
 
 #include "core/registry.h"
 #include "elements/logic/all.h"
+#include "elements/element.h"
 #include "elements/package.h"
+#include "nodes/node.h"
+
+inline void init_resources()
+{
+  Q_INIT_RESOURCE(icons);
+}
 
 namespace core {
 
@@ -32,22 +39,22 @@ Registry &Registry::get()
   return s_registry;
 }
 
-void register_internal_elements()
+void Registry::registerInternalElements()
 {
-  Registry &registry{ Registry::get() };
+  init_resources();
 
-  registry.registerElement<elements::Package, nodes::Package>();
-  registry.registerElement<elements::logic::Clock, nodes::logic::Test>();
-  registry.registerElement<elements::logic::Nand, nodes::logic::Test>();
-  registry.registerElement<elements::logic::And, nodes::logic::Test>();
-  registry.registerElement<elements::logic::Nor, nodes::logic::Test>();
-  registry.registerElement<elements::logic::Or, nodes::logic::Test>();
-  registry.registerElement<elements::logic::Not, nodes::logic::Test>();
-  registry.registerElement<elements::logic::ConstBool, nodes::logic::Test>();
-  registry.registerElement<elements::logic::ConstFloat, nodes::logic::Test>();
-  registry.registerElement<elements::logic::ConstInt, nodes::logic::Test>();
-  registry.registerElement<elements::logic::RandomBool, nodes::logic::Test>();
-  registry.registerElement<elements::logic::Switch, nodes::logic::Test>();
+  registerElement<elements::Package, nodes::Package>();
+  registerElement<elements::logic::Clock, nodes::logic::Test>();
+  registerElement<elements::logic::Nand, nodes::logic::Test>();
+  registerElement<elements::logic::And, nodes::logic::Test>();
+  registerElement<elements::logic::Nor, nodes::logic::Test>();
+  registerElement<elements::logic::Or, nodes::logic::Test>();
+  registerElement<elements::logic::Not, nodes::logic::Test>();
+  registerElement<elements::logic::ConstBool, nodes::logic::Test>();
+  registerElement<elements::logic::ConstFloat, nodes::logic::Test>();
+  registerElement<elements::logic::ConstInt, nodes::logic::Test>();
+  registerElement<elements::logic::RandomBool, nodes::logic::Test>();
+  registerElement<elements::logic::Switch, nodes::logic::Test>();
 }
 
 } // namespace core
