@@ -9,7 +9,7 @@ class Package;
 
 class NodesView;
 
-class PackageView : public QWidget {
+class PackageView final : public QWidget {
   Q_OBJECT
 
  public:

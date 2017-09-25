@@ -7,7 +7,7 @@
 
 class LinkItem;
 
-class SocketItem : public QGraphicsItem {
+class SocketItem final : public QGraphicsItem {
  public:
   enum class Type { eInput, eOutput };
 

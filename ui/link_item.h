@@ -9,7 +9,7 @@ class QGraphicsDropShadowEffect;
 
 constexpr int LINK_TYPE{ QGraphicsItem::UserType + 2 };
 
-class LinkItem : public QGraphicsPathItem {
+class LinkItem final : public QGraphicsPathItem {
  public:
   LinkItem(QGraphicsItem *a_parent = nullptr);
 
