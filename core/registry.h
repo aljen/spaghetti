@@ -36,6 +36,22 @@
 #include "core/metadata.h"
 #include "core/strings.h"
 
+// clang-format off
+#if defined(_WIN64) || defined(_WIN32)
+# if defined(SPAGHETTI_SHARED)
+#  if defined(SPAGHETTI_EXPORTS)
+#   define SPAGHETTI_API __declspec(dllexport)
+#  else
+#   define SPAGHETTI_API __declspec(dllimport)
+#  endif
+# else
+#  define SPAGHETTI_API
+# endif
+#else
+# define SPAGHETTI_API __attribute__((visibility("default")))
+#endif
+// clang-format on
+
 namespace elements {
 class Element;
 }

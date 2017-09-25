@@ -15,10 +15,7 @@ class Example final : public elements::Element {
   {
   }
 
-  bool calculate() override
-  {
-    return false;
-  }
+  bool calculate() override { return false; }
 
   size_t type() const noexcept override { return Types::eUser + 100; }
 };
@@ -30,11 +27,7 @@ core::MetaData &Example::metaData()
   return metaData;
 }
 
-extern "C" {
-
-void register_plugin(core::Registry &a_registry)
+extern "C" SPAGHETTI_API void register_plugin(core::Registry &a_registry)
 {
   a_registry.registerElement<Example, nodes::Node>();
-}
-
 }
