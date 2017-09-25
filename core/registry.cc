@@ -74,7 +74,7 @@ void Registry::loadPlugins()
     boost::system::error_code error{};
     auto plugin = std::make_shared<dll::shared_library>(entry, error, dll::load_mode::append_decorations);
 
-    if (error != 0 || !plugin->has("register_plugin")) continue;
+    if (error.value() != 0 || !plugin->has("register_plugin")) continue;
 
     auto registerPlugin = plugin->get<void(core::Registry &)>("register_plugin");
     registerPlugin(*this);
