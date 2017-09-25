@@ -13,8 +13,8 @@ set(VENDOR_ROOT ${PROJECT_ROOT}/vendor)
 include_directories(SYSTEM ${VENDOR_ROOT})
 
 find_package(Threads REQUIRED)
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Boost COMPONENTS Filesystem REQUIRED)
+find_package(Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Boost REQUIRED COMPONENTS filesystem)
 
 set(LIBSPAGHETTI_SOURCES
   core/id_manager.h
@@ -75,7 +75,7 @@ set(SPAGHETTI_SOURCES
   )
 
 add_library(Spaghetti STATIC ${LIBSPAGHETTI_SOURCES})
-target_link_libraries(Spaghetti PUBLIC Qt5::Widgets PRIVATE Boost::Filesystem ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(Spaghetti PUBLIC Qt5::Widgets PRIVATE Boost::filesystem ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
 
 add_executable(SpaghettiEditor ${SPAGHETTI_SOURCES})
 target_link_libraries(SpaghettiEditor Spaghetti)
