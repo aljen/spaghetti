@@ -78,7 +78,7 @@ void NodesView::dragEnterEvent(QDragEnterEvent *a_event)
     QGraphicsView::dragEnterEvent(a_event);
 }
 
-void NodesView::dragLeaveEvent(QDragLeaveEvent *a_event)
+void NodesView::dragLeaveEvent([[maybe_unused]] QDragLeaveEvent *a_event)
 {
   scene()->removeItem(m_dragNode);
   delete m_dragNode;
@@ -138,7 +138,7 @@ void NodesView::wheelEvent(QWheelEvent *a_event)
   QTimeLine *const animation{ new QTimeLine{ 350, this } };
   animation->setUpdateInterval(20);
 
-  connect(animation, &QTimeLine::valueChanged, [&](qreal a_scale) {
+  connect(animation, &QTimeLine::valueChanged, [&](qreal) {
     qreal const factor{ 1.0 + static_cast<qreal>(m_scheduledScalings) / 300.0 };
     QMatrix temp{ matrix() };
     temp.scale(factor, factor);

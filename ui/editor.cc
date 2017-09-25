@@ -129,5 +129,3 @@ void Editor::addElement(QString a_category, core::MetaData a_metaData)
 }
 
 void Editor::aboutToQuit() {}
-
-void Editor::itemMoved(QGraphicsItem *const aItem) {}

@@ -29,7 +29,6 @@ class Editor : public QMainWindow {
   void addElement(QString a_category, core::MetaData a_metaData);
 
   void aboutToQuit();
-  void itemMoved(QGraphicsItem *const a_item);
 
   PackageView *currentPackageView() const { return m_currentPackageView; }
 

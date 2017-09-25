@@ -13,7 +13,6 @@ namespace nodes {
 
 constexpr qreal ICON_OFFSET{ 25.0 };
 constexpr QSizeF ICON_SIZE{ 50.0 + ICON_OFFSET, 25.0 + ICON_OFFSET };
-constexpr QRectF ICON_RECT{ QPointF{ -ICON_SIZE.width() / 2.0, -ICON_SIZE.height() / 2.0 }, ICON_SIZE };
 constexpr qreal ROUND_FACTOR{ 15.0 };
 
 Node::Node(QGraphicsItem *a_parent)
@@ -71,10 +70,10 @@ void Node::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, 
 
   //  a_painter->translate(m_boundingRect.width() / 2.0 - size.width() / 4.0, m_boundingRect.height() / 2.0 -
   //  size.height() / 4.0); a_painter->drawPixmap(0, 0, size.width() / 2.0, size.height() / 2.0, m_icon);
-  auto x = -size2.width() / 2.0;
-  auto y = -size2.height() / 2.0;
-  auto w = size2.width();
-  auto h = size2.height();
+  auto const x = static_cast<int>(-size2.width() / 2.0);
+  auto const y = static_cast<int>(-size2.height() / 2.0);
+  auto const w = size2.width();
+  auto const h = size2.height();
   a_painter->drawPixmap(x, y, w, h, m_icon);
 }
 
@@ -112,12 +111,12 @@ void Node::setElement(elements::Element *const a_element)
   for (size_t i = 0; i < inputs.size(); ++i) addInput(static_cast<uint8_t>(i), inputs[i]);
   for (size_t i = 0; i < outputs.size(); ++i) addOutput(static_cast<uint8_t>(i), outputs[i]);
 
-  m_element->onChange([&](elements::Element *const a_element) {
-    auto const &outputs = a_element->outputs();
-    for (size_t i = 0; i < outputs.size(); ++i) {
-      switch (outputs[i].type) {
+  m_element->onChange([&](elements::Element *const a_changed) {
+    auto const &changedOutputs = a_changed->outputs();
+    for (size_t i = 0; i < changedOutputs.size(); ++i) {
+      switch (changedOutputs[i].type) {
         case elements::Element::Type::eBool: {
-          bool const signal{ std::get<bool>(outputs[i].value) };
+          bool const signal{ std::get<bool>(changedOutputs[i].value) };
           m_outputs[static_cast<int>(i)]->setSignal(signal);
           break;
         }
