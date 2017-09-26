@@ -7,9 +7,9 @@
 
 PackageView::PackageView(elements::Package *const a_package)
   : QWidget{}
+  , m_package{ (a_package ? a_package : new elements::Package) }
   , m_scene{ new QGraphicsScene{ this } }
   , m_nodesView{ new NodesView{ m_scene, this } }
-  , m_package{ (a_package ? a_package : new elements::Package) }
   , m_standalone{ !a_package }
 {
   setObjectName("PackageView");

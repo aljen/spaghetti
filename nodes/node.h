@@ -6,8 +6,9 @@
 #include <QVector>
 
 #include "elements/element.h"
+#include "ui/socket_item.h"
 
-class SocketItem;
+class NodesView;
 
 namespace nodes {
 
@@ -24,6 +25,13 @@ class Node : public QGraphicsItem {
   QVariant itemChange(GraphicsItemChange a_change, QVariant const &a_value) override;
   void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *a_event) override;
 
+  enum class Type { eElement, eInputs, eOutputs };
+  using SocketType = SocketItem::Type;
+  using ElementType = elements::Element::Type;
+
+  void setType(Type const a_type) { m_type = a_type; }
+  void setNodesView(NodesView *const a_nodesView) { m_nodesView = a_nodesView; }
+
   void setElement(elements::Element *const a_element);
   void setName(QString a_name) { m_name = a_name; }
   void setPath(QString a_path) { m_path = a_path; }
@@ -33,17 +41,18 @@ class Node : public QGraphicsItem {
   void expand();
 
  private:
-  void addInput(uint8_t const a_id, elements::Element::Input const &a_input);
-  void addOutput(uint8_t const a_id, elements::Element::Output const &a_output);
+  void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ElementType const a_elementType);
   void calculateBoundingRect();
 
  private:
   enum class Mode { eIconified, eExpanded } m_mode{};
+  Type m_type{};
   QString m_name{};
   QString m_path{};
   QPixmap m_icon{};
   QRectF m_boundingRect{};
   elements::Element *m_element{};
+  NodesView *m_nodesView{};
 
   using Sockets = QVector<SocketItem *>;
   Sockets m_inputs{};

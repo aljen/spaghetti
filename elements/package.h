@@ -53,6 +53,9 @@ class Package final : public Element {
  public:
   static core::MetaData &metaData();
 
+  Package();
+  ~Package() override;
+
   size_t type() const noexcept override { return Types::ePackage; }
 
   Element *add(char const *const a_name) { return add(string::hash(a_name)); }

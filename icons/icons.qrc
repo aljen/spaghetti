@@ -9,5 +9,7 @@
         <file>elements/logic/const_value.png</file>
         <file>elements/logic/package.png</file>
         <file>elements/logic/clock.png</file>
+        <file>elements/logic/inputs.png</file>
+        <file>elements/logic/outputs.png</file>
     </qresource>
 </RCC>

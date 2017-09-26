@@ -18,6 +18,8 @@
 NodesView::NodesView(QGraphicsScene *const a_scene, PackageView *a_parent)
   : QGraphicsView{ a_scene, a_parent }
   , m_packageView{ a_parent }
+  , m_inputs{ new nodes::Node }
+  , m_outputs{ new nodes::Node }
 {
   setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing |
                  QPainter::SmoothPixmapTransform);
@@ -45,9 +47,25 @@ NodesView::NodesView(QGraphicsScene *const a_scene, PackageView *a_parent)
     a_scene->addItem(vertical);
   }
 
+
   setAcceptDrops(true);
 
+  using NodeType = nodes::Node::Type;
+  m_inputs->setPos(-600.0, 0.0);
+  m_inputs->setType(NodeType::eInputs);
+  m_inputs->setElement(m_packageView->package());
+  m_inputs->setIcon(":/elements/logic/inputs.png");
+  m_inputs->setNodesView(this);
+  m_inputs->iconify();
+  m_outputs->setPos(600.0, 0.0);
+  m_outputs->setType(NodeType::eOutputs);
+  m_outputs->setElement(m_packageView->package());
+  m_outputs->setIcon(":/elements/logic/outputs.png");
+  m_outputs->setNodesView(this);
+  m_outputs->iconify();
 
+  a_scene->addItem(m_inputs);
+  a_scene->addItem(m_outputs);
 }
 
 NodesView::~NodesView() {}
@@ -127,7 +145,6 @@ void NodesView::keyReleaseEvent(QKeyEvent *a_event)
 
 void NodesView::wheelEvent(QWheelEvent *a_event)
 {
-  qDebug() << a_event;
   int32_t const numDegrees{ a_event->delta() / 8 };
   int32_t const numSteps{ numDegrees / 15 };
 

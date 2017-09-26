@@ -2,7 +2,7 @@
 
 #include "elements/types.h"
 #include "ui/config.h"
-#include "ui/socket_item.h"
+#include "ui/nodes_view.h"
 
 #include <iostream>
 
@@ -82,7 +82,6 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
   (void)a_change;
   (void)a_value;
 
-  //  qDebug() << a_change << a_value;
   switch (a_change) {
     case QGraphicsItem::ItemSelectedChange: {
       break;
@@ -108,8 +107,31 @@ void Node::setElement(elements::Element *const a_element)
 
   auto const &inputs = m_element->inputs();
   auto const &outputs = m_element->outputs();
-  for (size_t i = 0; i < inputs.size(); ++i) addInput(static_cast<uint8_t>(i), inputs[i]);
-  for (size_t i = 0; i < outputs.size(); ++i) addOutput(static_cast<uint8_t>(i), outputs[i]);
+
+  switch (m_type) {
+    case Type::eElement:
+      for (size_t i = 0; i < inputs.size(); ++i) {
+        QString const name = QString::fromStdString(inputs[i].name);
+        addSocket(SocketType::eInput, static_cast<uint8_t>(i), name, inputs[i].type);
+      }
+      for (size_t i = 0; i < outputs.size(); ++i) {
+        QString const name = QString::fromStdString(outputs[i].name);
+        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), name, outputs[i].type);
+      }
+      break;
+    case Type::eInputs:
+      for (size_t i = 0; i < inputs.size(); ++i) {
+        QString const name = QString::fromStdString(inputs[i].name);
+        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), name, inputs[i].type);
+      }
+      break;
+    case Type::eOutputs:
+      for (size_t i = 0; i < outputs.size(); ++i) {
+        QString const name = QString::fromStdString(outputs[i].name);
+        addSocket(SocketType::eInput, static_cast<uint8_t>(i), name, outputs[i].type);
+      }
+      break;
+  }
 
   m_element->onChange([&](elements::Element *const a_changed) {
     auto const &changedOutputs = a_changed->outputs();
@@ -155,17 +177,15 @@ void Node::expand()
   calculateBoundingRect();
 }
 
-void Node::addInput(uint8_t const a_id, elements::Element::Input const &a_input)
+void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ElementType const a_elementType)
 {
-  QString const name{ QString::fromStdString(a_input.name) };
-  //  qDebug() << "Adding input" << name << a_id << "for element" << m_element->id();
-  auto *const socket{ new SocketItem{ SocketItem::Type::eInput, this } };
+  auto *const socket{ new SocketItem{ a_type, this } };
   socket->setElementId(m_element->id());
   socket->setSocketId(a_id);
 
   Config const &config{ Config::get() };
 
-  switch (a_input.type) {
+  switch (a_elementType) {
     case elements::Element::Type::eBool:
       socket->setColors(config.getColor(Config::Color::eBoolSignalOff), config.getColor(Config::Color::eBoolSignalOn));
       break;
@@ -179,36 +199,11 @@ void Node::addInput(uint8_t const a_id, elements::Element::Input const &a_input)
       break;
   }
 
-  socket->setName(name);
-  m_inputs.push_back(socket);
-}
-
-void Node::addOutput(uint8_t const a_id, elements::Element::Output const &a_output)
-{
-  QString const name{ QString::fromStdString(a_output.name) };
-  //  qDebug() << "Adding output" << name << a_id << "for element" << m_element->id();
-  auto *const socket{ new SocketItem{ SocketItem::Type::eOutput, this } };
-  socket->setElementId(m_element->id());
-  socket->setSocketId(a_id);
-
-  Config const &config{ Config::get() };
-
-  switch (a_output.type) {
-    case elements::Element::Type::eBool:
-      socket->setColors(config.getColor(Config::Color::eBoolSignalOff), config.getColor(Config::Color::eBoolSignalOn));
-      break;
-    case elements::Element::Type::eFloat:
-      socket->setColors(config.getColor(Config::Color::eFloatSignalOff),
-                        config.getColor(Config::Color::eFloatSignalOn));
-      break;
-    case elements::Element::Type::eInt:
-      socket->setColors(config.getColor(Config::Color::eIntegerSignalOff),
-                        config.getColor(Config::Color::eIntegerSignalOn));
-      break;
-  }
-
-  socket->setName(name);
-  m_outputs.push_back(socket);
+  socket->setName(a_name);
+  if (a_type == SocketType::eInput)
+    m_inputs.push_back(socket);
+  else
+    m_outputs.push_back(socket);
 }
 
 void Node::calculateBoundingRect()

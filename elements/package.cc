@@ -36,6 +36,22 @@ core::MetaData &Package::metaData()
   return metaData;
 }
 
+Package::Package()
+  : Element{}
+{
+  m_data.push_back(this);
+
+  addInput(Type::eBool, "#1");
+  addInput(Type::eBool, "#2");
+  addInput(Type::eBool, "#3");
+  addOutput(Type::eBool, "#1");
+}
+
+Package::~Package()
+{
+
+}
+
 Element *Package::add(string::hash_t a_hash)
 {
   core::Registry &registry{ core::Registry::get() };
@@ -69,6 +85,7 @@ Element *Package::add(string::hash_t a_hash)
 
 void Package::remove(size_t a_id)
 {
+  assert(a_id > 0);
   assert(a_id < m_data.size());
   assert(std::find(std::begin(m_free), std::end(m_free), a_id) == std::end(m_free));
 
@@ -91,10 +108,22 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   Element *const source{ get(a_sourceId) };
   Element *const target{ get(a_targetId) };
 
-  assert(target->m_inputs[a_inputId].type == source->m_outputs[a_outputId].type);
-  target->m_inputs[a_inputId].id = a_sourceId;
-  target->m_inputs[a_inputId].slot = a_outputId;
-  target->m_inputs[a_inputId].value = &source->m_outputs[a_outputId].value;
+  std::cerr << "source_id: " << a_sourceId << "@" << static_cast<int>(a_outputId) << " "
+            << "target_id: " << a_targetId << "@" << static_cast<int>(a_inputId) << std::endl;
+  if (a_sourceId != 0 && a_targetId != 0) {
+    std::cerr << "normal connect, element to element" << std::endl;
+    assert(target->m_inputs[a_inputId].type == source->m_outputs[a_outputId].type);
+    target->m_inputs[a_inputId].id = a_sourceId;
+    target->m_inputs[a_inputId].slot = a_outputId;
+    target->m_inputs[a_inputId].value = &source->m_outputs[a_outputId].value;
+  } else if (a_sourceId == 0) {
+    std::cerr << "package connect, package input to element input" << std::endl;
+    target->m_inputs[a_inputId].id = a_sourceId;
+    target->m_inputs[a_inputId].slot = a_outputId;
+    target->m_inputs[a_inputId].value = source->m_inputs[a_outputId].value;
+  } else if (a_targetId == 0) {
+    std::cerr << "package connect, element output to package output" << std::endl;
+  }
 
 //  std::cerr << "Notifying " << a_targetId << " (" << target->name() << ")";
 //  std::cerr << "@" << static_cast<int32_t>(a_inputId) << " when " << a_sourceId << " (" << source->name() << ")";

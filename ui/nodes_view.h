@@ -36,6 +36,8 @@ class NodesView : public QGraphicsView {
 
  private:
   PackageView *m_packageView{};
+  nodes::Node *m_inputs{};
+  nodes::Node *m_outputs{};
   nodes::Node *m_dragNode{};
   LinkItem *m_dragLink{};
   int32_t m_scheduledScalings{};
