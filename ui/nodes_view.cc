@@ -134,6 +134,14 @@ void NodesView::dropEvent(QDropEvent *a_event)
 void NodesView::keyReleaseEvent(QKeyEvent *a_event)
 {
   qDebug() << a_event;
+  switch (a_event->key()) {
+    case Qt::Key_R:
+      centerOn(0.0, 0.0);
+      resetMatrix();
+      break;
+    default:
+      break;
+  }
 
   auto const selected = scene()->selectedItems();
   for (auto &&item : selected) {
