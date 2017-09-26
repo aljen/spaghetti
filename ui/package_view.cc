@@ -38,7 +38,6 @@ PackageView::PackageView(elements::Package *const a_package)
   //  QBrush brush{ QColor(156, 156, 156, 255) }; // GREY
   //  QBrush brush{ QColor(95, 124, 136, 255) }; // BLUE GREY
   //  QBrush brush{ QColor(58, 66, 71, 255) }; // DARK GREY
-  brush.setStyle(Qt::DiagCrossPattern);
   m_scene->setBackgroundBrush(brush);
 
   QVBoxLayout *const layout{ new QVBoxLayout{ this } };
