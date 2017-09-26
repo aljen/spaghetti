@@ -4,6 +4,7 @@
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
+#include <QGraphicsLineItem>
 #include <QMimeData>
 #include <QTimeLine>
 
@@ -29,6 +30,20 @@ NodesView::NodesView(QGraphicsScene *const a_scene, PackageView *a_parent)
 
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
+  constexpr int32_t SIZE = 10000;
+  constexpr int32_t SPACING = 10;
+  QPen pen{ QColor(156, 156, 156, 32) };
+  for (int32_t i = -SIZE; i < SIZE; i += SPACING) {
+    QGraphicsLineItem *const horizontal{ new QGraphicsLineItem{ static_cast<qreal>(i), -SIZE, static_cast<qreal>(i), SIZE } };
+    horizontal->setPen(pen);
+    horizontal->setZValue(-100.0);
+    a_scene->addItem(horizontal);
+
+    QGraphicsLineItem *const vertical{ new QGraphicsLineItem{ -SIZE, static_cast<qreal>(i), SIZE, static_cast<qreal>(i) } };
+    vertical->setPen(pen);
+    vertical->setZValue(-100.0);
+    a_scene->addItem(vertical);
+  }
 
   setAcceptDrops(true);
 
