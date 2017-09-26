@@ -32,6 +32,9 @@ class Editor : public QMainWindow {
 
   PackageView *currentPackageView() const { return m_currentPackageView; }
 
+ protected:
+  void showEvent(QShowEvent *a_event);
+
  private:
   Ui::Editor *m_ui{};
   PackageView *m_currentPackageView{};

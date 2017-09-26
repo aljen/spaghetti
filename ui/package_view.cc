@@ -61,3 +61,8 @@ bool PackageView::canClose()
 {
   return true;
 }
+
+void PackageView::center()
+{
+  m_nodesView->centerOn(0.0, 0.0);
+}

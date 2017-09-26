@@ -20,6 +20,7 @@ class PackageView final : public QWidget {
   elements::Package *package() { return m_package; }
 
   bool canClose();
+  void center();
 
  private:
   elements::Package *const m_package{};

@@ -129,3 +129,18 @@ void Editor::addElement(QString a_category, core::MetaData a_metaData)
 }
 
 void Editor::aboutToQuit() {}
+
+void Editor::showEvent(QShowEvent* a_event)
+{
+  static bool s_firstTime{ true };
+
+  if (s_firstTime) {
+    s_firstTime = false;
+    auto *const tab = m_ui->tabWidget;
+    auto const index = tab->currentIndex();
+    auto packageView = qobject_cast<PackageView *const>(tab->widget(index));
+    packageView->center();
+  }
+
+  QMainWindow::showEvent(a_event);
+}
