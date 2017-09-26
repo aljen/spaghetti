@@ -106,7 +106,7 @@ void NodesView::dropEvent(QDropEvent *a_event)
     auto package = m_packageView->package();
     auto element = package->add(path);
     m_dragNode->setElement(element);
-    m_dragNode->expand();
+    m_dragNode->iconify();
     m_dragNode = nullptr;
   }
 
