@@ -96,9 +96,9 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   target->m_inputs[a_inputId].slot = a_outputId;
   target->m_inputs[a_inputId].value = &source->m_outputs[a_outputId].value;
 
-  std::cout << "Notifying " << a_targetId << " (" << target->name() << ")";
-  std::cout << "@" << static_cast<int32_t>(a_inputId) << " when " << a_sourceId << " (" << source->name() << ")";
-  std::cout << "@" << static_cast<int32_t>(a_outputId) << " changes.." << std::endl;
+//  std::cerr << "Notifying " << a_targetId << " (" << target->name() << ")";
+//  std::cerr << "@" << static_cast<int32_t>(a_inputId) << " when " << a_sourceId << " (" << source->name() << ")";
+//  std::cerr << "@" << static_cast<int32_t>(a_outputId) << " changes.." << std::endl;
   m_callbacks[a_sourceId].insert(a_targetId);
 
   if (target->calculate()) elementChanged(a_targetId);
@@ -134,35 +134,36 @@ bool Package::tryDispatch()
   size_t id{};
   bool const dequeued{ m_queue.try_dequeue(id) };
   if (dequeued) {
-    std::cout << "Dequeued id: " << id << std::endl;
+//    std::cerr << "Dequeued id: " << id << std::endl;
     dispatch(id);
   }
 
   return dequeued;
 }
+
 void Package::dispatch(size_t a_id)
 {
   Element *const source{ get(a_id) };
   if (source->m_callback) source->m_callback(source);
 
   if (m_callbacks.find(a_id) == std::end(m_callbacks)) {
-    std::cout << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
-              << " don't exist." << std::endl;
+//    std::cerr << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
+//              << " don't exist." << std::endl;
     return;
   }
 
   if (m_callbacks[a_id].empty()) {
-    std::cout << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
-              << " is empty." << std::endl;
+//    std::cerr << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
+//              << " is empty." << std::endl;
     return;
   }
 
-  std::cout << "Dispatching dependencies for id: " << a_id << " (" << source->name() << ")" << std::endl;
+//  std::cerr << "Dispatching dependencies for id: " << a_id << " (" << source->name() << ")" << std::endl;
   for (auto id : m_callbacks[a_id]) {
     Element *const element{ get(id) };
-    std::cout << "Recalculating id: " << id << " (" << element->name() << ")"
-              << " because id: " << a_id << " (" << source->name() << ")"
-              << " changed." << std::endl;
+//    std::cerr << "Recalculating id: " << id << " (" << element->name() << ")"
+//              << " because id: " << a_id << " (" << source->name() << ")"
+//              << " changed." << std::endl;
     if (element->calculate()) elementChanged(id);
   }
 }
