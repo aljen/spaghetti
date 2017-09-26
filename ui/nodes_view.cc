@@ -21,11 +21,11 @@ NodesView::NodesView(QGraphicsScene *const a_scene, PackageView *a_parent)
 {
   setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing |
                  QPainter::SmoothPixmapTransform);
-  setDragMode(QGraphicsView::RubberBandDrag);
+  setDragMode(QGraphicsView::ScrollHandDrag);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
   setResizeAnchor(QGraphicsView::NoAnchor);
-  setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+  setTransformationAnchor(QGraphicsView::AnchorViewCenter);
   setObjectName("GraphicsView");
 
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
