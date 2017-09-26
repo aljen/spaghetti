@@ -14,11 +14,10 @@
 #include "ui/link_item.h"
 #include "ui/package_view.h"
 
-NodesView::NodesView(PackageView *a_parent)
-  : QGraphicsView{ a_parent }
+NodesView::NodesView(QGraphicsScene *const a_scene, PackageView *a_parent)
+  : QGraphicsView{ a_scene, a_parent }
   , m_packageView{ a_parent }
 {
-  //  (void)m_dragNode;
   setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing |
                  QPainter::SmoothPixmapTransform);
   setDragMode(QGraphicsView::RubberBandDrag);
@@ -30,24 +29,10 @@ NodesView::NodesView(PackageView *a_parent)
 
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-  setAcceptDrops(true);
-}
-
-NodesView::NodesView(QGraphicsScene *a_scene, PackageView *a_parent)
-  : QGraphicsView{ a_scene, a_parent }
-{
-  setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing |
-                 QPainter::SmoothPixmapTransform);
-  setDragMode(QGraphicsView::RubberBandDrag);
-  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  setResizeAnchor(QGraphicsView::NoAnchor);
-  setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-  setObjectName("GraphicsView");
-
-  setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
   setAcceptDrops(true);
+
+
 }
 
 NodesView::~NodesView() {}

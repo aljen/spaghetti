@@ -8,6 +8,7 @@ class Package;
 } // namespace elements
 
 class NodesView;
+class QGraphicsScene;
 
 class PackageView final : public QWidget {
   Q_OBJECT
@@ -23,8 +24,9 @@ class PackageView final : public QWidget {
   void center();
 
  private:
-  elements::Package *const m_package{};
+  QGraphicsScene *m_scene{};
   NodesView *const m_nodesView{};
+  elements::Package *const m_package{};
   bool m_standalone{};
 };
 

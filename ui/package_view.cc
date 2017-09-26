@@ -7,14 +7,16 @@
 
 PackageView::PackageView(elements::Package *const a_package)
   : QWidget{}
+  , m_scene{ new QGraphicsScene{ this } }
+  , m_nodesView{ new NodesView{ m_scene, this } }
   , m_package{ (a_package ? a_package : new elements::Package) }
-  , m_nodesView{ new NodesView{ this } }
   , m_standalone{ !a_package }
 {
   setObjectName("PackageView");
-  QGraphicsScene *const scene{ new QGraphicsScene{ this } };
-  scene->setSceneRect(-32000, -32000, 64000, 64000);
-  scene->setObjectName("PackageViewScene");
+
+  m_scene->setSceneRect(-32000, -32000, 64000, 64000);
+  m_scene->setObjectName("PackageViewScene");
+
   QBrush brush{ QColor(169, 169, 169, 32) };
   //  QBrush brush{ QColor(244, 53, 64, 255) }; // RED
   //  QBrush brush{ QColor(232, 0, 99, 255) }; // PINK
@@ -37,9 +39,7 @@ PackageView::PackageView(elements::Package *const a_package)
   //  QBrush brush{ QColor(95, 124, 136, 255) }; // BLUE GREY
   //  QBrush brush{ QColor(58, 66, 71, 255) }; // DARK GREY
   brush.setStyle(Qt::DiagCrossPattern);
-  scene->setBackgroundBrush(brush);
-
-  m_nodesView->setScene(scene);
+  m_scene->setBackgroundBrush(brush);
 
   QVBoxLayout *const layout{ new QVBoxLayout{ this } };
   layout->addWidget(m_nodesView);

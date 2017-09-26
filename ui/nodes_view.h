@@ -15,8 +15,7 @@ class NodesView : public QGraphicsView {
   Q_OBJECT
 
  public:
-  NodesView(PackageView *a_parent = nullptr);
-  NodesView(QGraphicsScene *a_scene, PackageView *a_parent = nullptr);
+  NodesView(QGraphicsScene *const a_scene, PackageView *a_parent);
   ~NodesView() override;
 
   void dragEnterEvent(QDragEnterEvent *a_event) override;
