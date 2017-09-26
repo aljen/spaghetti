@@ -4,6 +4,7 @@
 #include "ui/config.h"
 #include "ui/nodes_view.h"
 
+#include <cmath>
 #include <iostream>
 
 #include <QDebug>
@@ -85,6 +86,14 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
   switch (a_change) {
     case QGraphicsItem::ItemSelectedChange: {
       break;
+    }
+    case QGraphicsItem::ItemPositionChange: {
+      if (m_nodesView && m_nodesView->snapToGrid()) {
+        QPointF const position{ a_value.toPointF() };
+        qreal const x{ std::round(position.x() / 10.0) * 10.0 };
+        qreal const y{ std::round(position.y() / 10.0) * 10.0 };
+        return QPointF{ x, y };
+      }
     }
     default: break;
   }

@@ -22,6 +22,7 @@ class NodesView : public QGraphicsView {
   void dragLeaveEvent(QDragLeaveEvent *a_event) override;
   void dragMoveEvent(QDragMoveEvent *a_event) override;
   void dropEvent(QDropEvent *a_event) override;
+  void keyPressEvent(QKeyEvent *a_event) override;
   void keyReleaseEvent(QKeyEvent *a_event) override;
   void wheelEvent(QWheelEvent *a_event) override;
 
@@ -33,6 +34,10 @@ class NodesView : public QGraphicsView {
   void cancelDragLink();
 
   PackageView *packageView() const { return m_packageView; }
+  bool snapToGrid() const { return m_snapToGrid; }
+
+ private:
+  void updateGrid(qreal a_scale);
 
  private:
   PackageView *m_packageView{};
@@ -41,6 +46,10 @@ class NodesView : public QGraphicsView {
   nodes::Node *m_dragNode{};
   LinkItem *m_dragLink{};
   int32_t m_scheduledScalings{};
+  QVector<QGraphicsLineItem*> m_gridAll{};
+  QVector<QGraphicsLineItem*> m_grid100{};
+  QVector<QGraphicsLineItem*> *m_gridLast{};
+  bool m_snapToGrid{};
 };
 
 #endif // NODESVIEW_H

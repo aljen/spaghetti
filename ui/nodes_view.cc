@@ -34,19 +34,31 @@ NodesView::NodesView(QGraphicsScene *const a_scene, PackageView *a_parent)
 
   constexpr int32_t SIZE = 10000;
   constexpr int32_t SPACING = 10;
-  QPen pen{ QColor(156, 156, 156, 32) };
+  QPen penNormal{ QColor(156, 156, 156, 32) };
+  QPen penAxis{ QColor(156, 156, 156, 128) };
   for (int32_t i = -SIZE; i < SIZE; i += SPACING) {
     QGraphicsLineItem *const horizontal{ new QGraphicsLineItem{ static_cast<qreal>(i), -SIZE, static_cast<qreal>(i), SIZE } };
-    horizontal->setPen(pen);
+    horizontal->setPen(i == 0 ? penAxis : penNormal);
     horizontal->setZValue(-100.0);
     a_scene->addItem(horizontal);
 
     QGraphicsLineItem *const vertical{ new QGraphicsLineItem{ -SIZE, static_cast<qreal>(i), SIZE, static_cast<qreal>(i) } };
-    vertical->setPen(pen);
+    vertical->setPen(i == 0 ? penAxis : penNormal);
     vertical->setZValue(-100.0);
     a_scene->addItem(vertical);
+
+    m_gridAll.push_back(horizontal);
+    m_gridAll.push_back(vertical);
+
+    if (i % 100 == 0 || i == 0) {
+      m_grid100.push_back(horizontal);
+      m_grid100.push_back(vertical);
+    }
   }
 
+  m_gridLast = &m_gridAll;
+
+  updateGrid(matrix().m11());
 
   setAcceptDrops(true);
 
@@ -85,6 +97,7 @@ void NodesView::dragEnterEvent(QDragEnterEvent *a_event)
 
     assert(m_dragNode == nullptr);
     m_dragNode = registry.createNode(path);
+    m_dragNode->setNodesView(this);
     m_dragNode->setName(name);
     m_dragNode->setPath(pathString);
     m_dragNode->setIcon(icon);
@@ -131,13 +144,21 @@ void NodesView::dropEvent(QDropEvent *a_event)
   QGraphicsView::dropEvent(a_event);
 }
 
+void NodesView::keyPressEvent(QKeyEvent* a_event)
+{
+  m_snapToGrid = a_event->modifiers() & Qt::ShiftModifier;
+}
+
 void NodesView::keyReleaseEvent(QKeyEvent *a_event)
 {
   qDebug() << a_event;
+  m_snapToGrid = a_event->modifiers() & Qt::ShiftModifier;
+
   switch (a_event->key()) {
     case Qt::Key_R:
       centerOn(0.0, 0.0);
       resetMatrix();
+      updateGrid(matrix().m11());
       break;
     default:
       break;
@@ -167,7 +188,7 @@ void NodesView::wheelEvent(QWheelEvent *a_event)
     qreal const factor{ 1.0 + static_cast<qreal>(m_scheduledScalings) / 300.0 };
     QMatrix temp{ matrix() };
     temp.scale(factor, factor);
-    if (temp.m11() >= 0.3 && temp.m11() < 3.0) scale(factor, factor);
+    if (temp.m11() >= 0.2 && temp.m11() <= 4.0) scale(factor, factor);
   });
   connect(animation, &QTimeLine::finished, [&]() {
     if (m_scheduledScalings > 0)
@@ -175,6 +196,8 @@ void NodesView::wheelEvent(QWheelEvent *a_event)
     else
       m_scheduledScalings++;
     if (sender()) sender()->deleteLater();
+    qreal const realScale = matrix().m11();
+    updateGrid(realScale);
   });
 
   animation->start();
@@ -199,4 +222,20 @@ void NodesView::cancelDragLink()
 {
   delete m_dragLink;
   m_dragLink = nullptr;
+}
+
+void NodesView::updateGrid(qreal a_scale)
+{
+  for (auto &&item : *m_gridLast)
+    scene()->removeItem(item);
+
+  if (a_scale >= 0.9) {
+    for (auto &&item : m_gridAll)
+      scene()->addItem(item);
+    m_gridLast = &m_gridAll;
+  } else if (a_scale < 0.9) {
+    for (auto &&item : m_grid100)
+      scene()->addItem(item);
+    m_gridLast = &m_grid100;
+  }
 }
