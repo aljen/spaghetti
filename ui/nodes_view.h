@@ -37,7 +37,8 @@ class NodesView : public QGraphicsView {
   bool snapToGrid() const { return m_snapToGrid; }
 
  private:
-  void updateGrid(qreal a_scale);
+  void createGrid();
+  void updateGrid(qreal const a_scale);
 
  private:
   PackageView *m_packageView{};
@@ -46,9 +47,9 @@ class NodesView : public QGraphicsView {
   nodes::Node *m_dragNode{};
   LinkItem *m_dragLink{};
   int32_t m_scheduledScalings{};
-  QVector<QGraphicsLineItem*> m_gridAll{};
-  QVector<QGraphicsLineItem*> m_grid100{};
-  QVector<QGraphicsLineItem*> *m_gridLast{};
+  enum class GridDensity { eLarge, eSmall } m_gridDensity{};
+  QGraphicsItemGroup *const m_gridLarge{};
+  QGraphicsItemGroup *const m_gridSmall{};
   bool m_snapToGrid{};
 };
 

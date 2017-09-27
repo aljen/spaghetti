@@ -4,6 +4,7 @@
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
+#include <QGraphicsItemGroup>
 #include <QGraphicsLineItem>
 #include <QMimeData>
 #include <QTimeLine>
@@ -20,6 +21,8 @@ NodesView::NodesView(QGraphicsScene *const a_scene, PackageView *a_parent)
   , m_packageView{ a_parent }
   , m_inputs{ new nodes::Node }
   , m_outputs{ new nodes::Node }
+  , m_gridLarge{ new QGraphicsItemGroup }
+  , m_gridSmall{ new QGraphicsItemGroup }
 {
   setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing |
                  QPainter::SmoothPixmapTransform);
@@ -32,33 +35,7 @@ NodesView::NodesView(QGraphicsScene *const a_scene, PackageView *a_parent)
 
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-  constexpr int32_t SIZE = 10000;
-  constexpr int32_t SPACING = 10;
-  QPen penNormal{ QColor(156, 156, 156, 32) };
-  QPen penAxis{ QColor(156, 156, 156, 128) };
-  for (int32_t i = -SIZE; i < SIZE; i += SPACING) {
-    QGraphicsLineItem *const horizontal{ new QGraphicsLineItem{ static_cast<qreal>(i), -SIZE, static_cast<qreal>(i), SIZE } };
-    horizontal->setPen(i == 0 ? penAxis : penNormal);
-    horizontal->setZValue(-100.0);
-    a_scene->addItem(horizontal);
-
-    QGraphicsLineItem *const vertical{ new QGraphicsLineItem{ -SIZE, static_cast<qreal>(i), SIZE, static_cast<qreal>(i) } };
-    vertical->setPen(i == 0 ? penAxis : penNormal);
-    vertical->setZValue(-100.0);
-    a_scene->addItem(vertical);
-
-    m_gridAll.push_back(horizontal);
-    m_gridAll.push_back(vertical);
-
-    if (i % 100 == 0 || i == 0) {
-      m_grid100.push_back(horizontal);
-      m_grid100.push_back(vertical);
-    }
-  }
-
-  m_gridLast = &m_gridAll;
-
-  updateGrid(matrix().m11());
+  createGrid();
 
   setAcceptDrops(true);
 
@@ -224,18 +201,67 @@ void NodesView::cancelDragLink()
   m_dragLink = nullptr;
 }
 
-void NodesView::updateGrid(qreal a_scale)
+void NodesView::createGrid()
 {
-  for (auto &&item : *m_gridLast)
-    scene()->removeItem(item);
+  constexpr int32_t SIZE = 10000;
+  constexpr int32_t SPACING = 10;
+  QPen penNormal{ QColor(156, 156, 156, 32) };
+  QPen penAxis{ QColor(156, 156, 156, 128) };
+  QGraphicsLineItem *horizontal{};
+  QGraphicsLineItem *vertical{};
 
-  if (a_scale >= 0.9) {
-    for (auto &&item : m_gridAll)
-      scene()->addItem(item);
-    m_gridLast = &m_gridAll;
-  } else if (a_scale < 0.9) {
-    for (auto &&item : m_grid100)
-      scene()->addItem(item);
-    m_gridLast = &m_grid100;
+  for (int32_t i = -SIZE; i <= SIZE; i += SPACING) {
+    penNormal.setWidth(1);
+    penAxis.setWidth(1);
+
+    horizontal = new QGraphicsLineItem{ static_cast<qreal>(i), -SIZE, static_cast<qreal>(i), SIZE };
+    horizontal->setPen(i == 0 ? penAxis : penNormal);
+    horizontal->setZValue(-100.0);
+    m_gridLarge->addToGroup(horizontal);
+
+    vertical = new QGraphicsLineItem{ -SIZE, static_cast<qreal>(i), SIZE, static_cast<qreal>(i) };
+    vertical->setPen(i == 0 ? penAxis : penNormal);
+    vertical->setZValue(-100.0);
+    m_gridLarge->addToGroup(vertical);
+
+    if (i % 100 == 0 || i == 0) {
+      penNormal.setWidth(3);
+      penAxis.setWidth(3);
+
+      horizontal = new QGraphicsLineItem{ static_cast<qreal>(i), -SIZE, static_cast<qreal>(i), SIZE };
+      horizontal->setPen(i == 0 ? penAxis : penNormal);
+      horizontal->setZValue(-100.0);
+      m_gridSmall->addToGroup(horizontal);
+
+      vertical = new QGraphicsLineItem{ -SIZE, static_cast<qreal>(i), SIZE, static_cast<qreal>(i) };
+      vertical->setPen(i == 0 ? penAxis : penNormal);
+      vertical->setZValue(-100.0);
+      m_gridSmall->addToGroup(vertical);
+    }
+  }
+
+  m_gridDensity = GridDensity::eLarge;
+  scene()->addItem(m_gridLarge);
+  scene()->addItem(m_gridSmall);
+  m_gridSmall->hide();
+
+  updateGrid(matrix().m11());
+}
+
+void NodesView::updateGrid(qreal const a_scale)
+{
+  GridDensity const newDensity{ (a_scale >= 0.85 ? GridDensity::eLarge : GridDensity::eSmall) };
+
+  if (newDensity == m_gridDensity) return;
+
+  switch (m_gridDensity = newDensity; m_gridDensity) {
+    case GridDensity::eLarge:
+      m_gridLarge->show();
+      m_gridSmall->hide();
+      break;
+    case GridDensity::eSmall:
+      m_gridLarge->hide();
+      m_gridSmall->show();
+      break;
   }
 }
