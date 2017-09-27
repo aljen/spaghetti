@@ -41,9 +41,9 @@ class NodesView : public QGraphicsView {
   void updateGrid(qreal const a_scale);
 
  private:
-  PackageView *m_packageView{};
-  nodes::Node *m_inputs{};
-  nodes::Node *m_outputs{};
+  PackageView *const m_packageView{};
+  nodes::Node *const m_inputs{};
+  nodes::Node *const m_outputs{};
   nodes::Node *m_dragNode{};
   LinkItem *m_dragLink{};
   int32_t m_scheduledScalings{};
