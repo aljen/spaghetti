@@ -121,7 +121,7 @@ void NodesView::dropEvent(QDropEvent *a_event)
   QGraphicsView::dropEvent(a_event);
 }
 
-void NodesView::keyPressEvent(QKeyEvent* a_event)
+void NodesView::keyPressEvent(QKeyEvent *a_event)
 {
   m_snapToGrid = a_event->modifiers() & Qt::ShiftModifier;
 }
@@ -137,8 +137,7 @@ void NodesView::keyReleaseEvent(QKeyEvent *a_event)
       resetMatrix();
       updateGrid(matrix().m11());
       break;
-    default:
-      break;
+    default: break;
   }
 
   auto const selected = scene()->selectedItems();

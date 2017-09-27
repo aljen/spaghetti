@@ -130,7 +130,7 @@ void Editor::addElement(QString a_category, core::MetaData a_metaData)
 
 void Editor::aboutToQuit() {}
 
-void Editor::showEvent(QShowEvent* a_event)
+void Editor::showEvent(QShowEvent *a_event)
 {
   static bool s_firstTime{ true };
 
