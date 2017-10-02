@@ -22,7 +22,12 @@ elseif (GCC OR CLANG)
     set(COMMON_FLAGS "${COMMON_FLAGS} -fPIC")
   endif ()
 
-  set(COMMON_FLAGS_DEBUG "-gz -g3 -ggdb3 -O0 -fno-inline -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+  set(COMMON_FLAGS_DEBUG "-g3 -ggdb3 -O0 -fno-inline -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+  if (UNIX)
+#    msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/7.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: unrecognized option '--compress-debug-sections=zlib'
+#    msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/7.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: use the --help option for usage information
+    set(COMMON_FLAGS_DEBUG "${COMMON_FLAGS_DEBUG} -gz")
+  endif ()
   set(COMMON_FLAGS_RELEASE "-O3 -flto -fuse-linker-plugin")
   set(COMMON_FLAGS_LINKER "-Wl,-O1 -Wl,--fatal-warnings -Wl,--discard-all -Wl,--build-id=sha1")
   set(COMMON_DEFINITIONS_DEBUG "-D_DEBUG")
@@ -34,8 +39,14 @@ elseif (GCC OR CLANG)
     set(COMMON_WARNINGS "${COMMON_WARNINGS} -Wmissing-format-attribute -Wsuggest-final-types")
     set(COMMON_WARNINGS "${COMMON_WARNINGS} -Wsuggest-final-methods -Wduplicated-branches -Wduplicated-cond -Wshadow")
     set(COMMON_WARNINGS "${COMMON_WARNINGS} -Wundef -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion")
-    set(COMMON_WARNINGS "${COMMON_WARNINGS} -Wzero-as-null-pointer-constant -Wparentheses -Wenum-compare -Wlogical-op")
+    set(COMMON_WARNINGS "${COMMON_WARNINGS} -Wparentheses -Wenum-compare -Wlogical-op")
     set(COMMON_WARNINGS "${COMMON_WARNINGS} -Wlong-long -Wrestrict -Wold-style-cast")
+#    spaghetti\core\registry.cc: In constructor 'boost::filesystem::path::path(const Source&, typename boost::enable_if<boost::filesystem::path_traits::is_pathable<typename boost::decay<Source>::type> >::type*) [with Source = char [11]; typename boost::enable_if<boost::filesystem::path_traits::is_pathable<typename boost::decay<Source>::type> >::type = void]':
+#    spaghetti\core\registry.cc:67:43: error: zero as null pointer constant [-Werror=zero-as-null-pointer-constant]
+#       fs::path const pluginsDir{ "../plugins" };
+    if (UNIX)
+      set(COMMON_WARNINGS "${COMMON_WARNINGS} -Wzero-as-null-pointer-constant")
+    endif ()
   elseif (CLANG)
     set(COMMON_FLAGS_CXX "-stdlib=libc++")
     set(COMMON_WARNINGS "-Weverything -Werror -Wno-c++98-compat -Wno-padded -Wno-exit-time-destructors")
