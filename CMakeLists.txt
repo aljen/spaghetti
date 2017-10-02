@@ -62,8 +62,6 @@ set(LIBSPAGHETTI_SOURCES
   ui/elements_list.h
   ui/link_item.cc
   ui/link_item.h
-  ui/nodes_view.cc
-  ui/nodes_view.h
   ui/package_view.cc
   ui/package_view.h
   ui/socket_item.cc

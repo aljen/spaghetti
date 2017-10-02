@@ -1,14 +1,14 @@
 #include "nodes/node.h"
 
-#include "elements/types.h"
-#include "ui/config.h"
-#include "ui/nodes_view.h"
-
 #include <cmath>
 #include <iostream>
 
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
+
+#include "elements/types.h"
+#include "ui/config.h"
+#include "ui/package_view.h"
 
 namespace nodes {
 
@@ -88,7 +88,7 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
       break;
     }
     case QGraphicsItem::ItemPositionChange: {
-      if (m_nodesView && m_nodesView->snapToGrid()) {
+      if (m_packageView && m_packageView->snapToGrid()) {
         QPointF const position{ a_value.toPointF() };
         qreal const x{ std::round(position.x() / 10.0) * 10.0 };
         qreal const y{ std::round(position.y() / 10.0) * 10.0 };

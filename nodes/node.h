@@ -8,7 +8,7 @@
 #include "elements/element.h"
 #include "ui/socket_item.h"
 
-class NodesView;
+class PackageView;
 
 namespace nodes {
 
@@ -30,7 +30,7 @@ class Node : public QGraphicsItem {
   using ElementType = elements::Element::Type;
 
   void setType(Type const a_type) { m_type = a_type; }
-  void setNodesView(NodesView *const a_nodesView) { m_nodesView = a_nodesView; }
+  void setPackageView(PackageView *const a_packageView) { m_packageView = a_packageView; }
 
   void setElement(elements::Element *const a_element);
   void setName(QString a_name) { m_name = a_name; }
@@ -52,7 +52,7 @@ class Node : public QGraphicsItem {
   QPixmap m_icon{};
   QRectF m_boundingRect{};
   elements::Element *m_element{};
-  NodesView *m_nodesView{};
+  PackageView *m_packageView{};
 
   using Sockets = QVector<SocketItem *>;
   Sockets m_inputs{};
