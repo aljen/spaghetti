@@ -27,11 +27,13 @@
 #include <cassert>
 #include <type_traits>
 
+// clang-format off
 #ifdef _MSC_VER
 # include <unordered_map>
 #else
 # include <sparsepp/spp.h>
 #endif
+// clang-format on
 
 #include "core/metadata.h"
 #include "core/strings.h"
@@ -59,6 +61,7 @@ namespace nodes {
 class Node;
 }
 
+// clang-format off
 #define REGISTRY_SPP_MAP 1
 #define REGISTRY_STD_UNORDERED_MAP 2
 #ifdef _MSC_VER
@@ -66,6 +69,7 @@ class Node;
 #else
 # define REGISTRY_MAP REGISTRY_SPP_MAP
 #endif
+// clang-format on
 
 namespace core {
 

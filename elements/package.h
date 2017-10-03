@@ -24,17 +24,20 @@
 #define ELEMENTS_PACKAGE_H
 
 #include <concurrentqueue.h>
+// clang-format off
 #ifdef _MSC_VER
 # include <unordered_map>
 #else
 # include <sparsepp/spp.h>
 #endif
+// clang-format on
 
 #include "core/id_manager.h"
 #include "core/strings.h"
 #include "elements/element.h"
 #include "elements/types.h"
 
+// clang-format off
 #define PACKAGE_SPP_MAP 1
 #define PACKAGE_STD_UNORDERED_MAP 2
 #ifdef _MSC_VER
@@ -42,6 +45,7 @@
 #else
 # define PACKAGE_MAP PACKAGE_SPP_MAP
 #endif
+// clang-format on
 
 namespace elements {
 
