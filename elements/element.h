@@ -39,11 +39,11 @@ class Package;
 class Element {
  public:
   using Value = std::variant<bool, int32_t, float>;
-  enum class Type { eBool, eInt, eFloat };
+  enum class ValueType { eBool, eInt, eFloat };
 
   struct Input {
     Value *value{};
-    Type type{};
+    ValueType type{};
 
     size_t id{};
     uint8_t slot{};
@@ -52,7 +52,7 @@ class Element {
 
   struct Output {
     Value value{};
-    Type type{};
+    ValueType type{};
 
     std::string name{};
   };
@@ -74,8 +74,8 @@ class Element {
   Inputs const &inputs() const { return m_inputs; }
   Outputs const &outputs() const { return m_outputs; }
 
-  bool addInput(Type a_type, std::string a_name);
-  bool addOutput(Type a_type, std::string a_name);
+  bool addInput(ValueType const a_type, std::string const a_name);
+  bool addOutput(ValueType const a_type, std::string const a_name);
 
   bool connect(size_t a_sourceId, uint8_t a_outputId, uint8_t a_inputId);
 

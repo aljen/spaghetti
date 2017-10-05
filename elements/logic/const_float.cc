@@ -38,7 +38,7 @@ ConstFloat::ConstFloat()
   setMaxInputs(0);
   setMinOutputs(1);
   setMaxOutputs(1);
-  addOutput(Type::eFloat, "#1");
+  addOutput(ValueType::eFloat, "#1");
 }
 
 void ConstFloat::set(float a_value)

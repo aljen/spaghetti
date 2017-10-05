@@ -33,7 +33,7 @@ void Element::addInput(size_t a_id)
 }
 #endif
 
-bool Element::addInput(Element::Type a_type, std::string a_name)
+bool Element::addInput(Element::ValueType const a_type, std::string const a_name)
 {
   if (m_inputs.size() + 1 > m_maxInputs) return false;
 
@@ -45,7 +45,7 @@ bool Element::addInput(Element::Type a_type, std::string a_name)
   return true;
 }
 
-bool Element::addOutput(Element::Type a_type, std::string a_name)
+bool Element::addOutput(Element::ValueType const a_type, std::string const a_name)
 {
   if (m_outputs.size() + 1 > m_maxOutputs) return false;
 

@@ -146,7 +146,7 @@ void Node::setElement(elements::Element *const a_element)
     auto const &changedOutputs = a_changed->outputs();
     for (size_t i = 0; i < changedOutputs.size(); ++i) {
       switch (changedOutputs[i].type) {
-        case elements::Element::Type::eBool: {
+        case ValueType::eBool: {
           bool const signal{ std::get<bool>(changedOutputs[i].value) };
           m_outputs[static_cast<int>(i)]->setSignal(signal);
           break;
@@ -186,7 +186,7 @@ void Node::expand()
   calculateBoundingRect();
 }
 
-void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ElementType const a_elementType)
+void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType)
 {
   auto *const socket{ new SocketItem{ a_type, this } };
   socket->setElementId(m_element->id());
@@ -194,15 +194,15 @@ void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const 
 
   Config const &config{ Config::get() };
 
-  switch (a_elementType) {
-    case elements::Element::Type::eBool:
+  switch (a_valueType) {
+    case ValueType::eBool:
       socket->setColors(config.getColor(Config::Color::eBoolSignalOff), config.getColor(Config::Color::eBoolSignalOn));
       break;
-    case elements::Element::Type::eFloat:
+    case ValueType::eFloat:
       socket->setColors(config.getColor(Config::Color::eFloatSignalOff),
                         config.getColor(Config::Color::eFloatSignalOn));
       break;
-    case elements::Element::Type::eInt:
+    case ValueType::eInt:
       socket->setColors(config.getColor(Config::Color::eIntegerSignalOff),
                         config.getColor(Config::Color::eIntegerSignalOn));
       break;

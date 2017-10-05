@@ -38,7 +38,7 @@ ConstInt::ConstInt()
   setMaxInputs(0);
   setMinOutputs(1);
   setMaxOutputs(1);
-  addOutput(Type::eInt, "#1");
+  addOutput(ValueType::eInt, "#1");
 }
 
 void ConstInt::set(int32_t a_value)

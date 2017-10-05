@@ -38,9 +38,9 @@ Nor::Nor()
   setMinInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
-  addInput(Type::eBool, "#1");
-  addInput(Type::eBool, "#2");
-  addOutput(Type::eBool, "#1");
+  addInput(ValueType::eBool, "#1");
+  addInput(ValueType::eBool, "#2");
+  addOutput(ValueType::eBool, "#1");
 }
 
 bool Nor::calculate()

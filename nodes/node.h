@@ -27,7 +27,7 @@ class Node : public QGraphicsItem {
 
   enum class Type { eElement, eInputs, eOutputs };
   using SocketType = SocketItem::Type;
-  using ElementType = elements::Element::Type;
+  using ValueType = elements::Element::ValueType;
 
   void setType(Type const a_type) { m_type = a_type; }
   void setPackageView(PackageView *const a_packageView) { m_packageView = a_packageView; }
@@ -41,7 +41,7 @@ class Node : public QGraphicsItem {
   void expand();
 
  private:
-  void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ElementType const a_elementType);
+  void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType);
   void calculateBoundingRect();
 
  private:
