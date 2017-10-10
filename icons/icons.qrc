@@ -11,5 +11,6 @@
         <file>elements/logic/clock.png</file>
         <file>elements/logic/inputs.png</file>
         <file>elements/logic/outputs.png</file>
+        <file>unknown.png</file>
     </qresource>
 </RCC>
