@@ -33,7 +33,7 @@
 #endif
 // clang-format on
 
-#include "core/id_manager.h"
+#include "core/api.h"
 #include "core/strings.h"
 #include "elements/element.h"
 
@@ -53,7 +53,7 @@ namespace logic {
 class Clock;
 } // namespace logic
 
-class Package final : public Element {
+class SPAGHETTI_API Package final : public Element {
  public:
   Package();
   ~Package() override;

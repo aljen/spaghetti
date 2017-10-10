@@ -61,7 +61,7 @@ class Node;
 
 namespace core {
 
-class Registry final {
+class SPAGHETTI_API Registry final {
   struct MetaInfo {
     std::string type{};
     std::string name{};
