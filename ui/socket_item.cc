@@ -45,16 +45,15 @@ void SocketItem::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_op
   Q_UNUSED(a_widget);
 
   QRectF const rect{ boundingRect() };
-  Config const &config{ Config::get() };
 
-  QPen pen{ config.getColor(Config::Color::eSocketBorder) };
+  QPen pen{ get_color(Color::eSocketBorder) };
   pen.setWidth(2);
 
   QBrush brush{};
   if (m_isHover)
-    brush.setColor(config.getColor(Config::Color::eSocketHover));
+    brush.setColor(get_color(Color::eSocketHover));
   else if (m_isDrop)
-    brush.setColor(config.getColor(Config::Color::eSocketDrop));
+    brush.setColor(get_color(Color::eSocketDrop));
   else if (m_isSignalOn)
     brush.setColor(m_colorSignalOn);
   else if (!m_isSignalOn)
@@ -78,7 +77,7 @@ void SocketItem::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_op
   }
 
   if (!m_nameHidden) {
-    pen.setColor(config.getColor(Config::Color::eFontName));
+    pen.setColor(get_color(Color::eFontName));
     a_painter->setPen(pen);
     QFont font{ a_painter->font() };
     font.setPointSize(12);

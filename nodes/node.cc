@@ -48,9 +48,8 @@ void Node::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, 
   (void)a_option;
   (void)a_widget;
 
-  Config const &config{ Config::get() };
   //  QPen pen{ color };
-  QPen pen{ config.getColor(Config::Color::eSocketBorder) };
+  QPen pen{ get_color(Color::eSocketBorder) };
   pen.setWidth(2);
   QColor color{ 105, 105, 105, 128 };
   QBrush brush{ color };
@@ -192,19 +191,15 @@ void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const 
   socket->setElementId(m_element->id());
   socket->setSocketId(a_id);
 
-  Config const &config{ Config::get() };
-
   switch (a_valueType) {
     case ValueType::eBool:
-      socket->setColors(config.getColor(Config::Color::eBoolSignalOff), config.getColor(Config::Color::eBoolSignalOn));
+      socket->setColors(get_color(Color::eBoolSignalOff), get_color(Color::eBoolSignalOn));
       break;
     case ValueType::eFloat:
-      socket->setColors(config.getColor(Config::Color::eFloatSignalOff),
-                        config.getColor(Config::Color::eFloatSignalOn));
+      socket->setColors(get_color(Color::eFloatSignalOff), get_color(Color::eFloatSignalOn));
       break;
     case ValueType::eInt:
-      socket->setColors(config.getColor(Config::Color::eIntegerSignalOff),
-                        config.getColor(Config::Color::eIntegerSignalOn));
+      socket->setColors(get_color(Color::eIntegerSignalOff), get_color(Color::eIntegerSignalOn));
       break;
   }
 

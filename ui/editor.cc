@@ -40,8 +40,6 @@ Editor::Editor(QWidget *a_parent)
   connect(m_ui->tabWidget, &QTabWidget::tabCloseRequested, this, &Editor::tabCloseRequested);
   connect(m_ui->tabWidget, &QTabWidget::currentChanged, this, &Editor::tabChanged);
 
-  Config::get();
-
   populateElementsList();
   newPackage();
 }
