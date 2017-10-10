@@ -41,7 +41,6 @@ class Editor : public QMainWindow {
   explicit Editor(QWidget *a_parent = nullptr);
   ~Editor();
 
-  void new_package();
   void newPackage(bool a_checked = false);
   void tabCloseRequested(int a_index);
   void tabChanged(int a_index);

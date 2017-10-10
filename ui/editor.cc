@@ -7,8 +7,6 @@
 #include "ui/colors.h"
 #include "ui/elements_list.h"
 
-//#include <json/json.hpp>
-
 #include <QDebug>
 #include <QDockWidget>
 #include <QGraphicsItem>

@@ -31,6 +31,8 @@
 #include <variant>
 #include <vector>
 
+#include <json.hpp>
+
 #include "core/strings.h"
 
 namespace elements {
@@ -39,8 +41,12 @@ class Package;
 
 class Element {
  public:
+  using Json = nlohmann::json;
   using Value = std::variant<bool, int32_t, float>;
   enum class ValueType { eBool, eInt, eFloat };
+  struct Vec2 {
+    double x{}, y{};
+  };
 
   struct Input {
     Value *value{};
@@ -67,33 +73,49 @@ class Element {
   virtual char const *type() const noexcept = 0;
   virtual string::hash_t hash() const noexcept = 0;
 
+  virtual void serialize(Json &a_json);
+  virtual void deserialize(Json const &a_json);
+
   virtual bool calculate() { return false; }
 
   size_t id() const noexcept { return m_id; }
 
-  void setName(std::string a_name) { m_name = a_name; }
+  void setName(std::string const a_name) { m_name = a_name; }
   std::string_view name() const noexcept { return m_name; }
+
+  void setPosition(double const a_x, double const a_y)
+  {
+    m_position.x = a_x;
+    m_position.y = a_y;
+  }
+  void setPosition(Vec2 const a_position) { m_position = a_position; }
+  Vec2 const &position() const { return m_position; }
+
+  void iconify(bool const a_iconify) { m_isIconified = a_iconify; }
+  bool isIconified() const { return m_isIconified; }
 
   Inputs const &inputs() const { return m_inputs; }
   Outputs const &outputs() const { return m_outputs; }
 
   bool addInput(ValueType const a_type, std::string const a_name);
+  void clearInputs();
   bool addOutput(ValueType const a_type, std::string const a_name);
+  void clearOutputs();
 
-  bool connect(size_t a_sourceId, uint8_t a_outputId, uint8_t a_inputId);
+  bool connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t const a_inputId);
 
   using CallbackFunction = std::function<void(Element *const)>;
   void onChange(CallbackFunction &&a_callback) { m_callback = a_callback; }
 
  protected:
-  void setMinInputs(uint8_t a_min);
+  void setMinInputs(uint8_t const a_min);
   uint8_t minInputs() const { return m_minInputs; }
-  void setMaxInputs(uint8_t a_max);
+  void setMaxInputs(uint8_t const a_max);
   uint8_t maxInputs() const { return m_maxInputs; }
 
-  void setMinOutputs(uint8_t a_min);
+  void setMinOutputs(uint8_t const a_min);
   uint8_t minOutputs() const { return m_minOutputs; }
-  void setMaxOutputs(uint8_t a_max);
+  void setMaxOutputs(uint8_t const a_max);
   uint8_t maxOutputs() const { return m_maxOutputs; }
 
  protected:
@@ -106,7 +128,9 @@ class Element {
  private:
   size_t m_id{};
   std::string m_name{};
+  Vec2 m_position{};
   CallbackFunction m_callback{};
+  bool m_isIconified{};
   uint8_t m_minInputs{};
   uint8_t m_maxInputs{ std::numeric_limits<uint8_t>::max() };
   uint8_t m_minOutputs{};

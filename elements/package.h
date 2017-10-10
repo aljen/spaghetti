@@ -55,6 +55,8 @@ class Clock;
 
 class SPAGHETTI_API Package final : public Element {
  public:
+  using Elements = std::vector<Element *>;
+
   Package();
   ~Package() override;
 
@@ -63,6 +65,12 @@ class SPAGHETTI_API Package final : public Element {
 
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
+
+  std::string_view package() const { return m_package; }
+  void setPackage(std::string a_name) { m_package = a_name; }
+
+  void serialize(Json &a_json) override;
+  void deserialize(Json const &a_json) override;
 
   Element *add(char const *const a_name) { return add(string::hash(a_name)); }
   Element *add(string::hash_t a_hash);
@@ -78,12 +86,36 @@ class SPAGHETTI_API Package final : public Element {
 
   void elementChanged(size_t a_id);
 
+  void setInputsPosition(double const a_x, double const a_y)
+  {
+    m_inputsPosition.x = a_x;
+    m_inputsPosition.y = a_y;
+  }
+  void setInputsPosition(Vec2 const a_position) { m_inputsPosition = a_position; }
+  Vec2 const &inputsPosition() const { return m_inputsPosition; }
+
+  void setOutputsPosition(double const a_x, double const a_y)
+  {
+    m_outputsPosition.x = a_x;
+    m_outputsPosition.y = a_y;
+  }
+  void setOutputsPosition(Vec2 const a_position) { m_outputsPosition = a_position; }
+  Vec2 const &outputsPosition() const { return m_outputsPosition; }
+
+  Elements const &elements() const { return m_data; }
+
+  void open(std::string const &a_filename);
+  void save(std::string const &a_filename);
+
  private:
   bool tryDispatch();
   void dispatch(size_t a_id);
 
  private:
-  std::vector<Element *> m_data{};
+  std::string m_package{};
+  Vec2 m_inputsPosition{};
+  Vec2 m_outputsPosition{};
+  Elements m_data{};
   std::vector<size_t> m_free{};
 
   std::vector<logic::Clock *> m_clocks{};

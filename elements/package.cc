@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 #include <iostream>
+#include <fstream>
 #include <string_view>
 
 #include "core/registry.h"
@@ -41,6 +42,60 @@ Package::Package()
 }
 
 Package::~Package() {}
+
+void Package::serialize(Element::Json &a_json)
+{
+  Element::serialize(a_json);
+
+  auto elements = Json::array();
+
+  // TODO(aljen): fix holes
+  size_t const DATA_SIZE{ m_data.size() };
+  for (size_t i = 1; i < DATA_SIZE; ++i) {
+    if (m_data[i] == nullptr) continue;
+
+    Json json{};
+    m_data[i]->serialize(json);
+    elements.push_back(json);
+  }
+
+  a_json["elements"] = elements;
+
+  auto &node = a_json["node"];
+  node["inputs_position"]["x"] = m_inputsPosition.x;
+  node["inputs_position"]["y"] = m_inputsPosition.y;
+  node["outputs_position"]["x"] = m_outputsPosition.x;
+  node["outputs_position"]["y"] = m_outputsPosition.y;
+
+  a_json["package"] = m_package;
+}
+
+void Package::deserialize(Json const &a_json)
+{
+  std::cout << __PRETTY_FUNCTION__ << '>' << std::endl;
+
+  Element::deserialize(a_json);
+
+  auto const tempInputsPosition = a_json["inputs"]["position"];
+  auto const tempInputsPositionX = tempInputsPosition["x"].get<double>();
+  auto const tempInputsPositionY = tempInputsPosition["y"].get<double>();
+  auto const tempOutputsPosition = a_json["outputs"]["position"];
+  auto const tempOutputsPositionX = tempOutputsPosition["x"].get<double>();
+  auto const tempOutputsPositionY = tempOutputsPosition["y"].get<double>();
+  auto const elements = a_json["elements"];
+
+  setInputsPosition(tempInputsPositionX, tempInputsPositionY);
+  setOutputsPosition(tempOutputsPositionX, tempOutputsPositionY);
+
+  for (Json const &temp : elements) {
+    auto const tempString = temp.dump();
+    auto const elementType = temp["type"].get<std::string>();
+    auto const element = add(elementType.c_str());
+    element->deserialize(tempString);
+  }
+
+  std::cout << __PRETTY_FUNCTION__ << '<' << std::endl;
+}
 
 Element *Package::add(string::hash_t a_hash)
 {
@@ -190,6 +245,26 @@ void Package::dispatch(size_t a_id)
 void Package::elementChanged(size_t a_id)
 {
   m_queue.enqueue(a_id);
+}
+
+void Package::open(std::string const &a_filename)
+{
+  std::ifstream file{ a_filename };
+  if (!file.is_open()) return;
+
+  Json json{};
+  file >> json;
+
+  deserialize(json);
+}
+
+void Package::save(std::string const &a_filename)
+{
+  Json json{};
+  serialize(json);
+
+  std::ofstream file{ a_filename };
+  file << json.dump(2);
 }
 
 } // namespace elements

@@ -7,7 +7,6 @@
 #include <QGraphicsScene>
 #include <QMimeData>
 #include <QTimeLine>
-#include <QVBoxLayout>
 
 #include "core/registry.h"
 #include "elements/package.h"
