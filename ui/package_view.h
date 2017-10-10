@@ -1,3 +1,4 @@
+#pragma once
 #ifndef UI_PACKAGE_VIEW_H
 #define UI_PACKAGE_VIEW_H
 

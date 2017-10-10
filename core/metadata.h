@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CORE_METADATA_H
 #define CORE_METADATA_H
 

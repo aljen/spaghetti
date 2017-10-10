@@ -1,3 +1,4 @@
+#pragma once
 #ifndef ELEMENTSLIST_H
 #define ELEMENTSLIST_H
 

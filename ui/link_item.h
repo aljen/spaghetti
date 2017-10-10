@@ -1,3 +1,4 @@
+#pragma once
 #ifndef LINKITEM_H
 #define LINKITEM_H
 

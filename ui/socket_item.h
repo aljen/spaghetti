@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SOCKETITEM_H
 #define SOCKETITEM_H
 

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef NODES_NODE_H
 #define NODES_NODE_H
 
