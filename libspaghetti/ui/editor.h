@@ -27,6 +27,8 @@
 #include <QMainWindow>
 #include <QMap>
 
+#include "core/api.h"
+
 namespace Ui {
 class Editor;
 }
@@ -34,7 +36,7 @@ class Editor;
 class QGraphicsItem;
 class PackageView;
 
-class Editor : public QMainWindow {
+class SPAGHETTI_API Editor final : public QMainWindow {
   Q_OBJECT
 
  public:

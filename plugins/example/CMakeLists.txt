@@ -8,7 +8,7 @@ set(EXAMPLE_SOURCES
   example.cc
   )
 
-add_library(Example SHARED ${EXAMPLE_SOURCES})
+add_library(Example MODULE ${EXAMPLE_SOURCES})
 target_include_directories(Example PRIVATE ${PROJECT_ROOT})
 set_target_properties(Example PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins")
 set_target_properties(Example PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins")

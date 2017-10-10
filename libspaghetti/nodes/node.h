@@ -28,6 +28,7 @@
 #include <QPainter>
 #include <QVector>
 
+#include "core/api.h"
 #include "elements/element.h"
 #include "ui/socket_item.h"
 
@@ -37,7 +38,7 @@ namespace nodes {
 
 constexpr int NODE_TYPE{ QGraphicsItem::UserType + 1 };
 
-class Node : public QGraphicsItem {
+class SPAGHETTI_API Node : public QGraphicsItem {
  public:
   explicit Node(QGraphicsItem *a_parent = nullptr);
   ~Node() override;

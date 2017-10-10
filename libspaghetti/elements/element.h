@@ -33,13 +33,14 @@
 
 #include <json.hpp>
 
+#include "core/api.h"
 #include "core/strings.h"
 
 namespace elements {
 
 class Package;
 
-class Element {
+class SPAGHETTI_API Element {
  public:
   using Json = nlohmann::json;
   using Value = std::variant<bool, int32_t, float>;
