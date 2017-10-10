@@ -7,7 +7,7 @@
 #include <QGraphicsDropShadowEffect>
 
 #include "elements/types.h"
-#include "ui/config.h"
+#include "ui/colors.h"
 #include "ui/package_view.h"
 
 namespace nodes {

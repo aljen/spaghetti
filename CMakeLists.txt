@@ -53,8 +53,8 @@ set(LIBSPAGHETTI_SOURCES
   icons/icons.qrc
   nodes/node.cc
   nodes/node.h
-  ui/config.cc
-  ui/config.h
+  ui/colors.cc
+  ui/colors.h
   ui/editor.cc
   ui/editor.h
   ui/editor.ui

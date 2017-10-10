@@ -10,7 +10,7 @@
 #include <QWidget>
 
 #include "elements/package.h"
-#include "ui/config.h"
+#include "ui/colors.h"
 #include "ui/link_item.h"
 #include "ui/package_view.h"
 

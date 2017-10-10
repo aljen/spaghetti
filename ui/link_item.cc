@@ -6,7 +6,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QStyleOptionGraphicsItem>
 
-#include "config.h"
+#include "colors.h"
 #include "ui/socket_item.h"
 
 LinkItem::LinkItem(QGraphicsItem *a_parent)

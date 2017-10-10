@@ -4,7 +4,7 @@
 #include "ui/link_item.h"
 #include "ui/socket_item.h"
 
-#include "ui/config.h"
+#include "ui/colors.h"
 #include "ui/elements_list.h"
 
 //#include <json/json.hpp>
