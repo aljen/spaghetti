@@ -41,10 +41,10 @@ Package::Package()
 {
   m_data.push_back(this);
 
-  addInput(Type::eBool, "#1");
-  addInput(Type::eBool, "#2");
-  addInput(Type::eBool, "#3");
-  addOutput(Type::eBool, "#1");
+  addInput(ValueType::eBool, "#1");
+  addInput(ValueType::eBool, "#2");
+  addInput(ValueType::eBool, "#3");
+  addOutput(ValueType::eBool, "#1");
 }
 
 Package::~Package()
