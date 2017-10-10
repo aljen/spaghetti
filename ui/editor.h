@@ -27,8 +27,6 @@
 #include <QMainWindow>
 #include <QMap>
 
-#include "core/metadata.h"
-
 namespace Ui {
 class Editor;
 }
@@ -49,7 +47,7 @@ class Editor : public QMainWindow {
   void tabChanged(int a_index);
 
   void populateElementsList();
-  void addElement(QString a_category, core::MetaData a_metaData);
+  void addElement(QString a_category, QString a_name, QString a_type, QString a_icon);
 
   void aboutToQuit();
 

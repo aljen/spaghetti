@@ -30,13 +30,6 @@ std::bernoulli_distribution g_distrib(0.47);
 
 namespace elements::logic {
 
-core::MetaData &RandomBool::metaData()
-{
-  static core::MetaData metaData{ "Random (Bool)", "logic/random_bool", ":/elements/logic/const_value.png" };
-
-  return metaData;
-}
-
 RandomBool::RandomBool()
   : Element{}
 {

@@ -28,7 +28,7 @@
 #include "core/registry.h"
 #include "ui/editor.h"
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+int main(int argc, char **argv)
 {
   QApplication app{ argc, argv };
   app.setStyle(QStyleFactory::create("Fusion"));

@@ -31,11 +31,15 @@ namespace elements::logic {
 
 class Not final : public Element {
  public:
-  static core::MetaData &metaData();
+  static constexpr char const *const TYPE{ "logic/not" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   Not();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
   bool calculate() override;
-  size_t type() const noexcept override { return Types::eNot; }
 };
 
 } // namespace elements::logic

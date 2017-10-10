@@ -25,13 +25,6 @@
 
 namespace elements::logic {
 
-core::MetaData &Switch::metaData()
-{
-  static core::MetaData metaData{ "Switch (Int)", "logic/switch", ":/elements/logic/switch.png" };
-
-  return metaData;
-}
-
 Switch::Switch()
 {
   setMinInputs(1);

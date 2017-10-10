@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <boost/dll.hpp>
 #include <boost/filesystem.hpp>
 
 #include "core/registry.h"
@@ -48,18 +49,20 @@ void Registry::registerInternalElements()
 {
   init_resources();
 
-  registerElement<elements::Package, nodes::Package>();
-  registerElement<elements::logic::Clock, nodes::logic::Test>();
-  registerElement<elements::logic::Nand, nodes::logic::Test>();
-  registerElement<elements::logic::And, nodes::logic::Test>();
-  registerElement<elements::logic::Nor, nodes::logic::Test>();
-  registerElement<elements::logic::Or, nodes::logic::Test>();
-  registerElement<elements::logic::Not, nodes::logic::Test>();
-  registerElement<elements::logic::ConstBool, nodes::logic::Test>();
-  registerElement<elements::logic::ConstFloat, nodes::logic::Test>();
-  registerElement<elements::logic::ConstInt, nodes::logic::Test>();
-  registerElement<elements::logic::RandomBool, nodes::logic::Test>();
-  registerElement<elements::logic::Switch, nodes::logic::Test>();
+  using namespace elements;
+
+  registerElement<Package>("Package", ":/elements/logic/package.png");
+  registerElement<logic::Clock>("Clock (ms)", ":/elements/logic/clock.png");
+  registerElement<logic::Nand>("NAND (Bool)", ":/elements/logic/nand.png");
+  registerElement<logic::And>("AND (Bool)", ":/elements/logic/and.png");
+  registerElement<logic::Nor>("NOR (Bool)", ":/elements/logic/nor.png");
+  registerElement<logic::Or>("OR (Bool)", ":/elements/logic/or.png");
+  registerElement<logic::Not>("NOT (Bool)", ":/elements/logic/not.png");
+  registerElement<logic::ConstBool>("Const value (Bool)", ":/elements/logic/const_value.png");
+  registerElement<logic::ConstFloat>("Const value (Float)", ":/elements/logic/const_value.png");
+  registerElement<logic::ConstInt>("Const value (Int)", ":/elements/logic/const_value.png");
+  registerElement<logic::RandomBool>("Random (Bool)", ":/elements/logic/const_value.png");
+  registerElement<logic::Switch>("Switch (Int)", ":/elements/logic/switch.png");
 }
 
 void Registry::loadPlugins()

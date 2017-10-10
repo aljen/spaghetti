@@ -25,13 +25,6 @@
 
 namespace elements::logic {
 
-core::MetaData &Not::metaData()
-{
-  static core::MetaData metaData{ "NOT (Bool)", "logic/not", ":/elements/logic/not.png" };
-
-  return metaData;
-}
-
 Not::Not()
   : Element{}
 {

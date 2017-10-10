@@ -25,13 +25,6 @@
 
 namespace elements::logic {
 
-core::MetaData &Nand::metaData()
-{
-  static core::MetaData metaData{ "NAND (Bool)", "logic/nand", ":/elements/logic/nand.png" };
-
-  return metaData;
-}
-
 Nand::Nand()
   : Element{}
 {

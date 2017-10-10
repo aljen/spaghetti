@@ -56,12 +56,14 @@ class Clock;
 
 class Package final : public Element {
  public:
-  static core::MetaData &metaData();
-
   Package();
   ~Package() override;
 
-  size_t type() const noexcept override { return Types::ePackage; }
+  static constexpr char const *const TYPE{ "logic/package" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
 
   Element *add(char const *const a_name) { return add(string::hash(a_name)); }
   Element *add(string::hash_t a_hash);

@@ -25,13 +25,6 @@
 
 namespace elements::logic {
 
-core::MetaData &Or::metaData()
-{
-  static core::MetaData metaData{ "OR (Bool)", "logic/or", ":/elements/logic/or.png" };
-
-  return metaData;
-}
-
 Or::Or()
   : Element{}
 {

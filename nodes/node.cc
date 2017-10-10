@@ -192,9 +192,7 @@ void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const 
   socket->setSocketId(a_id);
 
   switch (a_valueType) {
-    case ValueType::eBool:
-      socket->setColors(get_color(Color::eBoolSignalOff), get_color(Color::eBoolSignalOn));
-      break;
+    case ValueType::eBool: socket->setColors(get_color(Color::eBoolSignalOff), get_color(Color::eBoolSignalOn)); break;
     case ValueType::eFloat:
       socket->setColors(get_color(Color::eFloatSignalOff), get_color(Color::eFloatSignalOn));
       break;

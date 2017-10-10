@@ -85,17 +85,18 @@ void Editor::populateElementsList()
 
   for (auto &&element : elements) {
     auto const &info = element.second;
-    std::string const path{ info.data->path };
+    std::string const path{ info.type };
     std::string category{ path };
 
     if (auto const it = path.find_first_of('/'); it != std::string::npos) category = path.substr(0, it);
     category[0] = static_cast<char>(std::toupper(category[0]));
 
-    addElement(QString::fromStdString(category), *info.data);
+    addElement(QString::fromStdString(category), QString::fromStdString(info.name), QString::fromStdString(info.type),
+               QString::fromStdString(info.icon));
   }
 }
 
-void Editor::addElement(QString a_category, core::MetaData a_metaData)
+void Editor::addElement(QString a_category, QString a_name, QString a_type, QString a_icon)
 {
   QToolBox *const toolbox{ m_ui->elementsList };
 
@@ -116,11 +117,11 @@ void Editor::addElement(QString a_category, core::MetaData a_metaData)
     toolbox->addItem(list, a_category);
   }
 
-  QListWidgetItem *const item{ new QListWidgetItem{ QString::fromLatin1(a_metaData.name) } };
-  item->setData(ElementsList::eMetaDataPath, QString::fromLatin1(a_metaData.path));
-  item->setData(ElementsList::eMetaDataName, QString::fromLatin1(a_metaData.name));
-  item->setData(ElementsList::eMetaDataIcon, QString::fromLatin1(a_metaData.icon));
-  item->setIcon(QIcon(QString::fromLatin1(a_metaData.icon)));
+  QListWidgetItem *const item{ new QListWidgetItem{ a_name } };
+  item->setData(ElementsList::eMetaDataType, a_type);
+  item->setData(ElementsList::eMetaDataName, a_name);
+  item->setData(ElementsList::eMetaDataIcon, a_icon);
+  item->setIcon(QIcon(a_icon));
   list->addItem(item);
 
   list->sortItems();

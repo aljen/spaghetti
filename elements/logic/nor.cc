@@ -25,13 +25,6 @@
 
 namespace elements::logic {
 
-core::MetaData &Nor::metaData()
-{
-  static core::MetaData metaData{ "NOR (Bool)", "logic/nor", ":/elements/logic/nor.png" };
-
-  return metaData;
-}
-
 Nor::Nor()
   : Element{}
 {

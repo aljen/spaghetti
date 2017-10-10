@@ -32,7 +32,7 @@ class ElementsList : public QListWidget {
   Q_OBJECT
 
  public:
-  enum { eMetaDataPath = Qt::UserRole, eMetaDataName = Qt::UserRole + 1, eMetaDataIcon = Qt::UserRole + 2 };
+  enum { eMetaDataType = Qt::UserRole, eMetaDataName = Qt::UserRole + 1, eMetaDataIcon = Qt::UserRole + 2 };
 
   explicit ElementsList(Editor *const a_parent = nullptr);
 

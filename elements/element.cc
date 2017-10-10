@@ -25,14 +25,6 @@
 
 namespace elements {
 
-#if 0
-void Element::addInput(size_t a_id)
-{
-  m_manager->notifyOnChange(a_id, m_id);
-  m_inputs.emplace_back(a_id);
-}
-#endif
-
 bool Element::addInput(Element::ValueType const a_type, std::string const a_name)
 {
   if (m_inputs.size() + 1 > m_maxInputs) return false;

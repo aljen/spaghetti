@@ -31,11 +31,13 @@ namespace elements::logic {
 
 class ConstFloat final : public Element {
  public:
-  static core::MetaData &metaData();
+  static constexpr char const *const TYPE{ "logic/const_float" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   ConstFloat();
 
-  size_t type() const noexcept override { return Types::eConstFloat; }
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
 
   void set(float a_value);
 };

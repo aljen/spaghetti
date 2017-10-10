@@ -31,11 +31,15 @@ namespace elements::logic {
 
 class Nand final : public Element {
  public:
-  static core::MetaData &metaData();
+  static constexpr char const *const TYPE{ "logic/nand" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   Nand();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
   bool calculate() override;
-  size_t type() const noexcept override { return Types::eNand; }
 };
 
 } // namespace elements::logic

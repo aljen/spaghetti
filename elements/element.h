@@ -31,7 +31,7 @@
 #include <variant>
 #include <vector>
 
-#include "core/metadata.h"
+#include "core/strings.h"
 
 namespace elements {
 
@@ -64,9 +64,11 @@ class Element {
   Element() = default;
   virtual ~Element() = default;
 
-  virtual size_t type() const noexcept = 0;
+  virtual char const *type() const noexcept = 0;
+  virtual string::hash_t hash() const noexcept = 0;
 
   virtual bool calculate() { return false; }
+
   size_t id() const noexcept { return m_id; }
 
   void setName(std::string a_name) { m_name = a_name; }

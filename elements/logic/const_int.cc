@@ -25,13 +25,6 @@
 
 namespace elements::logic {
 
-core::MetaData &ConstInt::metaData()
-{
-  static core::MetaData metaData{ "Const value (Int)", "logic/const_int", ":/elements/logic/const_value.png" };
-
-  return metaData;
-}
-
 ConstInt::ConstInt()
 {
   setMinInputs(0);

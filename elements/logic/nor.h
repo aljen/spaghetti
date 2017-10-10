@@ -31,11 +31,15 @@ namespace elements::logic {
 
 class Nor final : public Element {
  public:
-  static core::MetaData &metaData();
+  static constexpr char const *const TYPE{ "logic/nor" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   Nor();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
   bool calculate() override;
-  size_t type() const noexcept override { return Types::eNor; }
 };
 
 } // namespace elements::logic

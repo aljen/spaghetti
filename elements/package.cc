@@ -29,13 +29,6 @@
 
 namespace elements {
 
-core::MetaData &Package::metaData()
-{
-  static core::MetaData metaData{ "Package", "logic/package", ":/elements/logic/package.png" };
-
-  return metaData;
-}
-
 Package::Package()
   : Element{}
 {
@@ -47,10 +40,7 @@ Package::Package()
   addOutput(ValueType::eBool, "#1");
 }
 
-Package::~Package()
-{
-
-}
+Package::~Package() {}
 
 Element *Package::add(string::hash_t a_hash)
 {
@@ -73,7 +63,7 @@ Element *Package::add(string::hash_t a_hash)
   element->m_package = this;
   element->m_id = index;
 
-  if (element->type() == Types::eClock) {
+  if (element->hash() == logic::Clock::HASH) {
     using logic::Clock;
     Clock *const clock{ reinterpret_cast<Clock *const>(element) };
     clock->reset(Clock::clock_t::now());
@@ -89,7 +79,7 @@ void Package::remove(size_t a_id)
   assert(a_id < m_data.size());
   assert(std::find(std::begin(m_free), std::end(m_free), a_id) == std::end(m_free));
 
-  if (m_data[a_id]->type() == Types::eClock) std::remove(std::begin(m_clocks), std::end(m_clocks), m_data[a_id]);
+  if (m_data[a_id]->hash() == logic::Clock::HASH) std::remove(std::begin(m_clocks), std::end(m_clocks), m_data[a_id]);
 
   delete m_data[a_id];
   m_data[a_id] = nullptr;

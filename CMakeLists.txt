@@ -19,7 +19,6 @@ find_package(Boost REQUIRED COMPONENTS filesystem)
 set(LIBSPAGHETTI_SOURCES
   core/api.h
   core/id_manager.h
-  core/metadata.h
   core/registry.cc
   core/registry.h
   core/strings.h

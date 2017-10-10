@@ -31,11 +31,13 @@ namespace elements::logic {
 
 class Switch final : public Element {
  public:
-  static core::MetaData &metaData();
+  static constexpr char const *const TYPE{ "logic/switch" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   Switch();
 
-  size_t type() const noexcept override { return Types::eSwitchBool; }
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
 
   void toggle();
   void set(bool a_state);

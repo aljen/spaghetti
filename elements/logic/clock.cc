@@ -27,13 +27,6 @@
 
 namespace elements::logic {
 
-core::MetaData &Clock::metaData()
-{
-  static core::MetaData metaData{ "Clock (ms)", "logic/clock", ":/elements/logic/clock.png" };
-
-  return metaData;
-}
-
 Clock::Clock()
   : Element{}
 {

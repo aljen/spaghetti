@@ -8,26 +8,21 @@
 
 class Example final : public elements::Element {
  public:
-  static core::MetaData &metaData();
+  static constexpr char const *const TYPE{ "plugins/example" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   Example()
     : elements::Element{}
   {
   }
 
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
   bool calculate() override { return false; }
-
-  size_t type() const noexcept override { return Types::eUser + 100; }
 };
-
-core::MetaData &Example::metaData()
-{
-  static core::MetaData metaData{ "Example (Bool)", "plugins/example", ":/elements/logic/and.png" };
-
-  return metaData;
-}
 
 extern "C" SPAGHETTI_API void register_plugin(core::Registry &a_registry)
 {
-  a_registry.registerElement<Example, nodes::Node>();
+  a_registry.registerElement<Example>("Example (Bool)", ":/elements/logic/and.png");
 }

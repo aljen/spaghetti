@@ -24,7 +24,6 @@
 #ifndef CORE_REGISTRY_H
 #define CORE_REGISTRY_H
 
-#include <boost/dll.hpp>
 #include <cassert>
 #include <type_traits>
 
@@ -37,8 +36,11 @@
 // clang-format on
 
 #include "core/api.h"
-#include "core/metadata.h"
 #include "core/strings.h"
+
+namespace boost::dll {
+class shared_library;
+}
 
 namespace elements {
 class Element;
@@ -60,8 +62,10 @@ class Node;
 namespace core {
 
 class Registry final {
-  struct Info {
-    MetaData *data;
+  struct MetaInfo {
+    std::string type{};
+    std::string name{};
+    std::string icon{};
     template<typename T>
     using CloneFunc = T *(*)();
     CloneFunc<elements::Element> cloneElement{};
@@ -70,9 +74,9 @@ class Registry final {
 
  public:
 #if REGISTRY_MAP == REGISTRY_SPP_MAP
-  using Elements = spp::sparse_hash_map<string::hash_t, Info>;
+  using Elements = spp::sparse_hash_map<string::hash_t, MetaInfo>;
 #elif REGISTRY_MAP == REGISTRY_STD_UNORDERED_MAP
-  using Elements = std::unordered_map<string::hash_t, Info>;
+  using Elements = std::unordered_map<string::hash_t, MetaInfo>;
 #endif
 
   static Registry &get();
@@ -80,16 +84,14 @@ class Registry final {
   void registerInternalElements();
   void loadPlugins();
 
-  template<typename Element, typename Node>
+  template<typename Element, typename Node = nodes::Node>
   typename std::enable_if_t<(std::is_base_of_v<elements::Element, Element> && std::is_base_of_v<nodes::Node, Node>)>
-  registerElement()
+  registerElement(std::string a_name, std::string a_icon)
   {
-    MetaData &metaData{ Element::metaData() };
-    string::hash_t const hash{ string::hash(metaData.path) };
-
-    if (m_elements.find(hash) != std::end(m_elements)) return;
-
-    Info info{ &metaData, &cloneElement<Element>, &cloneNode<Node> };
+    string::hash_t const hash{ Element::HASH };
+    assert(m_elements.find(hash) == std::end(m_elements));
+    MetaInfo const info{ Element::TYPE, std::move(a_name), std::move(a_icon), &cloneElement<Element>,
+                         &cloneNode<Node> };
     m_elements[hash] = info;
   }
 

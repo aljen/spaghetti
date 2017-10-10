@@ -25,13 +25,6 @@
 
 namespace elements::logic {
 
-core::MetaData &ConstFloat::metaData()
-{
-  static core::MetaData metaData{ "Const value (Float)", "logic/const_float", ":/elements/logic/const_value.png" };
-
-  return metaData;
-}
-
 ConstFloat::ConstFloat()
 {
   setMinInputs(0);

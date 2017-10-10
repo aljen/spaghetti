@@ -47,19 +47,19 @@ void ElementsList::startDrag(Qt::DropActions a_supportedActions)
   QListWidgetItem *const item{ currentItem() };
   QDrag *const drag{ new QDrag{ this } };
 
-  auto const path = item->data(ElementsList::eMetaDataPath).toString();
+  auto const type = item->data(ElementsList::eMetaDataType).toString();
   auto const name = item->data(ElementsList::eMetaDataName).toByteArray();
   auto const icon = item->data(ElementsList::eMetaDataIcon).toByteArray();
 
   QMimeData *const mimeData{ new QMimeData };
-  mimeData->setText(path);
+  mimeData->setText(type);
   mimeData->setData("metadata/name", name);
   mimeData->setData("metadata/icon", icon);
   drag->setMimeData(mimeData);
 
   auto const ret = drag->exec(Qt::CopyAction);
   switch (ret) {
-    case Qt::CopyAction: qDebug() << "Item" << path << "added!"; break;
+    case Qt::CopyAction: qDebug() << "Item" << type << "added!"; break;
     default: qDebug() << Q_FUNC_INFO << "ret:" << ret; break;
   }
 }

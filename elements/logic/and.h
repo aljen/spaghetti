@@ -31,11 +31,15 @@ namespace elements::logic {
 
 class And final : public Element {
  public:
-  static core::MetaData &metaData();
+  static constexpr char const *const TYPE{ "logic/and" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   And();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
   bool calculate() override;
-  size_t type() const noexcept override { return Types::eAnd; }
 };
 
 } // namespace elements::logic

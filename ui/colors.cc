@@ -1,5 +1,5 @@
-#include <array>
 #include "colors.h"
+#include <array>
 
 // https://www.materialpalette.com/
 // 244,  53,  64, 255 - RED
@@ -26,25 +26,25 @@
 // 111,  80,  96, 255 - WENGE
 
 namespace {
-std::array<QColor, static_cast<size_t>(Color::eCount)> const g_colors {{
-  { 255, 245, 238, 255 }, // Color::eFontName
-  { 169, 169, 169, 255 }, // Color::eFontType
-  { 105, 105, 105,  64 }, // Color::eNodeHeader
-  { 105, 105, 105, 128 }, // Color::eNodeContent
-  {  54,  54,  54, 255 }, // Color::eSocketBorder
-  { 255,  99,  71, 255 }, // Color::eSocketInput
-  { 135, 206, 235, 255 }, // Color::eSocketOutput
-  { 173, 255,  47, 255 }, // Color::eSocketDrop
-  { 255, 215,   0, 255 }, // Color::eSocketHover
-  { 244,  53,  64, 255 }, // Color::eBoolSignalOff
-  {  75, 173,  88, 255 }, // Color::eBoolSignalOn
-  {  62,  84, 174, 255 }, // Color::eIntegerSignalOff
-  {   0, 170, 238, 255 }, // Color::eIntegerSignalOn
-  { 111,  80,  96, 255 }, // Color::eFloatSignalOff
-  { 232,   0,  99, 255 }, // Color::eFloatSignalOn
-  { 165, 165, 165,  64 }, // Color::eLink
-  { 255, 255, 255, 255 }  // Color::eSelected
-}};
+std::array<QColor, static_cast<size_t>(Color::eCount)> const g_colors{ {
+    { 255, 245, 238, 255 }, // Color::eFontName
+    { 169, 169, 169, 255 }, // Color::eFontType
+    { 105, 105, 105, 64 },  // Color::eNodeHeader
+    { 105, 105, 105, 128 }, // Color::eNodeContent
+    { 54, 54, 54, 255 },    // Color::eSocketBorder
+    { 255, 99, 71, 255 },   // Color::eSocketInput
+    { 135, 206, 235, 255 }, // Color::eSocketOutput
+    { 173, 255, 47, 255 },  // Color::eSocketDrop
+    { 255, 215, 0, 255 },   // Color::eSocketHover
+    { 244, 53, 64, 255 },   // Color::eBoolSignalOff
+    { 75, 173, 88, 255 },   // Color::eBoolSignalOn
+    { 62, 84, 174, 255 },   // Color::eIntegerSignalOff
+    { 0, 170, 238, 255 },   // Color::eIntegerSignalOn
+    { 111, 80, 96, 255 },   // Color::eFloatSignalOff
+    { 232, 0, 99, 255 },    // Color::eFloatSignalOn
+    { 165, 165, 165, 64 },  // Color::eLink
+    { 255, 255, 255, 255 }  // Color::eSelected
+} };
 }
 
 QColor get_color(Color const a_color)

@@ -25,13 +25,6 @@
 
 namespace elements::logic {
 
-core::MetaData &ConstBool::metaData()
-{
-  static core::MetaData metaData{ "Const value (Bool)", "logic/const_bool", ":/elements/logic/const_value.png" };
-
-  return metaData;
-}
-
 ConstBool::ConstBool()
 {
   setMinInputs(0);

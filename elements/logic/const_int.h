@@ -31,11 +31,13 @@ namespace elements::logic {
 
 class ConstInt final : public Element {
  public:
-  static core::MetaData &metaData();
+  static constexpr char const *const TYPE{ "logic/const_int" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   ConstInt();
 
-  size_t type() const noexcept override { return Types::eConstInt; }
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
 
   void set(int32_t a_value);
 };

@@ -25,13 +25,6 @@
 
 namespace elements::logic {
 
-core::MetaData &And::metaData()
-{
-  static core::MetaData metaData{ "AND (Bool)", "logic/and", ":/elements/logic/and.png" };
-
-  return metaData;
-}
-
 And::And()
   : Element{}
 {
