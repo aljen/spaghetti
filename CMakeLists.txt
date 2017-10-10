@@ -49,7 +49,6 @@ set(LIBSPAGHETTI_SOURCES
   elements/element.h
   elements/package.cc
   elements/package.h
-  elements/types.h
   icons/icons.qrc
   nodes/node.cc
   nodes/node.h

@@ -36,7 +36,6 @@
 #include "core/id_manager.h"
 #include "core/strings.h"
 #include "elements/element.h"
-#include "elements/types.h"
 
 // clang-format off
 #define PACKAGE_SPP_MAP 1

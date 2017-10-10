@@ -6,7 +6,6 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 
-#include "elements/types.h"
 #include "ui/colors.h"
 #include "ui/package_view.h"
 

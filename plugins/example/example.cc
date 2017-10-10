@@ -3,7 +3,6 @@
 
 #include "core/registry.h"
 #include "elements/element.h"
-#include "elements/types.h"
 #include "nodes/node.h"
 
 class Example final : public elements::Element {

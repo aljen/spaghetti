@@ -25,7 +25,6 @@
 #define ELEMENTS_LOGIC_RANDOM_BOOL_H
 
 #include "elements/element.h"
-#include "elements/types.h"
 
 namespace elements::logic {
 
