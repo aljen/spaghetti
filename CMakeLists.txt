@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 
-project(Spaghetti VERSION 17.09.06 LANGUAGES C CXX)
+project(Spaghetti
+  VERSION 17.10.12
+  DESCRIPTION "Graphical logic editor/simulator"
+  LANGUAGES C CXX
+)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(DefaultOptions)
