@@ -47,10 +47,8 @@ Editor::~Editor()
   delete m_ui;
 }
 
-void Editor::newPackage(bool a_checked)
+void Editor::newPackage()
 {
-  (void)a_checked;
-
   PackageView *const package{ new PackageView };
   int const index{ m_ui->tabWidget->addTab(package, "New package") };
   m_ui->tabWidget->setCurrentIndex(index);
