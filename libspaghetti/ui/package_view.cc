@@ -86,7 +86,6 @@ PackageView::PackageView(elements::Package *const a_package)
 PackageView::~PackageView()
 {
   if (m_standalone) {
-    qDebug() << "Stopping thread";
     m_package->quitDispatchThread();
     delete m_package;
   }
