@@ -22,3 +22,8 @@ if (NOT MSVC)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
   endif ()
 endif ()
+
+find_package(Git REQUIRED)
+if (Git_FOUND)
+  message("Found GIT: ${GIT_VERSION_STRING}")
+endif ()
