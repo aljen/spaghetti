@@ -7,20 +7,25 @@
 #include "ui/colors.h"
 #include "ui/elements_list.h"
 
+#include <QAction>
 #include <QDebug>
+#include <QDesktopServices>
 #include <QDockWidget>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
+#include <QMessageBox>
 #include <QPainterPath>
 #include <QPolygonF>
 #include <QPushButton>
 #include <QToolBox>
+#include <QUrl>
 #include <cctype>
 #include <fstream>
 #include <typeinfo>
 #include <vector>
 
 #include "core/registry.h"
+#include "core/version.h"
 #include "elements/logic/all.h"
 #include "nodes/node.h"
 #include "ui/package_view.h"
@@ -35,6 +40,10 @@ Editor::Editor(QWidget *a_parent)
   m_ui->tabWidget->removeTab(0);
 
   connect(m_ui->actionNew, &QAction::triggered, this, &Editor::newPackage);
+  connect(m_ui->actionBuildCommit, &QAction::triggered, this, &Editor::buildCommit);
+  connect(m_ui->actionRecentChanges, &QAction::triggered, this, &Editor::recentChanges);
+  connect(m_ui->actionAbout, &QAction::triggered, this, &Editor::about);
+  connect(m_ui->actionAboutQt, &QAction::triggered, this, &Editor::aboutQt);
   connect(m_ui->tabWidget, &QTabWidget::tabCloseRequested, this, &Editor::tabCloseRequested);
   connect(m_ui->tabWidget, &QTabWidget::currentChanged, this, &Editor::tabChanged);
 
@@ -138,4 +147,47 @@ void Editor::showEvent(QShowEvent *a_event)
   }
 
   QMainWindow::showEvent(a_event);
+}
+
+void Editor::buildCommit()
+{
+  QUrl const url{ QString("https://github.com/aljen/spaghetti/tree/%1").arg(core::version::COMMIT_HASH) };
+  QDesktopServices::openUrl(url);
+}
+
+void Editor::recentChanges()
+{
+  QUrl const url{ QString("https://github.com/aljen/spaghetti/compare/%1...master").arg(core::version::COMMIT_HASH) };
+  QDesktopServices::openUrl(url);
+}
+
+void Editor::about()
+{
+  QMessageBox::about(
+      this, "About Spaghetti",
+      QString("<a href='https://github.com/aljen/spaghetti'>Spaghetti</a> version: %1<br>"
+              "<br>"
+              "Copyright © 2017 <b>Artur Wyszyński</b><br>"
+              "<br>"
+              "Build date: <b>%2, %3</b><br>"
+              "Git branch: <b>%4</b><br>"
+              "Git commit: <b>%5</b><br>"
+              "<br>"
+              "Used libraries:<br>"
+              "<a href='https://github.com/nlohmann/json'>JSON for Modern C++</a> by <b>Niels Lohmann</b><br>"
+              "<a href='https://github.com/cameron314/concurrentqueue'>An industrial-strength lock-free queue for "
+              "C++</a> by <b>cameron314</b><br>"
+              "<a href='https://github.com/greg7mdp/sparsepp'>A fast, memory efficient hash map for C++</a> by "
+              "<b>Gregory Popovitch</b><br>"
+              "<a href='http://www.boost.org/'>Boost libraries</a><br>")
+          .arg(core::version::STRING)
+          .arg(__DATE__)
+          .arg(__TIME__)
+          .arg(core::version::BRANCH)
+          .arg(core::version::COMMIT_SHORT_HASH));
+}
+
+void Editor::aboutQt()
+{
+  QMessageBox::aboutQt(this);
 }

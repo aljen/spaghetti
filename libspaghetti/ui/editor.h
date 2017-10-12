@@ -56,6 +56,10 @@ class SPAGHETTI_API Editor final : public QMainWindow {
 
  protected:
   void showEvent(QShowEvent *a_event);
+  void buildCommit();
+  void recentChanges();
+  void about();
+  void aboutQt();
 
  private:
   Ui::Editor *m_ui{};
