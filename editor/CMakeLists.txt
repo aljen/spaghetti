@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 
-project(Puttanesca VERSION 17.09.06 LANGUAGES C CXX)
+project(Puttanesca VERSION ${Spaghetti_VERSION} LANGUAGES C CXX)
 
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
 
