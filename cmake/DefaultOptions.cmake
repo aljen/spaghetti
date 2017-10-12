@@ -24,6 +24,4 @@ if (NOT MSVC)
 endif ()
 
 find_package(Git REQUIRED)
-if (Git_FOUND)
-  message("Found GIT: ${GIT_VERSION_STRING}")
-endif ()
+message("Found GIT: ${GIT_VERSION_STRING}")
