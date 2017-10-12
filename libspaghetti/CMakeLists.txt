@@ -6,11 +6,15 @@ find_package(Threads REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem)
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
 
+configure_file(core/version.h.in core/version.h)
+
 set(LIBSPAGHETTI_SOURCES
   core/api.h
   core/registry.cc
   core/registry.h
   core/strings.h
+  ${CMAKE_CURRENT_BINARY_DIR}/core/version.h
+  core/version.h.in
   elements/logic/all.h
   elements/logic/and.cc
   elements/logic/and.h
@@ -63,6 +67,7 @@ target_compile_definitions(Spaghetti
   )
 target_include_directories(Spaghetti PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
   $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(Spaghetti
