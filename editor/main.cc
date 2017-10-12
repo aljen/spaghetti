@@ -26,10 +26,15 @@
 #include <iostream>
 
 #include "core/registry.h"
+#include "core/version.h"
 #include "ui/editor.h"
 
 int main(int argc, char **argv)
 {
+  std::cerr << "Spaghetti version: " << core::version::STRING
+            << ", git: " << core::version::BRANCH << '@' << core::version::COMMIT_SHORT_HASH
+            << ", build date: " << __DATE__ << ", " << __TIME__ << '\n';
+
   QApplication app{ argc, argv };
   app.setStyle(QStyleFactory::create("Fusion"));
 
