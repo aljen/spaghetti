@@ -24,15 +24,13 @@
 #ifndef CORE_VERSION_H
 #define CORE_VERSION_H
 
-#include "core/api.h"
-
 namespace core::version {
 
 constexpr char const *const STRING{ "@Spaghetti_VERSION@" };
 constexpr uint8_t const MAJOR{ @Spaghetti_VERSION_MAJOR@ };
 constexpr uint8_t const MINOR{ @Spaghetti_VERSION_MINOR@ };
 constexpr uint8_t const PATCH{ @Spaghetti_VERSION_PATCH@ };
-constexpr uint32_t VERSION{ MAJOR * 10000 + MINOR * 100 + PATCH };
+constexpr uint32_t const VERSION{ MAJOR * 10000 + MINOR * 100 + PATCH };
 
 constexpr char const *const BRANCH{ "@Spaghetti_GIT_BRANCH@" };
 constexpr char const *const COMMIT_HASH{ "@Spaghetti_GIT_COMMIT_HASH@" };
