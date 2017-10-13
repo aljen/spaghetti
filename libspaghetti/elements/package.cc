@@ -20,13 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string_view>
 
 #include "core/registry.h"
 #include "elements/logic/clock.h"
 #include "elements/package.h"
+
+#define TRACE_LOGIC 1
 
 namespace elements {
 
@@ -170,9 +172,11 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
     std::cerr << "package connect, element output to package output" << std::endl;
   }
 
-//  std::cerr << "Notifying " << a_targetId << " (" << target->name() << ")";
-//  std::cerr << "@" << static_cast<int32_t>(a_inputId) << " when " << a_sourceId << " (" << source->name() << ")";
-//  std::cerr << "@" << static_cast<int32_t>(a_outputId) << " changes.." << std::endl;
+#if TRACE_LOGIC
+  std::cerr << "Notifying " << a_targetId << " (" << target->name() << ")";
+  std::cerr << "@" << static_cast<int32_t>(a_inputId) << " when " << a_sourceId << " (" << source->name() << ")";
+  std::cerr << "@" << static_cast<int32_t>(a_outputId) << " changes.." << std::endl;
+#endif
   m_callbacks[a_sourceId].insert(a_targetId);
 
   if (target->calculate()) elementChanged(a_targetId);
@@ -208,7 +212,9 @@ bool Package::tryDispatch()
   size_t id{};
   bool const dequeued{ m_queue.try_dequeue(id) };
   if (dequeued) {
-//    std::cerr << "Dequeued id: " << id << std::endl;
+#if TRACE_LOGIC
+    std::cerr << "Dequeued id: " << id << std::endl;
+#endif
     dispatch(id);
   }
 
@@ -221,23 +227,31 @@ void Package::dispatch(size_t a_id)
   if (source->m_callback) source->m_callback(source);
 
   if (m_callbacks.find(a_id) == std::end(m_callbacks)) {
-//    std::cerr << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
-//              << " don't exist." << std::endl;
+#if TRACE_LOGIC
+    std::cerr << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
+              << " don't exist." << std::endl;
+#endif
     return;
   }
 
   if (m_callbacks[a_id].empty()) {
-//    std::cerr << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
-//              << " is empty." << std::endl;
+#if TRACE_LOGIC
+    std::cerr << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
+              << " is empty." << std::endl;
+#endif
     return;
   }
 
-//  std::cerr << "Dispatching dependencies for id: " << a_id << " (" << source->name() << ")" << std::endl;
+#if TRACE_LOGIC
+  std::cerr << "Dispatching dependencies for id: " << a_id << " (" << source->name() << ")" << std::endl;
+#endif
   for (auto id : m_callbacks[a_id]) {
     Element *const element{ get(id) };
-//    std::cerr << "Recalculating id: " << id << " (" << element->name() << ")"
-//              << " because id: " << a_id << " (" << source->name() << ")"
-//              << " changed." << std::endl;
+#if TRACE_LOGIC
+    std::cerr << "Recalculating id: " << id << " (" << element->name() << ")"
+              << " because id: " << a_id << " (" << source->name() << ")"
+              << " changed." << std::endl;
+#endif
     if (element->calculate()) elementChanged(id);
   }
 }
