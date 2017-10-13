@@ -28,7 +28,7 @@
 #include "elements/logic/clock.h"
 #include "elements/package.h"
 
-#define TRACE_LOGIC 1
+#define TRACE_LOGIC 0
 
 namespace elements {
 
