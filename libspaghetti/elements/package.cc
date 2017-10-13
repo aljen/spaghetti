@@ -43,7 +43,14 @@ Package::Package()
   addOutput(ValueType::eBool, "#1");
 }
 
-Package::~Package() {}
+Package::~Package()
+{
+  size_t const SIZE{ m_data.size() };
+  for (size_t i = 1; i < SIZE; ++i) {
+    auto *const element = m_data[i];
+    if (element) delete element;
+  }
+}
 
 void Package::serialize(Element::Json &a_json)
 {
