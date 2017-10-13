@@ -204,7 +204,7 @@ void Package::startDispatchThread()
 void Package::quitDispatchThread()
 {
   m_quit = true;
-  m_thread.join();
+  if (m_thread.joinable()) m_thread.join();
 }
 
 bool Package::tryDispatch()
