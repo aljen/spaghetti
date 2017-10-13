@@ -92,6 +92,7 @@ void Element::deserialize(Json const &a_json)
       else if (a_type == "float")
         return ValueType::eFloat;
       assert(false && "Wrong socket type");
+      return ValueType::eBool;
     }(socketStringType);
 
     a_input ? addInput(socketType, socketName) : addOutput(socketType, socketName);
