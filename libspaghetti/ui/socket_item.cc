@@ -264,3 +264,20 @@ void SocketItem::setSignal(const bool a_signal)
     for (LinkItem *const link : m_links) link->setSignal(a_signal);
   }
 }
+
+void SocketItem::connect(SocketItem *const a_other)
+{
+  auto const linkItem = new LinkItem;
+  linkItem->setColors(m_colorSignalOff, m_colorSignalOn);
+  linkItem->setFrom(this);
+  linkItem->setTo(a_other);
+
+  m_links.push_back(linkItem);
+  m_used = true;
+
+  a_other->m_links.push_back(linkItem);
+  a_other->m_used = true;
+  a_other->m_isDrop = false;
+
+  scene()->addItem(linkItem);
+}

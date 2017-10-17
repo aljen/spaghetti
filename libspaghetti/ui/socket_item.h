@@ -87,6 +87,8 @@ class SocketItem final : public QGraphicsItem {
   void setColors(QColor const a_signalOff, QColor const a_signalOn);
   void setSignal(bool const a_signal);
 
+  void connect(SocketItem *const a_other);
+
  private:
   QString m_name{};
   QFont m_font{};

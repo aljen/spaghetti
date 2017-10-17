@@ -25,6 +25,7 @@
 #define UI_PACKAGE_VIEW_H
 
 #include <QGraphicsView>
+#include <QHash>
 
 namespace elements {
 class Package;
@@ -36,12 +37,19 @@ class Node;
 
 class LinkItem;
 
+class QTableWidget;
+
 class PackageView final : public QGraphicsView {
   Q_OBJECT
 
  public:
-  explicit PackageView(elements::Package *const a_package = nullptr);
+  using Nodes = QHash<size_t, nodes::Node *>;
+
+  explicit PackageView(QTableWidget *const a_properties, elements::Package *const a_package = nullptr);
   ~PackageView() override;
+
+  void open();
+  void save();
 
   void dragEnterEvent(QDragEnterEvent *a_event) override;
   void dragLeaveEvent(QDragLeaveEvent *a_event) override;
@@ -63,12 +71,24 @@ class PackageView final : public QGraphicsView {
   void center();
   bool snapToGrid() const { return m_snapToGrid; }
 
+  void setFilename(QString const a_filename) { m_filename = a_filename; }
+  QString filename() const { return m_filename; }
+
+  void showProperties();
+
+  Nodes &nodes() { return m_nodes; }
+  Nodes const &nodes() const { return m_nodes; }
+
+  nodes::Node *getNode(size_t const a_id) const { return m_nodes[a_id]; }
+
  private:
   void createGrid();
   void updateGrid(qreal const a_scale);
 
  private:
+  QTableWidget *const m_properties{};
   elements::Package *const m_package{};
+  Nodes m_nodes{};
   QGraphicsScene *const m_scene{};
   nodes::Node *const m_inputs{};
   nodes::Node *const m_outputs{};
@@ -78,6 +98,7 @@ class PackageView final : public QGraphicsView {
   enum class GridDensity { eLarge, eSmall } m_gridDensity{};
   QGraphicsItemGroup *const m_gridLarge{};
   QGraphicsItemGroup *const m_gridSmall{};
+  QString m_filename{};
   bool m_snapToGrid{};
   bool m_standalone{};
 };

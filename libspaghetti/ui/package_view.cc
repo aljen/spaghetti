@@ -6,6 +6,8 @@
 #include <QDragMoveEvent>
 #include <QGraphicsScene>
 #include <QMimeData>
+#include <QTableWidget>
+#include <QHeaderView>
 #include <QTimeLine>
 
 #include "core/registry.h"
@@ -14,8 +16,9 @@
 #include "ui/elements_list.h"
 #include "ui/link_item.h"
 
-PackageView::PackageView(elements::Package *const a_package)
+PackageView::PackageView(QTableWidget *const a_properties, elements::Package *const a_package)
   : QGraphicsView{ new QGraphicsScene }
+  , m_properties{ a_properties }
   , m_package{ (a_package ? a_package : new elements::Package) }
   , m_scene{ scene() }
   , m_inputs{ new nodes::Node }
@@ -78,6 +81,12 @@ PackageView::PackageView(elements::Package *const a_package)
   m_outputs->setPackageView(this);
   m_outputs->iconify();
 
+  core::Registry &registry{ core::Registry::get() };
+
+  m_package->setInputsPosition(m_inputs->x(), m_inputs->y());
+  m_package->setOutputsPosition(m_outputs->x(), m_outputs->y());
+  m_package->setName(registry.elementName("logic/package"));
+
   m_scene->addItem(m_inputs);
   m_scene->addItem(m_outputs);
   m_package->startDispatchThread();
@@ -85,10 +94,59 @@ PackageView::PackageView(elements::Package *const a_package)
 
 PackageView::~PackageView()
 {
+  qDebug() << Q_FUNC_INFO;
   if (m_standalone) {
     m_package->quitDispatchThread();
     delete m_package;
   }
+}
+
+void PackageView::open()
+{
+  qDebug() << Q_FUNC_INFO;
+  m_package->open(m_filename.toStdString());
+
+  auto const &inputsPosition = m_package->inputsPosition();
+  auto const &outputsPosition = m_package->outputsPosition();
+  m_inputs->setPos(inputsPosition.x, inputsPosition.y);
+  m_outputs->setPos(outputsPosition.x, outputsPosition.y);
+
+  core::Registry &registry{ core::Registry::get() };
+
+  auto const &elements = m_package->elements();
+  size_t const SIZE{ elements.size() };
+  for (size_t i = 1; i < SIZE; ++i) {
+    auto const element = elements[i];
+    auto const node = registry.createNode(element->hash());
+    auto const nodeName = QString::fromStdString(registry.elementName(element->hash()));
+    auto const nodeIcon= QString::fromStdString(registry.elementIcon(element->hash()));
+    auto const nodePath = QString::fromLocal8Bit(element->type());
+
+    m_nodes[element->id()] = node;
+
+    node->setPackageView(this);
+    node->setName(nodeName);
+    node->setPath(nodePath);
+    node->setIcon(nodeIcon);
+    node->setPos(element->position().x, element->position().y);
+    node->setElement(element);
+    element->isIconified() ? node->iconify() : node->expand();
+    m_scene->addItem(node);
+  }
+
+  auto const &connections = m_package->connections();
+  for (auto const &connection : connections) {
+    auto const source = getNode(connection.from_id);
+    auto const target = getNode(connection.to_id);
+    auto const sourceSocket = source->outputs()[connection.from_socket];
+    auto const targetSocket = target->inputs()[connection.to_socket];
+    sourceSocket->connect(targetSocket);
+  }
+}
+
+void PackageView::save()
+{
+  m_package->save(m_filename.toStdString());
 }
 
 void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
@@ -98,7 +156,7 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
     auto const name = a_event->mimeData()->data("metadata/name");
     auto const icon = a_event->mimeData()->data("metadata/icon");
     auto const stringData = pathString.toLatin1();
-    char const *const path{ stringData.data() };
+    auto const path = stringData.data();
 
     auto const dropPosition = mapToScene(a_event->pos());
 
@@ -111,16 +169,16 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
     m_dragNode->setPath(pathString);
     m_dragNode->setIcon(icon);
     m_dragNode->setPos(dropPosition);
-    scene()->addItem(m_dragNode);
+    m_scene->addItem(m_dragNode);
 
     a_event->accept();
   } else
     QGraphicsView::dragEnterEvent(a_event);
 }
 
-void PackageView::dragLeaveEvent([[maybe_unused]] QDragLeaveEvent *a_event)
+void PackageView::dragLeaveEvent(QDragLeaveEvent *)
 {
-  scene()->removeItem(m_dragNode);
+  m_scene->removeItem(m_dragNode);
   delete m_dragNode;
   m_dragNode = nullptr;
 }
@@ -144,8 +202,12 @@ void PackageView::dropEvent(QDropEvent *a_event)
     char const *const path{ stringData.data() };
 
     auto const element = m_package->add(path);
+    element->setName(m_dragNode->name().toStdString());
     m_dragNode->setElement(element);
     m_dragNode->iconify();
+
+    m_nodes[element->id()] = m_dragNode;
+
     m_dragNode = nullptr;
   }
 
@@ -171,7 +233,7 @@ void PackageView::keyReleaseEvent(QKeyEvent *a_event)
     default: break;
   }
 
-  auto const selected = scene()->selectedItems();
+  auto const selected = m_scene->selectedItems();
   for (auto &&item : selected) {
     if (item->type() == nodes::NODE_TYPE) {
       qDebug() << "Node:" << item;
@@ -226,6 +288,46 @@ void PackageView::center()
   centerOn(0.0, 0.0);
 }
 
+
+void PackageView::showProperties()
+{
+  m_properties->clear();
+  m_properties->setColumnCount(2);
+  m_properties->setHorizontalHeaderLabels(QString("Name;Value").split(";"));
+  m_properties->horizontalHeader()->setStretchLastSection(true);
+  m_properties->setRowCount(3);
+
+  QTableWidgetItem *item{};
+
+  int const id{ static_cast<int>(m_package->id()) };
+  QString const type{ QString::fromLocal8Bit(m_package->type()) };
+  QString const name{ QString::fromStdString(m_package->name()) };
+
+  item = new QTableWidgetItem{ "ID" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(0, 0, item);
+
+  item = new QTableWidgetItem{ id };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  item->setData(Qt::DisplayRole, id );
+  m_properties->setItem(0, 1, item);
+
+  item = new QTableWidgetItem{ "Type" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(1, 0, item);
+
+  item = new QTableWidgetItem{ type };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(1, 1, item);
+
+  item = new QTableWidgetItem{ "Name" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(2, 0, item);
+
+  item = new QTableWidgetItem{ name };
+  m_properties->setItem(2, 1, item);
+}
+
 void PackageView::createGrid()
 {
   constexpr int32_t SIZE = 10000;
@@ -266,8 +368,8 @@ void PackageView::createGrid()
   }
 
   m_gridDensity = GridDensity::eLarge;
-  scene()->addItem(m_gridLarge);
-  scene()->addItem(m_gridSmall);
+  m_scene->addItem(m_gridLarge);
+  m_scene->addItem(m_gridSmall);
   m_gridSmall->hide();
 
   updateGrid(matrix().m11());

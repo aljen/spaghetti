@@ -10,7 +10,9 @@
 #include <QAction>
 #include <QDebug>
 #include <QDesktopServices>
+#include <QDir>
 #include <QDockWidget>
+#include <QFileDialog>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
 #include <QMessageBox>
@@ -30,6 +32,8 @@
 #include "nodes/node.h"
 #include "ui/package_view.h"
 
+QString const PACKAGES_DIR{ "../packages" };
+
 Editor::Editor(QWidget *a_parent)
   : QMainWindow{ a_parent }
   , m_ui{ new Ui::Editor }
@@ -40,6 +44,14 @@ Editor::Editor(QWidget *a_parent)
   m_ui->tabWidget->removeTab(0);
 
   connect(m_ui->actionNew, &QAction::triggered, this, &Editor::newPackage);
+  connect(m_ui->actionOpen, &QAction::triggered, this, &Editor::openPackage);
+  connect(m_ui->actionSave, &QAction::triggered, this, &Editor::savePackage);
+  connect(m_ui->actionClose, &QAction::triggered, this, &Editor::closePackage);
+  connect(m_ui->actionCloseAll, &QAction::triggered, this, &Editor::closeAllPackages);
+
+  connect(m_ui->actionShowLibrary, &QAction::triggered, this, &Editor::showLibrary);
+  connect(m_ui->actionShowProperties, &QAction::triggered, this, &Editor::showProperties);
+
   connect(m_ui->actionBuildCommit, &QAction::triggered, this, &Editor::buildCommit);
   connect(m_ui->actionRecentChanges, &QAction::triggered, this, &Editor::recentChanges);
   connect(m_ui->actionAbout, &QAction::triggered, this, &Editor::about);
@@ -47,20 +59,22 @@ Editor::Editor(QWidget *a_parent)
   connect(m_ui->tabWidget, &QTabWidget::tabCloseRequested, this, &Editor::tabCloseRequested);
   connect(m_ui->tabWidget, &QTabWidget::currentChanged, this, &Editor::tabChanged);
 
-  populateElementsList();
+  QDir packagesDir{ PACKAGES_DIR };
+  if (!packagesDir.exists()) packagesDir.mkpath(".");
+
+  m_ui->propertiesTable->clear();
+  m_ui->propertiesTable->setColumnCount(2);
+  m_ui->propertiesTable->setHorizontalHeaderLabels(QString("Name;Value").split(";"));
+  m_ui->propertiesTable->horizontalHeader()->setStretchLastSection(true);
+  m_ui->propertiesTable->setRowCount(3);
+
+  populateLibrary();
   newPackage();
 }
 
 Editor::~Editor()
 {
   delete m_ui;
-}
-
-void Editor::newPackage()
-{
-  PackageView *const package{ new PackageView };
-  int const index{ m_ui->tabWidget->addTab(package, "New package") };
-  m_ui->tabWidget->setCurrentIndex(index);
 }
 
 void Editor::tabCloseRequested(int a_index)
@@ -157,6 +171,77 @@ PackageView *Editor::packageViewForIndex(int const a_index) const
 int Editor::openPackageViews() const
 {
   return m_ui->tabWidget->count();
+}
+
+void Editor::newPackage()
+{
+  auto *const packageView = new PackageView{ m_ui->propertiesTable };
+  m_packageViewIndex = m_ui->tabWidget->addTab(packageView, "New package");
+  m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
+  packageView->showProperties();
+}
+
+void Editor::openPackage()
+{
+  QString const filename{ QFileDialog::getOpenFileName(this, "Open .package", PACKAGES_DIR, "*.package") };
+  if (filename.isEmpty()) return;
+
+  newPackage();
+
+  auto *const packageView = packageViewForIndex(m_packageViewIndex);
+  packageView->setFilename(filename);
+
+  QDir const packagesDir{ PACKAGES_DIR };
+  m_ui->tabWidget->setTabText(m_packageViewIndex, packagesDir.relativeFilePath(filename));
+
+  packageView->open();
+  packageView->showProperties();
+}
+
+void Editor::savePackage()
+{
+  assert(m_packageViewIndex >= 0);
+
+  auto *const packageView = packageViewForIndex(m_packageViewIndex);
+
+  if (packageView->filename().isEmpty()) {
+    QString filename{ QFileDialog::getSaveFileName(this, "Save .package", PACKAGES_DIR, "*.package") };
+    if (filename.isEmpty()) return;
+    if (!filename.endsWith(".package")) filename += ".package";
+
+    packageView->setFilename(filename);
+    QDir const packagesDir{ PACKAGES_DIR };
+    m_ui->tabWidget->setTabText(m_packageViewIndex, packagesDir.relativeFilePath(filename));
+  }
+
+  packageView->save();
+}
+
+void Editor::closePackage()
+{
+  closePackageView(m_packageViewIndex);
+}
+
+void Editor::closeAllPackages()
+{
+  while (int count = openPackageViews()) closePackageView(count - 1);
+}
+
+void Editor::closePackageView(int const a_index)
+{
+  auto *const packageView = packageViewForIndex(a_index);
+  if (packageView->canClose()) m_ui->tabWidget->removeTab(a_index);
+  delete packageView;
+}
+
+void Editor::showLibrary(bool a_checked)
+{
+  m_ui->library->setVisible(a_checked);
+}
+
+void Editor::showProperties(bool a_checked)
+{
+  m_ui->properties->setVisible(a_checked);
 }
 
 void Editor::buildCommit()
