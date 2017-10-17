@@ -56,6 +56,14 @@ class Clock;
 class SPAGHETTI_API Package final : public Element {
  public:
   using Elements = std::vector<Element *>;
+  struct Connection {
+    size_t from_id{};
+    uint8_t from_socket{};
+    size_t to_id{};
+    uint8_t to_socket{};
+  };
+
+  using Connections = std::vector<Connection>;
 
   Package();
   ~Package() override;
@@ -103,6 +111,7 @@ class SPAGHETTI_API Package final : public Element {
   Vec2 const &outputsPosition() const { return m_outputsPosition; }
 
   Elements const &elements() const { return m_data; }
+  Connections const &connections() const { return m_connections; }
 
   void open(std::string const &a_filename);
   void save(std::string const &a_filename);
@@ -116,6 +125,8 @@ class SPAGHETTI_API Package final : public Element {
   Vec2 m_inputsPosition{};
   Vec2 m_outputsPosition{};
   Elements m_data{};
+  Connections m_connections{};
+
   std::vector<size_t> m_free{};
 
   std::vector<logic::Clock *> m_clocks{};

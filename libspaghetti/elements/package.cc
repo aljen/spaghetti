@@ -184,6 +184,7 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   std::cerr << "@" << static_cast<int32_t>(a_inputId) << " when " << a_sourceId << " (" << source->name() << ")";
   std::cerr << "@" << static_cast<int32_t>(a_outputId) << " changes.." << std::endl;
 #endif
+  m_connections.emplace_back(Connection{ a_sourceId, a_outputId, a_targetId, a_inputId });
   m_callbacks[a_sourceId].insert(a_targetId);
 
   if (target->calculate()) elementChanged(a_targetId);
