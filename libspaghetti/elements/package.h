@@ -74,8 +74,14 @@ class SPAGHETTI_API Package final : public Element {
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
 
-  std::string_view package() const { return m_package; }
-  void setPackage(std::string a_name) { m_package = a_name; }
+  std::string_view packageDescription() const { return m_packageDescription; }
+  void setPackageDescription(std::string a_description) { m_packageDescription = a_description; }
+
+  std::string_view packagePath() const { return m_packagePath; }
+  void setPackagePath(std::string a_path) { m_packagePath = a_path; }
+
+  std::string_view packageIcon() const { return m_packageIcon; }
+  void setPackageIcon(std::string a_icon) { m_packageIcon = a_icon; }
 
   void serialize(Json &a_json) override;
   void deserialize(Json const &a_json) override;
@@ -121,7 +127,9 @@ class SPAGHETTI_API Package final : public Element {
   void dispatch(size_t a_id);
 
  private:
-  std::string m_package{};
+  std::string m_packageDescription{ "A package" };
+  std::string m_packagePath{ "packages/unknown_package" };
+  std::string m_packageIcon{ "icons/unknown.png" };
   Vec2 m_inputsPosition{};
   Vec2 m_outputsPosition{};
   Elements m_data{};

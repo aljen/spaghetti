@@ -56,27 +56,44 @@ void Package::serialize(Element::Json &a_json)
 {
   Element::serialize(a_json);
 
-  auto elements = Json::array();
+  auto &jsonNode = a_json["node"];
+  jsonNode["inputs_position"]["x"] = m_inputsPosition.x;
+  jsonNode["inputs_position"]["y"] = m_inputsPosition.y;
+  jsonNode["outputs_position"]["x"] = m_outputsPosition.x;
+  jsonNode["outputs_position"]["y"] = m_outputsPosition.y;
 
+  auto &jsonPackage = a_json["package"];
+  jsonPackage["description"] = m_packageDescription;
+  jsonPackage["path"] = m_packagePath;
+  jsonPackage["icon"] = m_packageIcon;
+
+  auto jsonElements = Json::array();
   // TODO(aljen): fix holes
   size_t const DATA_SIZE{ m_data.size() };
   for (size_t i = 1; i < DATA_SIZE; ++i) {
-    if (m_data[i] == nullptr) continue;
+    auto const element = m_data[i];
+    if (element == nullptr) continue;
 
-    Json json{};
-    m_data[i]->serialize(json);
-    elements.push_back(json);
+    Json jsonElement{};
+    element->serialize(jsonElement);
+    jsonElements.push_back(jsonElement);
   }
+  jsonPackage["elements"] = jsonElements;
 
-  a_json["elements"] = elements;
+  auto jsonConnections = Json::array();
+  for (auto const &connection : m_connections) {
+    Json jsonConnection{}, jsonConnect{}, jsonTo{};
 
-  auto &node = a_json["node"];
-  node["inputs_position"]["x"] = m_inputsPosition.x;
-  node["inputs_position"]["y"] = m_inputsPosition.y;
-  node["outputs_position"]["x"] = m_outputsPosition.x;
-  node["outputs_position"]["y"] = m_outputsPosition.y;
+    jsonConnect["id"] = connection.from_id;
+    jsonConnect["socket"] = connection.from_socket;
+    jsonTo["id"] = connection.to_id;
+    jsonTo["socket"] = connection.to_socket;
 
-  a_json["package"] = m_package;
+    jsonConnection["connect"] = jsonConnect;
+    jsonConnection["to"] = jsonTo;
+    jsonConnections.push_back(jsonConnection);
+  }
+  jsonPackage["connections"] = jsonConnections;
 }
 
 void Package::deserialize(Json const &a_json)
@@ -85,22 +102,45 @@ void Package::deserialize(Json const &a_json)
 
   Element::deserialize(a_json);
 
-  auto const tempInputsPosition = a_json["inputs"]["position"];
-  auto const tempInputsPositionX = tempInputsPosition["x"].get<double>();
-  auto const tempInputsPositionY = tempInputsPosition["y"].get<double>();
-  auto const tempOutputsPosition = a_json["outputs"]["position"];
-  auto const tempOutputsPositionX = tempOutputsPosition["x"].get<double>();
-  auto const tempOutputsPositionY = tempOutputsPosition["y"].get<double>();
-  auto const elements = a_json["elements"];
+  auto const &jsonNode = a_json["node"];
+  auto const jsonInputsPosition = jsonNode["inputs_position"];
+  auto const jsonInputsPositionX = jsonInputsPosition["x"].get<double>();
+  auto const jsonInputsPositionY = jsonInputsPosition["y"].get<double>();
+  auto const jsonOutputsPosition = jsonNode["outputs_position"];
+  auto const jsonOutputsPositionX = jsonOutputsPosition["x"].get<double>();
+  auto const jsonOutputsPositionY = jsonOutputsPosition["y"].get<double>();
 
-  setInputsPosition(tempInputsPositionX, tempInputsPositionY);
-  setOutputsPosition(tempOutputsPositionX, tempOutputsPositionY);
+  auto const &jsonPackage = a_json["package"];
+  auto const &jsonElements = jsonPackage["elements"];
+  auto const &jsonConnections = jsonPackage["connections"];
+  auto const &jsonDescription = jsonPackage["description"].get<std::string>();
+  auto const &jsonIcon = jsonPackage["icon"].get<std::string>();
+  auto const &jsonPath = jsonPackage["path"].get<std::string>();
 
-  for (Json const &temp : elements) {
-    auto const tempString = temp.dump();
-    auto const elementType = temp["type"].get<std::string>();
+  setPackageDescription(jsonDescription);
+  setPackageIcon(jsonIcon);
+  setPackagePath(jsonPath);
+  setInputsPosition(jsonInputsPositionX, jsonInputsPositionY);
+  setOutputsPosition(jsonOutputsPositionX, jsonOutputsPositionY);
+
+  for (auto const &temp : jsonElements) {
+    auto const &elementGroup = temp["element"];
+    auto const elementType = elementGroup["type"].get<std::string>();
     auto const element = add(elementType.c_str());
-    element->deserialize(tempString);
+    element->deserialize(temp);
+  }
+
+  for (auto const &connection : jsonConnections) {
+    auto const &from = connection["connect"];
+    auto const &to = connection["to"];
+    auto const &fromId = from["id"].get<size_t>();
+    auto const &fromSocket = from["socket"].get<uint8_t>();
+    auto const &toId = to["id"].get<size_t>();
+    auto const &toSocket = to["socket"].get<uint8_t>();
+    std::cerr << "from " << fromId << "@" << static_cast<int>(fromSocket) << " to " << toId << "@"
+              << static_cast<int>(toSocket) << std::endl;
+
+    connect(fromId, fromSocket, toId, toSocket);
   }
 
   std::cout << __PRETTY_FUNCTION__ << '<' << std::endl;

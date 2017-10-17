@@ -31,51 +31,87 @@ namespace elements {
 
 void Element::serialize(Element::Json &a_json)
 {
-  a_json["id"] = m_id;
-  a_json["name"] = m_name;
-  a_json["type"] = type();
-  auto &node = a_json["node"];
-  node["position"]["x"] = m_position.x;
-  node["position"]["y"] = m_position.y;
-  node["iconify"] = m_isIconified;
-  auto &sockets = a_json["sockets"];
-  auto &inputs = sockets["inputs"];
-  inputs["min"] = m_minInputs;
-  inputs["max"] = m_maxInputs;
-  auto &outputs = sockets["outputs"];
-  outputs["min"] = m_minOutputs;
-  outputs["max"] = m_maxOutputs;
+  auto &jsonElement = a_json["element"];
+  jsonElement["id"] = m_id;
+  jsonElement["name"] = m_name;
+  jsonElement["type"] = type();
+  jsonElement["min_inputs"] = m_minInputs;
+  jsonElement["max_inputs"] = m_maxInputs;
+  jsonElement["min_outputs"] = m_minOutputs;
+  jsonElement["max_outputs"] = m_maxOutputs;
+
+  auto getSocketType = [](ValueType const a_type) {
+    switch (a_type) {
+      case ValueType::eBool: return "bool";
+      case ValueType::eInt: return "int";
+      case ValueType::eFloat: return "float";
+    }
+    assert(false && "Wrong socket type");
+    return "unknown";
+  };
+
+  auto jsonInputs = Json::array();
+  size_t const INPUTS_COUNT{ m_inputs.size() };
+  for (size_t i = 0; i < INPUTS_COUNT; ++i) {
+    Json socket{};
+    socket["socket"] = i;
+    socket["type"] = getSocketType(m_inputs[i].type);
+    socket["name"] = m_inputs[i].name;
+    jsonInputs.push_back(socket);
+  }
+
+  auto jsonOutputs = Json::array();
+  size_t const OUTPUTS_COUNT{ m_outputs.size() };
+  for (size_t i = 0; i < OUTPUTS_COUNT; ++i) {
+    Json socket{};
+    socket["socket"] = i;
+    socket["type"] = getSocketType(m_outputs[i].type);
+    socket["name"] = m_outputs[i].name;
+    jsonOutputs.push_back(socket);
+  }
+
+  auto &jsonIo = jsonElement["io"];
+  jsonIo["inputs"] = jsonInputs;
+  jsonIo["outputs"] = jsonOutputs;
+
+  auto &jsonNode = a_json["node"];
+  jsonNode["position"]["x"] = m_position.x;
+  jsonNode["position"]["y"] = m_position.y;
+  jsonNode["iconify"] = m_isIconified;
 }
 
 void Element::deserialize(Json const &a_json)
 {
   std::cout << __PRETTY_FUNCTION__ << '>' << std::endl;
 
-  auto const tempId = a_json["id"].get<size_t>();
-  auto const tempName = a_json["name"].get<std::string>();
-  auto const tempPosition = a_json["position"];
-  auto const tempIconify = a_json["iconify"].get<bool>();
-  auto const tempPositionX = tempPosition["x"].get<double>();
-  auto const tempPositionY = tempPosition["y"].get<double>();
-  auto const tempInputs = a_json["inputs"];
-  auto const tempMinInputs = tempInputs["min"].get<uint8_t>();
-  auto const tempMaxInputs = tempInputs["max"].get<uint8_t>();
-  auto const tempInputsSockets = tempInputs["sockets"];
-  auto const tempOutputs = a_json["outputs"];
-  auto const tempMinOutputs = tempOutputs["min"].get<uint8_t>();
-  auto const tempMaxOutputs = tempOutputs["max"].get<uint8_t>();
-  auto const tempOutputsSockets = tempOutputs["sockets"];
+  auto const &jsonElement = a_json["element"];
+  auto const jsonId = jsonElement["id"].get<size_t>();
+  auto const jsonName = jsonElement["name"].get<std::string>();
+  auto const jsonMinInputs = jsonElement["min_inputs"].get<uint8_t>();
+  auto const jsonMaxInputs = jsonElement["max_inputs"].get<uint8_t>();
+  auto const jsonMinOutputs = jsonElement["min_outputs"].get<uint8_t>();
+  auto const jsonMaxOutputs = jsonElement["max_outputs"].get<uint8_t>();
 
-  assert(id() == tempId);
-  setName(tempName);
-  setPosition(tempPositionX, tempPositionY);
+  auto const &jsonIo = jsonElement["io"];
+  auto const &jsonInputs = jsonIo["inputs"];
+  auto const &jsonOutputs = jsonIo["outputs"];
+
+  auto const &jsonNode = a_json["node"];
+  auto const jsonIconify = jsonNode["iconify"].get<bool>();
+  auto const &jsonPosition = jsonNode["position"];
+  auto const jsonPositionX = jsonPosition["x"].get<double>();
+  auto const jsonPositionY = jsonPosition["y"].get<double>();
+
+  assert(id() == jsonId);
+  setName(jsonName);
+  setPosition(jsonPositionX, jsonPositionY);
   clearInputs();
   clearOutputs();
-  setMinInputs(tempMinInputs);
-  setMaxInputs(tempMaxInputs);
-  setMinOutputs(tempMinOutputs);
-  setMaxOutputs(tempMaxOutputs);
-  iconify(tempIconify);
+  setMinInputs(jsonMinInputs);
+  setMaxInputs(jsonMaxInputs);
+  setMinOutputs(jsonMinOutputs);
+  setMaxOutputs(jsonMaxOutputs);
+  iconify(jsonIconify);
 
   auto add_socket = [&](Json const &a_socket, bool const a_input, uint8_t &a_socketCount) {
     auto const socketId = a_socket["socket"].get<uint8_t>();
@@ -100,8 +136,8 @@ void Element::deserialize(Json const &a_json)
   };
 
   uint8_t inputsCount{}, outputsCount{};
-  for (auto &&socket : tempInputsSockets) add_socket(socket, true, inputsCount);
-  for (auto &&socket : tempOutputsSockets) add_socket(socket, false, outputsCount);
+  for (auto &&socket : jsonInputs) add_socket(socket, true, inputsCount);
+  for (auto &&socket : jsonOutputs) add_socket(socket, false, outputsCount);
 
   std::cout << __PRETTY_FUNCTION__ << '<' << std::endl;
 }
