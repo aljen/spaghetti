@@ -82,7 +82,7 @@ class SPAGHETTI_API Element {
   size_t id() const noexcept { return m_id; }
 
   void setName(std::string const a_name) { m_name = a_name; }
-  std::string_view name() const noexcept { return m_name; }
+  std::string name() const noexcept { return m_name; }
 
   void setPosition(double const a_x, double const a_y)
   {
