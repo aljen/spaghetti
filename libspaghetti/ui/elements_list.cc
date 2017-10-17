@@ -38,7 +38,7 @@ void ElementsList::startDrag(Qt::DropActions a_supportedActions)
 {
   (void)a_supportedActions;
 
-  PackageView *const packageView{ m_editor->currentPackageView() };
+  PackageView *const packageView{ m_editor->packageView() };
   if (!packageView) {
     qDebug() << "There is no active package view!";
     return;

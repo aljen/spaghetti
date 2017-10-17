@@ -77,10 +77,7 @@ void Editor::tabCloseRequested(int a_index)
 
 void Editor::tabChanged(int a_index)
 {
-  if (a_index >= 0)
-    m_currentPackageView = qobject_cast<PackageView *>(m_ui->tabWidget->widget(a_index));
-  else
-    m_currentPackageView = nullptr;
+  m_packageViewIndex = a_index;
 }
 
 void Editor::populateElementsList()
@@ -147,6 +144,19 @@ void Editor::showEvent(QShowEvent *a_event)
   }
 
   QMainWindow::showEvent(a_event);
+}
+
+PackageView *Editor::packageViewForIndex(int const a_index) const
+{
+  auto *const tabWidget = m_ui->tabWidget;
+  auto const index = a_index == -1 ? tabWidget->currentIndex() : a_index;
+  auto packageView = qobject_cast<PackageView *const>(tabWidget->widget(index));
+  return packageView;
+}
+
+int Editor::openPackageViews() const
+{
+  return m_ui->tabWidget->count();
 }
 
 void Editor::buildCommit()

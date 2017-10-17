@@ -52,10 +52,14 @@ class SPAGHETTI_API Editor final : public QMainWindow {
 
   void aboutToQuit();
 
-  PackageView *currentPackageView() const { return m_currentPackageView; }
+  PackageView *packageView() const { return packageViewForIndex(m_packageViewIndex); }
+  int packageViewIndex() const { return m_packageViewIndex; }
 
  protected:
   void showEvent(QShowEvent *a_event);
+
+  PackageView *packageViewForIndex(int const a_index = -1) const;
+  int openPackageViews() const;
   void buildCommit();
   void recentChanges();
   void about();
@@ -63,7 +67,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
 
  private:
   Ui::Editor *m_ui{};
-  PackageView *m_currentPackageView{};
+  int m_packageViewIndex{ -1 };
 };
 
 #endif // EDITOR_H
