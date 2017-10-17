@@ -89,6 +89,7 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
         qreal const y{ std::round(position.y() / 10.0) * 10.0 };
         return QPointF{ x, y };
       }
+      break;
     }
     default: break;
   }
