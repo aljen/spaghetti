@@ -111,6 +111,20 @@ class SPAGHETTI_API Registry final {
     return m_elements[a_hash].cloneNode();
   }
 
+  std::string elementName(char const *const a_name) { return elementName(string::hash(a_name)); }
+  std::string elementName(string::hash_t const a_hash)
+  {
+    assert(m_elements.find(a_hash) != std::end(m_elements));
+    return m_elements[a_hash].name;
+  }
+
+  std::string elementIcon(char const *const a_name) { return elementIcon(string::hash(a_name)); }
+  std::string elementIcon(string::hash_t const a_hash)
+  {
+    assert(m_elements.find(a_hash) != std::end(m_elements));
+    return m_elements[a_hash].icon;
+  }
+
   Elements const &elements() const { return m_elements; }
 
  private:
