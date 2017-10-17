@@ -40,6 +40,8 @@ constexpr int NODE_TYPE{ QGraphicsItem::UserType + 1 };
 
 class SPAGHETTI_API Node : public QGraphicsItem {
  public:
+  using Sockets = QVector<SocketItem *>;
+
   explicit Node(QGraphicsItem *a_parent = nullptr);
   ~Node() override;
 
@@ -57,12 +59,22 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   void setPackageView(PackageView *const a_packageView) { m_packageView = a_packageView; }
 
   void setElement(elements::Element *const a_element);
+
   void setName(QString a_name) { m_name = a_name; }
+  QString name() const { return m_name; }
+
   void setPath(QString a_path) { m_path = a_path; }
+  QString path() const { return m_path; }
+
   void setIcon(QString a_icon);
+  QPixmap icon() const { return m_icon; }
+  QString iconPath() const { return m_iconPath; }
 
   void iconify();
   void expand();
+
+  Sockets const &inputs() const { return m_inputs; }
+  Sockets const &outputs() const { return m_outputs; }
 
  private:
   void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType);
@@ -73,12 +85,12 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   Type m_type{};
   QString m_name{};
   QString m_path{};
+  QString m_iconPath{};
   QPixmap m_icon{};
   QRectF m_boundingRect{};
   elements::Element *m_element{};
   PackageView *m_packageView{};
 
-  using Sockets = QVector<SocketItem *>;
   Sockets m_inputs{};
   Sockets m_outputs{};
 };
