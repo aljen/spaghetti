@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 
+#include "elements/package.h"
 #include "ui/colors.h"
 #include "ui/package_view.h"
 
@@ -91,6 +92,25 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
       }
       break;
     }
+    case QGraphicsItem::ItemPositionHasChanged: {
+      if (m_element) {
+        QPointF const position{ a_value.toPointF() };
+        switch (m_type) {
+          case Type::eElement: m_element->setPosition(position.x(), position.y()); break;
+          case Type::eInputs: {
+            auto const package = reinterpret_cast<elements::Package *const>(m_element);
+            package->setInputsPosition(position.x(), position.y());
+            break;
+          }
+          case Type::eOutputs: {
+            auto const package = reinterpret_cast<elements::Package *const>(m_element);
+            package->setOutputsPosition(position.x(), position.y());
+            break;
+          }
+        }
+      }
+      break;
+    }
     default: break;
   }
 
@@ -152,16 +172,21 @@ void Node::setElement(elements::Element *const a_element)
     }
   });
 
+  m_element->setPosition(x(), y());
+  m_element->iconify(m_mode == Mode::eIconified);
+
   calculateBoundingRect();
 }
 
 void Node::setIcon(QString a_icon)
 {
+  m_iconPath = a_icon;
   m_icon.load(a_icon);
 }
 
 void Node::iconify()
 {
+  if (m_element) m_element->iconify(true);
   m_mode = Mode::eIconified;
 
   for (auto &&input : m_inputs) input->hideName();
@@ -173,6 +198,7 @@ void Node::iconify()
 
 void Node::expand()
 {
+  if (m_element) m_element->iconify(false);
   m_mode = Mode::eExpanded;
 
   for (auto &&input : m_inputs) input->showName();
