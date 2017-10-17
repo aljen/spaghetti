@@ -82,9 +82,6 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
   (void)a_value;
 
   switch (a_change) {
-    case QGraphicsItem::ItemSelectedChange: {
-      break;
-    }
     case QGraphicsItem::ItemPositionChange: {
       if (m_packageView && m_packageView->snapToGrid()) {
         QPointF const position{ a_value.toPointF() };
