@@ -36,7 +36,7 @@ Editor::Editor(QWidget *a_parent)
 {
   setObjectName("SpaghettiEditor");
   m_ui->setupUi(this);
-  m_ui->elementsList->removeItem(0);
+  m_ui->libraryToolBox->removeItem(0);
   m_ui->tabWidget->removeTab(0);
 
   connect(m_ui->actionNew, &QAction::triggered, this, &Editor::newPackage);
@@ -80,7 +80,7 @@ void Editor::tabChanged(int a_index)
   m_packageViewIndex = a_index;
 }
 
-void Editor::populateElementsList()
+void Editor::populateLibrary()
 {
   core::Registry const &registry{ core::Registry::get() };
   auto const &elements{ registry.elements() };
@@ -100,7 +100,7 @@ void Editor::populateElementsList()
 
 void Editor::addElement(QString a_category, QString a_name, QString a_type, QString a_icon)
 {
-  QToolBox *const toolbox{ m_ui->elementsList };
+  QToolBox *const toolbox{ m_ui->libraryToolBox };
 
   ElementsList *list{};
 
