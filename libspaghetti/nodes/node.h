@@ -33,6 +33,7 @@
 #include "ui/socket_item.h"
 
 class PackageView;
+class QTableWidget;
 
 namespace nodes {
 
@@ -41,6 +42,13 @@ constexpr int NODE_TYPE{ QGraphicsItem::UserType + 1 };
 class SPAGHETTI_API Node : public QGraphicsItem {
  public:
   using Sockets = QVector<SocketItem *>;
+
+  enum AllowedValueType {
+    eBoolType = 1 << 0,
+    eIntType = 1 << 1,
+    eFloatType = 1 << 2,
+    eAnyType = eBoolType | eIntType | eFloatType
+  };
 
   explicit Node(QGraphicsItem *a_parent = nullptr);
   ~Node() override;
@@ -78,21 +86,42 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   Sockets const &inputs() const { return m_inputs; }
   Sockets const &outputs() const { return m_outputs; }
 
+  void setPropertiesTable(QTableWidget *const a_properties);
+
   void paintBorder(QPainter *const a_painter);
   void paintIcon(QPainter *const a_painter);
 
+  virtual void showProperties();
   virtual void refreshCentralWidget() {}
   virtual void elementSet() {}
 
+  void showCommonProperties();
+  void showInputsProperties(int a_allowedTypes = eAnyType);
+  void showOutputsProperties(int a_allowedTypes = eAnyType);
+
  protected:
   void setCentralWidget(QGraphicsItem *a_centralWidget);
+  void propertiesInsertTitle(QString a_title);
 
  private:
+  void addInput(ValueType const a_type);
+  void removeInput();
+  void setInputName(uint8_t a_socketId, QString const a_name);
+  void setInputType(uint8_t a_socketId, ValueType const a_type);
+
+  void addOutput(ValueType const a_type);
+  void removeOutput();
+  void setOutputName(uint8_t a_socketId, QString const a_name);
+  void setOutputType(uint8_t a_socketId, ValueType const a_type);
+
   void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType);
+  void removeSocket(SocketType const a_type);
   void calculateBoundingRect();
+  void setOutputs(elements::Element *const a_element);
 
  protected:
   QGraphicsItem *m_centralWidget{};
+  QTableWidget *m_properties{};
   elements::Element *m_element{};
   PackageView *m_packageView{};
 

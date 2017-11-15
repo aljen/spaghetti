@@ -1,10 +1,16 @@
 #include "nodes/node.h"
 
+#include <bitset>
 #include <cmath>
 #include <iostream>
 
+#include <QComboBox>
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QTableWidget>
+#include <QTreeWidget>
 
 #include "elements/package.h"
 #include "ui/colors.h"
@@ -57,7 +63,17 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
   (void)a_value;
 
   switch (a_change) {
-    case QGraphicsItem::ItemPositionChange: {
+    case ItemSelectedHasChanged: {
+      nodes::Node *lastSelected{};
+      auto selectedItems = scene()->selectedItems();
+      for (auto &&item : selectedItems) {
+        if (item->type() == NODE_TYPE) lastSelected = static_cast<nodes::Node *>(item);
+      }
+      m_packageView->setSelectedNode(lastSelected);
+      m_packageView->showProperties();
+      break;
+    }
+    case ItemPositionChange: {
       if (m_packageView && m_packageView->snapToGrid()) {
         QPointF const position{ a_value.toPointF() };
         qreal const x{ std::round(position.x() / 10.0) * 10.0 };
@@ -66,7 +82,7 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
       }
       break;
     }
-    case QGraphicsItem::ItemPositionHasChanged: {
+    case ItemPositionHasChanged: {
       if (m_element) {
         QPointF const position{ a_value.toPointF() };
         switch (m_type) {
@@ -132,22 +148,19 @@ void Node::setElement(elements::Element *const a_element)
       break;
   }
 
-  m_element->onChange([&](elements::Element *const a_changed) {
-    auto const &changedOutputs = a_changed->outputs();
-    for (size_t i = 0; i < changedOutputs.size(); ++i) {
-      switch (changedOutputs[i].type) {
-        case ValueType::eBool: {
-          bool const signal{ std::get<bool>(changedOutputs[i].value) };
-          m_outputs[static_cast<int>(i)]->setSignal(signal);
-          break;
-        }
-        default: break;
-      }
-    }
-  });
+  m_element->onChange([&](elements::Element *const a_changed) { setOutputs(a_changed); });
 
   m_element->setPosition(x(), y());
   m_element->iconify(m_mode == Mode::eIconified);
+
+  m_element->calculate();
+
+  if (m_type == Type::eElement) {
+    setName(QString::fromStdString(m_element->name()));
+    setOutputs(m_element);
+  }
+
+  elementSet();
 
   calculateBoundingRect();
 }
@@ -192,6 +205,11 @@ void Node::expand()
   calculateBoundingRect();
 }
 
+void Node::setPropertiesTable(QTableWidget *const a_properties)
+{
+  m_properties = a_properties;
+}
+
 void Node::paintBorder(QPainter *const a_painter)
 {
   auto rect = boundingRect();
@@ -223,11 +241,276 @@ void Node::paintIcon(QPainter *const a_painter)
   a_painter->drawPixmap(x, y, w, h, m_icon);
 }
 
+void Node::showProperties()
+{
+  showCommonProperties();
+  showInputsProperties();
+  showOutputsProperties();
+}
+
+void Node::showCommonProperties()
+{
+  m_properties->setRowCount(0);
+  //  m_properties->clear();
+  propertiesInsertTitle("Element");
+
+  QTableWidgetItem *item{};
+  int const id{ static_cast<int>(m_element->id()) };
+  QString const type{ QString::fromLocal8Bit(m_element->type()) };
+  QString const name{ QString::fromStdString(m_element->name()) };
+
+  int row = m_properties->rowCount();
+  m_properties->insertRow(row);
+  item = new QTableWidgetItem{ "ID" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(row, 0, item);
+
+  item = new QTableWidgetItem{ id };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  item->setData(Qt::DisplayRole, id);
+  m_properties->setItem(row, 1, item);
+
+  row = m_properties->rowCount();
+  m_properties->insertRow(row);
+  item = new QTableWidgetItem{ "Type" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(row, 0, item);
+
+  item = new QTableWidgetItem{ type };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(row, 1, item);
+
+  row = m_properties->rowCount();
+  m_properties->insertRow(row);
+  item = new QTableWidgetItem{ "Name" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(row, 0, item);
+
+  QLineEdit *nameEdit = new QLineEdit{ name };
+  m_properties->setCellWidget(row, 1, nameEdit);
+  QObject::connect(nameEdit, &QLineEdit::textChanged, [this](QString const &a_text) { setName(a_text); });
+}
+
+QString valueType2QString(elements::Element::ValueType a_type)
+{
+  switch (a_type) {
+    case elements::Element::ValueType::eBool: return "Bool";
+    case elements::Element::ValueType::eInt: return "Int";
+    case elements::Element::ValueType::eFloat: return "Float";
+  }
+  return "Unknown";
+}
+
+void Node::showInputsProperties(int a_allowedTypes)
+{
+  (void)a_allowedTypes;
+
+  auto &inputs = m_element->inputs();
+  int const INPUTS_SIZE = static_cast<int>(inputs.size());
+
+  uint8_t const MIN_INPUTS_SIZE = m_element->minInputs();
+  uint8_t const MAX_INPUTS_SIZE = m_element->maxInputs();
+  bool const ADDING_DISABLED = MIN_INPUTS_SIZE == MAX_INPUTS_SIZE;
+  //  qDebug() << "ADDING_DISABLED:" << ADDING_DISABLED;
+
+  QTableWidgetItem *item{};
+  int row = m_properties->rowCount();
+
+  if (m_inputs.size()) propertiesInsertTitle("Inputs");
+
+  if (!ADDING_DISABLED) {
+    row = m_properties->rowCount();
+    m_properties->insertRow(row);
+    item = new QTableWidgetItem{ "Count" };
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    m_properties->setItem(row, 0, item);
+
+    QSpinBox *const count = new QSpinBox{};
+    count->setRange(MIN_INPUTS_SIZE, MAX_INPUTS_SIZE);
+    count->setValue(static_cast<int>(inputs.size()));
+    m_properties->setCellWidget(row, 1, count);
+    QObject::connect(count, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
+      auto const size = m_element->inputs().size();
+      if (static_cast<int>(size) < a_value)
+        addInput(ValueType::eBool);
+      else
+        removeInput();
+    });
+  }
+
+  std::bitset<3> const allowedTypes(static_cast<uint64_t>(a_allowedTypes));
+
+  for (int i = 0; i < INPUTS_SIZE; ++i) {
+    //    qDebug() << "MIN:" << MIN_INPUTS_SIZE << "MAX:" << MAX_INPUTS_SIZE << "INDEX:" << i;
+
+    row = m_properties->rowCount();
+    m_properties->insertRow(row);
+    QLineEdit *const inputName = new QLineEdit{ QString::fromStdString(inputs[i].name) };
+    m_properties->setCellWidget(row, 0, inputName);
+
+    QString const inputType = valueType2QString(inputs[i].type);
+
+    if (allowedTypes.count() <= 1) {
+      item = new QTableWidgetItem{ inputType };
+      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+      m_properties->setItem(row, 1, item);
+    } else {
+      QComboBox *const comboBox{ new QComboBox };
+      if (a_allowedTypes & eBoolType)
+        comboBox->addItem(valueType2QString(ValueType::eBool), static_cast<int>(ValueType::eBool));
+      if (a_allowedTypes & eIntType)
+        comboBox->addItem(valueType2QString(ValueType::eInt), static_cast<int>(ValueType::eInt));
+      if (a_allowedTypes & eFloatType)
+        comboBox->addItem(valueType2QString(ValueType::eFloat), static_cast<int>(ValueType::eFloat));
+      m_properties->setCellWidget(row, 1, comboBox);
+      QObject::connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
+                       [i, comboBox, this](int a_index) {
+                         ValueType const valueType = static_cast<ValueType>(comboBox->itemData(a_index).toInt());
+                         setInputType(static_cast<uint8_t>(i), valueType);
+                       });
+    }
+  }
+}
+
+void Node::showOutputsProperties(int a_allowedTypes)
+{
+  (void)a_allowedTypes;
+
+  auto &outputs = m_element->outputs();
+  int const OUTPUTS_SIZE = static_cast<int>(outputs.size());
+
+  uint8_t const MIN_OUTPUTS_SIZE = m_element->minOutputs();
+  uint8_t const MAX_OUTPUTS_SIZE = m_element->maxOutputs();
+  bool const ADDING_DISABLED = MIN_OUTPUTS_SIZE == MAX_OUTPUTS_SIZE;
+  //  qDebug() << "ADDING_DISABLED:" << ADDING_DISABLED;
+
+  QTableWidgetItem *item{};
+  int row = m_properties->rowCount();
+
+  if (OUTPUTS_SIZE) propertiesInsertTitle("Outputs");
+
+  if (!ADDING_DISABLED) {
+    row = m_properties->rowCount();
+    m_properties->insertRow(row);
+    item = new QTableWidgetItem{ "Count" };
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    m_properties->setItem(row, 0, item);
+
+    QSpinBox *const count = new QSpinBox{};
+    count->setRange(MIN_OUTPUTS_SIZE, MAX_OUTPUTS_SIZE);
+    count->setValue(static_cast<int>(OUTPUTS_SIZE));
+    m_properties->setCellWidget(row, 1, count);
+    QObject::connect(count, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
+      auto const size = m_element->outputs().size();
+      if (static_cast<int>(size) < a_value)
+        addOutput(ValueType::eBool);
+      else
+        removeOutput();
+    });
+  }
+
+  for (int i = 0; i < OUTPUTS_SIZE; ++i) {
+    //    qDebug() << "MIN:" << MIN_OUTPUTS_SIZE << "MAX:" << MAX_OUTPUTS_SIZE << "INDEX:" << i;
+
+    row = m_properties->rowCount();
+    m_properties->insertRow(row);
+    QLineEdit *const outputName = new QLineEdit{ QString::fromStdString(outputs[i].name) };
+    m_properties->setCellWidget(row, 0, outputName);
+
+    QString const outputType = valueType2QString(outputs[i].type);
+
+    item = new QTableWidgetItem{ outputType };
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    m_properties->setItem(row, 1, item);
+  }
+}
+
 void Node::setCentralWidget(QGraphicsItem *a_centralWidget)
 {
   if (m_centralWidget) delete m_centralWidget;
   m_centralWidget = a_centralWidget;
   m_centralWidget->setParentItem(this);
+}
+
+void Node::propertiesInsertTitle(QString a_title)
+{
+  int const ROW = m_properties->rowCount();
+  m_properties->insertRow(ROW);
+  QTableWidgetItem *const item{ new QTableWidgetItem{ a_title } };
+  item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  item->setBackgroundColor(Qt::darkGray);
+  item->setTextColor(Qt::black);
+  m_properties->setItem(ROW, 0, item);
+  m_properties->setSpan(ROW, 0, 1, 2);
+}
+
+void Node::addInput(ValueType const a_type)
+{
+  uint8_t const size = static_cast<uint8_t>(m_element->inputs().size());
+  QString const inputName = QString("#%1").arg(size);
+
+  m_element->addInput(a_type, inputName.toStdString());
+  addSocket(SocketType::eInput, size, inputName, a_type);
+
+  calculateBoundingRect();
+  m_packageView->showProperties();
+}
+
+void Node::removeInput()
+{
+  m_element->removeInput();
+  removeSocket(SocketType::eInput);
+  calculateBoundingRect();
+  m_packageView->showProperties();
+}
+
+void Node::setInputName(uint8_t a_socketId, QString const a_name)
+{
+  m_element->setInputName(a_socketId, a_name.toStdString());
+  m_inputs[a_socketId]->setName(a_name);
+  calculateBoundingRect();
+  m_packageView->showProperties();
+}
+
+void Node::setInputType(uint8_t a_socketId, const Node::ValueType a_type)
+{
+  (void)a_socketId;
+  (void)a_type;
+}
+
+void Node::addOutput(ValueType const a_type)
+{
+  uint8_t const size = static_cast<uint8_t>(m_element->outputs().size());
+  QString const name = QString("#%1").arg(size);
+
+  m_element->addOutput(a_type, name.toStdString());
+  addSocket(SocketType::eOutput, size, name, a_type);
+
+  calculateBoundingRect();
+  m_packageView->showProperties();
+}
+
+void Node::removeOutput()
+{
+  m_element->removeOutput();
+  removeSocket(SocketType::eOutput);
+  calculateBoundingRect();
+  m_packageView->showProperties();
+}
+
+void Node::setOutputName(uint8_t a_socketId, QString const a_name)
+{
+  m_element->setOutputName(a_socketId, a_name.toStdString());
+  m_outputs[a_socketId]->setName(a_name);
+  calculateBoundingRect();
+  m_packageView->showProperties();
+}
+
+void Node::setOutputType(uint8_t a_socketId, const Node::ValueType a_type)
+{
+  (void)a_socketId;
+  (void)a_type;
 }
 
 void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType)
@@ -239,18 +522,39 @@ void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const 
   switch (a_valueType) {
     case ValueType::eBool: socket->setColors(get_color(Color::eBoolSignalOff), get_color(Color::eBoolSignalOn)); break;
     case ValueType::eFloat:
-      socket->setColors(get_color(Color::eFloatSignalOff), get_color(Color::eFloatSignalOn));
+      socket->setColors(get_color(Color::eFloatSignalOn), get_color(Color::eFloatSignalOff));
       break;
     case ValueType::eInt:
-      socket->setColors(get_color(Color::eIntegerSignalOff), get_color(Color::eIntegerSignalOn));
+      socket->setColors(get_color(Color::eIntegerSignalOn), get_color(Color::eIntegerSignalOn));
       break;
   }
 
   socket->setName(a_name);
+  socket->setValueType(a_valueType);
+
+  if (m_mode == Mode::eIconified)
+    socket->hideName();
+  else
+    socket->showName();
+
   if (a_type == SocketType::eInput)
     m_inputs.push_back(socket);
   else
     m_outputs.push_back(socket);
+}
+
+void Node::removeSocket(const Node::SocketType a_type)
+{
+  switch (a_type) {
+    case SocketType::eInput:
+      delete m_inputs.back();
+      m_inputs.pop_back();
+      break;
+    case SocketType::eOutput:
+      delete m_outputs.back();
+      m_outputs.pop_back();
+      break;
+  }
 }
 
 void Node::calculateBoundingRect()
@@ -266,14 +570,28 @@ void Node::calculateBoundingRect()
 
   QSizeF size{};
 
+  int inputsTextWidth{}, outputsTextWidth{};
+  for (int i = 0; i < m_inputs.size(); ++i) {
+    inputsTextWidth = std::max(inputsTextWidth, m_inputs[i]->nameWidth());
+  }
+  for (int i = 0; i < m_outputs.size(); ++i) {
+    outputsTextWidth = std::max(outputsTextWidth, m_outputs[i]->nameWidth());
+  }
+
+  inputsTextWidth += 20;
+  outputsTextWidth += 20;
+
+  QSizeF const centralSize = m_centralWidget ? (m_centralWidget->boundingRect().size() + QSizeF(30, 30)) : ICON_SIZE;
+
   int32_t spacing{};
   switch (m_mode) {
     case Mode::eIconified: {
       spacing = SPACING_ICONIFIED;
+      size = centralSize;
       if (socketsCount < 2)
-        size = ICON_SIZE;
+        size = centralSize;
       else {
-        size.rwidth() = ICON_SIZE.width();
+        size.rwidth() = centralSize.width();
         size.rheight() = ROUND_FACTOR + ROUND_FACTOR;
         size.rheight() += socketsCount * SOCKET_SIZE + (socketsCount - 1) * spacing;
       }
@@ -281,12 +599,17 @@ void Node::calculateBoundingRect()
     }
     case Mode::eExpanded: {
       spacing = SPACING_EXPANED;
-      size = ICON_SIZE;
-      size.rheight() += 50;
-      size.rwidth() += 100;
+      size = centralSize;
+      size.rwidth() = centralSize.width() + inputsTextWidth + outputsTextWidth;
+      qDebug() << "central:" << centralSize.width() << "inputs:" << inputsTextWidth << "outputs:" << outputsTextWidth;
+      size.rheight() = ROUND_FACTOR + ROUND_FACTOR;
+      size.rheight() += socketsCount * SOCKET_SIZE + (socketsCount - 1) * spacing;
       break;
     }
   }
+
+  size.rwidth() = std::round(size.rwidth() / 10.0) * 10.0;
+  size.rheight() = std::round(size.rheight() / 10.0) * 10.0;
 
   QRectF const rect{ QPointF{ -size.width() / 2.0, -size.height() / 2.0 }, size };
 
@@ -306,8 +629,22 @@ void Node::calculateBoundingRect()
   }
 
   m_boundingRect = rect;
+}
 
-  update();
+void Node::setOutputs(elements::Element *const a_element)
+{
+  assert(a_element == m_element);
+  auto const &changedOutputs = a_element->outputs();
+  for (size_t i = 0; i < changedOutputs.size(); ++i) {
+    switch (changedOutputs[i].type) {
+      case ValueType::eBool: {
+        bool const signal{ std::get<bool>(changedOutputs[i].value) };
+        m_outputs[static_cast<int>(i)]->setSignal(signal);
+        break;
+      }
+      default: break;
+    }
+  }
 }
 
 } // namespace nodes
