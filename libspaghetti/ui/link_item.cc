@@ -92,7 +92,6 @@ void LinkItem::setHover(bool const a_hover)
   m_isHover = a_hover;
   if (m_from) m_from->setHover(m_isHover);
   if (m_to) m_to->setHover(m_isHover);
-  update();
 }
 
 void LinkItem::setColors(QColor const a_signalOff, QColor const a_signalOn)
@@ -106,8 +105,6 @@ void LinkItem::setSignal(bool const a_signal)
   m_isSignalOn = a_signal;
 
   if (m_to) m_to->setSignal(a_signal);
-
-  update();
 }
 
 void LinkItem::trackNodes()
@@ -147,6 +144,4 @@ void LinkItem::trackNodes()
   QPainterPathStroker stroker{};
   stroker.setWidth(15);
   m_shape = stroker.createStroke(m_path);
-
-  update();
 }
