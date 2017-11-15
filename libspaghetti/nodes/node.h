@@ -82,6 +82,10 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType);
   void calculateBoundingRect();
 
+ protected:
+  elements::Element *m_element{};
+  PackageView *m_packageView{};
+
  private:
   enum class Mode { eIconified, eExpanded } m_mode{};
   Type m_type{};
@@ -90,8 +94,6 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   QString m_iconPath{};
   QPixmap m_icon{};
   QRectF m_boundingRect{};
-  elements::Element *m_element{};
-  PackageView *m_packageView{};
 
   Sockets m_inputs{};
   Sockets m_outputs{};
