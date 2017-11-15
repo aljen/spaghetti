@@ -81,6 +81,8 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   void paintBorder(QPainter *const a_painter);
   void paintIcon(QPainter *const a_painter);
 
+  virtual void refreshCentralWidget() {}
+
  protected:
   void setCentralWidget(QGraphicsItem *a_centralWidget);
 
