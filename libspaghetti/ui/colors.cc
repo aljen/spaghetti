@@ -41,7 +41,8 @@ std::array<QColor, static_cast<size_t>(Color::eCount)> const g_colors{ {
     { 62, 84, 174, 255 },   // Color::eIntegerSignalOff
     { 0, 170, 238, 255 },   // Color::eIntegerSignalOn
     { 111, 80, 96, 255 },   // Color::eFloatSignalOff
-    { 232, 0, 99, 255 },    // Color::eFloatSignalOn
+//    { 232, 0, 99, 255 },    // Color::eFloatSignalOn
+    { 254, 144,  50, 255 },    // Color::eFloatSignalOn
     { 165, 165, 165, 64 },  // Color::eLink
     { 255, 255, 255, 255 }  // Color::eSelected
 } };
