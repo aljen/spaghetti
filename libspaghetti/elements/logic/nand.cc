@@ -38,11 +38,12 @@ Nand::Nand()
 
 bool Nand::calculate()
 {
+  if (!allInputsConnected()) return false;
+
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
 
   bool allSets{ true };
   for (auto &input : m_inputs) {
-    if (!input.value) return false; // TODO(awyszynski): continue instead?
     bool const v{ std::get<bool>(*input.value) };
     if (!v) {
       allSets = false;

@@ -38,11 +38,12 @@ Nor::Nor()
 
 bool Nor::calculate()
 {
+  if (!allInputsConnected()) return false;
+
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
 
   bool somethingSet{ false };
   for (auto &input : m_inputs) {
-    if (!input.value) return false; // TODO(awyszynski): continue instead?
     bool const v{ std::get<bool>(*input.value) };
     somethingSet |= v;
     if (v) break;
