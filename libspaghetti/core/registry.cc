@@ -28,8 +28,10 @@
 #include "elements/logic/all.h"
 #include "elements/ui/all.h"
 #include "elements/package.h"
+#include "nodes/ui/float_info.h"
 #include "nodes/ui/push_button.h"
 #include "nodes/ui/toggle_button.h"
+#include "nodes/blinker.h"
 #include "nodes/clock.h"
 #include "nodes/const_value.h"
 #include "nodes/node.h"
@@ -58,9 +60,11 @@ void Registry::registerInternalElements()
 
   registerElement<Package>("Package", ":/elements/logic/package.png");
 
+  registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Float Info", ":/unknown.png");
   registerElement<ui::PushButton, nodes::ui::PushButton>("Push Button", ":/elements/ui/push_button.png");
   registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button", ":/elements/ui/toggle_button.png");
 
+  registerElement<logic::Blinker, nodes::Blinker>("Blinker (bool)", ":/unknown.png");
   registerElement<logic::Clock, nodes::Clock>("Clock (ms)", ":/elements/logic/clock.png");
   registerElement<logic::Nand>("NAND (Bool)", ":/elements/logic/nand.png");
   registerElement<logic::And>("AND (Bool)", ":/elements/logic/and.png");

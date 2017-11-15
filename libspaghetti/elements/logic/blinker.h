@@ -21,20 +21,37 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
+#ifndef ELEMENTS_LOGIC_BLINKER_H
+#define ELEMENTS_LOGIC_BLINKER_H
 
-#include "elements/logic/and.h"
-#include "elements/logic/blinker.h"
-#include "elements/logic/clock.h"
-#include "elements/logic/const_bool.h"
-#include "elements/logic/const_float.h"
-#include "elements/logic/const_int.h"
-#include "elements/logic/nand.h"
-#include "elements/logic/nor.h"
-#include "elements/logic/not.h"
-#include "elements/logic/or.h"
-#include "elements/logic/random_bool.h"
-#include "elements/logic/switch.h"
+#include "elements/element.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace elements::logic {
+
+class Blinker final : public elements::Element {
+ public:
+  static constexpr char const *const TYPE{ "logic/blinker" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  Blinker();
+  ~Blinker() override;
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  bool isUpdatable() const override { return true; }
+  void update(duration_t const &a_delta) override;
+
+  bool calculate() override;
+
+ private:
+  bool m_enabled{};
+  bool m_state{};
+  duration_t m_highRate{};
+  duration_t m_lowRate{};
+  duration_t m_time{};
+};
+
+} // namespace elements::logic
+
+#endif // ELEMENTS_LOGIC_BLINKER_H

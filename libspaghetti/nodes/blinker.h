@@ -21,20 +21,17 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
+#ifndef NODES_BLINKER_H
+#define NODES_BLINKER_H
 
-#include "elements/logic/and.h"
-#include "elements/logic/blinker.h"
-#include "elements/logic/clock.h"
-#include "elements/logic/const_bool.h"
-#include "elements/logic/const_float.h"
-#include "elements/logic/const_int.h"
-#include "elements/logic/nand.h"
-#include "elements/logic/nor.h"
-#include "elements/logic/not.h"
-#include "elements/logic/or.h"
-#include "elements/logic/random_bool.h"
-#include "elements/logic/switch.h"
+#include "nodes/node.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace nodes {
+
+class Blinker : public Node {
+  void showProperties();
+};
+
+} // namespace nodes
+
+#endif // NODES_BLINKER_H

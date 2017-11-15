@@ -18,6 +18,8 @@ set(LIBSPAGHETTI_SOURCES
   elements/logic/all.h
   elements/logic/and.cc
   elements/logic/and.h
+  elements/logic/blinker.cc
+  elements/logic/blinker.h
   elements/logic/clock.cc
   elements/logic/clock.h
   elements/logic/const_bool.cc
@@ -39,6 +41,8 @@ set(LIBSPAGHETTI_SOURCES
   elements/logic/switch.cc
   elements/logic/switch.h
   elements/ui/all.h
+  elements/ui/float_info.cc
+  elements/ui/float_info.h
   elements/ui/push_button.cc
   elements/ui/push_button.h
   elements/ui/toggle_button.cc
@@ -48,10 +52,14 @@ set(LIBSPAGHETTI_SOURCES
   elements/package.cc
   elements/package.h
   icons/icons.qrc
+  nodes/ui/float_info.cc
+  nodes/ui/float_info.h
   nodes/ui/push_button.cc
   nodes/ui/push_button.h
   nodes/ui/toggle_button.cc
   nodes/ui/toggle_button.h
+  nodes/blinker.cc
+  nodes/blinker.h
   nodes/clock.cc
   nodes/clock.h
   nodes/const_value.cc

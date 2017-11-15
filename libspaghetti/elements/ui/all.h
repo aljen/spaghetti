@@ -24,6 +24,7 @@
 #ifndef ELEMENTS_UI_ALL_H
 #define ELEMENTS_UI_ALL_H
 
+#include "elements/ui/float_info.h"
 #include "elements/ui/push_button.h"
 #include "elements/ui/toggle_button.h"
 
