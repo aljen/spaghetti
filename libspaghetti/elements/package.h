@@ -49,10 +49,6 @@
 
 namespace elements {
 
-namespace logic {
-class Clock;
-} // namespace logic
-
 class SPAGHETTI_API Package final : public Element {
  public:
   using Elements = std::vector<Element *>;
@@ -93,7 +89,8 @@ class SPAGHETTI_API Package final : public Element {
 
   bool connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, uint8_t a_inputId);
 
-  void threadFunction();
+  void dispatchThreadFunction();
+  void updatesThreadFunction();
 
   void startDispatchThread();
   void quitDispatchThread();
@@ -137,9 +134,11 @@ class SPAGHETTI_API Package final : public Element {
 
   std::vector<size_t> m_free{};
 
-  std::vector<logic::Clock *> m_clocks{};
+  std::vector<Element *> m_updatables{};
 
   moodycamel::ConcurrentQueue<size_t> m_queue{};
+  moodycamel::ConcurrentQueue<Element *> m_addUpdatableQueue{};
+  moodycamel::ConcurrentQueue<Element *> m_removeUpdatableQueue{};
 
 #if PACKAGE_MAP == PACKAGE_SPP_MAP
   using Callbacks = spp::sparse_hash_map<size_t, std::set<size_t>>;
@@ -148,7 +147,8 @@ class SPAGHETTI_API Package final : public Element {
 #endif
 
   Callbacks m_callbacks{};
-  std::thread m_thread{};
+  std::thread m_dispatchThread{};
+  std::thread m_updatesThread{};
 
   bool m_quit{};
 };

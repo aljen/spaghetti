@@ -32,10 +32,6 @@ namespace elements::logic {
 
 class Clock final : public Element {
  public:
-  using clock_t = std::chrono::high_resolution_clock;
-  using time_point_t = std::chrono::high_resolution_clock::time_point;
-  using duration_t = std::chrono::milliseconds;
-
   static constexpr char const *const TYPE{ "logic/clock" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
@@ -47,11 +43,16 @@ class Clock final : public Element {
   bool calculate() override;
 
   void setDuration(duration_t a_duration) { m_duration = a_duration; }
-  void reset(time_point_t a_timePoint) { m_lastTimePoint = a_timePoint; }
-  void update(time_point_t const &a_timePoint);
+  void reset() { m_time = duration_t{ 0.0 }; }
+
+  bool isUpdatable() const override { return true; }
+
+  void update(duration_t const &a_delta);
+
+  duration_t duration() const { return m_duration; }
 
  private:
-  time_point_t m_lastTimePoint{};
+  duration_t m_time{};
   duration_t m_duration{ 500 };
 };
 

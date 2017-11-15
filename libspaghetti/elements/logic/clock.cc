@@ -42,14 +42,14 @@ bool Clock::calculate()
   return false;
 }
 
-void Clock::update(time_point_t const &a_timePoint)
+void Clock::update(duration_t const &a_delta)
 {
-  auto const diff = a_timePoint - m_lastTimePoint;
-  if (diff >= m_duration) {
+  m_time += a_delta;
+  if (m_time >= m_duration) {
     bool const value = !std::get<bool>(m_outputs[0].value);
     m_outputs[0].value = value;
-    m_lastTimePoint = a_timePoint;
     m_package->elementChanged(id());
+    reset();
   }
 }
 

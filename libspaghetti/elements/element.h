@@ -24,6 +24,7 @@
 #ifndef ELEMENTS_ELEMENT_H
 #define ELEMENTS_ELEMENT_H
 
+#include <chrono>
 #include <functional>
 #include <set>
 #include <string>
@@ -42,6 +43,8 @@ class Package;
 
 class SPAGHETTI_API Element {
  public:
+  using duration_t = std::chrono::duration<double, std::milli>;
+
   using Json = nlohmann::json;
   using Value = std::variant<bool, int32_t, float>;
   enum class ValueType { eBool, eInt, eFloat };
@@ -78,6 +81,10 @@ class SPAGHETTI_API Element {
   virtual void deserialize(Json const &a_json);
 
   virtual bool calculate() { return false; }
+  virtual void reset() {}
+
+  virtual bool isUpdatable() const { return false; }
+  virtual void update(duration_t const &a_delta) { (void)a_delta; }
 
   size_t id() const noexcept { return m_id; }
 

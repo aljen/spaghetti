@@ -163,13 +163,9 @@ Element *Package::add(string::hash_t a_hash)
 
   element->m_package = this;
   element->m_id = index;
+  element->reset();
 
-  if (element->hash() == logic::Clock::HASH) {
-    using logic::Clock;
-    Clock *const clock{ reinterpret_cast<Clock *const>(element) };
-    clock->reset(Clock::clock_t::now());
-    m_clocks.push_back(clock);
-  }
+  if (element->isUpdatable()) m_addUpdatableQueue.enqueue(element);
 
   return element;
 }
@@ -180,7 +176,7 @@ void Package::remove(size_t a_id)
   assert(a_id < m_data.size());
   assert(std::find(std::begin(m_free), std::end(m_free), a_id) == std::end(m_free));
 
-  if (m_data[a_id]->hash() == logic::Clock::HASH) std::remove(std::begin(m_clocks), std::end(m_clocks), m_data[a_id]);
+  if (m_data[a_id]->isUpdatable()) std::remove(std::begin(m_updatables), std::end(m_updatables), m_data[a_id]);
 
   delete m_data[a_id];
   m_data[a_id] = nullptr;
@@ -229,27 +225,51 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   return true;
 }
 
-void Package::threadFunction()
+void Package::dispatchThreadFunction()
 {
-  while (!m_quit) {
-    auto const now = logic::Clock::clock_t::now();
-    for (auto &&clock : m_clocks) {
-      clock->update(now);
-    }
+  while (!m_quit) tryDispatch();
+}
 
-    if (!tryDispatch()) std::this_thread::yield();
+void Package::updatesThreadFunction()
+{
+  using clock_t = std::chrono::high_resolution_clock;
+
+  auto last = clock_t::now();
+
+  while (!m_quit) {
+    Element *temp{};
+    while (m_addUpdatableQueue.try_dequeue(temp)) m_updatables.push_back(temp);
+    while (m_removeUpdatableQueue.try_dequeue(temp))
+      std::remove(std::begin(m_updatables), std::end(m_updatables), temp);
+
+    auto const now = clock_t::now();
+    auto const delta = now - last;
+    for (auto &&updatable : m_updatables) updatable->update(delta);
+    last = now;
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 }
 
 void Package::startDispatchThread()
 {
-  m_thread = std::thread(&Package::threadFunction, this);
+  m_updatesThread = std::thread(&Package::updatesThreadFunction, this);
+  m_dispatchThread = std::thread(&Package::dispatchThreadFunction, this);
 }
 
 void Package::quitDispatchThread()
 {
   m_quit = true;
-  if (m_thread.joinable()) m_thread.join();
+  if (m_updatesThread.joinable()) {
+    std::cerr << "Waiting for updates thread join.." << std::endl;
+    m_updatesThread.join();
+    std::cerr << "After updates thread join.." << std::endl;
+  }
+  if (m_dispatchThread.joinable()) {
+    std::cerr << "Waiting for dispatch thread join.." << std::endl;
+    m_dispatchThread.join();
+    std::cerr << "After dispatch thread join.." << std::endl;
+  }
 }
 
 bool Package::tryDispatch()
