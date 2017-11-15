@@ -64,6 +64,7 @@ class LinkItem final : public QGraphicsPathItem {
   ValueType valueType() const { return m_valueType; }
 
   bool isSnapped() const { return m_isSnapped; }
+  bool isSignalOn() const { return m_isSignalOn; }
 
   void trackNodes();
 
