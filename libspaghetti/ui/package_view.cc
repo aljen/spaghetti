@@ -5,9 +5,9 @@
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
 #include <QGraphicsScene>
+#include <QHeaderView>
 #include <QMimeData>
 #include <QTableWidget>
-#include <QHeaderView>
 #include <QTimeLine>
 
 #include "core/registry.h"
@@ -23,6 +23,7 @@ PackageView::PackageView(QTableWidget *const a_properties, elements::Package *co
   , m_scene{ scene() }
   , m_inputs{ new nodes::Node }
   , m_outputs{ new nodes::Node }
+  , m_packageNode{ core::Registry::get().createNode("logic/package") }
   , m_gridLarge{ new QGraphicsItemGroup }
   , m_gridSmall{ new QGraphicsItemGroup }
   , m_standalone{ !a_package }
@@ -35,33 +36,22 @@ PackageView::PackageView(QTableWidget *const a_properties, elements::Package *co
   setResizeAnchor(QGraphicsView::NoAnchor);
   setTransformationAnchor(QGraphicsView::AnchorViewCenter);
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+  setOptimizationFlags(QGraphicsView::DontSavePainterState | QGraphicsView::DontAdjustForAntialiasing);
+
   setObjectName("PackageView");
 
+  m_scene->setItemIndexMethod(QGraphicsScene::NoIndex);
   m_scene->setSceneRect(-32000, -32000, 64000, 64000);
   m_scene->setObjectName("PackageViewScene");
 
   QBrush brush{ QColor(169, 169, 169, 32) };
-  //  QBrush brush{ QColor(244, 53, 64, 255) }; // RED
-  //  QBrush brush{ QColor(232, 0, 99, 255) }; // PINK
-  //  QBrush brush{ QColor(154, 41, 169, 255) }; // PURPLE
-  //  QBrush brush{ QColor(101, 63, 176, 255) }; // DEEP PURPLE
-  //  QBrush brush{ QColor(62, 84, 174, 255) }; // INDIGO
-  //  QBrush brush{ QColor(29, 151, 237, 255) }; // BLUE
-  //  QBrush brush{ QColor(0, 170, 238, 255) }; // LIGHT BLUE
-  //  QBrush brush{ QColor(0, 188, 208, 255) }; // CYAN
-  //  QBrush brush{ QColor(0, 149, 134, 255) }; // TEAL
-  //  QBrush brush{ QColor(75, 173, 88, 255) }; // GREEN
-  //  QBrush brush{ QColor(137, 193, 86, 255) }; // LIGHT GREEN
-  //  QBrush brush{ QColor(203, 217, 81, 255) }; // LIME
-  //  QBrush brush{ QColor(254, 231, 86, 255) }; // YELLOW
-  //  QBrush brush{ QColor(254, 187, 59, 255) }; // AMBER
-  //  QBrush brush{ QColor(254, 144, 50, 255) }; // ORANGE
-  //  QBrush brush{ QColor(254, 74, 53, 255) }; // DEEP ORANGE
-  //  QBrush brush{ QColor(120, 83, 74, 255) }; // BROWN
-  //  QBrush brush{ QColor(156, 156, 156, 255) }; // GREY
-  //  QBrush brush{ QColor(95, 124, 136, 255) }; // BLUE GREY
-  //  QBrush brush{ QColor(58, 66, 71, 255) }; // DARK GREY
   m_scene->setBackgroundBrush(brush);
+
+  m_inputs->setPropertiesTable(m_properties);
+  m_outputs->setPropertiesTable(m_properties);
+
+  m_packageNode->setPropertiesTable(m_properties);
+  m_packageNode->setElement(m_package);
 
   createGrid();
 
@@ -94,7 +84,6 @@ PackageView::PackageView(QTableWidget *const a_properties, elements::Package *co
 
 PackageView::~PackageView()
 {
-  qDebug() << Q_FUNC_INFO;
   if (m_standalone) {
     m_package->quitDispatchThread();
     delete m_package;
@@ -103,7 +92,6 @@ PackageView::~PackageView()
 
 void PackageView::open()
 {
-  qDebug() << Q_FUNC_INFO;
   m_package->open(m_filename.toStdString());
 
   auto const &inputsPosition = m_package->inputsPosition();
@@ -119,18 +107,19 @@ void PackageView::open()
     auto const element = elements[i];
     auto const node = registry.createNode(element->hash());
     auto const nodeName = QString::fromStdString(registry.elementName(element->hash()));
-    auto const nodeIcon= QString::fromStdString(registry.elementIcon(element->hash()));
+    auto const nodeIcon = QString::fromStdString(registry.elementIcon(element->hash()));
     auto const nodePath = QString::fromLocal8Bit(element->type());
 
     m_nodes[element->id()] = node;
 
+    element->isIconified() ? node->iconify() : node->expand();
     node->setPackageView(this);
+    node->setPropertiesTable(m_properties);
     node->setName(nodeName);
     node->setPath(nodePath);
     node->setIcon(nodeIcon);
     node->setPos(element->position().x, element->position().y);
     node->setElement(element);
-    element->isIconified() ? node->iconify() : node->expand();
     m_scene->addItem(node);
   }
 
@@ -165,6 +154,7 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
     assert(m_dragNode == nullptr);
     m_dragNode = registry.createNode(path);
     m_dragNode->setPackageView(this);
+    m_dragNode->setPropertiesTable(m_properties);
     m_dragNode->setName(name);
     m_dragNode->setPath(pathString);
     m_dragNode->setIcon(icon);
@@ -178,9 +168,11 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
 
 void PackageView::dragLeaveEvent(QDragLeaveEvent *)
 {
-  m_scene->removeItem(m_dragNode);
-  delete m_dragNode;
-  m_dragNode = nullptr;
+  if (m_dragNode) {
+    m_scene->removeItem(m_dragNode);
+    delete m_dragNode;
+    m_dragNode = nullptr;
+  }
 }
 
 void PackageView::dragMoveEvent(QDragMoveEvent *a_event)
@@ -202,7 +194,7 @@ void PackageView::dropEvent(QDropEvent *a_event)
     char const *const path{ stringData.data() };
 
     auto const element = m_package->add(path);
-    element->setName(m_dragNode->name().toStdString());
+    if (element->name().empty()) element->setName(m_dragNode->name().toStdString());
     m_dragNode->setElement(element);
     m_dragNode->iconify();
 
@@ -221,7 +213,6 @@ void PackageView::keyPressEvent(QKeyEvent *a_event)
 
 void PackageView::keyReleaseEvent(QKeyEvent *a_event)
 {
-  qDebug() << a_event;
   m_snapToGrid = a_event->modifiers() & Qt::ShiftModifier;
 
   switch (a_event->key()) {
@@ -236,7 +227,7 @@ void PackageView::keyReleaseEvent(QKeyEvent *a_event)
   auto const selected = m_scene->selectedItems();
   for (auto &&item : selected) {
     if (item->type() == nodes::NODE_TYPE) {
-      qDebug() << "Node:" << item;
+      //      qDebug() << "Node:" << item;
     }
   }
 }
@@ -288,44 +279,50 @@ void PackageView::center()
   centerOn(0.0, 0.0);
 }
 
-
 void PackageView::showProperties()
 {
   m_properties->clear();
   m_properties->setColumnCount(2);
   m_properties->setHorizontalHeaderLabels(QString("Name;Value").split(";"));
+
+  m_selectedNode->showProperties();
   m_properties->horizontalHeader()->setStretchLastSection(true);
-  m_properties->setRowCount(3);
+}
 
-  QTableWidgetItem *item{};
+void PackageView::deleteElement()
+{
+  auto selectedItems = m_scene->selectedItems();
 
-  int const id{ static_cast<int>(m_package->id()) };
-  QString const type{ QString::fromLocal8Bit(m_package->type()) };
-  QString const name{ QString::fromStdString(m_package->name()) };
+  for (auto &&item : selectedItems) {
+    if (item->type() == nodes::NODE_TYPE) {
+      auto const node = reinterpret_cast<nodes::Node *const>(item);
+      auto const element = node->element();
 
-  item = new QTableWidgetItem{ "ID" };
-  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-  m_properties->setItem(0, 0, item);
+      delete node;
+      m_nodes.remove(element->id());
+      m_package->remove(element->id());
+    }
+  }
+}
 
-  item = new QTableWidgetItem{ id };
-  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-  item->setData(Qt::DisplayRole, id );
-  m_properties->setItem(0, 1, item);
+void PackageView::setSelectedNode(nodes::Node *const a_node)
+{
+  if (a_node == nullptr)
+    m_selectedNode = m_packageNode;
+  else
+    m_selectedNode = a_node;
+}
 
-  item = new QTableWidgetItem{ "Type" };
-  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-  m_properties->setItem(1, 0, item);
+void PackageView::setVisible(bool a_visible)
+{
+  QGraphicsView::setVisible(a_visible);
+  //  qDebug() << m_filename << "visible:" << a_visible;
 
-  item = new QTableWidgetItem{ type };
-  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-  m_properties->setItem(1, 1, item);
-
-  item = new QTableWidgetItem{ "Name" };
-  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-  m_properties->setItem(2, 0, item);
-
-  item = new QTableWidgetItem{ name };
-  m_properties->setItem(2, 1, item);
+  //  if (a_visible) {
+  //    if (!m_timer.isActive()) m_timer.start();
+  //  } else {
+  //    m_timer.stop();
+  //  }
 }
 
 void PackageView::createGrid()

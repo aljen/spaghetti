@@ -76,10 +76,16 @@ class PackageView final : public QGraphicsView {
 
   void showProperties();
 
+  void deleteElement();
+
   Nodes &nodes() { return m_nodes; }
   Nodes const &nodes() const { return m_nodes; }
 
   nodes::Node *getNode(size_t const a_id) const { return m_nodes[a_id]; }
+
+  void setSelectedNode(nodes::Node *const a_node);
+
+  void setVisible(bool a_visible) override;
 
  private:
   void createGrid();
@@ -92,7 +98,9 @@ class PackageView final : public QGraphicsView {
   QGraphicsScene *const m_scene{};
   nodes::Node *const m_inputs{};
   nodes::Node *const m_outputs{};
+  nodes::Node *const m_packageNode{};
   nodes::Node *m_dragNode{};
+  nodes::Node *m_selectedNode{};
   LinkItem *m_dragLink{};
   int32_t m_scheduledScalings{};
   enum class GridDensity { eLarge, eSmall } m_gridDensity{};
