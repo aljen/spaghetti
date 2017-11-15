@@ -170,6 +170,7 @@ void SocketItem::dropEvent(QGraphicsSceneDragDropEvent *a_event)
 
   package->connect(from->elementId(), from->socketId(), m_elementId, m_socketId);
 
+  setSignal(linkItem->isSignalOn());
 }
 
 void SocketItem::mousePressEvent(QGraphicsSceneMouseEvent *a_event)
