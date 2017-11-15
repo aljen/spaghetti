@@ -44,37 +44,11 @@ QRectF Node::boundingRect() const
 
 void Node::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget)
 {
-  (void)a_painter;
   (void)a_option;
   (void)a_widget;
 
-  //  QPen pen{ color };
-  QPen pen{ get_color(Color::eSocketBorder) };
-  pen.setWidth(2);
-  QColor color{ 105, 105, 105, 128 };
-  QBrush brush{ color };
-  a_painter->setPen(pen);
-  a_painter->setBrush(brush);
-  a_painter->drawRoundedRect(m_boundingRect, ROUND_FACTOR, ROUND_FACTOR);
-
-  //  pen.setColor(QColor(54, 54, 54, 255));
-  //  pen.setColor(isSelected() ? QColor(95, 124, 136, 255) : QColor(58, 66, 71, 255));
-  pen.setColor(isSelected() ? QColor(156, 156, 156, 255) : QColor(58, 66, 71, 255));
-  pen.setWidth(2);
-  a_painter->setPen(pen);
-  a_painter->setBrush(Qt::NoBrush);
-  a_painter->drawRoundedRect(m_boundingRect, ROUND_FACTOR, ROUND_FACTOR);
-
-  auto size = m_icon.size();
-  auto size2 = size / 2.0;
-
-  //  a_painter->translate(m_boundingRect.width() / 2.0 - size.width() / 4.0, m_boundingRect.height() / 2.0 -
-  //  size.height() / 4.0); a_painter->drawPixmap(0, 0, size.width() / 2.0, size.height() / 2.0, m_icon);
-  auto const x = static_cast<int>(-size2.width() / 2.0);
-  auto const y = static_cast<int>(-size2.height() / 2.0);
-  auto const w = size2.width();
-  auto const h = size2.height();
-  a_painter->drawPixmap(x, y, w, h, m_icon);
+  paintBorder(a_painter);
+  paintIcon(a_painter);
 }
 
 QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant const &a_value)
@@ -216,6 +190,37 @@ void Node::expand()
 
   prepareGeometryChange();
   calculateBoundingRect();
+}
+
+void Node::paintBorder(QPainter *const a_painter)
+{
+  auto rect = boundingRect();
+
+  QPen pen{ get_color(Color::eSocketBorder) };
+  pen.setWidth(2);
+  QColor color{ 105, 105, 105, 128 };
+  QBrush brush{ color };
+  a_painter->setPen(pen);
+  a_painter->setBrush(brush);
+  a_painter->drawRect(rect);
+
+  pen.setColor(isSelected() ? QColor(156, 156, 156, 255) : QColor(58, 66, 71, 255));
+  pen.setWidth(2);
+  a_painter->setPen(pen);
+  a_painter->setBrush(Qt::NoBrush);
+  a_painter->drawRect(rect);
+}
+
+void Node::paintIcon(QPainter *const a_painter)
+{
+  auto size = m_icon.size();
+  auto size2 = size / 2.0;
+
+  auto const x = static_cast<int>(-size2.width() / 2.0);
+  auto const y = static_cast<int>(-size2.height() / 2.0);
+  auto const w = size2.width();
+  auto const h = size2.height();
+  a_painter->drawPixmap(x, y, w, h, m_icon);
 }
 
 void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType)
