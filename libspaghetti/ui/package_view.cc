@@ -79,11 +79,18 @@ PackageView::PackageView(QTableWidget *const a_properties, elements::Package *co
 
   m_scene->addItem(m_inputs);
   m_scene->addItem(m_outputs);
+
+  m_timer.setInterval(1000 / 33);
+
+  connect(&m_timer, &QTimer::timeout, [this]() { m_scene->advance(); });
+  m_timer.start();
+
   m_package->startDispatchThread();
 }
 
 PackageView::~PackageView()
 {
+  m_timer.stop();
   if (m_standalone) {
     m_package->quitDispatchThread();
     delete m_package;

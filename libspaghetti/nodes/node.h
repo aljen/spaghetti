@@ -58,6 +58,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   void paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget) override;
   QVariant itemChange(GraphicsItemChange a_change, QVariant const &a_value) override;
   void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *a_event) override;
+  void advance(int a_phase) override;
 
   enum class Type { eElement, eInputs, eOutputs };
   using SocketType = SocketItem::Type;

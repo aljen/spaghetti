@@ -50,6 +50,8 @@ class LinkItem final : public QGraphicsPathItem {
   void hoverEnterEvent(QGraphicsSceneHoverEvent *a_event) override;
   void hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event) override;
 
+  void advance(int a_phase) override;
+
   SocketItem const *from() const { return m_from; }
   SocketItem *to() const { return m_to; }
   void setFrom(SocketItem *const a_from);

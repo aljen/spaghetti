@@ -26,6 +26,7 @@
 
 #include <QGraphicsView>
 #include <QHash>
+#include <QTimer>
 
 namespace elements {
 class Package;
@@ -96,6 +97,7 @@ class PackageView final : public QGraphicsView {
   elements::Package *const m_package{};
   Nodes m_nodes{};
   QGraphicsScene *const m_scene{};
+  QTimer m_timer{};
   nodes::Node *const m_inputs{};
   nodes::Node *const m_outputs{};
   nodes::Node *const m_packageNode{};

@@ -74,6 +74,15 @@ void LinkItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event)
   setHover(false);
 }
 
+void LinkItem::advance(int a_phase)
+{
+  if (!a_phase) return;
+
+  if (m_valueType != ValueType::eBool) m_dashOffset -= 0.6;
+
+  update();
+}
+
 void LinkItem::setFrom(SocketItem *const a_from)
 {
   m_from = a_from;

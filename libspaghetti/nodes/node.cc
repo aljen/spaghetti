@@ -114,6 +114,15 @@ void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *a_event)
   QGraphicsItem::mouseDoubleClickEvent(a_event);
 }
 
+void Node::advance(int a_phase)
+{
+  if (!a_phase) return;
+
+  refreshCentralWidget();
+
+  update();
+}
+
 void Node::setElement(elements::Element *const a_element)
 {
   if (m_element) qDebug() << "Already have element!";
