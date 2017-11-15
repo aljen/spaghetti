@@ -64,6 +64,7 @@
     <property name="title">
      <string>Edit</string>
     </property>
+    <addaction name="actionDeleteElement"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -129,7 +130,14 @@
    <widget class="QWidget" name="dockWidgetContents_2">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QTableWidget" name="propertiesTable"/>
+      <widget class="QTableWidget" name="propertiesTable">
+       <property name="selectionMode">
+        <enum>QAbstractItemView::NoSelection</enum>
+       </property>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -216,6 +224,14 @@
    </property>
    <property name="text">
     <string>Show Properties</string>
+   </property>
+  </action>
+  <action name="actionDeleteElement">
+   <property name="text">
+    <string>Delete element</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
   </action>
  </widget>
