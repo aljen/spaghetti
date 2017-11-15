@@ -60,7 +60,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
 
   void setElement(elements::Element *const a_element);
 
-  void setName(QString a_name) { m_name = a_name; }
+  void setName(QString a_name);
   QString name() const { return m_name; }
 
   void setPath(QString a_path) { m_path = a_path; }

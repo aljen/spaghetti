@@ -178,6 +178,16 @@ void Node::setElement(elements::Element *const a_element)
   calculateBoundingRect();
 }
 
+void Node::setName(QString a_name)
+{
+  m_name = a_name;
+  if (m_element)
+    setToolTip(QString("%1 (%2)").arg(a_name).arg(m_element->id()));
+  else
+    setToolTip(QString("%1").arg(a_name));
+  if (m_element) m_element->setName(a_name.toStdString());
+}
+
 void Node::setIcon(QString a_icon)
 {
   m_iconPath = a_icon;
