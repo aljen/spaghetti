@@ -154,6 +154,16 @@ bool Element::addInput(Element::ValueType const a_type, std::string const a_name
   return true;
 }
 
+void Element::setInputName(uint8_t a_input, std::string const a_name)
+{
+  m_inputs[a_input].name = a_name;
+}
+
+void Element::removeInput()
+{
+  m_inputs.pop_back();
+}
+
 void Element::clearInputs()
 {
   m_inputs.clear();
@@ -169,6 +179,16 @@ bool Element::addOutput(Element::ValueType const a_type, std::string const a_nam
   m_outputs.emplace_back(output);
 
   return true;
+}
+
+void Element::setOutputName(uint8_t a_output, std::string const a_name)
+{
+  m_outputs[a_output].name = a_name;
+}
+
+void Element::removeOutput()
+{
+  m_outputs.pop_back();
 }
 
 void Element::clearOutputs()
