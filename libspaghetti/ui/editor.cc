@@ -181,6 +181,7 @@ void Editor::newPackage()
   auto *const packageView = new PackageView{ m_ui->propertiesTable };
   m_packageViewIndex = m_ui->tabWidget->addTab(packageView, "New package");
   m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
+  packageView->setSelectedNode(nullptr);
   packageView->showProperties();
 }
 
@@ -198,6 +199,7 @@ void Editor::openPackage()
   m_ui->tabWidget->setTabText(m_packageViewIndex, packagesDir.relativeFilePath(filename));
 
   packageView->open();
+  packageView->setSelectedNode(nullptr);
   packageView->showProperties();
 }
 
