@@ -108,16 +108,17 @@ class SPAGHETTI_API Element {
   using CallbackFunction = std::function<void(Element *const)>;
   void onChange(CallbackFunction &&a_callback) { m_callback = a_callback; }
 
+  uint8_t minInputs() const { return m_minInputs; }
+  uint8_t maxInputs() const { return m_maxInputs; }
+  uint8_t minOutputs() const { return m_minOutputs; }
+  uint8_t maxOutputs() const { return m_maxOutputs; }
+
  protected:
   void setMinInputs(uint8_t const a_min);
-  uint8_t minInputs() const { return m_minInputs; }
   void setMaxInputs(uint8_t const a_max);
-  uint8_t maxInputs() const { return m_maxInputs; }
 
   void setMinOutputs(uint8_t const a_min);
-  uint8_t minOutputs() const { return m_minOutputs; }
   void setMaxOutputs(uint8_t const a_max);
-  uint8_t maxOutputs() const { return m_maxOutputs; }
 
  protected:
   Inputs m_inputs{};
