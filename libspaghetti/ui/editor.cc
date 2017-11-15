@@ -76,6 +76,7 @@ Editor::Editor(QWidget *a_parent)
 
 Editor::~Editor()
 {
+  closeAllPackages();
   delete m_ui;
 }
 
