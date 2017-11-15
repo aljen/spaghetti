@@ -30,6 +30,8 @@
 
 class LinkItem;
 
+constexpr int SOCKET_TYPE{ QGraphicsItem::UserType + 3 };
+
 class SocketItem final : public QGraphicsItem {
  public:
   enum class Type { eInput, eOutput };
@@ -37,6 +39,8 @@ class SocketItem final : public QGraphicsItem {
   constexpr static int SIZE{ 16 };
 
   SocketItem(Type aType, QGraphicsItem *const a_parent = nullptr);
+
+  int type() const override { return SOCKET_TYPE; }
 
   bool isInput() const { return m_type == Type::eInput; }
   bool isOutput() const { return m_type == Type::eOutput; }
