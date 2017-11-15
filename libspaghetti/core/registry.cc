@@ -26,7 +26,12 @@
 #include "core/registry.h"
 #include "elements/element.h"
 #include "elements/logic/all.h"
+#include "elements/ui/all.h"
 #include "elements/package.h"
+#include "nodes/ui/push_button.h"
+#include "nodes/ui/toggle_button.h"
+#include "nodes/clock.h"
+#include "nodes/const_value.h"
 #include "nodes/node.h"
 
 namespace fs = boost::filesystem;
@@ -52,16 +57,20 @@ void Registry::registerInternalElements()
   using namespace elements;
 
   registerElement<Package>("Package", ":/elements/logic/package.png");
-  registerElement<logic::Clock>("Clock (ms)", ":/elements/logic/clock.png");
+
+  registerElement<ui::PushButton, nodes::ui::PushButton>("Push Button", ":/elements/ui/push_button.png");
+  registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button", ":/elements/ui/toggle_button.png");
+
+  registerElement<logic::Clock, nodes::Clock>("Clock (ms)", ":/elements/logic/clock.png");
   registerElement<logic::Nand>("NAND (Bool)", ":/elements/logic/nand.png");
   registerElement<logic::And>("AND (Bool)", ":/elements/logic/and.png");
   registerElement<logic::Nor>("NOR (Bool)", ":/elements/logic/nor.png");
   registerElement<logic::Or>("OR (Bool)", ":/elements/logic/or.png");
   registerElement<logic::Not>("NOT (Bool)", ":/elements/logic/not.png");
-  registerElement<logic::ConstBool>("Const value (Bool)", ":/elements/logic/const_value.png");
-  registerElement<logic::ConstFloat>("Const value (Float)", ":/elements/logic/const_value.png");
-  registerElement<logic::ConstInt>("Const value (Int)", ":/elements/logic/const_value.png");
-  registerElement<logic::RandomBool>("Random (Bool)", ":/elements/logic/const_value.png");
+  registerElement<logic::ConstBool, nodes::ConstBool>("Const value (Bool)", ":/elements/logic/const_bool.png");
+  registerElement<logic::ConstFloat, nodes::ConstFloat>("Const value (Float)", ":/elements/logic/const_float.png");
+  registerElement<logic::ConstInt, nodes::ConstInt>("Const value (Int)", ":/elements/logic/const_int.png");
+  registerElement<logic::RandomBool>("Random (Bool)", ":/elements/logic/random_value.png");
   registerElement<logic::Switch>("Switch (Int)", ":/elements/logic/switch.png");
 }
 
