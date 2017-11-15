@@ -192,30 +192,30 @@ void SocketItem::mouseMoveEvent(QGraphicsSceneMouseEvent *a_event)
       QApplication::startDragDistance())
     return;
 
-  //  QRectF const rect{ boundingRect() };
-
   QDrag *const drag = new QDrag(a_event->widget());
 
   QMimeData *const mime = new QMimeData;
-  //  mime->setData("data/x-element", QByteArray());
   drag->setMimeData(mime);
 
   LinkItem *linkItem{ new LinkItem };
   linkItem->setColors(m_colorSignalOff, m_colorSignalOn);
+  linkItem->setValueType(m_valueType);
   linkItem->setFrom(this);
+  linkItem->setSignal(m_isSignalOn);
 
   scene()->addItem(linkItem);
+  m_links.push_back(linkItem);
 
   PackageView *const view{ reinterpret_cast<PackageView *const>(scene()->views()[0]) };
   view->setDragLink(linkItem);
 
   Qt::DropAction const action{ drag->exec() };
-  if (action == Qt::IgnoreAction)
+  if (action == Qt::IgnoreAction) {
+    m_links.removeAll(linkItem);
+    scene()->removeItem(linkItem);
     view->cancelDragLink();
-  else {
-    m_links.push_back(linkItem);
+  } else
     m_used = true;
-  }
 
   setCursor(Qt::OpenHandCursor);
 }
@@ -261,6 +261,7 @@ void SocketItem::connect(SocketItem *const a_other)
 {
   auto const linkItem = new LinkItem;
   linkItem->setColors(m_colorSignalOff, m_colorSignalOn);
+  linkItem->setValueType(m_valueType);
   linkItem->setFrom(this);
   linkItem->setTo(a_other);
 
