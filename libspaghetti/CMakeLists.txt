@@ -38,11 +38,24 @@ set(LIBSPAGHETTI_SOURCES
   elements/logic/random_bool.h
   elements/logic/switch.cc
   elements/logic/switch.h
+  elements/ui/all.h
+  elements/ui/push_button.cc
+  elements/ui/push_button.h
+  elements/ui/toggle_button.cc
+  elements/ui/toggle_button.h
   elements/element.cc
   elements/element.h
   elements/package.cc
   elements/package.h
   icons/icons.qrc
+  nodes/ui/push_button.cc
+  nodes/ui/push_button.h
+  nodes/ui/toggle_button.cc
+  nodes/ui/toggle_button.h
+  nodes/clock.cc
+  nodes/clock.h
+  nodes/const_value.cc
+  nodes/const_value.h
   nodes/node.cc
   nodes/node.h
   ui/colors.cc
