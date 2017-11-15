@@ -87,6 +87,7 @@ class LinkItem final : public QGraphicsPathItem {
   QPointF m_toPoint{};
   bool m_isHover{};
   bool m_isSnapped{};
+  qreal m_dashOffset{};
 };
 
 #endif // LINKITEM_H

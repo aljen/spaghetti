@@ -37,12 +37,25 @@ void LinkItem::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_opti
   (void)a_option;
   (void)a_widget;
 
-  QColor const signalColor{ m_isSignalOn ? m_colorSignalOn : m_colorSignalOff };
-  QColor const notActive{ isSelected() ? get_color(Color::eSelected) : signalColor };
+  QColor const signalColor{ (m_isSignalOn ? m_colorSignalOn : m_colorSignalOff) };
+  QColor const notActive{ (isSelected() ? get_color(Color::eSelected) : signalColor) };
   QColor const hover{ get_color(Color::eSocketHover) };
+
   QPen pen{ (m_isHover ? hover : notActive) };
-  pen.setStyle(m_to ? Qt::SolidLine : Qt::DashDotLine);
+  pen.setStyle((m_to ? Qt::SolidLine : Qt::DashDotLine));
   pen.setWidth(3);
+
+  if (m_valueType != ValueType::eBool) {
+    QPen dash = pen;
+    QColor hover2 = signalColor;
+    hover2.setAlpha(112);
+    dash.setColor(hover2);
+    dash.setStyle(Qt::DashLine);
+    dash.setWidth(9);
+    dash.setDashOffset(m_dashOffset);
+    a_painter->setPen(dash);
+    a_painter->drawPath(m_path);
+  }
 
   a_painter->setPen(pen);
   a_painter->drawPath(m_path);
