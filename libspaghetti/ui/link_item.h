@@ -47,6 +47,7 @@ class LinkItem final : public QGraphicsPathItem {
   void hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event) override;
 
   SocketItem const *from() const { return m_from; }
+  SocketItem *to() const { return m_to; }
   void setFrom(SocketItem *const a_from);
   void setTo(SocketItem *const a_to);
   void setTo(QPointF const a_to);
