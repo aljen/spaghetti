@@ -81,11 +81,15 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   void paintBorder(QPainter *const a_painter);
   void paintIcon(QPainter *const a_painter);
 
+ protected:
+  void setCentralWidget(QGraphicsItem *a_centralWidget);
+
  private:
   void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType);
   void calculateBoundingRect();
 
  protected:
+  QGraphicsItem *m_centralWidget{};
   elements::Element *m_element{};
   PackageView *m_packageView{};
 

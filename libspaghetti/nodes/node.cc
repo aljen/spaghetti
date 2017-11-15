@@ -48,7 +48,7 @@ void Node::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, 
   (void)a_widget;
 
   paintBorder(a_painter);
-  paintIcon(a_painter);
+  if (!m_centralWidget) paintIcon(a_painter);
 }
 
 QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant const &a_value)
@@ -221,6 +221,13 @@ void Node::paintIcon(QPainter *const a_painter)
   auto const w = size2.width();
   auto const h = size2.height();
   a_painter->drawPixmap(x, y, w, h, m_icon);
+}
+
+void Node::setCentralWidget(QGraphicsItem *a_centralWidget)
+{
+  if (m_centralWidget) delete m_centralWidget;
+  m_centralWidget = a_centralWidget;
+  m_centralWidget->setParentItem(this);
 }
 
 void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType)
