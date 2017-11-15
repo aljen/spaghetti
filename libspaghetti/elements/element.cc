@@ -176,6 +176,11 @@ bool Element::addOutput(Element::ValueType const a_type, std::string const a_nam
   Output output{};
   output.name = a_name;
   output.type = a_type;
+  switch (a_type) {
+    case ValueType::eBool: output.value = false; break;
+    case ValueType::eInt: output.value = 0; break;
+    case ValueType::eFloat: output.value = 0.0f; break;
+  }
   m_outputs.emplace_back(output);
 
   return true;
