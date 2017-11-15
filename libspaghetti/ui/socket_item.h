@@ -66,11 +66,7 @@ class SocketItem final : public QGraphicsItem {
 
   QVariant itemChange(GraphicsItemChange a_change, QVariant const &a_value) override;
 
-  void setHover(bool a_hover)
-  {
-    m_isHover = a_hover;
-    update();
-  }
+  void setHover(bool a_hover) { m_isHover = a_hover; }
 
   QString name() const { return m_name; }
   void setName(QString a_name) { m_name = a_name; }
