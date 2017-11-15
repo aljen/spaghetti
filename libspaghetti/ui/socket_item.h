@@ -28,6 +28,8 @@
 #include <QPainter>
 #include <QVector>
 
+#include "elements/element.h"
+
 class LinkItem;
 
 constexpr int SOCKET_TYPE{ QGraphicsItem::UserType + 3 };
@@ -35,6 +37,7 @@ constexpr int SOCKET_TYPE{ QGraphicsItem::UserType + 3 };
 class SocketItem final : public QGraphicsItem {
  public:
   enum class Type { eInput, eOutput };
+  using ValueType = elements::Element::ValueType;
 
   constexpr static int SIZE{ 16 };
 
@@ -93,9 +96,14 @@ class SocketItem final : public QGraphicsItem {
 
   void connect(SocketItem *const a_other);
 
+  void setValueType(ValueType const a_type) { m_valueType = a_type; }
+  ValueType valueType() const { return m_valueType; }
+
  private:
   QString m_name{};
   QFont m_font{};
+
+  ValueType m_valueType{};
 
   size_t m_elementId{};
   uint8_t m_socketId{};
