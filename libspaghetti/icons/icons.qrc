@@ -15,5 +15,7 @@
         <file>elements/logic/const_bool.png</file>
         <file>elements/logic/const_float.png</file>
         <file>elements/logic/const_int.png</file>
+        <file>elements/ui/push_button.png</file>
+        <file>elements/ui/toggle_button.png</file>
     </qresource>
 </RCC>
