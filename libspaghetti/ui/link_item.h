@@ -26,14 +26,18 @@
 
 #include <QGraphicsPathItem>
 #include <QPainter>
+#include "elements/element.h"
 
-class SocketItem;
 class QGraphicsDropShadowEffect;
 
 constexpr int LINK_TYPE{ QGraphicsItem::UserType + 2 };
 
+class SocketItem;
+
 class LinkItem final : public QGraphicsPathItem {
  public:
+  using ValueType = elements::Element::ValueType;
+
   LinkItem(QGraphicsItem *a_parent = nullptr);
 
   int type() const override { return LINK_TYPE; }
@@ -56,12 +60,17 @@ class LinkItem final : public QGraphicsPathItem {
   void setColors(QColor const a_signalOff, QColor const a_signalOn);
   void setSignal(bool const a_signal);
 
+  void setValueType(ValueType const a_type) { m_valueType = a_type; }
+  ValueType valueType() const { return m_valueType; }
+
   bool isSnapped() const { return m_isSnapped; }
 
   void trackNodes();
 
  private:
   QGraphicsDropShadowEffect *m_effect{};
+
+  ValueType m_valueType{};
 
   SocketItem *m_from{};
   SocketItem *m_to{};
