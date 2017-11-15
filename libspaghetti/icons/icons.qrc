@@ -6,11 +6,14 @@
         <file>elements/logic/switch.png</file>
         <file>elements/logic/nand.png</file>
         <file>elements/logic/nor.png</file>
-        <file>elements/logic/const_value.png</file>
         <file>elements/logic/package.png</file>
         <file>elements/logic/clock.png</file>
         <file>elements/logic/inputs.png</file>
         <file>elements/logic/outputs.png</file>
+        <file>elements/logic/random_value.png</file>
         <file>unknown.png</file>
+        <file>elements/logic/const_bool.png</file>
+        <file>elements/logic/const_float.png</file>
+        <file>elements/logic/const_int.png</file>
     </qresource>
 </RCC>
