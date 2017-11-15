@@ -34,6 +34,24 @@ ConstBool::ConstBool()
   addOutput(ValueType::eBool, "#1");
 }
 
+void ConstBool::serialize(Json& a_json)
+{
+  Element::serialize(a_json);
+
+  auto &properties= a_json["properties"];
+  properties["value"] = m_currentValue;
+}
+
+void ConstBool::deserialize(const Json& a_json)
+{
+  Element::deserialize(a_json);
+
+  auto const &properties= a_json["properties"];
+  m_currentValue = properties["value"].get<bool>();
+
+  m_outputs[0].value = m_currentValue;
+}
+
 void ConstBool::toggle()
 {
   m_currentValue = !m_currentValue;

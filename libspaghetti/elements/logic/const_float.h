@@ -38,6 +38,9 @@ class ConstFloat final : public Element {
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
 
+  void serialize(Json &a_json) override;
+  void deserialize(Json const &a_json) override;
+
   void set(float a_value);
 
   float currentValue() const { return m_currentValue; }
