@@ -68,6 +68,8 @@ class SPAGHETTI_API Editor final : public QMainWindow {
 
   void closePackageView(int const a_index);
 
+  void deleteElement();
+
   void showLibrary(bool a_checked);
   void showProperties(bool a_checked);
 

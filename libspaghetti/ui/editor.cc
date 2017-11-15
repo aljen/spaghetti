@@ -49,6 +49,8 @@ Editor::Editor(QWidget *a_parent)
   connect(m_ui->actionClose, &QAction::triggered, this, &Editor::closePackage);
   connect(m_ui->actionCloseAll, &QAction::triggered, this, &Editor::closeAllPackages);
 
+  connect(m_ui->actionDeleteElement, &QAction::triggered, this, &Editor::deleteElement);
+
   connect(m_ui->actionShowLibrary, &QAction::triggered, this, &Editor::showLibrary);
   connect(m_ui->actionShowProperties, &QAction::triggered, this, &Editor::showProperties);
 
@@ -232,6 +234,12 @@ void Editor::closePackageView(int const a_index)
   auto *const packageView = packageViewForIndex(a_index);
   if (packageView->canClose()) m_ui->tabWidget->removeTab(a_index);
   delete packageView;
+}
+
+void Editor::deleteElement()
+{
+  auto *const packageView = packageViewForIndex(m_packageViewIndex);
+  packageView->deleteElement();
 }
 
 void Editor::showLibrary(bool a_checked)
