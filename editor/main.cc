@@ -55,6 +55,8 @@ int main(int argc, char **argv)
   app.setPalette(darkPalette);
   app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
 
+  std::locale::global(std::locale("C"));
+
   core::Registry &registry{ core::Registry::get() };
   registry.registerInternalElements();
   registry.loadPlugins();
