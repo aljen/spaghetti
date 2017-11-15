@@ -99,8 +99,6 @@ void SocketItem::hoverEnterEvent(QGraphicsSceneHoverEvent *a_event)
   m_isHover = true;
 
   for (auto const link : m_links) link->setHover(m_isHover);
-
-  update();
 }
 
 void SocketItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event)
@@ -110,8 +108,6 @@ void SocketItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event)
   m_isHover = false;
 
   for (auto const link : m_links) link->setHover(m_isHover);
-
-  update();
 }
 
 void SocketItem::dragEnterEvent(QGraphicsSceneDragDropEvent *a_event)
@@ -130,8 +126,6 @@ void SocketItem::dragEnterEvent(QGraphicsSceneDragDropEvent *a_event)
 
   linkItem->setTo(this);
   m_isDrop = true;
-
-  update();
 }
 
 void SocketItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *a_event)
@@ -145,8 +139,6 @@ void SocketItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *a_event)
   LinkItem *const linkItem{ view->dragLink() };
   if (!linkItem) return;
   linkItem->setTo(nullptr);
-
-  update();
 }
 
 void SocketItem::dragMoveEvent(QGraphicsSceneDragDropEvent *a_event)
@@ -175,7 +167,6 @@ void SocketItem::dropEvent(QGraphicsSceneDragDropEvent *a_event)
 
   package->connect(from->elementId(), from->socketId(), m_elementId, m_socketId);
 
-  update();
 }
 
 void SocketItem::mousePressEvent(QGraphicsSceneMouseEvent *a_event)
@@ -220,7 +211,6 @@ void SocketItem::mouseMoveEvent(QGraphicsSceneMouseEvent *a_event)
   else {
     m_links.push_back(linkItem);
     m_used = true;
-    update();
   }
 
   setCursor(Qt::OpenHandCursor);
@@ -258,7 +248,6 @@ void SocketItem::setColors(QColor const a_signalOff, QColor const a_signalOn)
 void SocketItem::setSignal(const bool a_signal)
 {
   m_isSignalOn = a_signal;
-  update();
 
   if (m_type == Type::eOutput) {
     for (LinkItem *const link : m_links) link->setSignal(a_signal);
