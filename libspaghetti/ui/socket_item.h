@@ -64,7 +64,7 @@ class SocketItem final : public QGraphicsItem {
   void mouseMoveEvent(QGraphicsSceneMouseEvent *a_event) override;
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *a_event) override;
 
-  QVariant itemChange(GraphicsItemChange a_change, const QVariant &a_value) override;
+  QVariant itemChange(GraphicsItemChange a_change, QVariant const &a_value) override;
 
   void setHover(bool a_hover)
   {
