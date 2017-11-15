@@ -74,11 +74,7 @@ class SocketItem final : public QGraphicsItem {
   void showName() { m_nameHidden = false; }
   void hideName() { m_nameHidden = true; }
 
-  void markAsUsed()
-  {
-    m_used = true;
-    update();
-  }
+  void markAsUsed() { m_used = true; }
 
   int nameWidth() const;
 
