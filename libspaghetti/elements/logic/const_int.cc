@@ -36,9 +36,9 @@ ConstInt::ConstInt()
 
 void ConstInt::set(int32_t a_value)
 {
-  int32_t const currentValue{ std::get<int32_t>(m_outputs[0].value) };
-  if (a_value == currentValue) return;
+  if (a_value == m_currentValue) return;
 
+  m_currentValue = a_value;
   m_outputs[0].value = a_value;
 
   m_package->elementChanged(id());

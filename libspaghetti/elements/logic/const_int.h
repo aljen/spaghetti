@@ -39,6 +39,11 @@ class ConstInt final : public Element {
   string::hash_t hash() const noexcept override { return HASH; }
 
   void set(int32_t a_value);
+
+  int32_t currentValue() const { return m_currentValue; }
+
+ private:
+  int32_t m_currentValue{};
 };
 
 } // namespace elements::logic

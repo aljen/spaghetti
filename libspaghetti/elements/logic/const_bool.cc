@@ -36,16 +36,17 @@ ConstBool::ConstBool()
 
 void ConstBool::toggle()
 {
-  m_outputs[0].value = !std::get<bool>(m_outputs[0].value);
+  m_currentValue = !m_currentValue;
+  m_outputs[0].value = m_currentValue;
 
   m_package->elementChanged(id());
 }
 
 void ConstBool::set(bool a_state)
 {
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-  if (a_state == currentState) return;
+  if (a_state == m_currentValue) return;
 
+  m_currentValue = a_state;
   m_outputs[0].value = a_state;
 
   m_package->elementChanged(id());

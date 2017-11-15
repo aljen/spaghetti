@@ -39,6 +39,11 @@ class ConstFloat final : public Element {
   string::hash_t hash() const noexcept override { return HASH; }
 
   void set(float a_value);
+
+  float currentValue() const { return m_currentValue; }
+
+ private:
+  float m_currentValue{};
 };
 
 } // namespace elements::logic

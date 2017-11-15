@@ -40,6 +40,11 @@ class ConstBool final : public Element {
 
   void toggle();
   void set(bool a_state);
+
+  bool currentValue() const { return m_currentValue; }
+
+ private:
+  bool m_currentValue{};
 };
 
 } // namespace elements::logic

@@ -36,9 +36,9 @@ ConstFloat::ConstFloat()
 
 void ConstFloat::set(float a_value)
 {
-  float const currentValue{ std::get<float>(m_outputs[0].value) };
-  if (a_value == currentValue) return;
+  if (a_value == m_currentValue) return;
 
+  m_currentValue = a_value;
   m_outputs[0].value = a_value;
 
   m_package->elementChanged(id());
