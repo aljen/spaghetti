@@ -19,6 +19,7 @@
 #include <QPainterPath>
 #include <QPolygonF>
 #include <QPushButton>
+#include <QTableWidget>
 #include <QToolBox>
 #include <QUrl>
 #include <cctype>
@@ -63,12 +64,6 @@ Editor::Editor(QWidget *a_parent)
 
   QDir packagesDir{ PACKAGES_DIR };
   if (!packagesDir.exists()) packagesDir.mkpath(".");
-
-  m_ui->propertiesTable->clear();
-  m_ui->propertiesTable->setColumnCount(2);
-  m_ui->propertiesTable->setHorizontalHeaderLabels(QString("Name;Value").split(";"));
-  m_ui->propertiesTable->horizontalHeader()->setStretchLastSection(true);
-  m_ui->propertiesTable->setRowCount(3);
 
   populateLibrary();
   newPackage();
