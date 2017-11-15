@@ -253,9 +253,8 @@ void SocketItem::setSignal(const bool a_signal)
 {
   m_isSignalOn = a_signal;
 
-  if (m_type == Type::eOutput) {
+  if (m_type == Type::eOutput)
     for (LinkItem *const link : m_links) link->setSignal(a_signal);
-  }
 }
 
 void SocketItem::connect(SocketItem *const a_other)
