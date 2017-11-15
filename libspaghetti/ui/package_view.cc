@@ -24,8 +24,6 @@ PackageView::PackageView(QTableWidget *const a_properties, elements::Package *co
   , m_inputs{ new nodes::Node }
   , m_outputs{ new nodes::Node }
   , m_packageNode{ core::Registry::get().createNode("logic/package") }
-  , m_gridLarge{ new QGraphicsItemGroup }
-  , m_gridSmall{ new QGraphicsItemGroup }
   , m_standalone{ !a_package }
 {
   setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing |
@@ -52,8 +50,6 @@ PackageView::PackageView(QTableWidget *const a_properties, elements::Package *co
 
   m_packageNode->setPropertiesTable(m_properties);
   m_packageNode->setElement(m_package);
-
-  createGrid();
 
   setAcceptDrops(true);
 
@@ -270,6 +266,38 @@ void PackageView::wheelEvent(QWheelEvent *a_event)
   animation->start();
 }
 
+void PackageView::drawBackground(QPainter *a_painter, QRectF const &a_rect)
+{
+  QPen penNormal{ QColor(156, 156, 156, 32) };
+  QPen penAxis{ QColor(156, 156, 156, 128) };
+
+  qreal const LEFT{ a_rect.left() };
+  qreal const RIGHT{  a_rect.right() };
+  qreal const TOP{  a_rect.top() };
+  qreal const BOTTOM{  a_rect.bottom() };
+  qreal const GRID_DENSITY{ (m_gridDensity == GridDensity::eSmall ? 100.0 : 10.0) };
+
+  qreal const START_X{ std::round(LEFT / GRID_DENSITY) * GRID_DENSITY };
+  qreal const START_Y{ std::round(TOP / GRID_DENSITY) * GRID_DENSITY };
+
+  if (m_gridDensity == GridDensity::eSmall) {
+    penAxis.setWidth(2);
+    penNormal.setWidth(2);
+  }
+
+  for (qreal x = START_X; x < RIGHT; x += GRID_DENSITY) {
+    QPen const PEN{ ((x >= -0.1 && x <= 0.1) ? penAxis : penNormal) };
+    a_painter->setPen(PEN);
+    a_painter->drawLine(QPointF{ x, TOP }, QPointF{ x, BOTTOM });
+  }
+
+  for (qreal y = START_Y; y < BOTTOM; y += GRID_DENSITY) {
+    QPen const PEN{ ((y >= -0.1 && y <= 0.1) ? penAxis : penNormal) };
+    a_painter->setPen(PEN);
+    a_painter->drawLine(QPointF{ LEFT, y }, QPointF{ RIGHT, y });
+  }
+}
+
 void PackageView::cancelDragLink()
 {
   delete m_dragLink;
@@ -332,67 +360,11 @@ void PackageView::setVisible(bool a_visible)
   //  }
 }
 
-void PackageView::createGrid()
-{
-  constexpr int32_t SIZE = 10000;
-  constexpr int32_t SPACING = 10;
-  QPen penNormal{ QColor(156, 156, 156, 32) };
-  QPen penAxis{ QColor(156, 156, 156, 128) };
-  QGraphicsLineItem *horizontal{};
-  QGraphicsLineItem *vertical{};
-
-  for (int32_t i = -SIZE; i <= SIZE; i += SPACING) {
-    penNormal.setWidth(1);
-    penAxis.setWidth(1);
-
-    horizontal = new QGraphicsLineItem{ static_cast<qreal>(i), -SIZE, static_cast<qreal>(i), SIZE };
-    horizontal->setPen(i == 0 ? penAxis : penNormal);
-    horizontal->setZValue(-100.0);
-    m_gridLarge->addToGroup(horizontal);
-
-    vertical = new QGraphicsLineItem{ -SIZE, static_cast<qreal>(i), SIZE, static_cast<qreal>(i) };
-    vertical->setPen(i == 0 ? penAxis : penNormal);
-    vertical->setZValue(-100.0);
-    m_gridLarge->addToGroup(vertical);
-
-    if (i % 100 == 0 || i == 0) {
-      penNormal.setWidth(3);
-      penAxis.setWidth(3);
-
-      horizontal = new QGraphicsLineItem{ static_cast<qreal>(i), -SIZE, static_cast<qreal>(i), SIZE };
-      horizontal->setPen(i == 0 ? penAxis : penNormal);
-      horizontal->setZValue(-100.0);
-      m_gridSmall->addToGroup(horizontal);
-
-      vertical = new QGraphicsLineItem{ -SIZE, static_cast<qreal>(i), SIZE, static_cast<qreal>(i) };
-      vertical->setPen(i == 0 ? penAxis : penNormal);
-      vertical->setZValue(-100.0);
-      m_gridSmall->addToGroup(vertical);
-    }
-  }
-
-  m_gridDensity = GridDensity::eLarge;
-  m_scene->addItem(m_gridLarge);
-  m_scene->addItem(m_gridSmall);
-  m_gridSmall->hide();
-
-  updateGrid(matrix().m11());
-}
-
 void PackageView::updateGrid(qreal const a_scale)
 {
   GridDensity const newDensity{ (a_scale >= 0.85 ? GridDensity::eLarge : GridDensity::eSmall) };
 
   if (newDensity == m_gridDensity) return;
 
-  switch (m_gridDensity = newDensity; m_gridDensity) {
-    case GridDensity::eLarge:
-      m_gridLarge->show();
-      m_gridSmall->hide();
-      break;
-    case GridDensity::eSmall:
-      m_gridLarge->hide();
-      m_gridSmall->show();
-      break;
-  }
+  m_gridDensity = newDensity;
 }

@@ -59,6 +59,7 @@ class PackageView final : public QGraphicsView {
   void keyPressEvent(QKeyEvent *a_event) override;
   void keyReleaseEvent(QKeyEvent *a_event) override;
   void wheelEvent(QWheelEvent *a_event) override;
+  void drawBackground(QPainter *painter, QRectF const &a_rect) override;
 
   LinkItem *dragLink() const { return m_dragLink; }
   void setDragLink(LinkItem *a_link) { m_dragLink = a_link; }
@@ -89,7 +90,6 @@ class PackageView final : public QGraphicsView {
   void setVisible(bool a_visible) override;
 
  private:
-  void createGrid();
   void updateGrid(qreal const a_scale);
 
  private:
@@ -106,8 +106,6 @@ class PackageView final : public QGraphicsView {
   LinkItem *m_dragLink{};
   int32_t m_scheduledScalings{};
   enum class GridDensity { eLarge, eSmall } m_gridDensity{};
-  QGraphicsItemGroup *const m_gridLarge{};
-  QGraphicsItemGroup *const m_gridSmall{};
   QString m_filename{};
   bool m_snapToGrid{};
   bool m_standalone{};
