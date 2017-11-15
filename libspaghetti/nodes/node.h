@@ -73,6 +73,8 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   void iconify();
   void expand();
 
+  elements::Element *element() const { return m_element; }
+
   Sockets const &inputs() const { return m_inputs; }
   Sockets const &outputs() const { return m_outputs; }
 
