@@ -29,28 +29,20 @@ void ElementsList::startDrag(Qt::DropActions a_supportedActions)
 {
   (void)a_supportedActions;
 
-  PackageView *const packageView{ m_editor->packageView() };
-  if (!packageView) {
-    qDebug() << "There is no active package view!";
-    return;
-  }
+  auto const packageView = m_editor->packageView();
+  if (!packageView) return;
 
-  QListWidgetItem *const item{ currentItem() };
-  QDrag *const drag{ new QDrag{ this } };
-
+  auto const item = currentItem();
   auto const type = item->data(ElementsList::eMetaDataType).toString();
   auto const name = item->data(ElementsList::eMetaDataName).toByteArray();
   auto const icon = item->data(ElementsList::eMetaDataIcon).toByteArray();
 
-  QMimeData *const mimeData{ new QMimeData };
+  auto const mimeData = new QMimeData;
   mimeData->setText(type);
   mimeData->setData("metadata/name", name);
   mimeData->setData("metadata/icon", icon);
-  drag->setMimeData(mimeData);
 
-  auto const ret = drag->exec(Qt::CopyAction);
-  switch (ret) {
-    case Qt::CopyAction: qDebug() << "Item" << type << "added!"; break;
-    default: qDebug() << Q_FUNC_INFO << "ret:" << ret; break;
-  }
+  auto const drag = new QDrag{ this };
+  drag->setMimeData(mimeData);
+  drag->exec(Qt::CopyAction);
 }
