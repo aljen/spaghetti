@@ -39,9 +39,6 @@ class ElementsList : public QListWidget {
   static QString elementsMimeType() { return QStringLiteral("data/x-element"); }
 
  protected:
-  void dragEnterEvent(QDragEnterEvent *a_event) override;
-  void dragMoveEvent(QDragMoveEvent *a_event) override;
-  void dropEvent(QDropEvent *a_event) override;
   void startDrag(Qt::DropActions a_supportedActions) override;
 
  private:

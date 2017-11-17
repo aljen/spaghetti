@@ -19,21 +19,6 @@ ElementsList::ElementsList(Editor *const a_parent)
   setSpacing(5);
 }
 
-void ElementsList::dragEnterEvent(QDragEnterEvent *a_event)
-{
-  (void)a_event;
-}
-
-void ElementsList::dragMoveEvent(QDragMoveEvent *a_event)
-{
-  (void)a_event;
-}
-
-void ElementsList::dropEvent(QDropEvent *a_event)
-{
-  (void)a_event;
-}
-
 void ElementsList::startDrag(Qt::DropActions a_supportedActions)
 {
   (void)a_supportedActions;
