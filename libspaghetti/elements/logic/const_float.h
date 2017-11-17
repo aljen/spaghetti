@@ -30,7 +30,7 @@ namespace elements::logic {
 
 class ConstFloat final : public Element {
  public:
-  static constexpr char const *const TYPE{ "logic/const_float" };
+  static constexpr char const *const TYPE{ "const/float" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   ConstFloat();

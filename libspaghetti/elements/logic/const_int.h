@@ -30,7 +30,7 @@ namespace elements::logic {
 
 class ConstInt final : public Element {
  public:
-  static constexpr char const *const TYPE{ "logic/const_int" };
+  static constexpr char const *const TYPE{ "const/int" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   ConstInt();

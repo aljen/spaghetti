@@ -30,7 +30,7 @@ namespace elements::logic {
 
 class ConstBool final : public Element {
  public:
-  static constexpr char const *const TYPE{ "logic/const_bool" };
+  static constexpr char const *const TYPE{ "const/bool" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   ConstBool();
