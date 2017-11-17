@@ -20,13 +20,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_ARITHMETIC_ALL_H
-#define ELEMENTS_ARITHMETIC_ALL_H
-
-#include "elements/arithmetic/add.h"
 #include "elements/arithmetic/add_if.h"
-#include "elements/arithmetic/multiply.h"
-#include "elements/arithmetic/multiply_if.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_ARITHMETIC_ALL_H
+namespace elements::arithmetic {
+
+AddIf::AddIf()
+  : Element{}
+{
+  setMinInputs(3);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eBool, "Enabled");
+  addInput(ValueType::eFloat, "#1");
+  addInput(ValueType::eFloat, "#2");
+  addOutput(ValueType::eFloat, "#1");
+}
+
+bool AddIf::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  bool const enabled = std::get<bool>(*m_inputs[0].value);
+
+  if (enabled != m_enabled && !enabled) {
+    m_outputs[0].value = 0.0f;
+    return true;
+  }
+
+  m_enabled = enabled;
+
+  if (!m_enabled) return false;
+
+  float sum{};
+
+  size_t const SIZE{ m_inputs.size() };
+  for (size_t i = 1; i < SIZE; ++i)
+    sum += std::get<float>(*m_inputs[i].value);
+
+  m_outputs[0].value = sum;
+
+  return true;
+}
+
+} // namespace elements::arithmetic

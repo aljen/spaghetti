@@ -18,6 +18,10 @@ set(LIBSPAGHETTI_SOURCES
   core/strings.h
   core/version.h.in
 
+  elements/arithmetic/add.cc
+  elements/arithmetic/add.h
+  elements/arithmetic/add_if.cc
+  elements/arithmetic/add_if.h
   elements/arithmetic/all.h
   elements/arithmetic/multiply.cc
   elements/arithmetic/multiply.h

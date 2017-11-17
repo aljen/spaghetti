@@ -21,12 +21,29 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_ARITHMETIC_ALL_H
-#define ELEMENTS_ARITHMETIC_ALL_H
+#ifndef ELEMENTS_ARITHMETIC_ADD_IF_H
+#define ELEMENTS_ARITHMETIC_ADD_IF_H
 
-#include "elements/arithmetic/add.h"
-#include "elements/arithmetic/add_if.h"
-#include "elements/arithmetic/multiply.h"
-#include "elements/arithmetic/multiply_if.h"
+#include "elements/element.h"
 
-#endif // ELEMENTS_ARITHMETIC_ALL_H
+namespace elements::arithmetic {
+
+class AddIf final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "arithmetic/add_if" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  AddIf();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  bool calculate() override;
+
+ private:
+  bool m_enabled{};
+};
+
+} // namespace elements::arithmetic
+
+#endif // ELEMENTS_ARITHMETIC_ADD_IF_H

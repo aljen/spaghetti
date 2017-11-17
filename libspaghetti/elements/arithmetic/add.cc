@@ -20,13 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_ARITHMETIC_ALL_H
-#define ELEMENTS_ARITHMETIC_ALL_H
-
 #include "elements/arithmetic/add.h"
-#include "elements/arithmetic/add_if.h"
-#include "elements/arithmetic/multiply.h"
-#include "elements/arithmetic/multiply_if.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_ARITHMETIC_ALL_H
+namespace elements::arithmetic {
+
+Add::Add()
+  : Element{}
+{
+  setMinInputs(2);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eFloat, "#1");
+  addInput(ValueType::eFloat, "#2");
+  addOutput(ValueType::eFloat, "#1");
+}
+
+bool Add::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  float sum{};
+  for (auto &&input : m_inputs) sum += std::get<float>(*input.value);
+
+  m_outputs[0].value = sum;
+
+  return true;
+}
+
+} // namespace elements::arithmetic

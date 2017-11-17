@@ -61,6 +61,8 @@ void Registry::registerInternalElements()
 
   registerElement<Package>("Package", ":/elements/logic/package.png");
 
+  registerElement<arithmetic::Add>("Add (Float)", ":/unknown.png");
+  registerElement<arithmetic::AddIf>("Add If (Float)", ":/unknown.png");
   registerElement<arithmetic::Multiply>("Multiply (Float)", ":/unknown.png");
   registerElement<arithmetic::MultiplyIf>("Multiply If (Float)", ":/unknown.png");
 
