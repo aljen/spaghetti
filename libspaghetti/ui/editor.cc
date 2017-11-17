@@ -1,4 +1,4 @@
-#include "editor.h"
+#include "ui/editor.h"
 #include "ui_editor.h"
 
 #include "ui/link_item.h"
@@ -20,7 +20,6 @@
 #include <QPolygonF>
 #include <QPushButton>
 #include <QTableWidget>
-#include <QToolBox>
 #include <QUrl>
 #include <cctype>
 #include <fstream>
@@ -31,6 +30,7 @@
 #include "core/version.h"
 #include "elements/logic/all.h"
 #include "nodes/node.h"
+#include "ui/expander_widget.h"
 #include "ui/package_view.h"
 
 QString const PACKAGES_DIR{ "../packages" };
@@ -41,7 +41,7 @@ Editor::Editor(QWidget *a_parent)
 {
   setObjectName("SpaghettiEditor");
   m_ui->setupUi(this);
-  m_ui->libraryToolBox->removeItem(0);
+  m_ui->libraryContainer->removeItem(0);
   m_ui->tabWidget->removeTab(0);
 
   connect(m_ui->actionNew, &QAction::triggered, this, &Editor::newPackage);
@@ -112,23 +112,23 @@ void Editor::populateLibrary()
 
 void Editor::addElement(QString a_category, QString a_name, QString a_type, QString a_icon)
 {
-  QToolBox *const toolbox{ m_ui->libraryToolBox };
+  ExpanderWidget *const library{ m_ui->libraryContainer };
 
   ElementsList *list{};
 
-  int const count{ toolbox->count() };
+  int const count{ library->count() };
   for (int i = 0; i < count; ++i) {
-    QString const text{ toolbox->itemText(i) };
+    QString const text{ library->itemText(i) };
     if (text != a_category) continue;
 
-    list = qobject_cast<ElementsList *>(toolbox->widget(i));
+    list = qobject_cast<ElementsList *>(library->widget(i));
     assert(list);
     break;
   }
 
   if (list == nullptr) {
     list = new ElementsList{ this };
-    toolbox->addItem(list, a_category);
+    library->addItem(list, a_category);
   }
 
   QListWidgetItem *const item{ new QListWidgetItem{ a_name } };
@@ -136,8 +136,9 @@ void Editor::addElement(QString a_category, QString a_name, QString a_type, QStr
   item->setData(ElementsList::eMetaDataName, a_name);
   item->setData(ElementsList::eMetaDataIcon, a_icon);
   item->setIcon(QIcon(a_icon));
-  list->addItem(item);
 
+  list->addItem(item);
+  list->doResize();
   list->sortItems();
 }
 

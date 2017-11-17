@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef EDITOR_H
-#define EDITOR_H
+#ifndef UI_EDITOR_WINDOW_H
+#define UI_EDITOR_WINDOW_H
 
 #include <QMainWindow>
 #include <QMap>
@@ -83,4 +83,4 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   int m_packageViewIndex{ -1 };
 };
 
-#endif // EDITOR_H
+#endif // UI_EDITOR_WINDOW_H

@@ -11,11 +11,13 @@
         <file>elements/logic/inputs.png</file>
         <file>elements/logic/outputs.png</file>
         <file>elements/logic/random_value.png</file>
-        <file>unknown.png</file>
         <file>elements/logic/const_bool.png</file>
         <file>elements/logic/const_float.png</file>
         <file>elements/logic/const_int.png</file>
         <file>elements/ui/push_button.png</file>
         <file>elements/ui/toggle_button.png</file>
+        <file>collapsed.png</file>
+        <file>expanded.png</file>
+        <file>unknown.png</file>
     </qresource>
 </RCC>

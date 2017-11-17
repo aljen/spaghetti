@@ -98,23 +98,12 @@
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QToolBox" name="libraryToolBox">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="page">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>68</width>
-          <height>877</height>
-         </rect>
+      <widget class="ExpanderWidget" name="libraryContainer">
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
         </property>
-        <attribute name="label">
-         <string>Page 1</string>
-        </attribute>
-       </widget>
+       </column>
       </widget>
      </item>
     </layout>
@@ -236,6 +225,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ExpanderWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>ui/expander_widget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
