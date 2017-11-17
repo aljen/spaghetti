@@ -29,17 +29,21 @@ class ToggleButtonWidget : public QGraphicsItem {
     (void)a_option;
     (void)a_widget;
 
+    auto innerRect = m_boundingRect.adjusted(5.0, 10.0, -5.0, -20.0).translated(0.0, 5.0);
     QBrush brush{ (m_state ? QColor{ 203, 217, 81 } : QColor{ 244, 53, 64 }) };
-    a_painter->setPen(Qt::NoPen);
+    QPen pen{ Qt::black };
+    a_painter->setPen(pen);
     a_painter->setBrush(brush);
-    a_painter->drawRect(m_boundingRect);
+    a_painter->drawRect(innerRect);
 
     QSizeF const toggleSize{ 30.0, m_boundingRect.height() };
     qreal const toggleX{ (m_state ? m_boundingRect.right() - toggleSize.width() : m_boundingRect.left()) };
     QRectF const toggleRect{ QPointF{ toggleX, m_boundingRect.top() }, toggleSize };
 
 //    brush.setColor(QColor{ 120,  83,  74, 255 });
-    brush.setColor(Qt::black);
+    brush.setColor(Qt::lightGray);
+    pen.setColor(Qt::black);
+    a_painter->setPen(pen);
     a_painter->setBrush(brush);
     a_painter->drawRect(toggleRect);
   }
