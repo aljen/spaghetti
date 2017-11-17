@@ -23,7 +23,9 @@
 #include <boost/dll.hpp>
 #include <boost/filesystem.hpp>
 
+#include "core/logger.h"
 #include "core/registry.h"
+#include "core/version.h"
 #include "elements/element.h"
 #include "elements/logic/all.h"
 #include "elements/ui/all.h"
@@ -50,6 +52,14 @@ Registry &Registry::get()
 {
   static Registry s_registry{};
   return s_registry;
+}
+
+Registry::Registry()
+{
+  log::init();
+
+  log::info("Spaghetti version: {}, git: {}@{}, build date: {}, {}", version::STRING, version::BRANCH,
+            version::COMMIT_SHORT_HASH, __DATE__, __TIME__);
 }
 
 void Registry::registerInternalElements()

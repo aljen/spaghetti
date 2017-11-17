@@ -128,7 +128,7 @@ class SPAGHETTI_API Registry final {
   Elements const &elements() const { return m_elements; }
 
  private:
-  Registry() = default;
+  Registry();
 
   template<typename T>
   static elements::Element *cloneElement()
