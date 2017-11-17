@@ -94,6 +94,9 @@ target_compile_definitions(Spaghetti
   PUBLIC -DSPAGHETTI_SHARED
   PRIVATE -DSPAGHETTI_EXPORTS
   )
+target_include_directories(Spaghetti
+  SYSTEM PUBLIC ${PROJECT_ROOT}/vendor/spdlog/include
+)
 target_include_directories(Spaghetti PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
