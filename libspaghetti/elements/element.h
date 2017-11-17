@@ -88,7 +88,8 @@ class SPAGHETTI_API Element {
 
   size_t id() const noexcept { return m_id; }
 
-  void setName(std::string const a_name) { m_name = a_name; }
+  void setName(std::string const a_name);
+
   std::string name() const noexcept { return m_name; }
 
   void setPosition(double const a_x, double const a_y)
@@ -128,6 +129,10 @@ class SPAGHETTI_API Element {
   uint8_t maxOutputs() const { return m_maxOutputs; }
 
  protected:
+  virtual void nameChanged(std::string const a_from, std::string const a_to);
+  virtual void inputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to);
+  virtual void outputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to);
+
   void setMinInputs(uint8_t const a_min);
   void setMaxInputs(uint8_t const a_max);
 
@@ -152,6 +157,26 @@ class SPAGHETTI_API Element {
   uint8_t m_minOutputs{};
   uint8_t m_maxOutputs{ std::numeric_limits<uint8_t>::max() };
 };
+
+void Element::nameChanged(std::string const a_from, std::string const a_to)
+{
+  (void)a_from;
+  (void)a_to;
+}
+
+void Element::inputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to)
+{
+  (void)a_id;
+  (void)a_from;
+  (void)a_to;
+}
+
+void Element::outputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to)
+{
+  (void)a_id;
+  (void)a_from;
+  (void)a_to;
+}
 
 } // namespace elements
 

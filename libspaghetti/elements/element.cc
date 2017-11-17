@@ -136,7 +136,13 @@ void Element::deserialize(Json const &a_json)
   uint8_t inputsCount{}, outputsCount{};
   for (auto &&socket : jsonInputs) add_socket(socket, true, inputsCount);
   for (auto &&socket : jsonOutputs) add_socket(socket, false, outputsCount);
+}
 
+void Element::setName(const std::string a_name)
+{
+  auto const oldName = m_name;
+  m_name = a_name;
+  nameChanged(oldName, m_name);
 }
 
 bool Element::addInput(Element::ValueType const a_type, std::string const a_name)
@@ -153,7 +159,10 @@ bool Element::addInput(Element::ValueType const a_type, std::string const a_name
 
 void Element::setInputName(uint8_t a_input, std::string const a_name)
 {
+  auto const oldName = m_inputs[a_input].name;
   m_inputs[a_input].name = a_name;
+
+  inputNameChanged(a_input, oldName, m_inputs[a_input].name);
 }
 
 void Element::removeInput()
@@ -185,7 +194,10 @@ bool Element::addOutput(Element::ValueType const a_type, std::string const a_nam
 
 void Element::setOutputName(uint8_t a_output, std::string const a_name)
 {
+  auto const oldName = m_outputs[a_output].name;
   m_outputs[a_output].name = a_name;
+
+  outputNameChanged(a_output, oldName, m_outputs[a_output].name);
 }
 
 void Element::removeOutput()
