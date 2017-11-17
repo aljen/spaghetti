@@ -38,6 +38,8 @@ class ElementsList : public QListWidget {
 
   static QString elementsMimeType() { return QStringLiteral("data/x-element"); }
 
+  void doResize();
+
  protected:
   void startDrag(Qt::DropActions a_supportedActions) override;
 

@@ -19,6 +19,12 @@ ElementsList::ElementsList(Editor *const a_parent)
   setSpacing(5);
 }
 
+void ElementsList::doResize()
+{
+  doItemsLayout();
+  setFixedHeight(qMax(contentsSize().height(), 1));
+}
+
 void ElementsList::startDrag(Qt::DropActions a_supportedActions)
 {
   (void)a_supportedActions;
