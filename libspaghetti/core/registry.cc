@@ -28,15 +28,15 @@
 #include "core/version.h"
 #include "elements/element.h"
 #include "elements/logic/all.h"
-#include "elements/ui/all.h"
 #include "elements/package.h"
-#include "nodes/ui/float_info.h"
-#include "nodes/ui/push_button.h"
-#include "nodes/ui/toggle_button.h"
+#include "elements/ui/all.h"
 #include "nodes/blinker.h"
 #include "nodes/clock.h"
 #include "nodes/const_value.h"
 #include "nodes/node.h"
+#include "nodes/ui/float_info.h"
+#include "nodes/ui/push_button.h"
+#include "nodes/ui/toggle_button.h"
 
 namespace fs = boost::filesystem;
 namespace dll = boost::dll;
