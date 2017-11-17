@@ -10,6 +10,8 @@ configure_file(core/version.h.in core/version.h)
 
 set(LIBSPAGHETTI_SOURCES
   core/api.h
+  core/logger.cc
+  core/logger.h
   core/registry.cc
   core/registry.h
   core/strings.h
