@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <iostream>
 
+#include "core/logger.h"
 #include "core/registry.h"
 #include "elements/element.h"
 #include "nodes/node.h"
@@ -45,5 +46,7 @@ class Example final : public elements::Element {
 
 extern "C" SPAGHETTI_API void register_plugin(core::Registry &a_registry)
 {
+  core::log::init_from_plugin();
+
   a_registry.registerElement<Example>("Example (Bool)", ":/elements/logic/and.png");
 }
