@@ -30,7 +30,7 @@ namespace elements::logic {
 
 class Nor final : public Element {
  public:
-  static constexpr char const *const TYPE{ "logic/nor" };
+  static constexpr char const *const TYPE{ "gates/nor" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   Nor();

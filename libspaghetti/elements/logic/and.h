@@ -30,7 +30,7 @@ namespace elements::logic {
 
 class And final : public Element {
  public:
-  static constexpr char const *const TYPE{ "logic/and" };
+  static constexpr char const *const TYPE{ "gates/and" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   And();

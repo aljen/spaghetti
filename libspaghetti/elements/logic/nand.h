@@ -30,7 +30,7 @@ namespace elements::logic {
 
 class Nand final : public Element {
  public:
-  static constexpr char const *const TYPE{ "logic/nand" };
+  static constexpr char const *const TYPE{ "gates/nand" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   Nand();
