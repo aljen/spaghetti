@@ -79,6 +79,8 @@ set(LIBSPAGHETTI_SOURCES
   ui/editor.ui
   ui/elements_list.cc
   ui/elements_list.h
+  ui/expander_widget.cc
+  ui/expander_widget.h
   ui/link_item.cc
   ui/link_item.h
   ui/package_view.cc
