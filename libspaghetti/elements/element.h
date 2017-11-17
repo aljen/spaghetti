@@ -158,20 +158,20 @@ class SPAGHETTI_API Element {
   uint8_t m_maxOutputs{ std::numeric_limits<uint8_t>::max() };
 };
 
-void Element::nameChanged(std::string const a_from, std::string const a_to)
+inline void Element::nameChanged(std::string const a_from, std::string const a_to)
 {
   (void)a_from;
   (void)a_to;
 }
 
-void Element::inputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to)
+inline void Element::inputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to)
 {
   (void)a_id;
   (void)a_from;
   (void)a_to;
 }
 
-void Element::outputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to)
+inline void Element::outputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to)
 {
   (void)a_id;
   (void)a_from;
