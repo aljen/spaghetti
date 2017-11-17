@@ -103,7 +103,7 @@ target_include_directories(Spaghetti PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(Spaghetti
-  PUBLIC Qt5::Widgets
-  PRIVATE Boost::filesystem ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS}
+  PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
+  PRIVATE ${CMAKE_DL_LIBS} Boost::filesystem
 )
 
