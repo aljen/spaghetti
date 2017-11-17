@@ -82,8 +82,6 @@ void Element::serialize(Element::Json &a_json)
 
 void Element::deserialize(Json const &a_json)
 {
-  std::cout << __PRETTY_FUNCTION__ << '>' << std::endl;
-
   auto const &jsonElement = a_json["element"];
   auto const jsonId = jsonElement["id"].get<size_t>();
   auto const jsonName = jsonElement["name"].get<std::string>();
@@ -139,7 +137,6 @@ void Element::deserialize(Json const &a_json)
   for (auto &&socket : jsonInputs) add_socket(socket, true, inputsCount);
   for (auto &&socket : jsonOutputs) add_socket(socket, false, outputsCount);
 
-  std::cout << __PRETTY_FUNCTION__ << '<' << std::endl;
 }
 
 bool Element::addInput(Element::ValueType const a_type, std::string const a_name)
