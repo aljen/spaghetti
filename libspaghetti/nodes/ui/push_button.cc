@@ -21,13 +21,12 @@
 // SOFTWARE.
 
 #include "nodes/ui/push_button.h"
-
 #include "elements/ui/push_button.h"
 
 #include <QCheckBox>
-#include <QTableWidget>
-#include <QPushButton>
 #include <QGraphicsProxyWidget>
+#include <QPushButton>
+#include <QTableWidget>
 
 namespace nodes::ui {
 
@@ -62,10 +61,7 @@ class PushButtonWidget : public QGraphicsItem {
     a_painter->drawRect(m_boundingRect);
   }
 
-  void setPushButton(elements::ui::PushButton *const a_pushButton)
-  {
-    m_pushButton = a_pushButton;
-  }
+  void setPushButton(elements::ui::PushButton *const a_pushButton) { m_pushButton = a_pushButton; }
 
  private:
   bool m_state{};

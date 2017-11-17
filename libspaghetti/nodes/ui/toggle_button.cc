@@ -21,9 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/ui/toggle_button.h"
-
 #include "elements/ui/toggle_button.h"
-
 #include "ui/colors.h"
 
 #include <QCheckBox>
@@ -62,7 +60,7 @@ class ToggleButtonWidget : public QGraphicsItem {
     qreal const toggleX{ (m_state ? m_boundingRect.right() - toggleSize.width() : m_boundingRect.left()) };
     QRectF const toggleRect{ QPointF{ toggleX, m_boundingRect.top() }, toggleSize };
 
-//    brush.setColor(QColor{ 120,  83,  74, 255 });
+    //    brush.setColor(QColor{ 120,  83,  74, 255 });
     brush.setColor(Qt::lightGray);
     pen.setColor(Qt::black);
     a_painter->setPen(pen);

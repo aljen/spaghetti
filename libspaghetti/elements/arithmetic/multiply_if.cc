@@ -20,41 +20,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/ui/float_info.h"
-#include "elements/ui/float_info.h"
+#include "elements/arithmetic/multiply_if.h"
+#include "elements/package.h"
 
-#include <QGraphicsSimpleTextItem>
-#include <QTableWidget>
+namespace elements::arithmetic {
 
-namespace nodes::ui {
-
-FloatInfo::FloatInfo()
+MultiplyIf::MultiplyIf()
+  : Element{}
 {
-  QFont font{};
-  font.setPixelSize(32);
-  auto widget = new QGraphicsSimpleTextItem("0.0");
-  widget->setFont(font);
-  QPointF widgetPosition{};
-  widgetPosition.rx() = -(widget->boundingRect().width() / 2.0);
-  widgetPosition.ry() = -(widget->boundingRect().height() / 2.0);
-  widget->setPos(widgetPosition);
-  setCentralWidget(widget);
-
-  m_info = widget;
+  setMinInputs(3);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eBool, "Enabled");
+  addInput(ValueType::eFloat, "#1");
+  addInput(ValueType::eFloat, "#2");
+  addOutput(ValueType::eFloat, "#1");
 }
 
-void FloatInfo::refreshCentralWidget()
+bool MultiplyIf::calculate()
 {
-  if (!m_element || !m_element->inputs()[0].value) return;
-  float const value{ std::get<float>(*m_element->inputs()[0].value) };
-  m_info->setText(QString::number(value, 'f', 2));
+  if (!allInputsConnected()) return false;
+
+  bool const enabled = std::get<bool>(*m_inputs[0].value);
+
+  if (enabled != m_enabled && !enabled) {
+    m_outputs[0].value = 0.0f;
+    return true;
+  }
+
+  m_enabled = enabled;
+
+  if (!m_enabled) return false;
+
+  float const a = std::get<float>(*m_inputs[1].value);
+  float const b = std::get<float>(*m_inputs[2].value);
+
+  m_outputs[0].value = a * b;
+
+  return true;
 }
 
-void FloatInfo::showProperties()
-{
-  showCommonProperties();
-  showInputsProperties();
-  showOutputsProperties();
-}
-
-} // namespace nodes::ui
+} // namespace elements::arithmetic

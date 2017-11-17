@@ -26,17 +26,8 @@
 #include "core/logger.h"
 #include "core/registry.h"
 #include "core/version.h"
-#include "elements/element.h"
-#include "elements/logic/all.h"
-#include "elements/package.h"
-#include "elements/ui/all.h"
-#include "nodes/blinker.h"
-#include "nodes/clock.h"
-#include "nodes/const_value.h"
-#include "nodes/node.h"
-#include "nodes/ui/float_info.h"
-#include "nodes/ui/push_button.h"
-#include "nodes/ui/toggle_button.h"
+#include "elements/all.h"
+#include "nodes/all.h"
 
 namespace fs = boost::filesystem;
 namespace dll = boost::dll;
@@ -70,29 +61,28 @@ void Registry::registerInternalElements()
 
   registerElement<Package>("Package", ":/elements/logic/package.png");
 
+  registerElement<arithmetic::Multiply>("Multiply (Float)", ":/unknown.png");
+  registerElement<arithmetic::MultiplyIf>("Multiply If (Float)", ":/unknown.png");
+
+  registerElement<const_value::Bool, nodes::const_value::Bool>("Const value (Bool)", ":/elements/logic/const_bool.png");
+  registerElement<const_value::Float, nodes::const_value::Float>("Const value (Float)",
+                                                                 ":/elements/logic/const_float.png");
+  registerElement<const_value::Int, nodes::const_value::Int>("Const value (Int)", ":/elements/logic/const_int.png");
+
+  registerElement<gates::Nand>("NAND (Bool)", ":/elements/logic/nand.png");
+  registerElement<gates::And>("AND (Bool)", ":/elements/logic/and.png");
+  registerElement<gates::Nor>("NOR (Bool)", ":/elements/logic/nor.png");
+  registerElement<gates::Or>("OR (Bool)", ":/elements/logic/or.png");
+  registerElement<gates::Not>("NOT (Bool)", ":/elements/logic/not.png");
+
+  registerElement<logic::Blinker, nodes::logic::Blinker>("Blinker (bool)", ":/unknown.png");
+  registerElement<logic::Clock, nodes::logic::Clock>("Clock (ms)", ":/elements/logic/clock.png");
+  registerElement<logic::RandomBool>("Random (Bool)", ":/elements/logic/random_value.png");
+  registerElement<logic::Switch>("Switch (Int)", ":/elements/logic/switch.png");
+
   registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Float Info", ":/unknown.png");
   registerElement<ui::PushButton, nodes::ui::PushButton>("Push Button", ":/elements/ui/push_button.png");
   registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button", ":/elements/ui/toggle_button.png");
-
-  registerElement<logic::Blinker, nodes::Blinker>("Blinker (bool)", ":/unknown.png");
-  registerElement<logic::Clock, nodes::Clock>("Clock (ms)", ":/elements/logic/clock.png");
-
-  registerElement<logic::Multiply>("Multiply (Float)", ":/unknown.png");
-  registerElement<logic::MultiplyIf>("Multiply If (Float)", ":/unknown.png");
-
-  registerElement<logic::Nand>("NAND (Bool)", ":/elements/logic/nand.png");
-  registerElement<logic::And>("AND (Bool)", ":/elements/logic/and.png");
-  registerElement<logic::Nor>("NOR (Bool)", ":/elements/logic/nor.png");
-  registerElement<logic::Or>("OR (Bool)", ":/elements/logic/or.png");
-  registerElement<logic::Not>("NOT (Bool)", ":/elements/logic/not.png");
-
-  registerElement<logic::ConstBool, nodes::ConstBool>("Const value (Bool)", ":/elements/logic/const_bool.png");
-  registerElement<logic::ConstFloat, nodes::ConstFloat>("Const value (Float)", ":/elements/logic/const_float.png");
-  registerElement<logic::ConstInt, nodes::ConstInt>("Const value (Int)", ":/elements/logic/const_int.png");
-
-  registerElement<logic::RandomBool>("Random (Bool)", ":/elements/logic/random_value.png");
-
-  registerElement<logic::Switch>("Switch (Int)", ":/elements/logic/switch.png");
 }
 
 void Registry::loadPlugins()

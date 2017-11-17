@@ -9,43 +9,51 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets)
 configure_file(core/version.h.in core/version.h)
 
 set(LIBSPAGHETTI_SOURCES
+  ${CMAKE_CURRENT_BINARY_DIR}/core/version.h
   core/api.h
   core/logger.cc
   core/logger.h
   core/registry.cc
   core/registry.h
   core/strings.h
-  ${CMAKE_CURRENT_BINARY_DIR}/core/version.h
   core/version.h.in
+
+  elements/arithmetic/all.h
+  elements/arithmetic/multiply.cc
+  elements/arithmetic/multiply.h
+  elements/arithmetic/multiply_if.cc
+  elements/arithmetic/multiply_if.h
+
+  elements/const/all.h
+  elements/const/bool.cc
+  elements/const/bool.h
+  elements/const/float.cc
+  elements/const/float.h
+  elements/const/int.cc
+  elements/const/int.h
+
+  elements/gates/all.h
+  elements/gates/and.cc
+  elements/gates/and.h
+  elements/gates/nand.cc
+  elements/gates/nand.h
+  elements/gates/nor.cc
+  elements/gates/nor.h
+  elements/gates/not.cc
+  elements/gates/not.h
+  elements/gates/or.cc
+  elements/gates/or.h
+
   elements/logic/all.h
-  elements/logic/and.cc
-  elements/logic/and.h
   elements/logic/blinker.cc
   elements/logic/blinker.h
   elements/logic/clock.cc
   elements/logic/clock.h
-  elements/logic/const_bool.cc
-  elements/logic/const_bool.h
-  elements/logic/const_float.cc
-  elements/logic/const_float.h
-  elements/logic/const_int.cc
-  elements/logic/const_int.h
-  elements/logic/multiply_if.cc
-  elements/logic/multiply_if.h
-  elements/logic/multiply.cc
-  elements/logic/multiply.h
-  elements/logic/nand.cc
-  elements/logic/nand.h
-  elements/logic/nor.cc
-  elements/logic/nor.h
-  elements/logic/not.cc
-  elements/logic/not.h
-  elements/logic/or.cc
-  elements/logic/or.h
   elements/logic/random_bool.cc
   elements/logic/random_bool.h
   elements/logic/switch.cc
   elements/logic/switch.h
+
   elements/ui/all.h
   elements/ui/float_info.cc
   elements/ui/float_info.h
@@ -53,25 +61,48 @@ set(LIBSPAGHETTI_SOURCES
   elements/ui/push_button.h
   elements/ui/toggle_button.cc
   elements/ui/toggle_button.h
+
+  elements/all.h
   elements/element.cc
   elements/element.h
   elements/package.cc
   elements/package.h
+
   icons/icons.qrc
+
   nodes/ui/float_info.cc
   nodes/ui/float_info.h
   nodes/ui/push_button.cc
   nodes/ui/push_button.h
   nodes/ui/toggle_button.cc
   nodes/ui/toggle_button.h
-  nodes/blinker.cc
-  nodes/blinker.h
-  nodes/clock.cc
-  nodes/clock.h
-  nodes/const_value.cc
-  nodes/const_value.h
+
+  nodes/const/all.h
+  nodes/const/bool.cc
+  nodes/const/bool.h
+  nodes/const/float.cc
+  nodes/const/float.h
+  nodes/const/int.cc
+  nodes/const/int.h
+
+  nodes/logic/all.h
+  nodes/logic/blinker.cc
+  nodes/logic/blinker.h
+  nodes/logic/clock.cc
+  nodes/logic/clock.h
+
+  nodes/ui/all.h
+  nodes/ui/float_info.cc
+  nodes/ui/float_info.h
+  nodes/ui/push_button.cc
+  nodes/ui/push_button.h
+  nodes/ui/toggle_button.cc
+  nodes/ui/toggle_button.h
+
+  nodes/all.h
   nodes/node.cc
   nodes/node.h
+
   ui/colors.cc
   ui/colors.h
   ui/editor.cc

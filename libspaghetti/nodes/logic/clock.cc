@@ -20,41 +20,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/ui/float_info.h"
-#include "elements/ui/float_info.h"
+#include "nodes/logic/clock.h"
+#include "elements/logic/clock.h"
 
-#include <QGraphicsSimpleTextItem>
+#include <QSpinBox>
 #include <QTableWidget>
 
-namespace nodes::ui {
+namespace nodes::logic {
 
-FloatInfo::FloatInfo()
-{
-  QFont font{};
-  font.setPixelSize(32);
-  auto widget = new QGraphicsSimpleTextItem("0.0");
-  widget->setFont(font);
-  QPointF widgetPosition{};
-  widgetPosition.rx() = -(widget->boundingRect().width() / 2.0);
-  widgetPosition.ry() = -(widget->boundingRect().height() / 2.0);
-  widget->setPos(widgetPosition);
-  setCentralWidget(widget);
-
-  m_info = widget;
-}
-
-void FloatInfo::refreshCentralWidget()
-{
-  if (!m_element || !m_element->inputs()[0].value) return;
-  float const value{ std::get<float>(*m_element->inputs()[0].value) };
-  m_info->setText(QString::number(value, 'f', 2));
-}
-
-void FloatInfo::showProperties()
+void Clock::showProperties()
 {
   showCommonProperties();
   showInputsProperties();
   showOutputsProperties();
+
+  propertiesInsertTitle("Clock");
+
+  int currentIndex = m_properties->rowCount();
+  m_properties->insertRow(currentIndex);
+
+  QTableWidgetItem *item{};
+  item = new QTableWidgetItem{ "Rate" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(currentIndex, 0, item);
+
+  elements::logic::Clock *const clock{ static_cast<elements::logic::Clock *const>(m_element) };
+
+  QSpinBox *rateValue = new QSpinBox{};
+  rateValue->setRange(10, 10000);
+  rateValue->setValue(static_cast<int>(clock->duration().count()));
+  rateValue->setSuffix("ms");
+  m_properties->setCellWidget(currentIndex, 1, rateValue);
+
+  QObject::connect(rateValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
+    elements::logic::Clock *const clockElement{ static_cast<elements::logic::Clock *const>(m_element) };
+    clockElement->setDuration(std::chrono::milliseconds(a_value));
+  });
 }
 
-} // namespace nodes::ui
+} // namespace nodes::logic

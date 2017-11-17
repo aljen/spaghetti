@@ -20,41 +20,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/ui/float_info.h"
-#include "elements/ui/float_info.h"
+#include "nodes/const/bool.h"
+#include "elements/const/bool.h"
 
-#include <QGraphicsSimpleTextItem>
+#include <QCheckBox>
 #include <QTableWidget>
 
-namespace nodes::ui {
+namespace nodes::const_value {
 
-FloatInfo::FloatInfo()
-{
-  QFont font{};
-  font.setPixelSize(32);
-  auto widget = new QGraphicsSimpleTextItem("0.0");
-  widget->setFont(font);
-  QPointF widgetPosition{};
-  widgetPosition.rx() = -(widget->boundingRect().width() / 2.0);
-  widgetPosition.ry() = -(widget->boundingRect().height() / 2.0);
-  widget->setPos(widgetPosition);
-  setCentralWidget(widget);
-
-  m_info = widget;
-}
-
-void FloatInfo::refreshCentralWidget()
-{
-  if (!m_element || !m_element->inputs()[0].value) return;
-  float const value{ std::get<float>(*m_element->inputs()[0].value) };
-  m_info->setText(QString::number(value, 'f', 2));
-}
-
-void FloatInfo::showProperties()
+void Bool::showProperties()
 {
   showCommonProperties();
-  showInputsProperties();
   showOutputsProperties();
+
+  propertiesInsertTitle("Const Bool");
+
+  int row = m_properties->rowCount();
+  m_properties->insertRow(row);
+
+  QTableWidgetItem *item{};
+
+  item = new QTableWidgetItem{ "Value" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(row, 0, item);
+
+  auto const constBool = static_cast<elements::const_value::Bool *const>(m_element);
+  bool const current = constBool->currentValue();
+
+  QCheckBox *const value = new QCheckBox;
+  m_properties->setCellWidget(row, 1, value);
+  value->setChecked(current);
+
+  QObject::connect(value, &QCheckBox::stateChanged, [constBool](int a_state) { constBool->set(a_state == 2); });
 }
 
-} // namespace nodes::ui
+} // namespace nodes::const_value

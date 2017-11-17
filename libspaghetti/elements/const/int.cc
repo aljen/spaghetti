@@ -20,41 +20,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/ui/float_info.h"
-#include "elements/ui/float_info.h"
+#include "elements/const/int.h"
+#include "elements/package.h"
 
-#include <QGraphicsSimpleTextItem>
-#include <QTableWidget>
+namespace elements::const_value {
 
-namespace nodes::ui {
-
-FloatInfo::FloatInfo()
+Int::Int()
 {
-  QFont font{};
-  font.setPixelSize(32);
-  auto widget = new QGraphicsSimpleTextItem("0.0");
-  widget->setFont(font);
-  QPointF widgetPosition{};
-  widgetPosition.rx() = -(widget->boundingRect().width() / 2.0);
-  widgetPosition.ry() = -(widget->boundingRect().height() / 2.0);
-  widget->setPos(widgetPosition);
-  setCentralWidget(widget);
-
-  m_info = widget;
+  setMinInputs(0);
+  setMaxInputs(0);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addOutput(ValueType::eInt, "#1");
 }
 
-void FloatInfo::refreshCentralWidget()
+void Int::serialize(Json &a_json)
 {
-  if (!m_element || !m_element->inputs()[0].value) return;
-  float const value{ std::get<float>(*m_element->inputs()[0].value) };
-  m_info->setText(QString::number(value, 'f', 2));
+  Element::serialize(a_json);
+
+  auto &properties = a_json["properties"];
+  properties["value"] = m_currentValue;
 }
 
-void FloatInfo::showProperties()
+void Int::deserialize(const Json &a_json)
 {
-  showCommonProperties();
-  showInputsProperties();
-  showOutputsProperties();
+  Element::deserialize(a_json);
+
+  auto const &properties = a_json["properties"];
+  m_currentValue = properties["value"].get<int32_t>();
+
+  m_outputs[0].value = m_currentValue;
 }
 
-} // namespace nodes::ui
+void Int::set(int32_t a_value)
+{
+  if (a_value == m_currentValue) return;
+
+  m_currentValue = a_value;
+  m_outputs[0].value = a_value;
+
+  m_package->elementChanged(id());
+}
+
+} // namespace elements::const_value

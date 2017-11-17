@@ -20,41 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/ui/float_info.h"
-#include "elements/ui/float_info.h"
+#pragma once
+#ifndef ELEMENTS_CONST_FLOAT_H
+#define ELEMENTS_CONST_FLOAT_H
 
-#include <QGraphicsSimpleTextItem>
-#include <QTableWidget>
+#include "elements/element.h"
 
-namespace nodes::ui {
+namespace elements::const_value {
 
-FloatInfo::FloatInfo()
-{
-  QFont font{};
-  font.setPixelSize(32);
-  auto widget = new QGraphicsSimpleTextItem("0.0");
-  widget->setFont(font);
-  QPointF widgetPosition{};
-  widgetPosition.rx() = -(widget->boundingRect().width() / 2.0);
-  widgetPosition.ry() = -(widget->boundingRect().height() / 2.0);
-  widget->setPos(widgetPosition);
-  setCentralWidget(widget);
+class Float final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "const/float" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
-  m_info = widget;
-}
+  Float();
 
-void FloatInfo::refreshCentralWidget()
-{
-  if (!m_element || !m_element->inputs()[0].value) return;
-  float const value{ std::get<float>(*m_element->inputs()[0].value) };
-  m_info->setText(QString::number(value, 'f', 2));
-}
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
 
-void FloatInfo::showProperties()
-{
-  showCommonProperties();
-  showInputsProperties();
-  showOutputsProperties();
-}
+  void serialize(Json &a_json) override;
+  void deserialize(Json const &a_json) override;
 
-} // namespace nodes::ui
+  void set(float a_value);
+
+  float currentValue() const { return m_currentValue; }
+
+ private:
+  float m_currentValue{};
+};
+
+} // namespace elements::const_value
+
+#endif // ELEMENTS_CONST_FLOAT_H

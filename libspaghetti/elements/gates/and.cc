@@ -20,41 +20,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/ui/float_info.h"
-#include "elements/ui/float_info.h"
+#include "elements/gates/and.h"
+#include "elements/package.h"
 
-#include <QGraphicsSimpleTextItem>
-#include <QTableWidget>
+namespace elements::gates {
 
-namespace nodes::ui {
-
-FloatInfo::FloatInfo()
+And::And()
+  : Element{}
 {
-  QFont font{};
-  font.setPixelSize(32);
-  auto widget = new QGraphicsSimpleTextItem("0.0");
-  widget->setFont(font);
-  QPointF widgetPosition{};
-  widgetPosition.rx() = -(widget->boundingRect().width() / 2.0);
-  widgetPosition.ry() = -(widget->boundingRect().height() / 2.0);
-  widget->setPos(widgetPosition);
-  setCentralWidget(widget);
-
-  m_info = widget;
+  setMinInputs(2);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eBool, "#1");
+  addInput(ValueType::eBool, "#2");
+  addOutput(ValueType::eBool, "#1");
 }
 
-void FloatInfo::refreshCentralWidget()
+bool And::calculate()
 {
-  if (!m_element || !m_element->inputs()[0].value) return;
-  float const value{ std::get<float>(*m_element->inputs()[0].value) };
-  m_info->setText(QString::number(value, 'f', 2));
+  if (!allInputsConnected()) return false;
+
+  bool const currentState{ std::get<bool>(m_outputs[0].value) };
+
+  bool allSets{ true };
+  for (auto &input : m_inputs) {
+    bool const v{ std::get<bool>(*input.value) };
+    if (!v) {
+      allSets = false;
+      break;
+    }
+  }
+
+  if (allSets != currentState) m_outputs[0].value = allSets;
+
+  return allSets != currentState;
 }
 
-void FloatInfo::showProperties()
-{
-  showCommonProperties();
-  showInputsProperties();
-  showOutputsProperties();
-}
-
-} // namespace nodes::ui
+} // namespace elements::gates
