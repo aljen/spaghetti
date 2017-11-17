@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef LINKITEM_H
-#define LINKITEM_H
+#ifndef UI_LINK_ITEM_H
+#define UI_LINK_ITEM_H
 
 #include <QGraphicsPathItem>
 #include <QPainter>
@@ -92,4 +92,4 @@ class LinkItem final : public QGraphicsPathItem {
   qreal m_dashOffset{};
 };
 
-#endif // LINKITEM_H
+#endif // UI_LINK_ITEM_H

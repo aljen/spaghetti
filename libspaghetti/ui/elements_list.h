@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTSLIST_H
-#define ELEMENTSLIST_H
+#ifndef UI_ELEMENTS_LIST_H
+#define UI_ELEMENTS_LIST_H
 
 #include <QListWidget>
 
@@ -48,4 +48,4 @@ class ElementsList : public QListWidget {
   Editor *const m_editor{};
 };
 
-#endif // ELEMENTSLIST_H
+#endif // UI_ELEMENTS_LIST_H

@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef COLORS_H
-#define COLORS_H
+#ifndef UI_COLORS_H
+#define UI_COLORS_H
 
 #include <QColor>
 
@@ -49,4 +49,4 @@ enum class Color {
 
 QColor get_color(Color const a_color);
 
-#endif // COLORS_H
+#endif // UI_COLORS_H

@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef SOCKETITEM_H
-#define SOCKETITEM_H
+#ifndef UI_SOCKET_ITEM_H
+#define UI_SOCKET_ITEM_H
 
 #include <QGraphicsItem>
 #include <QPainter>
@@ -113,4 +113,4 @@ class SocketItem final : public QGraphicsItem {
   QVector<LinkItem *> m_links{};
 };
 
-#endif // SOCKETITEM_H
+#endif // UI_SOCKET_ITEM_H
