@@ -76,15 +76,22 @@ void Registry::registerInternalElements()
 
   registerElement<logic::Blinker, nodes::Blinker>("Blinker (bool)", ":/unknown.png");
   registerElement<logic::Clock, nodes::Clock>("Clock (ms)", ":/elements/logic/clock.png");
+
+  registerElement<logic::Multiply>("Multiply (Float)", ":/unknown.png");
+  registerElement<logic::MultiplyIf>("Multiply If (Float)", ":/unknown.png");
+
   registerElement<logic::Nand>("NAND (Bool)", ":/elements/logic/nand.png");
   registerElement<logic::And>("AND (Bool)", ":/elements/logic/and.png");
   registerElement<logic::Nor>("NOR (Bool)", ":/elements/logic/nor.png");
   registerElement<logic::Or>("OR (Bool)", ":/elements/logic/or.png");
   registerElement<logic::Not>("NOT (Bool)", ":/elements/logic/not.png");
+
   registerElement<logic::ConstBool, nodes::ConstBool>("Const value (Bool)", ":/elements/logic/const_bool.png");
   registerElement<logic::ConstFloat, nodes::ConstFloat>("Const value (Float)", ":/elements/logic/const_float.png");
   registerElement<logic::ConstInt, nodes::ConstInt>("Const value (Int)", ":/elements/logic/const_int.png");
+
   registerElement<logic::RandomBool>("Random (Bool)", ":/elements/logic/random_value.png");
+
   registerElement<logic::Switch>("Switch (Int)", ":/elements/logic/switch.png");
 }
 

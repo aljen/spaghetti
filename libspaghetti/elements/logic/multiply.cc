@@ -20,23 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
-
-#include "elements/logic/and.h"
-#include "elements/logic/blinker.h"
-#include "elements/logic/clock.h"
-#include "elements/logic/const_bool.h"
-#include "elements/logic/const_float.h"
-#include "elements/logic/const_int.h"
-#include "elements/logic/multiply_if.h"
 #include "elements/logic/multiply.h"
-#include "elements/logic/nand.h"
-#include "elements/logic/nor.h"
-#include "elements/logic/not.h"
-#include "elements/logic/or.h"
-#include "elements/logic/random_bool.h"
-#include "elements/logic/switch.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace elements::logic {
+
+Multiply::Multiply()
+  : Element{}
+{
+  setMinInputs(2);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eFloat, "#1");
+  addInput(ValueType::eFloat, "#2");
+  addOutput(ValueType::eFloat, "#1");
+}
+
+bool Multiply::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  float const a{ std::get<float>(*m_inputs[0].value) };
+  float const b{ std::get<float>(*m_inputs[1].value) };
+
+  m_outputs[0].value = a * b;
+
+  return true;
+}
+
+} // namespace elements::logic

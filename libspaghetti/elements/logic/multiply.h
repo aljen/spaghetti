@@ -21,22 +21,26 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
+#ifndef ELEMENTS_LOGIC_MULTIPLY_H
+#define ELEMENTS_LOGIC_MULTIPLY_H
 
-#include "elements/logic/and.h"
-#include "elements/logic/blinker.h"
-#include "elements/logic/clock.h"
-#include "elements/logic/const_bool.h"
-#include "elements/logic/const_float.h"
-#include "elements/logic/const_int.h"
-#include "elements/logic/multiply_if.h"
-#include "elements/logic/multiply.h"
-#include "elements/logic/nand.h"
-#include "elements/logic/nor.h"
-#include "elements/logic/not.h"
-#include "elements/logic/or.h"
-#include "elements/logic/random_bool.h"
-#include "elements/logic/switch.h"
+#include "elements/element.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace elements::logic {
+
+class Multiply final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "arithmetic/multiply" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  Multiply();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  bool calculate() override;
+};
+
+} // namespace elements::logic
+
+#endif // ELEMENTS_LOGIC_MULTIPLY_H

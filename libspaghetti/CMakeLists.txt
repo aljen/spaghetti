@@ -28,6 +28,10 @@ set(LIBSPAGHETTI_SOURCES
   elements/logic/const_float.h
   elements/logic/const_int.cc
   elements/logic/const_int.h
+  elements/logic/multiply_if.cc
+  elements/logic/multiply_if.h
+  elements/logic/multiply.cc
+  elements/logic/multiply.h
   elements/logic/nand.cc
   elements/logic/nand.h
   elements/logic/nor.cc
