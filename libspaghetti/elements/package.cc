@@ -95,8 +95,6 @@ void Package::serialize(Element::Json &a_json)
 
 void Package::deserialize(Json const &a_json)
 {
-  std::cout << __PRETTY_FUNCTION__ << '>' << std::endl;
-
   Element::deserialize(a_json);
 
   auto const &jsonNode = a_json["node"];
@@ -139,8 +137,6 @@ void Package::deserialize(Json const &a_json)
 
     connect(fromId, fromSocket, toId, toSocket);
   }
-
-  std::cout << __PRETTY_FUNCTION__ << '<' << std::endl;
 }
 
 Element *Package::add(string::hash_t a_hash)
