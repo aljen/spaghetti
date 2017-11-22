@@ -31,7 +31,7 @@ ConstBool::ConstBool()
   setMaxInputs(0);
   setMinOutputs(1);
   setMaxOutputs(1);
-  addOutput(ValueType::eBool, "#1");
+  addOutput(ValueType::eBool, "Value");
 }
 
 void ConstBool::serialize(Json &a_json)

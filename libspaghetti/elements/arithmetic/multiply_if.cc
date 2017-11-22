@@ -32,9 +32,9 @@ MultiplyIf::MultiplyIf()
   setMinOutputs(1);
   setMaxOutputs(1);
   addInput(ValueType::eBool, "Enabled");
-  addInput(ValueType::eFloat, "#1");
-  addInput(ValueType::eFloat, "#2");
-  addOutput(ValueType::eFloat, "#1");
+  addInput(ValueType::eFloat, "A");
+  addInput(ValueType::eFloat, "B");
+  addOutput(ValueType::eFloat, "A / B");
 }
 
 bool MultiplyIf::calculate()
@@ -53,7 +53,8 @@ bool MultiplyIf::calculate()
   if (!m_enabled) return false;
 
   float const a = std::get<float>(*m_inputs[1].value);
-  float const b = std::get<float>(*m_inputs[2].value);
+  float b = std::get<float>(*m_inputs[2].value);
+  if (b == 0.0f) b = 1.0f;
 
   m_outputs[0].value = a * b;
 

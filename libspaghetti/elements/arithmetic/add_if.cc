@@ -34,7 +34,7 @@ AddIf::AddIf()
   addInput(ValueType::eBool, "Enabled");
   addInput(ValueType::eFloat, "#1");
   addInput(ValueType::eFloat, "#2");
-  addOutput(ValueType::eFloat, "#1");
+  addOutput(ValueType::eFloat, "Value");
 }
 
 bool AddIf::calculate()

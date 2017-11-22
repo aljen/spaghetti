@@ -31,7 +31,7 @@ ConstInt::ConstInt()
   setMaxInputs(0);
   setMinOutputs(1);
   setMaxOutputs(1);
-  addOutput(ValueType::eInt, "#1");
+  addOutput(ValueType::eInt, "Value");
 }
 
 void ConstInt::serialize(Json &a_json)

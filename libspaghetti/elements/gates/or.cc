@@ -33,7 +33,7 @@ Or::Or()
   setMaxOutputs(1);
   addInput(ValueType::eBool, "#1");
   addInput(ValueType::eBool, "#2");
-  addOutput(ValueType::eBool, "#1");
+  addOutput(ValueType::eBool, "State");
 }
 
 bool Or::calculate()

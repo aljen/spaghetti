@@ -34,7 +34,7 @@ Clock::Clock()
   setMaxInputs(0);
   setMinOutputs(1);
   setMaxOutputs(1);
-  addOutput(ValueType::eBool, "#1");
+  addOutput(ValueType::eBool, "State");
 }
 
 bool Clock::calculate()

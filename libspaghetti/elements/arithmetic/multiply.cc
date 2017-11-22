@@ -31,9 +31,9 @@ Multiply::Multiply()
   setMinInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
-  addInput(ValueType::eFloat, "#1");
-  addInput(ValueType::eFloat, "#2");
-  addOutput(ValueType::eFloat, "#1");
+  addInput(ValueType::eFloat, "A");
+  addInput(ValueType::eFloat, "B");
+  addOutput(ValueType::eFloat, "A * B");
 }
 
 bool Multiply::calculate()

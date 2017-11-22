@@ -38,8 +38,8 @@ RandomBool::RandomBool()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
-  addInput(ValueType::eBool, "#1");
-  addOutput(ValueType::eBool, "#1");
+  addInput(ValueType::eBool, "Trigger");
+  addOutput(ValueType::eBool, "Value");
 }
 
 bool RandomBool::calculate()

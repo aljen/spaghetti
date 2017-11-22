@@ -34,7 +34,7 @@ FloatInfo::FloatInfo()
   setMinOutputs(0);
   setMaxOutputs(0);
 
-  addInput(ValueType::eFloat, "Value");
+  addInput(ValueType::eFloat, "Float");
 }
 
 FloatInfo::~FloatInfo() {}
