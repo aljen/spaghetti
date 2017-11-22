@@ -66,11 +66,6 @@ void Registry::registerInternalElements()
   registerElement<arithmetic::Multiply>("Multiply (Float)", ":/unknown.png");
   registerElement<arithmetic::MultiplyIf>("Multiply If (Float)", ":/unknown.png");
 
-  registerElement<values::ConstBool, nodes::values::ConstBool>("Const value (Bool)", ":/values/const_bool.png");
-  registerElement<values::ConstFloat, nodes::values::ConstFloat>("Const value (Float)", ":/values/const_float.png");
-  registerElement<values::ConstInt, nodes::values::ConstInt>("Const value (Int)", ":/values/const_int.png");
-  registerElement<values::RandomBool>("Random (Bool)", ":/values/random_value.png");
-
   registerElement<gates::And>("AND (Bool)", ":/gates/and.png");
   registerElement<gates::Nand>("NAND (Bool)", ":/gates/nand.png");
   registerElement<gates::Nor>("NOR (Bool)", ":/gates/nor.png");
@@ -91,6 +86,12 @@ void Registry::registerInternalElements()
   registerElement<ui::IntInfo, nodes::ui::IntInfo>("Info (Int)", ":/values/const_int.png");
   registerElement<ui::PushButton, nodes::ui::PushButton>("Push Button (Bool)", ":/ui/push_button.png");
   registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button (Bool)", ":/ui/toggle_button.png");
+
+  registerElement<values::ConstBool, nodes::values::ConstBool>("Const value (Bool)", ":/values/const_bool.png");
+  registerElement<values::ConstFloat, nodes::values::ConstFloat>("Const value (Float)", ":/values/const_float.png");
+  registerElement<values::ConstInt, nodes::values::ConstInt>("Const value (Int)", ":/values/const_int.png");
+  registerElement<values::RandomBool>("Random (Bool)", ":/values/random_value.png");
+
   registerElement<values::Int2Float>("Int2Float", ":/unknown.png");
   registerElement<values::Float2Int>("Float2Int", ":/unknown.png");
   registerElement<values::Degree2Radian>("Degree2Radian", ":/unknown.png");
