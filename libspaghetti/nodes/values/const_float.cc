@@ -20,54 +20,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/const/bool.h"
-#include "elements/package.h"
+#include "nodes/values/const_float.h"
+#include "elements/values/const_float.h"
 
-namespace elements::const_value {
+#include <QDoubleSpinBox>
+#include <QTableWidget>
 
-Bool::Bool()
+namespace nodes::values {
+
+void ConstFloat::showProperties()
 {
-  setMinInputs(0);
-  setMaxInputs(0);
-  setMinOutputs(1);
-  setMaxOutputs(1);
-  addOutput(ValueType::eBool, "#1");
+  showCommonProperties();
+  showOutputsProperties();
+
+  propertiesInsertTitle("Const Float");
+
+  int row = m_properties->rowCount();
+  m_properties->insertRow(row);
+
+  QTableWidgetItem *item{};
+
+  item = new QTableWidgetItem{ "Value" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(row, 0, item);
+
+  auto const constFloat = static_cast<elements::values::ConstFloat *const>(m_element);
+  float const current = constFloat->currentValue();
+
+  QDoubleSpinBox *const value = new QDoubleSpinBox;
+  value->setRange(-9999999.0, 9999999.0);
+  value->setDecimals(4);
+  value->setValue(current);
+  m_properties->setCellWidget(row, 1, value);
+
+  QObject::connect(value, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+                   [constFloat](double a_value) { constFloat->set(static_cast<float>(a_value)); });
 }
 
-void Bool::serialize(Json &a_json)
-{
-  Element::serialize(a_json);
-
-  auto &properties = a_json["properties"];
-  properties["value"] = m_currentValue;
-}
-
-void Bool::deserialize(const Json &a_json)
-{
-  Element::deserialize(a_json);
-
-  auto const &properties = a_json["properties"];
-  m_currentValue = properties["value"].get<bool>();
-
-  m_outputs[0].value = m_currentValue;
-}
-
-void Bool::toggle()
-{
-  m_currentValue = !m_currentValue;
-  m_outputs[0].value = m_currentValue;
-
-  m_package->elementChanged(id());
-}
-
-void Bool::set(bool a_state)
-{
-  if (a_state == m_currentValue) return;
-
-  m_currentValue = a_state;
-  m_outputs[0].value = a_state;
-
-  m_package->elementChanged(id());
-}
-
-} // namespace elements::const_value
+} // namespace nodes::values

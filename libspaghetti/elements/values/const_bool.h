@@ -20,41 +20,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/const/float.h"
-#include "elements/const/float.h"
+#pragma once
+#ifndef ELEMENTS_VALUES_CONST_BOOL_H
+#define ELEMENTS_VALUES_CONST_BOOL_H
 
-#include <QDoubleSpinBox>
-#include <QTableWidget>
+#include "elements/element.h"
 
-namespace nodes::const_value {
+namespace elements::values {
 
-void Float::showProperties()
-{
-  showCommonProperties();
-  showOutputsProperties();
+class ConstBool final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "values/const_bool" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
-  propertiesInsertTitle("Const Float");
+  ConstBool();
 
-  int row = m_properties->rowCount();
-  m_properties->insertRow(row);
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
 
-  QTableWidgetItem *item{};
+  void serialize(Json &a_json) override;
+  void deserialize(Json const &a_json) override;
 
-  item = new QTableWidgetItem{ "Value" };
-  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-  m_properties->setItem(row, 0, item);
+  void toggle();
+  void set(bool a_state);
 
-  auto const constFloat = static_cast<elements::const_value::Float *const>(m_element);
-  float const current = constFloat->currentValue();
+  bool currentValue() const { return m_currentValue; }
 
-  QDoubleSpinBox *const value = new QDoubleSpinBox;
-  value->setRange(-9999999.0, 9999999.0);
-  value->setDecimals(4);
-  value->setValue(current);
-  m_properties->setCellWidget(row, 1, value);
+ private:
+  bool m_currentValue{};
+};
 
-  QObject::connect(value, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-                   [constFloat](double a_value) { constFloat->set(static_cast<float>(a_value)); });
-}
+} // namespace elements::values
 
-} // namespace nodes::const_value
+#endif // ELEMENTS_VALUES_CONST_BOOL_H

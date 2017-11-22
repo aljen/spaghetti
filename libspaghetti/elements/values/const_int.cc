@@ -20,35 +20,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_CONST_INT_H
-#define ELEMENTS_CONST_INT_H
+#include "elements/values/const_int.h"
+#include "elements/package.h"
 
-#include "elements/element.h"
+namespace elements::values {
 
-namespace elements::const_value {
+ConstInt::ConstInt()
+{
+  setMinInputs(0);
+  setMaxInputs(0);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addOutput(ValueType::eInt, "#1");
+}
 
-class Int final : public Element {
- public:
-  static constexpr char const *const TYPE{ "const/int" };
-  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+void ConstInt::serialize(Json &a_json)
+{
+  Element::serialize(a_json);
 
-  Int();
+  auto &properties = a_json["properties"];
+  properties["value"] = m_currentValue;
+}
 
-  char const *type() const noexcept override { return TYPE; }
-  string::hash_t hash() const noexcept override { return HASH; }
+void ConstInt::deserialize(const Json &a_json)
+{
+  Element::deserialize(a_json);
 
-  void serialize(Json &a_json) override;
-  void deserialize(Json const &a_json) override;
+  auto const &properties = a_json["properties"];
+  m_currentValue = properties["value"].get<int32_t>();
 
-  void set(int32_t a_value);
+  m_outputs[0].value = m_currentValue;
+}
 
-  int32_t currentValue() const { return m_currentValue; }
+void ConstInt::set(int32_t a_value)
+{
+  if (a_value == m_currentValue) return;
 
- private:
-  int32_t m_currentValue{};
-};
+  m_currentValue = a_value;
+  m_outputs[0].value = a_value;
 
-} // namespace elements::const_value
+  m_package->elementChanged(id());
+}
 
-#endif // ELEMENTS_CONST_INT_H
+} // namespace elements::values

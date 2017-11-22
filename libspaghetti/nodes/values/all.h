@@ -21,11 +21,11 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_CONST_ALL_H
-#define ELEMENTS_CONST_ALL_H
+#ifndef NODES_VALUES_ALL_H
+#define NODES_VALUES_ALL_H
 
-#include "elements/const/bool.h"
-#include "elements/const/float.h"
-#include "elements/const/int.h"
+#include "nodes/values/const_bool.h"
+#include "nodes/values/const_float.h"
+#include "nodes/values/const_int.h"
 
-#endif // ELEMENTS_CONST_ALL_H
+#endif // NODES_VALUES_ALL_H

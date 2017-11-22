@@ -48,5 +48,5 @@ extern "C" SPAGHETTI_API void register_plugin(core::Registry &a_registry)
 {
   core::log::init_from_plugin();
 
-  a_registry.registerElement<Example>("Example (Bool)", ":/elements/logic/and.png");
+  a_registry.registerElement<Example>("Example (Bool)", ":/unknown.png");
 }

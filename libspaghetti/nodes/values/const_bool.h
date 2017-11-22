@@ -21,17 +21,17 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_CONST_FLOAT_H
-#define NODES_CONST_FLOAT_H
+#ifndef NODES_VALUES_CONST_BOOL_H
+#define NODES_VALUES_CONST_BOOL_H
 
 #include "nodes/node.h"
 
-namespace nodes::const_value {
+namespace nodes::values {
 
-class Float : public Node {
+class ConstBool : public Node {
   void showProperties();
 };
 
-} // namespace nodes::const_value
+} // namespace nodes::values
 
-#endif // NODES_CONST_FLOAT_H
+#endif // NODES_VALUES_CONST_BOOL_H

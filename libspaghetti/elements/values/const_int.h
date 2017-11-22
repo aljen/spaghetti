@@ -20,40 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/const/int.h"
-#include "elements/const/int.h"
+#pragma once
+#ifndef ELEMENTS_VALUES_CONST_INT_H
+#define ELEMENTS_VALUES_CONST_INT_H
 
-#include <QSpinBox>
-#include <QTableWidget>
+#include "elements/element.h"
 
-namespace nodes::const_value {
+namespace elements::values {
 
-void Int::showProperties()
-{
-  showCommonProperties();
-  showOutputsProperties();
+class ConstInt final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "values/const_int" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
-  propertiesInsertTitle("Const Int");
+  ConstInt();
 
-  int row = m_properties->rowCount();
-  m_properties->insertRow(row);
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
 
-  QTableWidgetItem *item{};
+  void serialize(Json &a_json) override;
+  void deserialize(Json const &a_json) override;
 
-  item = new QTableWidgetItem{ "Value" };
-  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-  m_properties->setItem(row, 0, item);
+  void set(int32_t a_value);
 
-  auto const constInt = static_cast<elements::const_value::Int *const>(m_element);
-  int const current = constInt->currentValue();
+  int32_t currentValue() const { return m_currentValue; }
 
-  QSpinBox *const value = new QSpinBox;
-  value->setRange(std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::max());
-  value->setValue(static_cast<int>(current));
-  m_properties->setCellWidget(row, 1, value);
+ private:
+  int32_t m_currentValue{};
+};
 
-  QObject::connect(value, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-                   [constInt](int a_value) { constInt->set(a_value); });
-}
+} // namespace elements::values
 
-} // namespace nodes::const_value
+#endif // ELEMENTS_VALUES_CONST_INT_H

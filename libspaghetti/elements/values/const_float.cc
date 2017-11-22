@@ -20,18 +20,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef NODES_CONST_BOOL_H
-#define NODES_CONST_BOOL_H
+#include "elements/values/const_float.h"
+#include "elements/package.h"
 
-#include "nodes/node.h"
+namespace elements::values {
 
-namespace nodes::const_value {
+ConstFloat::ConstFloat()
+{
+  setMinInputs(0);
+  setMaxInputs(0);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addOutput(ValueType::eFloat, "#1");
+}
 
-class Bool : public Node {
-  void showProperties();
-};
+void ConstFloat::serialize(Json &a_json)
+{
+  Element::serialize(a_json);
 
-} // namespace nodes::const_value
+  auto &properties = a_json["properties"];
+  properties["value"] = m_currentValue;
+}
 
-#endif // NODES_CONST_BOOL_H
+void ConstFloat::deserialize(const Json &a_json)
+{
+  Element::deserialize(a_json);
+
+  auto const &properties = a_json["properties"];
+  m_currentValue = properties["value"].get<float>();
+
+  m_outputs[0].value = m_currentValue;
+}
+
+void ConstFloat::set(float a_value)
+{
+  if (a_value == m_currentValue) return;
+
+  m_currentValue = a_value;
+  m_outputs[0].value = a_value;
+
+  m_package->elementChanged(id());
+}
+
+} // namespace elements::values

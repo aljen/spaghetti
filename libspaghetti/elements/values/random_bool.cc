@@ -20,18 +20,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef NODES_CONST_INT_H
-#define NODES_CONST_INT_H
+#include <random>
 
-#include "nodes/node.h"
+#include "elements/package.h"
+#include "elements/values/random_bool.h"
 
-namespace nodes::const_value {
+std::random_device g_random{};
+std::mt19937 g_generator{ g_random() };
+std::bernoulli_distribution g_distrib(0.47);
 
-class Int: public Node {
-  void showProperties();
-};
+namespace elements::values {
 
-} // namespace nodes
+RandomBool::RandomBool()
+  : Element{}
+{
+  setMinInputs(1);
+  setMaxInputs(1);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eBool, "#1");
+  addOutput(ValueType::eBool, "#1");
+}
 
-#endif // NODES_CONST_INT_H
+bool RandomBool::calculate()
+{
+  bool const currentState{ std::get<bool>(m_outputs[0].value) };
+  bool const newState{ g_distrib(g_generator) };
+  if (newState != currentState) m_outputs[0].value = newState;
+  return newState != currentState;
+}
+
+} // namespace elements::values

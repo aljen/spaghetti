@@ -20,36 +20,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_CONST_BOOL_H
-#define ELEMENTS_CONST_BOOL_H
+#include "elements/values/const_bool.h"
+#include "elements/package.h"
 
-#include "elements/element.h"
+namespace elements::values {
 
-namespace elements::const_value {
+ConstBool::ConstBool()
+{
+  setMinInputs(0);
+  setMaxInputs(0);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addOutput(ValueType::eBool, "#1");
+}
 
-class Bool final : public Element {
- public:
-  static constexpr char const *const TYPE{ "const/bool" };
-  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+void ConstBool::serialize(Json &a_json)
+{
+  Element::serialize(a_json);
 
-  Bool();
+  auto &properties = a_json["properties"];
+  properties["value"] = m_currentValue;
+}
 
-  char const *type() const noexcept override { return TYPE; }
-  string::hash_t hash() const noexcept override { return HASH; }
+void ConstBool::deserialize(const Json &a_json)
+{
+  Element::deserialize(a_json);
 
-  void serialize(Json &a_json) override;
-  void deserialize(Json const &a_json) override;
+  auto const &properties = a_json["properties"];
+  m_currentValue = properties["value"].get<bool>();
 
-  void toggle();
-  void set(bool a_state);
+  m_outputs[0].value = m_currentValue;
+}
 
-  bool currentValue() const { return m_currentValue; }
+void ConstBool::toggle()
+{
+  m_currentValue = !m_currentValue;
+  m_outputs[0].value = m_currentValue;
 
- private:
-  bool m_currentValue{};
-};
+  m_package->elementChanged(id());
+}
 
-} // namespace elements::const_value
+void ConstBool::set(bool a_state)
+{
+  if (a_state == m_currentValue) return;
 
-#endif // ELEMENTS_CONST_BOOL_H
+  m_currentValue = a_state;
+  m_outputs[0].value = a_state;
+
+  m_package->elementChanged(id());
+}
+
+} // namespace elements::values

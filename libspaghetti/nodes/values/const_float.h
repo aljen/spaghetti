@@ -20,38 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/const/bool.h"
-#include "elements/const/bool.h"
+#pragma once
+#ifndef NODES_VALUES_CONST_FLOAT_H
+#define NODES_VALUES_CONST_FLOAT_H
 
-#include <QCheckBox>
-#include <QTableWidget>
+#include "nodes/node.h"
 
-namespace nodes::const_value {
+namespace nodes::values {
 
-void Bool::showProperties()
-{
-  showCommonProperties();
-  showOutputsProperties();
+class ConstFloat : public Node {
+  void showProperties();
+};
 
-  propertiesInsertTitle("Const Bool");
+} // namespace nodes::values
 
-  int row = m_properties->rowCount();
-  m_properties->insertRow(row);
-
-  QTableWidgetItem *item{};
-
-  item = new QTableWidgetItem{ "Value" };
-  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-  m_properties->setItem(row, 0, item);
-
-  auto const constBool = static_cast<elements::const_value::Bool *const>(m_element);
-  bool const current = constBool->currentValue();
-
-  QCheckBox *const value = new QCheckBox;
-  m_properties->setCellWidget(row, 1, value);
-  value->setChecked(current);
-
-  QObject::connect(value, &QCheckBox::stateChanged, [constBool](int a_state) { constBool->set(a_state == 2); });
-}
-
-} // namespace nodes::const_value
+#endif // NODES_VALUES_CONST_FLOAT_H

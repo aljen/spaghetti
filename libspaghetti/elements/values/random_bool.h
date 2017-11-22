@@ -21,34 +21,26 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_CONST_FLOAT_H
-#define ELEMENTS_CONST_FLOAT_H
+#ifndef ELEMENTS_VALUES_RANDOM_BOOL_H
+#define ELEMENTS_VALUES_RANDOM_BOOL_H
 
 #include "elements/element.h"
 
-namespace elements::const_value {
+namespace elements::values {
 
-class Float final : public Element {
+class RandomBool final : public Element {
  public:
-  static constexpr char const *const TYPE{ "const/float" };
+  static constexpr char const *const TYPE{ "values/random_bool" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
-  Float();
+  RandomBool();
 
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
 
-  void serialize(Json &a_json) override;
-  void deserialize(Json const &a_json) override;
-
-  void set(float a_value);
-
-  float currentValue() const { return m_currentValue; }
-
- private:
-  float m_currentValue{};
+  bool calculate() override;
 };
 
-} // namespace elements::const_value
+} // namespace elements::values
 
-#endif // ELEMENTS_CONST_FLOAT_H
+#endif // ELEMENTS_VALUES_RANDOM_BOOL_H

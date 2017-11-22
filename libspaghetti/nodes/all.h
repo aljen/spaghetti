@@ -24,8 +24,8 @@
 #ifndef NODES_ALL_H
 #define NODES_ALL_H
 
-#include "nodes/const/all.h"
 #include "nodes/logic/all.h"
 #include "nodes/ui/all.h"
+#include "nodes/values/all.h"
 
 #endif // NODES_ALL_H

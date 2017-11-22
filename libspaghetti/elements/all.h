@@ -25,10 +25,10 @@
 #define ELEMENTS_ALL_H
 
 #include "elements/arithmetic/all.h"
-#include "elements/const/all.h"
 #include "elements/gates/all.h"
 #include "elements/logic/all.h"
 #include "elements/ui/all.h"
+#include "elements/values/all.h"
 #include "elements/package.h"
 
 #endif // ELEMENTS_ALL_H

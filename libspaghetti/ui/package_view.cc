@@ -79,13 +79,13 @@ PackageView::PackageView(QTableWidget *const a_properties, elements::Package *co
   m_inputs->setPos(-600.0, 0.0);
   m_inputs->setType(NodeType::eInputs);
   m_inputs->setElement(m_package);
-  m_inputs->setIcon(":/elements/logic/inputs.png");
+  m_inputs->setIcon(":/logic/inputs.png");
   m_inputs->setPackageView(this);
   m_inputs->iconify();
   m_outputs->setPos(600.0, 0.0);
   m_outputs->setType(NodeType::eOutputs);
   m_outputs->setElement(m_package);
-  m_outputs->setIcon(":/elements/logic/outputs.png");
+  m_outputs->setIcon(":/logic/outputs.png");
   m_outputs->setPackageView(this);
   m_outputs->iconify();
 

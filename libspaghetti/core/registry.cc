@@ -59,23 +59,23 @@ void Registry::registerInternalElements()
 
   using namespace elements;
 
-  registerElement<Package>("Package", ":/elements/logic/package.png");
+  registerElement<Package>("Package", ":/logic/package.png");
 
   registerElement<arithmetic::Add>("Add (Float)", ":/unknown.png");
   registerElement<arithmetic::AddIf>("Add If (Float)", ":/unknown.png");
   registerElement<arithmetic::Multiply>("Multiply (Float)", ":/unknown.png");
   registerElement<arithmetic::MultiplyIf>("Multiply If (Float)", ":/unknown.png");
 
-  registerElement<const_value::Bool, nodes::const_value::Bool>("Const value (Bool)", ":/elements/logic/const_bool.png");
-  registerElement<const_value::Float, nodes::const_value::Float>("Const value (Float)",
-                                                                 ":/elements/logic/const_float.png");
-  registerElement<const_value::Int, nodes::const_value::Int>("Const value (Int)", ":/elements/logic/const_int.png");
+  registerElement<values::ConstBool, nodes::values::ConstBool>("Const value (Bool)", ":/values/const_bool.png");
+  registerElement<values::ConstFloat, nodes::values::ConstFloat>("Const value (Float)", ":/values/const_float.png");
+  registerElement<values::ConstInt, nodes::values::ConstInt>("Const value (Int)", ":/values/const_int.png");
+  registerElement<values::RandomBool>("Random (Bool)", ":/values/random_value.png");
 
-  registerElement<gates::Nand>("NAND (Bool)", ":/elements/logic/nand.png");
-  registerElement<gates::And>("AND (Bool)", ":/elements/logic/and.png");
-  registerElement<gates::Nor>("NOR (Bool)", ":/elements/logic/nor.png");
-  registerElement<gates::Or>("OR (Bool)", ":/elements/logic/or.png");
-  registerElement<gates::Not>("NOT (Bool)", ":/elements/logic/not.png");
+  registerElement<gates::And>("AND (Bool)", ":/gates/and.png");
+  registerElement<gates::Nand>("NAND (Bool)", ":/gates/nand.png");
+  registerElement<gates::Nor>("NOR (Bool)", ":/gates/nor.png");
+  registerElement<gates::Not>("NOT (Bool)", ":/gates/not.png");
+  registerElement<gates::Or>("OR (Bool)", ":/gates/or.png");
 
   registerElement<logic::IfGreaterEqual>("If A >= B (Float)", ":/unknown.png");
   registerElement<logic::IfGreater>("If A > B (Float)", ":/unknown.png");
@@ -84,13 +84,12 @@ void Registry::registerInternalElements()
   registerElement<logic::IfLowerEqual>("If A <= B (Float)", ":/unknown.png");
 
   registerElement<logic::Blinker, nodes::logic::Blinker>("Blinker (Bool)", ":/unknown.png");
-  registerElement<logic::Clock, nodes::logic::Clock>("Clock (ms)", ":/elements/logic/clock.png");
-  registerElement<logic::RandomBool>("Random (Bool)", ":/elements/logic/random_value.png");
-  registerElement<logic::Switch>("Switch (Int)", ":/elements/logic/switch.png");
+  registerElement<logic::Clock, nodes::logic::Clock>("Clock (ms)", ":/logic/clock.png");
+  registerElement<logic::Switch>("Switch (Int)", ":/logic/switch.png");
 
-  registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Info (Float)", ":/unknown.png");
-  registerElement<ui::PushButton, nodes::ui::PushButton>("Push Button (Bool)", ":/elements/ui/push_button.png");
-  registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button (Bool)", ":/elements/ui/toggle_button.png");
+  registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Info (Float)", ":/values/const_float.png");
+  registerElement<ui::PushButton, nodes::ui::PushButton>("Push Button (Bool)", ":/ui/push_button.png");
+  registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button (Bool)", ":/ui/toggle_button.png");
 }
 
 void Registry::loadPlugins()

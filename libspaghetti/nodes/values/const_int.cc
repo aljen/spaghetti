@@ -20,12 +20,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef NODES_CONST_ALL_H
-#define NODES_CONST_ALL_H
+#include "nodes/values/const_int.h"
+#include "elements/values/const_int.h"
 
-#include "nodes/const/bool.h"
-#include "nodes/const/float.h"
-#include "nodes/const/int.h"
+#include <QSpinBox>
+#include <QTableWidget>
 
-#endif // NODES_CONST_ALL_H
+namespace nodes::values {
+
+void ConstInt::showProperties()
+{
+  showCommonProperties();
+  showOutputsProperties();
+
+  propertiesInsertTitle("Const Int");
+
+  int row = m_properties->rowCount();
+  m_properties->insertRow(row);
+
+  QTableWidgetItem *item{};
+
+  item = new QTableWidgetItem{ "Value" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(row, 0, item);
+
+  auto const constInt = static_cast<elements::values::ConstInt *const>(m_element);
+  int const current = constInt->currentValue();
+
+  QSpinBox *const value = new QSpinBox;
+  value->setRange(std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::max());
+  value->setValue(static_cast<int>(current));
+  m_properties->setCellWidget(row, 1, value);
+
+  QObject::connect(value, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+                   [constInt](int a_value) { constInt->set(a_value); });
+}
+
+} // namespace nodes::values

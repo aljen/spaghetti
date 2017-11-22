@@ -28,14 +28,6 @@ set(LIBSPAGHETTI_SOURCES
   elements/arithmetic/multiply_if.cc
   elements/arithmetic/multiply_if.h
 
-  elements/const/all.h
-  elements/const/bool.cc
-  elements/const/bool.h
-  elements/const/float.cc
-  elements/const/float.h
-  elements/const/int.cc
-  elements/const/int.h
-
   elements/gates/all.h
   elements/gates/and.cc
   elements/gates/and.h
@@ -63,8 +55,6 @@ set(LIBSPAGHETTI_SOURCES
   elements/logic/if_lower.h
   elements/logic/if_lower_equal.cc
   elements/logic/if_lower_equal.h
-  elements/logic/random_bool.cc
-  elements/logic/random_bool.h
   elements/logic/switch.cc
   elements/logic/switch.h
 
@@ -75,6 +65,16 @@ set(LIBSPAGHETTI_SOURCES
   elements/ui/push_button.h
   elements/ui/toggle_button.cc
   elements/ui/toggle_button.h
+
+  elements/values/all.h
+  elements/values/const_bool.cc
+  elements/values/const_bool.h
+  elements/values/const_float.cc
+  elements/values/const_float.h
+  elements/values/const_int.cc
+  elements/values/const_int.h
+  elements/values/random_bool.cc
+  elements/values/random_bool.h
 
   elements/all.h
   elements/element.cc
@@ -91,14 +91,6 @@ set(LIBSPAGHETTI_SOURCES
   nodes/ui/toggle_button.cc
   nodes/ui/toggle_button.h
 
-  nodes/const/all.h
-  nodes/const/bool.cc
-  nodes/const/bool.h
-  nodes/const/float.cc
-  nodes/const/float.h
-  nodes/const/int.cc
-  nodes/const/int.h
-
   nodes/logic/all.h
   nodes/logic/blinker.cc
   nodes/logic/blinker.h
@@ -112,6 +104,14 @@ set(LIBSPAGHETTI_SOURCES
   nodes/ui/push_button.h
   nodes/ui/toggle_button.cc
   nodes/ui/toggle_button.h
+
+  nodes/values/all.h
+  nodes/values/const_bool.cc
+  nodes/values/const_bool.h
+  nodes/values/const_float.cc
+  nodes/values/const_float.h
+  nodes/values/const_int.cc
+  nodes/values/const_int.h
 
   nodes/all.h
   nodes/node.cc

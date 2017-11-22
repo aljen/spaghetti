@@ -20,46 +20,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/const/int.h"
-#include "elements/package.h"
+#include "nodes/values/const_bool.h"
+#include "elements/values/const_bool.h"
 
-namespace elements::const_value {
+#include <QCheckBox>
+#include <QTableWidget>
 
-Int::Int()
+namespace nodes::values {
+
+void ConstBool::showProperties()
 {
-  setMinInputs(0);
-  setMaxInputs(0);
-  setMinOutputs(1);
-  setMaxOutputs(1);
-  addOutput(ValueType::eInt, "#1");
+  showCommonProperties();
+  showOutputsProperties();
+
+  propertiesInsertTitle("Const Bool");
+
+  int row = m_properties->rowCount();
+  m_properties->insertRow(row);
+
+  QTableWidgetItem *item{};
+
+  item = new QTableWidgetItem{ "Value" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(row, 0, item);
+
+  auto const constBool = static_cast<elements::values::ConstBool *const>(m_element);
+  bool const current = constBool->currentValue();
+
+  QCheckBox *const value = new QCheckBox;
+  m_properties->setCellWidget(row, 1, value);
+  value->setChecked(current);
+
+  QObject::connect(value, &QCheckBox::stateChanged, [constBool](int a_state) { constBool->set(a_state == 2); });
 }
 
-void Int::serialize(Json &a_json)
-{
-  Element::serialize(a_json);
-
-  auto &properties = a_json["properties"];
-  properties["value"] = m_currentValue;
-}
-
-void Int::deserialize(const Json &a_json)
-{
-  Element::deserialize(a_json);
-
-  auto const &properties = a_json["properties"];
-  m_currentValue = properties["value"].get<int32_t>();
-
-  m_outputs[0].value = m_currentValue;
-}
-
-void Int::set(int32_t a_value)
-{
-  if (a_value == m_currentValue) return;
-
-  m_currentValue = a_value;
-  m_outputs[0].value = a_value;
-
-  m_package->elementChanged(id());
-}
-
-} // namespace elements::const_value
+} // namespace nodes::values

@@ -1,21 +1,21 @@
 <RCC>
     <qresource prefix="/">
-        <file>elements/logic/and.png</file>
-        <file>elements/logic/not.png</file>
-        <file>elements/logic/or.png</file>
-        <file>elements/logic/switch.png</file>
-        <file>elements/logic/nand.png</file>
-        <file>elements/logic/nor.png</file>
-        <file>elements/logic/package.png</file>
-        <file>elements/logic/clock.png</file>
-        <file>elements/logic/inputs.png</file>
-        <file>elements/logic/outputs.png</file>
-        <file>elements/logic/random_value.png</file>
-        <file>elements/logic/const_bool.png</file>
-        <file>elements/logic/const_float.png</file>
-        <file>elements/logic/const_int.png</file>
-        <file>elements/ui/push_button.png</file>
-        <file>elements/ui/toggle_button.png</file>
+        <file>gates/and.png</file>
+        <file>gates/nand.png</file>
+        <file>gates/nor.png</file>
+        <file>gates/not.png</file>
+        <file>gates/or.png</file>
+        <file>logic/clock.png</file>
+        <file>logic/inputs.png</file>
+        <file>logic/outputs.png</file>
+        <file>logic/package.png</file>
+        <file>logic/switch.png</file>
+        <file>ui/push_button.png</file>
+        <file>ui/toggle_button.png</file>
+        <file>values/const_bool.png</file>
+        <file>values/const_float.png</file>
+        <file>values/const_int.png</file>
+        <file>values/random_value.png</file>
         <file>collapsed.png</file>
         <file>expanded.png</file>
         <file>unknown.png</file>
