@@ -49,6 +49,7 @@ void Float::showProperties()
 
   QDoubleSpinBox *const value = new QDoubleSpinBox;
   value->setRange(-9999999.0, 9999999.0);
+  value->setDecimals(4);
   value->setValue(current);
   m_properties->setCellWidget(row, 1, value);
 
