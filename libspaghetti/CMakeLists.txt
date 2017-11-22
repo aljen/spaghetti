@@ -78,6 +78,8 @@ set(LIBSPAGHETTI_SOURCES
   elements/values/const_int.h
   elements/values/degree_to_radian.cc
   elements/values/degree_to_radian.h
+  elements/values/int_to_float.cc
+  elements/values/int_to_float.h
   elements/values/max_float.cc
   elements/values/max_float.h
   elements/values/max_int.cc
