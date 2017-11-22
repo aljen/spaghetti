@@ -70,6 +70,8 @@ set(LIBSPAGHETTI_SOURCES
   elements/ui/toggle_button.h
 
   elements/values/all.h
+  elements/values/clamp_float.cc
+  elements/values/clamp_float.h
   elements/values/const_bool.cc
   elements/values/const_bool.h
   elements/values/const_float.cc
