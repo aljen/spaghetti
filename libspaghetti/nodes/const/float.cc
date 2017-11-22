@@ -48,7 +48,7 @@ void Float::showProperties()
   float const current = constFloat->currentValue();
 
   QDoubleSpinBox *const value = new QDoubleSpinBox;
-  value->setRange(std::numeric_limits<float>::min(), std::numeric_limits<float>::max());
+  value->setRange(-9999999.0, 9999999.0);
   value->setValue(current);
   m_properties->setCellWidget(row, 1, value);
 
