@@ -16,6 +16,7 @@ set(LIBSPAGHETTI_SOURCES
   core/registry.cc
   core/registry.h
   core/strings.h
+  core/utils.h
   core/version.h.in
 
   elements/arithmetic/add.cc

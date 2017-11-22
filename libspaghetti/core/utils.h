@@ -20,39 +20,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/logic/if_equal.h"
-#include "core/utils.h"
-#include "elements/package.h"
+#pragma once
+#ifndef CORE_UTILS_H
+#define CORE_UTILS_H
 
-namespace elements::logic {
+#include <cmath>
+#include <limits>
 
-IfEqual::IfEqual()
-  : Element{}
+namespace core {
+
+constexpr float const PI = 3.1415926535897932f;
+constexpr float const RAD2DEG = 180.0f / PI;
+constexpr float const DEG2RAD = PI / 180.0f;
+
+inline bool nearly_equal(float const &a_a, float const &a_b)
 {
-  setMinInputs(2);
-  setMaxInputs(2);
-  setMinOutputs(1);
-  setMaxOutputs(1);
-  addInput(ValueType::eFloat, "A");
-  addInput(ValueType::eFloat, "B");
-  addOutput(ValueType::eBool, "A == B");
+  return std::nextafter(a_a, std::numeric_limits<float>::lowest()) <= a_b &&
+         std::nextafter(a_a, std::numeric_limits<float>::max()) >= a_b;
 }
 
-bool IfEqual::calculate()
-{
-  if (!allInputsConnected()) return false;
+} // namespace core
 
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-
-  float const A{ std::get<float>(*m_inputs[0].value) };
-  float const B{ std::get<float>(*m_inputs[1].value) };
-
-  bool const state{ core::nearly_equal(A, B) };
-
-  bool const changed{ state != currentState };
-  if (changed) m_outputs[0].value = state;
-
-  return changed;
-}
-
-} // namespace elements::logic
+#endif // CORE_UTILS_H
