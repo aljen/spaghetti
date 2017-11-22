@@ -96,6 +96,8 @@ void Registry::registerInternalElements()
 
   registerElement<values::MinInt>("Minimum value (Int)", ":/unknown.png");
   registerElement<values::MaxInt>("Maximum value (Int)", ":/unknown.png");
+  registerElement<values::MinFloat>("Minimum value (Float)", ":/unknown.png");
+  registerElement<values::MaxFloat>("Maximum value (Float)", ":/unknown.png");
 }
 
 void Registry::loadPlugins()
