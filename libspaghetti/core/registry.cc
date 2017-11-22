@@ -92,6 +92,7 @@ void Registry::registerInternalElements()
   registerElement<ui::PushButton, nodes::ui::PushButton>("Push Button (Bool)", ":/ui/push_button.png");
   registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button (Bool)", ":/ui/toggle_button.png");
   registerElement<values::Int2Float>("Int2Float", ":/unknown.png");
+  registerElement<values::Float2Int>("Float2Int", ":/unknown.png");
   registerElement<values::Degree2Radian>("Degree2Radian", ":/unknown.png");
   registerElement<values::Radian2Degree>("Radian2Degree", ":/unknown.png");
 
