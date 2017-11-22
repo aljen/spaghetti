@@ -21,13 +21,26 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_VALUES_ALL_H
-#define ELEMENTS_VALUES_ALL_H
+#ifndef ELEMENTS_VALUES_DEGREE_TO_RADIAN_H
+#define ELEMENTS_VALUES_DEGREE_TO_RADIAN_H
 
-#include "elements/values/const_bool.h"
-#include "elements/values/const_float.h"
-#include "elements/values/const_int.h"
-#include "elements/values/degree_to_radian.h"
-#include "elements/values/random_bool.h"
+#include "elements/element.h"
 
-#endif // ELEMENTS_VALUES_ALL_H
+namespace elements::values {
+
+class Degree2Radian final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "values/degree_to_radian" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  Degree2Radian();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  bool calculate() override;
+};
+
+} // namespace elements::values
+
+#endif // ELEMENTS_VALUES_DEGREE_TO_RADIAN_H

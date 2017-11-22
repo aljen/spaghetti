@@ -20,14 +20,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_VALUES_ALL_H
-#define ELEMENTS_VALUES_ALL_H
-
-#include "elements/values/const_bool.h"
-#include "elements/values/const_float.h"
-#include "elements/values/const_int.h"
 #include "elements/values/degree_to_radian.h"
-#include "elements/values/random_bool.h"
+#include "core/utils.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_VALUES_ALL_H
+namespace elements::values {
+
+Degree2Radian::Degree2Radian()
+{
+  setMinInputs(1);
+  setMaxInputs(1);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eFloat, "Degree");
+  addOutput(ValueType::eFloat, "Radian");
+}
+
+bool Degree2Radian::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  float const input{ std::get<float>(*m_inputs[0].value) };
+  m_outputs[0].value = input * core::DEG2RAD;
+
+  return true;
+}
+
+} // namespace elements::values
