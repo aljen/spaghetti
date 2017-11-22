@@ -93,6 +93,9 @@ void Registry::registerInternalElements()
   registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button (Bool)", ":/ui/toggle_button.png");
   registerElement<values::Degree2Radian>("Degree2Radian", ":/unknown.png");
   registerElement<values::Radian2Degree>("Radian2Degree", ":/unknown.png");
+
+  registerElement<values::MinInt>("Minimum value (Int)", ":/unknown.png");
+  registerElement<values::MaxInt>("Maximum value (Int)", ":/unknown.png");
 }
 
 void Registry::loadPlugins()

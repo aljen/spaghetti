@@ -78,6 +78,10 @@ set(LIBSPAGHETTI_SOURCES
   elements/values/const_int.h
   elements/values/degree_to_radian.cc
   elements/values/degree_to_radian.h
+  elements/values/max_int.cc
+  elements/values/max_int.h
+  elements/values/min_int.cc
+  elements/values/min_int.h
   elements/values/radian_to_degree.cc
   elements/values/radian_to_degree.h
   elements/values/random_bool.cc

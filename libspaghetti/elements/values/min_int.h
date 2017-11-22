@@ -21,16 +21,26 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_VALUES_ALL_H
-#define ELEMENTS_VALUES_ALL_H
+#ifndef ELEMENTS_VALUES_MIN_INT_H
+#define ELEMENTS_VALUES_MIN_INT_H
 
-#include "elements/values/const_bool.h"
-#include "elements/values/const_float.h"
-#include "elements/values/const_int.h"
-#include "elements/values/degree_to_radian.h"
-#include "elements/values/max_int.h"
-#include "elements/values/min_int.h"
-#include "elements/values/radian_to_degree.h"
-#include "elements/values/random_bool.h"
+#include "elements/element.h"
 
-#endif // ELEMENTS_VALUES_ALL_H
+namespace elements::values {
+
+class MinInt final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "values/min_int" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  MinInt();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  bool calculate() override;
+};
+
+} // namespace elements::values
+
+#endif // ELEMENTS_VALUES_MIN_INT_H

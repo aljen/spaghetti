@@ -20,17 +20,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_VALUES_ALL_H
-#define ELEMENTS_VALUES_ALL_H
-
-#include "elements/values/const_bool.h"
-#include "elements/values/const_float.h"
-#include "elements/values/const_int.h"
-#include "elements/values/degree_to_radian.h"
 #include "elements/values/max_int.h"
-#include "elements/values/min_int.h"
-#include "elements/values/radian_to_degree.h"
-#include "elements/values/random_bool.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_VALUES_ALL_H
+namespace elements::values {
+
+MaxInt::MaxInt()
+{
+  setMinInputs(2);
+  setMaxInputs(2);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eInt, "A");
+  addInput(ValueType::eInt, "B");
+  addOutput(ValueType::eInt, "max(A, B)");
+}
+
+bool MaxInt::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  int32_t const A{ std::get<int32_t>(*m_inputs[0].value) };
+  int32_t const B{ std::get<int32_t>(*m_inputs[1].value) };
+  m_outputs[0].value = std::max(A, B);
+
+  return true;
+}
+
+} // namespace elements::values
