@@ -77,14 +77,20 @@ void Registry::registerInternalElements()
   registerElement<gates::Or>("OR (Bool)", ":/elements/logic/or.png");
   registerElement<gates::Not>("NOT (Bool)", ":/elements/logic/not.png");
 
-  registerElement<logic::Blinker, nodes::logic::Blinker>("Blinker (bool)", ":/unknown.png");
+  registerElement<logic::IfGreaterEqual>("If A >= B (Float)", ":/unknown.png");
+  registerElement<logic::IfGreater>("If A > B (Float)", ":/unknown.png");
+  registerElement<logic::IfEqual>("If A == B (Float)", ":/unknown.png");
+  registerElement<logic::IfLower>("If A < B (Float)", ":/unknown.png");
+  registerElement<logic::IfLowerEqual>("If A <= B (Float)", ":/unknown.png");
+
+  registerElement<logic::Blinker, nodes::logic::Blinker>("Blinker (Bool)", ":/unknown.png");
   registerElement<logic::Clock, nodes::logic::Clock>("Clock (ms)", ":/elements/logic/clock.png");
   registerElement<logic::RandomBool>("Random (Bool)", ":/elements/logic/random_value.png");
   registerElement<logic::Switch>("Switch (Int)", ":/elements/logic/switch.png");
 
-  registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Float Info", ":/unknown.png");
-  registerElement<ui::PushButton, nodes::ui::PushButton>("Push Button", ":/elements/ui/push_button.png");
-  registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button", ":/elements/ui/toggle_button.png");
+  registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Info (Float)", ":/unknown.png");
+  registerElement<ui::PushButton, nodes::ui::PushButton>("Push Button (Bool)", ":/elements/ui/push_button.png");
+  registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button (Bool)", ":/elements/ui/toggle_button.png");
 }
 
 void Registry::loadPlugins()

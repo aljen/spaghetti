@@ -20,18 +20,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
-
-#include "elements/logic/blinker.h"
-#include "elements/logic/clock.h"
 #include "elements/logic/if_equal.h"
-#include "elements/logic/if_greater.h"
-#include "elements/logic/if_greater_equal.h"
-#include "elements/logic/if_lower.h"
-#include "elements/logic/if_lower_equal.h"
-#include "elements/logic/random_bool.h"
-#include "elements/logic/switch.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace elements::logic {
+
+inline bool nearly_equal(float const &a_a, float const &a_b)
+{
+  return std::nextafter(a_a, std::numeric_limits<float>::lowest()) <= a_b &&
+         std::nextafter(a_a, std::numeric_limits<float>::max()) >= a_b;
+}
+
+IfEqual::IfEqual()
+  : Element{}
+{
+  setMinInputs(2);
+  setMaxInputs(2);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eFloat, "A");
+  addInput(ValueType::eFloat, "B");
+  addOutput(ValueType::eBool, "A == B");
+}
+
+bool IfEqual::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  bool const currentState{ std::get<bool>(m_outputs[0].value) };
+
+  float const A{ std::get<float>(*m_inputs[0].value) };
+  float const B{ std::get<float>(*m_inputs[1].value) };
+
+  bool const state{ nearly_equal(A, B) };
+
+  bool const changed{ state != currentState };
+  if (changed) m_outputs[0].value = state;
+
+  return changed;
+}
+
+} // namespace elements::logic

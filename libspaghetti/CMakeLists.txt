@@ -53,6 +53,16 @@ set(LIBSPAGHETTI_SOURCES
   elements/logic/blinker.h
   elements/logic/clock.cc
   elements/logic/clock.h
+  elements/logic/if_equal.cc
+  elements/logic/if_equal.h
+  elements/logic/if_greater.cc
+  elements/logic/if_greater.h
+  elements/logic/if_greater_equal.cc
+  elements/logic/if_greater_equal.h
+  elements/logic/if_lower.cc
+  elements/logic/if_lower.h
+  elements/logic/if_lower_equal.cc
+  elements/logic/if_lower_equal.h
   elements/logic/random_bool.cc
   elements/logic/random_bool.h
   elements/logic/switch.cc

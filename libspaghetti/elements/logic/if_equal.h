@@ -21,17 +21,26 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
+#ifndef ELEMENTS_LOGIC_IF_EQUAL_H
+#define ELEMENTS_LOGIC_IF_EQUAL_H
 
-#include "elements/logic/blinker.h"
-#include "elements/logic/clock.h"
-#include "elements/logic/if_equal.h"
-#include "elements/logic/if_greater.h"
-#include "elements/logic/if_greater_equal.h"
-#include "elements/logic/if_lower.h"
-#include "elements/logic/if_lower_equal.h"
-#include "elements/logic/random_bool.h"
-#include "elements/logic/switch.h"
+#include "elements/element.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace elements::logic {
+
+class IfEqual final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "logic/if_equal" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  IfEqual();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  bool calculate() override;
+};
+
+} // namespace elements::logic
+
+#endif // ELEMENTS_LOGIC_IF_EQUAL_H
