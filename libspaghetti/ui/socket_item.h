@@ -32,6 +32,10 @@
 
 class LinkItem;
 
+namespace nodes {
+class Node;
+}
+
 constexpr int SOCKET_TYPE{ QGraphicsItem::UserType + 3 };
 
 class SocketItem final : public QGraphicsItem {
@@ -41,7 +45,7 @@ class SocketItem final : public QGraphicsItem {
 
   constexpr static int SIZE{ 16 };
 
-  SocketItem(Type aType, QGraphicsItem *const a_parent = nullptr);
+  SocketItem(Type aType, nodes::Node *const a_node);
 
   int type() const override { return SOCKET_TYPE; }
 
@@ -65,6 +69,7 @@ class SocketItem final : public QGraphicsItem {
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *a_event) override;
 
   QVariant itemChange(GraphicsItemChange a_change, QVariant const &a_value) override;
+//  void advance(int a_phase) override;
 
   void setHover(bool a_hover) { m_isHover = a_hover; }
 
@@ -88,12 +93,18 @@ class SocketItem final : public QGraphicsItem {
 
   void connect(SocketItem *const a_other);
 
+  void setCurrentValue(qreal const a_currentValue) { m_currentValue = a_currentValue; }
+  qreal currentValue() const { return m_currentValue; }
+
   void setValueType(ValueType const a_type) { m_valueType = a_type; }
   ValueType valueType() const { return m_valueType; }
 
  private:
+  nodes::Node *const m_node{};
   QString m_name{};
   QFont m_font{};
+
+  qreal m_currentValue{};
 
   ValueType m_valueType{};
 

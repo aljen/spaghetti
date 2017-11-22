@@ -70,6 +70,8 @@ class LinkItem final : public QGraphicsPathItem {
 
   void trackNodes();
 
+  void setDelta(qreal const a_delta);
+
  private:
   QGraphicsDropShadowEffect *m_effect{};
 
@@ -89,6 +91,7 @@ class LinkItem final : public QGraphicsPathItem {
   QPointF m_toPoint{};
   bool m_isHover{};
   bool m_isSnapped{};
+  qreal m_delta{};
   qreal m_dashOffset{};
 };
 

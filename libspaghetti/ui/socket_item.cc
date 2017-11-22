@@ -31,13 +31,16 @@
 #include <QMimeData>
 #include <QWidget>
 
+#include "core/logger.h"
 #include "elements/package.h"
+#include "nodes/node.h"
 #include "ui/colors.h"
 #include "ui/link_item.h"
 #include "ui/package_view.h"
 
-SocketItem::SocketItem(Type a_type, QGraphicsItem *const a_parent)
-  : QGraphicsItem{ a_parent }
+SocketItem::SocketItem(Type a_type, nodes::Node *const a_node)
+  : QGraphicsItem{ a_node }
+  , m_node{ a_node }
   , m_type{ a_type }
 {
   m_font.setFamily("Consolas");
@@ -258,6 +261,41 @@ QVariant SocketItem::itemChange(QGraphicsItem::GraphicsItemChange a_change, cons
   }
   return QGraphicsItem::itemChange(a_change, a_value);
 }
+
+#if 0
+void SocketItem::advance(int a_phase)
+{
+  if (!a_phase) return;
+
+  if (m_type == Type::eOutput) {
+    auto const element = m_node->element();
+    auto const &outputs = element->outputs();
+
+    switch (m_valueType) {
+      case ValueType::eFloat: {
+        qreal const oldValue = m_currentValue;
+        qreal const newValue = std::get<float>(outputs[m_socketId].value);
+        qreal const deltaValue = newValue - oldValue;
+        m_currentValue = newValue;
+
+//        core::log::info("old: {} new: {} dt: {}", oldValue, newValue, deltaValue);
+
+        for (LinkItem *const link : m_links)
+          link->setDelta(deltaValue);
+
+        break;
+      }
+      case ValueType::eInt: {
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+  update();
+}
+#endif
 
 int SocketItem::nameWidth() const
 {

@@ -100,7 +100,8 @@ void LinkItem::advance(int a_phase)
 {
   if (!a_phase) return;
 
-  if (m_valueType != ValueType::eBool) m_dashOffset -= 0.6;
+    if (m_valueType != ValueType::eBool) m_dashOffset -= 0.6;
+//  if (m_valueType != ValueType::eBool) m_dashOffset -= m_delta;
 
   update();
 }
@@ -188,4 +189,9 @@ void LinkItem::trackNodes()
   QPainterPathStroker stroker{};
   stroker.setWidth(15);
   m_shape = stroker.createStroke(m_path);
+}
+
+void LinkItem::setDelta(const qreal a_delta)
+{
+  m_delta = std::clamp(a_delta, -3.0, 3.0);
 }
