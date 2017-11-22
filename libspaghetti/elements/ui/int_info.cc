@@ -20,13 +20,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_UI_ALL_H
-#define ELEMENTS_UI_ALL_H
+#include "int_info.h"
 
-#include "elements/ui/float_info.h"
-#include "elements/ui/int_info.h"
-#include "elements/ui/push_button.h"
-#include "elements/ui/toggle_button.h"
+#include <iostream>
+#include "elements/package.h"
 
-#endif // ELEMENTS_UI_ALL_H
+namespace elements::ui {
+
+IntInfo::IntInfo()
+{
+  setMinInputs(1);
+  setMaxInputs(1);
+  setMinOutputs(0);
+  setMaxOutputs(0);
+
+  addInput(ValueType::eInt, "Int");
+}
+
+IntInfo::~IntInfo() {}
+
+bool IntInfo::calculate()
+{
+  return true;
+}
+
+} // namespace elements::ui

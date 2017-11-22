@@ -20,13 +20,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_UI_ALL_H
-#define ELEMENTS_UI_ALL_H
-
-#include "elements/ui/float_info.h"
+#include "nodes/ui/int_info.h"
 #include "elements/ui/int_info.h"
-#include "elements/ui/push_button.h"
-#include "elements/ui/toggle_button.h"
 
-#endif // ELEMENTS_UI_ALL_H
+#include <QGraphicsSimpleTextItem>
+#include <QTableWidget>
+
+namespace nodes::ui {
+
+IntInfo::IntInfo()
+{
+  QFont font{};
+  font.setPixelSize(32);
+  auto widget = new QGraphicsSimpleTextItem("0");
+  widget->setFont(font);
+  QPointF widgetPosition{};
+  widgetPosition.rx() = -(widget->boundingRect().width() / 2.0);
+  widgetPosition.ry() = -(widget->boundingRect().height() / 2.0);
+  widget->setPos(widgetPosition);
+  setCentralWidget(widget);
+
+  m_info = widget;
+}
+
+void IntInfo::refreshCentralWidget()
+{
+  if (!m_element || !m_element->inputs()[0].value) return;
+  int32_t const value{ std::get<int32_t>(*m_element->inputs()[0].value) };
+  m_info->setText(QString::number(value));
+}
+
+void IntInfo::showProperties()
+{
+  showCommonProperties();
+  showInputsProperties();
+  showOutputsProperties();
+}
+
+} // namespace nodes::ui

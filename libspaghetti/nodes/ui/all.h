@@ -25,6 +25,7 @@
 #define NODES_UI_ALL_H
 
 #include "nodes/ui/float_info.h"
+#include "nodes/ui/int_info.h"
 #include "nodes/ui/push_button.h"
 #include "nodes/ui/toggle_button.h"
 

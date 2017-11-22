@@ -62,6 +62,8 @@ set(LIBSPAGHETTI_SOURCES
   elements/ui/all.h
   elements/ui/float_info.cc
   elements/ui/float_info.h
+  elements/ui/int_info.cc
+  elements/ui/int_info.h
   elements/ui/push_button.cc
   elements/ui/push_button.h
   elements/ui/toggle_button.cc
@@ -101,6 +103,8 @@ set(LIBSPAGHETTI_SOURCES
   nodes/ui/all.h
   nodes/ui/float_info.cc
   nodes/ui/float_info.h
+  nodes/ui/int_info.cc
+  nodes/ui/int_info.h
   nodes/ui/push_button.cc
   nodes/ui/push_button.h
   nodes/ui/toggle_button.cc

@@ -21,12 +21,27 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_UI_ALL_H
-#define ELEMENTS_UI_ALL_H
+#ifndef ELEMENTS_UI_INT_INFO_H
+#define ELEMENTS_UI_INT_INFO_H
 
-#include "elements/ui/float_info.h"
-#include "elements/ui/int_info.h"
-#include "elements/ui/push_button.h"
-#include "elements/ui/toggle_button.h"
+#include "elements/element.h"
 
-#endif // ELEMENTS_UI_ALL_H
+namespace elements::ui {
+
+class IntInfo final : public elements::Element {
+ public:
+  static constexpr char const *const TYPE{ "ui/int_info" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  IntInfo();
+  ~IntInfo() override;
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  bool calculate() override;
+};
+
+} // namespace elements::ui
+
+#endif // ELEMENTS_UI_INT_INFO_H

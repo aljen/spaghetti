@@ -21,12 +21,25 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_UI_ALL_H
-#define ELEMENTS_UI_ALL_H
+#ifndef NODES_UI_INT_INFO_H
+#define NODES_UI_INT_INFO_H
 
-#include "elements/ui/float_info.h"
-#include "elements/ui/int_info.h"
-#include "elements/ui/push_button.h"
-#include "elements/ui/toggle_button.h"
+#include "nodes/node.h"
 
-#endif // ELEMENTS_UI_ALL_H
+namespace nodes::ui {
+
+class IntInfo : public Node {
+ public:
+  IntInfo();
+
+ private:
+  void refreshCentralWidget() override;
+  void showProperties() override;
+
+ private:
+  QGraphicsSimpleTextItem *m_info{};
+};
+
+} // namespace nodes::ui
+
+#endif // NODES_UI_INT_INFO_H
