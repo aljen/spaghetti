@@ -47,7 +47,7 @@ void FloatInfo::refreshCentralWidget()
 {
   if (!m_element || !m_element->inputs()[0].value) return;
   float const value{ std::get<float>(*m_element->inputs()[0].value) };
-  m_info->setText(QString::number(value, 'f', 2));
+  m_info->setText(QString::number(value, 'f', 4));
 }
 
 void FloatInfo::showProperties()
