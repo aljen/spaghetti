@@ -20,18 +20,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
-
-#include "elements/math/abs.h"
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
-#include "elements/math/cos.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
-#include "elements/math/sin.h"
-#include "elements/math/subtract.h"
 #include "elements/math/subtract_if.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_MATH_ALL_H
+namespace elements::math {
+
+SubtractIf::SubtractIf()
+  : Element{}
+{
+  setMinInputs(3);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eBool, "Enabled");
+  addInput(ValueType::eFloat, "#1");
+  addInput(ValueType::eFloat, "#2");
+  addOutput(ValueType::eFloat, "Value");
+}
+
+bool SubtractIf::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  bool const enabled = std::get<bool>(*m_inputs[0].value);
+
+  if (enabled != m_enabled && !enabled) {
+    m_outputs[0].value = 0.0f;
+    return true;
+  }
+
+  m_enabled = enabled;
+
+  if (!m_enabled) return false;
+
+  float ret{ std::get<float>(*m_inputs[1].value) };
+  size_t const SIZE{ m_inputs.size() };
+  for (size_t i = 2; i < SIZE; ++i) ret -= std::get<float>(*m_inputs[i].value);
+
+  m_outputs[0].value = ret;
+
+  return true;
+}
+
+} // namespace elements::math

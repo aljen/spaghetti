@@ -81,6 +81,8 @@ void Registry::registerInternalElements()
 
   registerElement<math::Add>("Add (Float)", ":/unknown.png");
   registerElement<math::AddIf>("Add If (Float)", ":/unknown.png");
+  registerElement<math::Subtract>("Subtract (Float)", ":/unknown.png");
+  registerElement<math::SubtractIf>("Subtract If (Float)", ":/unknown.png");
   registerElement<math::Multiply>("Multiply (Float)", ":/unknown.png");
   registerElement<math::MultiplyIf>("Multiply If (Float)", ":/unknown.png");
 

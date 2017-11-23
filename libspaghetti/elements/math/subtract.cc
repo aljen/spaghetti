@@ -20,18 +20,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
-
-#include "elements/math/abs.h"
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
-#include "elements/math/cos.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
-#include "elements/math/sin.h"
 #include "elements/math/subtract.h"
-#include "elements/math/subtract_if.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_MATH_ALL_H
+namespace elements::math {
+
+Subtract::Subtract()
+  : Element{}
+{
+  setMinInputs(2);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eFloat, "#1");
+  addInput(ValueType::eFloat, "#2");
+  addOutput(ValueType::eFloat, "Value");
+}
+
+bool Subtract::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  float ret{ std::get<float>(*m_inputs[0].value) };
+  size_t const SIZE{ m_inputs.size() };
+  for (size_t i = 1; i < SIZE; ++i) ret -= std::get<float>(*m_inputs[i].value);
+
+  m_outputs[0].value = ret;
+
+  return true;
+}
+
+} // namespace elements::math

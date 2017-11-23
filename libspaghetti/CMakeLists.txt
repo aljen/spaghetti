@@ -64,6 +64,10 @@ set(LIBSPAGHETTI_SOURCES
   elements/math/multiply_if.h
   elements/math/sin.cc
   elements/math/sin.h
+  elements/math/subtract.cc
+  elements/math/subtract.h
+  elements/math/subtract_if.cc
+  elements/math/subtract_if.h
 
   elements/ui/all.h
   elements/ui/float_info.cc
