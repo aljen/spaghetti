@@ -90,12 +90,12 @@ void Registry::registerInternalElements()
   registerElement<values::ConstBool, nodes::values::ConstBool>("Const value (Bool)", ":/values/const_bool.png");
   registerElement<values::ConstFloat, nodes::values::ConstFloat>("Const value (Float)", ":/values/const_float.png");
   registerElement<values::ConstInt, nodes::values::ConstInt>("Const value (Int)", ":/values/const_int.png");
-  registerElement<values::RandomBool>("Random (Bool)", ":/values/random_value.png");
+  registerElement<values::RandomBool>("Random value (Bool)", ":/values/random_value.png");
 
-  registerElement<values::Int2Float>("Int2Float", ":/unknown.png");
-  registerElement<values::Float2Int>("Float2Int", ":/unknown.png");
-  registerElement<values::Degree2Radian>("Degree2Radian", ":/unknown.png");
-  registerElement<values::Radian2Degree>("Radian2Degree", ":/unknown.png");
+  registerElement<values::Degree2Radian>("Convert angle (Deg2Rad)", ":/unknown.png");
+  registerElement<values::Radian2Degree>("Convert angle (Rad2Deg)", ":/unknown.png");
+  registerElement<values::Int2Float>("Convert value (Int2Float)", ":/unknown.png");
+  registerElement<values::Float2Int>("Convert value (Float2Int)", ":/unknown.png");
 
   registerElement<values::MinInt>("Minimum value (Int)", ":/unknown.png");
   registerElement<values::MaxInt>("Maximum value (Int)", ":/unknown.png");
