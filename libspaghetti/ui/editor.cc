@@ -205,7 +205,14 @@ void Editor::newPackage()
 
 void Editor::openPackage()
 {
+  foreach (PackageView *temp, this->findChildren<PackageView *>())
+    temp->setUpdatesEnabled(false);
+
   QString const filename{ QFileDialog::getOpenFileName(this, "Open .package", PACKAGES_DIR, "*.package") };
+
+  foreach (PackageView *temp, this->findChildren<PackageView *>())
+    temp->setUpdatesEnabled(true);
+
   if (filename.isEmpty()) return;
 
   newPackage();
@@ -228,7 +235,14 @@ void Editor::savePackage()
   auto *const packageView = packageViewForIndex(m_packageViewIndex);
 
   if (packageView->filename().isEmpty()) {
+    foreach (PackageView *temp, this->findChildren<PackageView *>())
+      temp->setUpdatesEnabled(false);
+
     QString filename{ QFileDialog::getSaveFileName(this, "Save .package", PACKAGES_DIR, "*.package") };
+
+    foreach (PackageView *temp, this->findChildren<PackageView *>())
+      temp->setUpdatesEnabled(true);
+
     if (filename.isEmpty()) return;
     if (!filename.endsWith(".package")) filename += ".package";
 
