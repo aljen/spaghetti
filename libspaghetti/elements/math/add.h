@@ -21,19 +21,19 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_ARITHMETIC_MULTIPLY_H
-#define ELEMENTS_ARITHMETIC_MULTIPLY_H
+#ifndef ELEMENTS_MATH_ADD_H
+#define ELEMENTS_MATH_ADD_H
 
 #include "elements/element.h"
 
-namespace elements::arithmetic {
+namespace elements::math {
 
-class Multiply final : public Element {
+class Add final : public Element {
  public:
-  static constexpr char const *const TYPE{ "arithmetic/multiply" };
+  static constexpr char const *const TYPE{ "math/add" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
-  Multiply();
+  Add();
 
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
@@ -41,6 +41,6 @@ class Multiply final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::arithmetic
+} // namespace elements::math
 
-#endif // ELEMENTS_ARITHMETIC_MULTIPLY_H
+#endif // ELEMENTS_MATH_ADD_H

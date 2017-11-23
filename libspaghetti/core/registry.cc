@@ -61,11 +61,6 @@ void Registry::registerInternalElements()
 
   registerElement<Package>("Package", ":/logic/package.png");
 
-  registerElement<arithmetic::Add>("Add (Float)", ":/unknown.png");
-  registerElement<arithmetic::AddIf>("Add If (Float)", ":/unknown.png");
-  registerElement<arithmetic::Multiply>("Multiply (Float)", ":/unknown.png");
-  registerElement<arithmetic::MultiplyIf>("Multiply If (Float)", ":/unknown.png");
-
   registerElement<gates::And>("AND (Bool)", ":/gates/and.png");
   registerElement<gates::Nand>("NAND (Bool)", ":/gates/nand.png");
   registerElement<gates::Nor>("NOR (Bool)", ":/gates/nor.png");
@@ -81,6 +76,11 @@ void Registry::registerInternalElements()
   registerElement<logic::Blinker, nodes::logic::Blinker>("Blinker (Bool)", ":/unknown.png");
   registerElement<logic::Clock, nodes::logic::Clock>("Clock (ms)", ":/logic/clock.png");
   registerElement<logic::Switch>("Switch (Int)", ":/logic/switch.png");
+
+  registerElement<math::Add>("Add (Float)", ":/unknown.png");
+  registerElement<math::AddIf>("Add If (Float)", ":/unknown.png");
+  registerElement<math::Multiply>("Multiply (Float)", ":/unknown.png");
+  registerElement<math::MultiplyIf>("Multiply If (Float)", ":/unknown.png");
 
   registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Info (Float)", ":/values/const_float.png");
   registerElement<ui::IntInfo, nodes::ui::IntInfo>("Info (Int)", ":/values/const_int.png");

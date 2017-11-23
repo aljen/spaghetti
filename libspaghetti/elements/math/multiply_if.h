@@ -21,16 +21,16 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_ARITHMETIC_MULTIPLY_IF_H
-#define ELEMENTS_ARITHMETIC_MULTIPLY_IF_H
+#ifndef ELEMENTS_MATH_MULTIPLY_IF_H
+#define ELEMENTS_MATH_MULTIPLY_IF_H
 
 #include "elements/element.h"
 
-namespace elements::arithmetic {
+namespace elements::math {
 
 class MultiplyIf final : public Element {
  public:
-  static constexpr char const *const TYPE{ "arithmetic/multiply_if" };
+  static constexpr char const *const TYPE{ "math/multiply_if" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   MultiplyIf();
@@ -44,6 +44,6 @@ class MultiplyIf final : public Element {
   bool m_enabled{};
 };
 
-} // namespace elements::arithmetic
+} // namespace elements::math
 
-#endif // ELEMENTS_ARITHMETIC_MULTIPLY_IF_H
+#endif // ELEMENTS_MATH_MULTIPLY_IF_H

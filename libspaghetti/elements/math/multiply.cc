@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/arithmetic/multiply.h"
+#include "elements/math/multiply.h"
 #include "elements/package.h"
 
-namespace elements::arithmetic {
+namespace elements::math {
 
 Multiply::Multiply()
   : Element{}
@@ -48,4 +48,4 @@ bool Multiply::calculate()
   return true;
 }
 
-} // namespace elements::arithmetic
+} // namespace elements::math

@@ -20,47 +20,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/arithmetic/add_if.h"
-#include "elements/package.h"
+#pragma once
+#ifndef ELEMENTS_MATH_MULTIPLY_H
+#define ELEMENTS_MATH_MULTIPLY_H
 
-namespace elements::arithmetic {
+#include "elements/element.h"
 
-AddIf::AddIf()
-  : Element{}
-{
-  setMinInputs(3);
-  setMinOutputs(1);
-  setMaxOutputs(1);
-  addInput(ValueType::eBool, "Enabled");
-  addInput(ValueType::eFloat, "#1");
-  addInput(ValueType::eFloat, "#2");
-  addOutput(ValueType::eFloat, "Value");
-}
+namespace elements::math {
 
-bool AddIf::calculate()
-{
-  if (!allInputsConnected()) return false;
+class Multiply final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "math/multiply" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
-  bool const enabled = std::get<bool>(*m_inputs[0].value);
+  Multiply();
 
-  if (enabled != m_enabled && !enabled) {
-    m_outputs[0].value = 0.0f;
-    return true;
-  }
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
 
-  m_enabled = enabled;
+  bool calculate() override;
+};
 
-  if (!m_enabled) return false;
+} // namespace elements::math
 
-  float sum{};
-
-  size_t const SIZE{ m_inputs.size() };
-  for (size_t i = 1; i < SIZE; ++i)
-    sum += std::get<float>(*m_inputs[i].value);
-
-  m_outputs[0].value = sum;
-
-  return true;
-}
-
-} // namespace elements::arithmetic
+#endif // ELEMENTS_MATH_MULTIPLY_H

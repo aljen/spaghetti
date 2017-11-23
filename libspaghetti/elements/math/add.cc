@@ -20,30 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_ARITHMETIC_ADD_IF_H
-#define ELEMENTS_ARITHMETIC_ADD_IF_H
+#include "elements/math/add.h"
+#include "elements/package.h"
 
-#include "elements/element.h"
+namespace elements::math {
 
-namespace elements::arithmetic {
+Add::Add()
+  : Element{}
+{
+  setMinInputs(2);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eFloat, "#1");
+  addInput(ValueType::eFloat, "#2");
+  addOutput(ValueType::eFloat, "Value");
+}
 
-class AddIf final : public Element {
- public:
-  static constexpr char const *const TYPE{ "arithmetic/add_if" };
-  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+bool Add::calculate()
+{
+  if (!allInputsConnected()) return false;
 
-  AddIf();
+  float sum{};
+  for (auto &&input : m_inputs) sum += std::get<float>(*input.value);
 
-  char const *type() const noexcept override { return TYPE; }
-  string::hash_t hash() const noexcept override { return HASH; }
+  m_outputs[0].value = sum;
 
-  bool calculate() override;
+  return true;
+}
 
- private:
-  bool m_enabled{};
-};
-
-} // namespace elements::arithmetic
-
-#endif // ELEMENTS_ARITHMETIC_ADD_IF_H
+} // namespace elements::math

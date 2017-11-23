@@ -20,27 +20,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_ARITHMETIC_ADD_H
-#define ELEMENTS_ARITHMETIC_ADD_H
+#include "elements/math/multiply_if.h"
+#include "elements/package.h"
 
-#include "elements/element.h"
+namespace elements::math {
 
-namespace elements::arithmetic {
+MultiplyIf::MultiplyIf()
+  : Element{}
+{
+  setMinInputs(3);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eBool, "Enabled");
+  addInput(ValueType::eFloat, "A");
+  addInput(ValueType::eFloat, "B");
+  addOutput(ValueType::eFloat, "A / B");
+}
 
-class Add final : public Element {
- public:
-  static constexpr char const *const TYPE{ "arithmetic/add" };
-  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+bool MultiplyIf::calculate()
+{
+  if (!allInputsConnected()) return false;
 
-  Add();
+  bool const enabled = std::get<bool>(*m_inputs[0].value);
 
-  char const *type() const noexcept override { return TYPE; }
-  string::hash_t hash() const noexcept override { return HASH; }
+  if (enabled != m_enabled && !enabled) {
+    m_outputs[0].value = 0.0f;
+    return true;
+  }
 
-  bool calculate() override;
-};
+  m_enabled = enabled;
 
-} // namespace elements::arithmetic
+  if (!m_enabled) return false;
 
-#endif // ELEMENTS_ARITHMETIC_ADD_H
+  float const a = std::get<float>(*m_inputs[1].value);
+  float b = std::get<float>(*m_inputs[2].value);
+
+  m_outputs[0].value = a * b;
+
+  return true;
+}
+
+} // namespace elements::math

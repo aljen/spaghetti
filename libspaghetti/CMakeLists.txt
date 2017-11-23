@@ -19,16 +19,6 @@ set(LIBSPAGHETTI_SOURCES
   core/utils.h
   core/version.h.in
 
-  elements/arithmetic/add.cc
-  elements/arithmetic/add.h
-  elements/arithmetic/add_if.cc
-  elements/arithmetic/add_if.h
-  elements/arithmetic/all.h
-  elements/arithmetic/multiply.cc
-  elements/arithmetic/multiply.h
-  elements/arithmetic/multiply_if.cc
-  elements/arithmetic/multiply_if.h
-
   elements/gates/all.h
   elements/gates/and.cc
   elements/gates/and.h
@@ -59,6 +49,15 @@ set(LIBSPAGHETTI_SOURCES
   elements/logic/switch.cc
   elements/logic/switch.h
 
+  elements/math/add.cc
+  elements/math/add.h
+  elements/math/add_if.cc
+  elements/math/add_if.h
+  elements/math/all.h
+  elements/math/multiply.cc
+  elements/math/multiply.h
+  elements/math/multiply_if.cc
+  elements/math/multiply_if.h
   elements/ui/all.h
   elements/ui/float_info.cc
   elements/ui/float_info.h

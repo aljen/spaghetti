@@ -20,24 +20,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/arithmetic/multiply_if.h"
+#include "elements/math/add_if.h"
 #include "elements/package.h"
 
-namespace elements::arithmetic {
+namespace elements::math {
 
-MultiplyIf::MultiplyIf()
+AddIf::AddIf()
   : Element{}
 {
   setMinInputs(3);
   setMinOutputs(1);
   setMaxOutputs(1);
   addInput(ValueType::eBool, "Enabled");
-  addInput(ValueType::eFloat, "A");
-  addInput(ValueType::eFloat, "B");
-  addOutput(ValueType::eFloat, "A / B");
+  addInput(ValueType::eFloat, "#1");
+  addInput(ValueType::eFloat, "#2");
+  addOutput(ValueType::eFloat, "Value");
 }
 
-bool MultiplyIf::calculate()
+bool AddIf::calculate()
 {
   if (!allInputsConnected()) return false;
 
@@ -52,12 +52,14 @@ bool MultiplyIf::calculate()
 
   if (!m_enabled) return false;
 
-  float const a = std::get<float>(*m_inputs[1].value);
-  float b = std::get<float>(*m_inputs[2].value);
+  float sum{};
 
-  m_outputs[0].value = a * b;
+  size_t const SIZE{ m_inputs.size() };
+  for (size_t i = 1; i < SIZE; ++i) sum += std::get<float>(*m_inputs[i].value);
+
+  m_outputs[0].value = sum;
 
   return true;
 }
 
-} // namespace elements::arithmetic
+} // namespace elements::math
