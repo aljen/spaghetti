@@ -49,6 +49,8 @@ set(LIBSPAGHETTI_SOURCES
   elements/logic/switch.cc
   elements/logic/switch.h
 
+  elements/math/abs.cc
+  elements/math/abs.h
   elements/math/add.cc
   elements/math/add.h
   elements/math/add_if.cc

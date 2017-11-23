@@ -20,16 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
-
 #include "elements/math/abs.h"
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
-#include "elements/math/cos.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
-#include "elements/math/sin.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_MATH_ALL_H
+namespace elements::math {
+
+Abs::Abs()
+  : Element{}
+{
+  setMinInputs(1);
+  setMaxInputs(1);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eFloat, "Value");
+  addOutput(ValueType::eFloat, "abs(value)");
+}
+
+bool Abs::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  float const VALUE{ std::get<float>(*m_inputs[0].value) };
+  float const ABS{ std::abs(VALUE) };
+
+  m_outputs[0].value = ABS;
+
+  return true;
+}
+
+} // namespace elements::math
