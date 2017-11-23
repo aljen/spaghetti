@@ -20,15 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
-
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
-#include "elements/math/cos.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
 #include "elements/math/sin.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_MATH_ALL_H
+namespace elements::math {
+
+Sin::Sin()
+  : Element{}
+{
+  setMinInputs(1);
+  setMaxInputs(1);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eFloat, "Angle (Rad)");
+  addOutput(ValueType::eFloat, "sin(angle)");
+}
+
+bool Sin::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  float const ANGLE{ std::get<float>(*m_inputs[0].value) };
+  float const SIN{ std::sin(ANGLE) };
+
+  m_outputs[0].value = SIN;
+
+  return true;
+}
+
+} // namespace elements::math

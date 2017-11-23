@@ -21,14 +21,26 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
+#ifndef ELEMENTS_MATH_SIN_H
+#define ELEMENTS_MATH_SIN_H
 
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
-#include "elements/math/cos.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
-#include "elements/math/sin.h"
+#include "elements/element.h"
 
-#endif // ELEMENTS_MATH_ALL_H
+namespace elements::math {
+
+class Sin final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "math/sin" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  Sin();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  bool calculate() override;
+};
+
+} // namespace elements::math
+
+#endif // ELEMENTS_MATH_SIN_H

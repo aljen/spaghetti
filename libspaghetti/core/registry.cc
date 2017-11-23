@@ -82,6 +82,7 @@ void Registry::registerInternalElements()
   registerElement<math::Multiply>("Multiply (Float)", ":/unknown.png");
   registerElement<math::MultiplyIf>("Multiply If (Float)", ":/unknown.png");
   registerElement<math::Cos>("Cos (Rad)", ":/unknown.png");
+  registerElement<math::Sin>("Sin (Rad)", ":/unknown.png");
 
   registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Info (Float)", ":/values/const_float.png");
   registerElement<ui::IntInfo, nodes::ui::IntInfo>("Info (Int)", ":/values/const_int.png");
