@@ -72,6 +72,8 @@ set(LIBSPAGHETTI_SOURCES
   elements/values/all.h
   elements/values/clamp_float.cc
   elements/values/clamp_float.h
+  elements/values/clamp_int.cc
+  elements/values/clamp_int.h
   elements/values/const_bool.cc
   elements/values/const_bool.h
   elements/values/const_float.cc

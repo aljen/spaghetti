@@ -20,23 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_VALUES_ALL_H
-#define ELEMENTS_VALUES_ALL_H
+#include <algorithm>
 
-#include "elements/values/clamp_float.h"
 #include "elements/values/clamp_int.h"
-#include "elements/values/const_bool.h"
-#include "elements/values/const_float.h"
-#include "elements/values/const_int.h"
-#include "elements/values/degree_to_radian.h"
-#include "elements/values/float_to_int.h"
-#include "elements/values/int_to_float.h"
-#include "elements/values/max_float.h"
-#include "elements/values/max_int.h"
-#include "elements/values/min_float.h"
-#include "elements/values/min_int.h"
-#include "elements/values/radian_to_degree.h"
-#include "elements/values/random_bool.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_VALUES_ALL_H
+namespace elements::values {
+
+ClampInt::ClampInt()
+{
+  setMinInputs(3);
+  setMaxInputs(3);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eInt, "Minimum");
+  addInput(ValueType::eInt, "Maximum");
+  addInput(ValueType::eInt, "Value");
+  addOutput(ValueType::eInt, "clamp(v, min, max)");
+}
+
+bool ClampInt::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  int32_t const MINIMUM{ std::get<int32_t>(*m_inputs[0].value) };
+  int32_t const MAXIMUM{ std::get<int32_t>(*m_inputs[1].value) };
+  int32_t const VALUE{ std::get<int32_t>(*m_inputs[2].value) };
+  m_outputs[0].value = std::clamp(VALUE, MINIMUM, MAXIMUM);
+
+  return true;
+}
+
+} // namespace elements::values

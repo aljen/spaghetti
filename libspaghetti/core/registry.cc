@@ -103,6 +103,7 @@ void Registry::registerInternalElements()
   registerElement<values::MaxFloat>("Maximum value (Float)", ":/unknown.png");
 
   registerElement<values::ClampFloat>("Clamp value (Float)", ":/unknown.png");
+  registerElement<values::ClampInt>("Clamp value (Int)", ":/unknown.png");
 }
 
 void Registry::loadPlugins()
