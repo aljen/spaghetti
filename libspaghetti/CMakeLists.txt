@@ -54,6 +54,8 @@ set(LIBSPAGHETTI_SOURCES
   elements/math/add_if.cc
   elements/math/add_if.h
   elements/math/all.h
+  elements/math/cos.cc
+  elements/math/cos.h
   elements/math/multiply.cc
   elements/math/multiply.h
   elements/math/multiply_if.cc
