@@ -54,7 +54,6 @@ bool MultiplyIf::calculate()
 
   float const a = std::get<float>(*m_inputs[1].value);
   float b = std::get<float>(*m_inputs[2].value);
-  if (b == 0.0f) b = 1.0f;
 
   m_outputs[0].value = a * b;
 
