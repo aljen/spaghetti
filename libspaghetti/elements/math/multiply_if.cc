@@ -34,7 +34,7 @@ MultiplyIf::MultiplyIf()
   addInput(ValueType::eBool, "Enabled");
   addInput(ValueType::eFloat, "A");
   addInput(ValueType::eFloat, "B");
-  addOutput(ValueType::eFloat, "A / B");
+  addOutput(ValueType::eFloat, "A * B");
 }
 
 bool MultiplyIf::calculate()
@@ -52,10 +52,10 @@ bool MultiplyIf::calculate()
 
   if (!m_enabled) return false;
 
-  float const a = std::get<float>(*m_inputs[1].value);
-  float b = std::get<float>(*m_inputs[2].value);
+  float const A = std::get<float>(*m_inputs[1].value);
+  float const B = std::get<float>(*m_inputs[2].value);
 
-  m_outputs[0].value = a * b;
+  m_outputs[0].value = A * B;
 
   return true;
 }
