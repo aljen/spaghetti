@@ -103,6 +103,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
  protected:
   void setCentralWidget(QGraphicsItem *a_centralWidget);
   void propertiesInsertTitle(QString a_title);
+  void calculateBoundingRect();
 
  private:
   void addInput(ValueType const a_type);
@@ -117,7 +118,6 @@ class SPAGHETTI_API Node : public QGraphicsItem {
 
   void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType);
   void removeSocket(SocketType const a_type);
-  void calculateBoundingRect();
   void setOutputs(elements::Element *const a_element);
 
  protected:
@@ -134,6 +134,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   QString m_iconPath{};
   QPixmap m_icon{};
   QRectF m_boundingRect{};
+  QPointF m_centralWidgetPosition{};
 
   Sockets m_inputs{};
   Sockets m_outputs{};

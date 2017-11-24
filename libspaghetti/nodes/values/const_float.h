@@ -29,7 +29,15 @@
 namespace nodes::values {
 
 class ConstFloat : public Node {
-  void showProperties();
+ public:
+  ConstFloat();
+
+ private:
+  void refreshCentralWidget() override;
+  void showProperties() override;
+
+ private:
+  QGraphicsSimpleTextItem *m_info{};
 };
 
 } // namespace nodes::values

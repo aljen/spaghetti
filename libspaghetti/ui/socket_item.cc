@@ -41,7 +41,7 @@ SocketItem::SocketItem(Type a_type, QGraphicsItem *const a_parent)
   , m_type{ a_type }
 {
   m_font.setFamily("Consolas");
-  m_font.setPointSize(12);
+  m_font.setPointSize(10);
 
   setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsFocusable |
            QGraphicsItem::ItemSendsScenePositionChanges);
@@ -58,7 +58,7 @@ SocketItem::SocketItem(Type a_type, QGraphicsItem *const a_parent)
 
 QRectF SocketItem::boundingRect() const
 {
-  return QRectF{ -(static_cast<qreal>(SIZE) / 2.), 0, static_cast<qreal>(SIZE), static_cast<qreal>(SIZE) };
+  return QRectF{ -(static_cast<qreal>(SIZE) / 2.), -(static_cast<qreal>(SIZE) / 2.), static_cast<qreal>(SIZE), static_cast<qreal>(SIZE) };
 }
 
 void SocketItem::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_option, QWidget *a_widget)
@@ -88,29 +88,34 @@ void SocketItem::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_op
 
   a_painter->setPen(pen);
   a_painter->setBrush(brush);
-  a_painter->drawEllipse(rect);
+  if (m_type == Type::eOutput)
+    a_painter->drawEllipse(rect);
+  else
+    a_painter->drawRect(rect);
 
   if (m_used) {
     a_painter->save();
     a_painter->setPen(Qt::NoPen);
     a_painter->setBrush(pen.color());
-    a_painter->drawEllipse(rect.adjusted(4, 4, -4, -4));
+    if (m_type == Type::eOutput)
+      a_painter->drawEllipse(rect.adjusted(4, 4, -4, -4));
+    else
+      a_painter->drawRect(rect.adjusted(4, 4, -4, -4));
     a_painter->restore();
   }
 
   if (!m_nameHidden) {
     pen.setColor(get_color(Color::eFontName));
     a_painter->setPen(pen);
-    QFont font{ a_painter->font() };
-    font.setPointSize(12);
-    a_painter->setFont(font);
+    a_painter->setFont(m_font);
 
-    QFontMetrics const metrics{ font };
+    QFontMetrics const metrics{ m_font };
+    int const FONT_HEIGHT = metrics.height();
 
     if (m_type == Type::eInput)
-      a_painter->drawText(static_cast<int>(rect.width()) - 2, 13, m_name);
+      a_painter->drawText(static_cast<int>(rect.width()) - 4, (FONT_HEIGHT / 2) - metrics.strikeOutPos(), m_name);
     else
-      a_painter->drawText(-metrics.width(m_name) - 14, 13, m_name);
+      a_painter->drawText(-metrics.width(m_name) - SIZE + SIZE / 3, (FONT_HEIGHT / 2) - metrics.strikeOutPos(), m_name);
   }
 }
 

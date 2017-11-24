@@ -72,7 +72,7 @@ class ToggleButtonWidget : public QGraphicsItem {
 
  private:
   bool m_state{};
-  QRectF m_boundingRect{ -40, -10, 80, 20 };
+  QRectF m_boundingRect{ 0, 0, 80, 20 };
   elements::ui::ToggleButton *m_toggleButton{};
 };
 

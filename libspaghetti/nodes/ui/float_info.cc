@@ -32,12 +32,13 @@ FloatInfo::FloatInfo()
 {
   QFont font{};
   font.setPixelSize(32);
-  auto widget = new QGraphicsSimpleTextItem("0.0");
+  auto widget = new QGraphicsSimpleTextItem(QString::number(0.0f, 'f', 4));
   widget->setFont(font);
-  QPointF widgetPosition{};
-  widgetPosition.rx() = -(widget->boundingRect().width() / 2.0);
-  widgetPosition.ry() = -(widget->boundingRect().height() / 2.0);
-  widget->setPos(widgetPosition);
+
+  auto brush = widget->brush();
+  brush.setColor(Qt::white);
+  widget->setBrush(brush);
+
   setCentralWidget(widget);
 
   m_info = widget;
@@ -48,6 +49,8 @@ void FloatInfo::refreshCentralWidget()
   if (!m_element || !m_element->inputs()[0].value) return;
   float const value{ std::get<float>(*m_element->inputs()[0].value) };
   m_info->setText(QString::number(value, 'f', 4));
+
+  calculateBoundingRect();
 }
 
 void FloatInfo::showProperties()

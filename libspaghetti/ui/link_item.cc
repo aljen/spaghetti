@@ -109,7 +109,7 @@ void LinkItem::setFrom(SocketItem *const a_from)
 {
   m_from = a_from;
 
-  QPointF const position{ mapFromScene(m_from->scenePos()) + QPointF(0, static_cast<qreal>(SocketItem::SIZE) / 2.) };
+  QPointF const position{ mapFromScene(m_from->scenePos()) };
   setPos(position);
 
   trackNodes();
@@ -155,12 +155,10 @@ void LinkItem::trackNodes()
 {
   prepareGeometryChange();
 
-  QPointF linkItemPos{ m_from->scenePos() };
-  linkItemPos.ry() += m_from->boundingRect().height() / 2;
+  QPointF const linkItemPos{ m_from->scenePos() };
   setPos(linkItemPos);
 
-  QPointF const toPoint{ (
-      m_to ? (mapFromScene(m_to->scenePos()) + QPointF(0, static_cast<qreal>(SocketItem::SIZE) / 2.)) : m_toPoint) };
+  QPointF const toPoint{ (m_to ? mapFromScene(m_to->scenePos()) : m_toPoint) };
   m_toPoint = toPoint;
 
   double x = toPoint.x() < 0. ? toPoint.x() : 0.;

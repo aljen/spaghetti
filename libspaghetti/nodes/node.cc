@@ -96,12 +96,10 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
       break;
     }
     case ItemPositionChange: {
-      if (m_packageView && m_packageView->snapToGrid()) {
-        QPointF const position{ a_value.toPointF() };
-        qreal const x{ std::round(position.x() / 10.0) * 10.0 };
-        qreal const y{ std::round(position.y() / 10.0) * 10.0 };
-        return QPointF{ x, y };
-      }
+      QPointF const position{ a_value.toPointF() };
+      qreal const x{ std::round(position.x() / 10.0) * 10.0 };
+      qreal const y{ std::round(position.y() / 10.0) * 10.0 };
+      return QPointF{ x, y };
       break;
     }
     case ItemPositionHasChanged: {
@@ -223,7 +221,6 @@ void Node::iconify()
   for (auto &&input : m_inputs) input->hideName();
   for (auto &&output : m_outputs) output->hideName();
 
-  prepareGeometryChange();
   calculateBoundingRect();
 }
 
@@ -235,7 +232,6 @@ void Node::expand()
   for (auto &&input : m_inputs) input->showName();
   for (auto &&output : m_outputs) output->showName();
 
-  prepareGeometryChange();
   calculateBoundingRect();
 }
 
@@ -265,14 +261,13 @@ void Node::paintBorder(QPainter *const a_painter)
 
 void Node::paintIcon(QPainter *const a_painter)
 {
-  auto size = m_icon.size();
-  auto size2 = size / 2.0;
+  auto const thisSize = m_boundingRect.size();
+  auto const iconSize = m_icon.size();
 
-  auto const x = static_cast<int>(-size2.width() / 2.0);
-  auto const y = static_cast<int>(-size2.height() / 2.0);
-  auto const w = size2.width();
-  auto const h = size2.height();
-  a_painter->drawPixmap(x, y, w, h, m_icon);
+  auto const y = static_cast<int>((thisSize.height() / 2.0) - (iconSize.height() / 2.0));
+  auto const w = iconSize.width();
+  auto const h = iconSize.height();
+  a_painter->drawPixmap(static_cast<int>(m_centralWidgetPosition.x()), y, w, h, m_icon);
 }
 
 void Node::showProperties()
@@ -464,6 +459,7 @@ void Node::setCentralWidget(QGraphicsItem *a_centralWidget)
   if (m_centralWidget) delete m_centralWidget;
   m_centralWidget = a_centralWidget;
   m_centralWidget->setParentItem(this);
+  m_centralWidget->setPos(m_centralWidgetPosition);
 }
 
 void Node::propertiesInsertTitle(QString a_title)
@@ -477,6 +473,62 @@ void Node::propertiesInsertTitle(QString a_title)
   item->setTextColor(Qt::black);
   m_properties->setItem(ROW, 0, item);
   m_properties->setSpan(ROW, 0, 1, 2);
+}
+
+template<typename Container, class Comparator>
+auto max_element(Container &a_container, Comparator a_comparator)
+{
+  return std::max_element(std::begin(a_container), std::end(a_container), a_comparator);
+}
+
+void Node::calculateBoundingRect()
+{
+  prepareGeometryChange();
+
+  constexpr int32_t const SOCKET_SIZE = SocketItem::SIZE;
+  qreal const ROUNDED_SOCKET_SIZE = std::round(static_cast<qreal>(SOCKET_SIZE) / 10.0) * 10.0;
+  auto const INPUTS_COUNT = m_inputs.count();
+  auto const OUTPUTS_COUNT = m_outputs.count();
+  auto const SOCKETS_COUNT = std::max(INPUTS_COUNT, OUTPUTS_COUNT);
+  auto const CENTRAL_SIZE = m_centralWidget ? m_centralWidget->boundingRect().size() : ICON_SIZE;
+  auto const SOCKETS_HEIGHT = SOCKETS_COUNT * ROUNDED_SOCKET_SIZE;
+
+  auto maxNameWidth = [](auto &&a_a, auto &&a_b) { return a_a->nameWidth() < a_b->nameWidth(); };
+  auto const LONGEST_INPUT = max_element(m_inputs, maxNameWidth);
+  auto const LONGEST_OUTPUT = max_element(m_outputs, maxNameWidth);
+  int const LONGEST_INPUTS_NAME_WIDTH = LONGEST_INPUT != std::end(m_inputs) ? (*LONGEST_INPUT)->nameWidth() : 0;
+  int const LONGEST_OUTPUTS_NAME_WIDTH = LONGEST_OUTPUT != std::end(m_outputs) ? (*LONGEST_OUTPUT)->nameWidth() : 0;
+  int const INPUTS_NAME_WIDTH = m_mode == Mode::eExpanded ? LONGEST_INPUTS_NAME_WIDTH : 0;
+  int const OUTPUTS_NAME_WIDTH = m_mode == Mode::eExpanded ? LONGEST_OUTPUTS_NAME_WIDTH : 0;
+
+  qreal width{ 100.0 };
+  qreal height{ 50.0 };
+
+  if (SOCKETS_HEIGHT > CENTRAL_SIZE.height())
+    height = SOCKETS_HEIGHT + ROUNDED_SOCKET_SIZE;
+  else
+    height = CENTRAL_SIZE.height() + ROUNDED_SOCKET_SIZE / 2;
+
+  width = ROUNDED_SOCKET_SIZE + INPUTS_NAME_WIDTH + CENTRAL_SIZE.width() + OUTPUTS_NAME_WIDTH + ROUNDED_SOCKET_SIZE * 2;
+  width = std::round(width / 10.0) * 10.0;
+
+  m_centralWidgetPosition = QPointF{ ROUNDED_SOCKET_SIZE + INPUTS_NAME_WIDTH, 0.0 };
+  if (m_centralWidget)
+    m_centralWidget->setPos(m_centralWidgetPosition);
+
+  qreal yOffset{ ROUNDED_SOCKET_SIZE };
+  for (auto &&input : m_inputs) {
+    input->setPos(0.0, yOffset);
+    yOffset += ROUNDED_SOCKET_SIZE;
+  }
+
+  yOffset = ROUNDED_SOCKET_SIZE;
+  for (auto &&output : m_outputs) {
+    output->setPos(width, yOffset);
+    yOffset += ROUNDED_SOCKET_SIZE;
+  }
+
+  m_boundingRect = QRectF{ 0.0, 0.0, width, height };
 }
 
 void Node::addInput(ValueType const a_type)
@@ -589,80 +641,6 @@ void Node::removeSocket(const Node::SocketType a_type)
       m_outputs.pop_back();
       break;
   }
-}
-
-void Node::calculateBoundingRect()
-{
-  auto const inputsCount = m_inputs.count();
-  auto const outputsCount = m_outputs.count();
-  auto const socketsCount = std::max(inputsCount, outputsCount);
-
-  constexpr int32_t const SPACING_ICONIFIED = 5;
-  constexpr int32_t const SPACING_EXPANED = 15;
-  constexpr int32_t const SOCKET_SIZE = SocketItem::SIZE;
-  //  int32_t const horizontalAdjust = 0;
-
-  QSizeF size{};
-
-  int inputsTextWidth{}, outputsTextWidth{};
-  for (int i = 0; i < m_inputs.size(); ++i) {
-    inputsTextWidth = std::max(inputsTextWidth, m_inputs[i]->nameWidth());
-  }
-  for (int i = 0; i < m_outputs.size(); ++i) {
-    outputsTextWidth = std::max(outputsTextWidth, m_outputs[i]->nameWidth());
-  }
-
-  inputsTextWidth += 20;
-  outputsTextWidth += 20;
-
-  QSizeF const centralSize = m_centralWidget ? (m_centralWidget->boundingRect().size() + QSizeF(30, 30)) : ICON_SIZE;
-
-  int32_t spacing{};
-  switch (m_mode) {
-    case Mode::eIconified: {
-      spacing = SPACING_ICONIFIED;
-      size = centralSize;
-      if (socketsCount < 2)
-        size = centralSize;
-      else {
-        size.rwidth() = centralSize.width();
-        size.rheight() = ROUND_FACTOR + ROUND_FACTOR;
-        size.rheight() += socketsCount * SOCKET_SIZE + (socketsCount - 1) * spacing;
-      }
-      break;
-    }
-    case Mode::eExpanded: {
-      spacing = SPACING_EXPANED;
-      size = centralSize;
-      size.rwidth() = centralSize.width() + inputsTextWidth + outputsTextWidth;
-      qDebug() << "central:" << centralSize.width() << "inputs:" << inputsTextWidth << "outputs:" << outputsTextWidth;
-      size.rheight() = ROUND_FACTOR + ROUND_FACTOR;
-      size.rheight() += socketsCount * SOCKET_SIZE + (socketsCount - 1) * spacing;
-      break;
-    }
-  }
-
-  size.rwidth() = std::round(size.rwidth() / 10.0) * 10.0;
-  size.rheight() = std::round(size.rheight() / 10.0) * 10.0;
-
-  QRectF const rect{ QPointF{ -size.width() / 2.0, -size.height() / 2.0 }, size };
-
-  auto const inputsHeight = inputsCount * SOCKET_SIZE + (inputsCount - 1) * spacing;
-  auto const outputsHeight = outputsCount * SOCKET_SIZE + (outputsCount - 1) * spacing;
-
-  qreal offset{ -inputsHeight / 2.0 };
-  for (auto &&input : m_inputs) {
-    input->setPos(-rect.width() / 2.0, offset);
-    offset += spacing + SOCKET_SIZE;
-  }
-
-  offset = -outputsHeight / 2.0;
-  for (auto &&output : m_outputs) {
-    output->setPos(rect.width() / 2.0, offset);
-    offset += spacing + SOCKET_SIZE;
-  }
-
-  m_boundingRect = rect;
 }
 
 void Node::setOutputs(elements::Element *const a_element)

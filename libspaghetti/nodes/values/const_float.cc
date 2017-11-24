@@ -23,10 +23,37 @@
 #include "nodes/values/const_float.h"
 #include "elements/values/const_float.h"
 
+#include <QDebug>
 #include <QDoubleSpinBox>
+#include <QGraphicsSimpleTextItem>
 #include <QTableWidget>
 
 namespace nodes::values {
+
+ConstFloat::ConstFloat()
+{
+  QFont font{};
+  font.setPixelSize(32);
+  auto widget = new QGraphicsSimpleTextItem(QString::number(0.0f, 'f', 4));
+  widget->setFont(font);
+
+  auto brush = widget->brush();
+  brush.setColor(Qt::white);
+  widget->setBrush(brush);
+
+  setCentralWidget(widget);
+
+  m_info = widget;
+}
+
+void ConstFloat::refreshCentralWidget()
+{
+  if (!m_element) return;
+  float const value{ std::get<float>(m_element->outputs()[0].value) };
+  m_info->setText(QString::number(value, 'f', 4));
+
+  calculateBoundingRect();
+}
 
 void ConstFloat::showProperties()
 {
