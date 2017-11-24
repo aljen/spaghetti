@@ -21,19 +21,29 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
+#ifndef ELEMENTS_MATH_DIVIDE_IF_H
+#define ELEMENTS_MATH_DIVIDE_IF_H
 
-#include "elements/math/abs.h"
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
-#include "elements/math/cos.h"
-#include "elements/math/divide.h"
-#include "elements/math/divide_if.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
-#include "elements/math/sin.h"
-#include "elements/math/subtract.h"
-#include "elements/math/subtract_if.h"
+#include "elements/element.h"
 
-#endif // ELEMENTS_MATH_ALL_H
+namespace elements::math {
+
+class DivideIf final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "math/divide_if" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  DivideIf();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  bool calculate() override;
+
+ private:
+  bool m_enabled{};
+};
+
+} // namespace elements::math
+
+#endif // ELEMENTS_MATH_DIVIDE_IF_H

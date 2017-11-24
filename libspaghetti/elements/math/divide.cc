@@ -20,20 +20,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
-
-#include "elements/math/abs.h"
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
-#include "elements/math/cos.h"
 #include "elements/math/divide.h"
-#include "elements/math/divide_if.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
-#include "elements/math/sin.h"
-#include "elements/math/subtract.h"
-#include "elements/math/subtract_if.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_MATH_ALL_H
+namespace elements::math {
+
+Divide::Divide()
+  : Element{}
+{
+  setMinInputs(2);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eFloat, "A");
+  addInput(ValueType::eFloat, "B");
+  addOutput(ValueType::eFloat, "A / B");
+}
+
+bool Divide::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  float const A{ std::get<float>(*m_inputs[0].value) };
+  float b{ std::get<float>(*m_inputs[1].value) };
+  if (b == 0.0f) b = 1.0f;
+
+  m_outputs[0].value = A / b;
+
+  return true;
+}
+
+} // namespace elements::math

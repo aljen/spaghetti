@@ -20,20 +20,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
-
-#include "elements/math/abs.h"
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
-#include "elements/math/cos.h"
-#include "elements/math/divide.h"
 #include "elements/math/divide_if.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
-#include "elements/math/sin.h"
-#include "elements/math/subtract.h"
-#include "elements/math/subtract_if.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_MATH_ALL_H
+namespace elements::math {
+
+DivideIf::DivideIf()
+  : Element{}
+{
+  setMinInputs(3);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eBool, "Enabled");
+  addInput(ValueType::eFloat, "A");
+  addInput(ValueType::eFloat, "B");
+  addOutput(ValueType::eFloat, "A / B");
+}
+
+bool DivideIf::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  bool const enabled = std::get<bool>(*m_inputs[0].value);
+
+  if (enabled != m_enabled && !enabled) {
+    m_outputs[0].value = 0.0f;
+    return true;
+  }
+
+  m_enabled = enabled;
+
+  if (!m_enabled) return false;
+
+  float const A = std::get<float>(*m_inputs[1].value);
+  float b = std::get<float>(*m_inputs[2].value);
+  if (b == 0.0f) b = 1.0f;
+
+  m_outputs[0].value = A / b;
+
+  return true;
+}
+
+} // namespace elements::math
