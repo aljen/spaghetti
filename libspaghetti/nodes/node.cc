@@ -40,9 +40,7 @@
 
 namespace nodes {
 
-constexpr qreal ICON_OFFSET{ 25.0 };
-constexpr QSizeF ICON_SIZE{ 50.0 + ICON_OFFSET, 25.0 + ICON_OFFSET };
-constexpr qreal ROUND_FACTOR{ 15.0 };
+constexpr QSizeF ICON_SIZE{ 100.0, 50.0 };
 
 Node::Node(QGraphicsItem *a_parent)
   : QGraphicsItem{ a_parent }
@@ -501,20 +499,24 @@ void Node::calculateBoundingRect()
   int const INPUTS_NAME_WIDTH = m_mode == Mode::eExpanded ? LONGEST_INPUTS_NAME_WIDTH : 0;
   int const OUTPUTS_NAME_WIDTH = m_mode == Mode::eExpanded ? LONGEST_OUTPUTS_NAME_WIDTH : 0;
 
-  qreal width{ 100.0 };
-  qreal height{ 50.0 };
+  qreal width{ CENTRAL_SIZE.width() };
+  qreal height{};
 
   if (SOCKETS_HEIGHT > CENTRAL_SIZE.height())
     height = SOCKETS_HEIGHT + ROUNDED_SOCKET_SIZE;
-  else
-    height = CENTRAL_SIZE.height() + ROUNDED_SOCKET_SIZE / 2;
+  else {
+    height = CENTRAL_SIZE.height() + ROUNDED_SOCKET_SIZE / 2.0;
+    if (SOCKETS_COUNT < 2) height += ROUNDED_SOCKET_SIZE / 2.0;
+  }
 
-  width = ROUNDED_SOCKET_SIZE + INPUTS_NAME_WIDTH + CENTRAL_SIZE.width() + OUTPUTS_NAME_WIDTH + ROUNDED_SOCKET_SIZE * 2;
+  width = ROUNDED_SOCKET_SIZE + INPUTS_NAME_WIDTH + CENTRAL_SIZE.width() + OUTPUTS_NAME_WIDTH + ROUNDED_SOCKET_SIZE;
   width = std::round(width / 10.0) * 10.0;
+  height = std::round(height / 10.0) * 10.0;
 
-  m_centralWidgetPosition = QPointF{ ROUNDED_SOCKET_SIZE + INPUTS_NAME_WIDTH, 0.0 };
-  if (m_centralWidget)
-    m_centralWidget->setPos(m_centralWidgetPosition);
+  qreal const CENTRAL_X = ROUNDED_SOCKET_SIZE + INPUTS_NAME_WIDTH;
+  qreal const CENTRAL_Y = (height / 2.0) - (CENTRAL_SIZE.height() / 2.0);
+  m_centralWidgetPosition = QPointF{ CENTRAL_X, CENTRAL_Y };
+  if (m_centralWidget) m_centralWidget->setPos(m_centralWidgetPosition);
 
   qreal yOffset{ ROUNDED_SOCKET_SIZE };
   for (auto &&input : m_inputs) {
