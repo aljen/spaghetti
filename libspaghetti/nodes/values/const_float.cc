@@ -49,8 +49,8 @@ ConstFloat::ConstFloat()
 void ConstFloat::refreshCentralWidget()
 {
   if (!m_element) return;
-  float const value{ std::get<float>(m_element->outputs()[0].value) };
-  m_info->setText(QString::number(value, 'f', 4));
+  float const VALUE{ std::get<float>(m_element->outputs()[0].value) };
+  m_info->setText(QString::number(VALUE, 'f', 4));
 
   calculateBoundingRect();
 }
@@ -71,17 +71,17 @@ void ConstFloat::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(row, 0, item);
 
-  auto const constFloat = static_cast<elements::values::ConstFloat *const>(m_element);
-  float const current = constFloat->currentValue();
+  auto const CONST_FLOAT = static_cast<elements::values::ConstFloat *const>(m_element);
+  float const CURRENT = CONST_FLOAT->currentValue();
 
   QDoubleSpinBox *const value = new QDoubleSpinBox;
   value->setRange(-9999999.0, 9999999.0);
   value->setDecimals(4);
-  value->setValue(current);
+  value->setValue(CURRENT);
   m_properties->setCellWidget(row, 1, value);
 
   QObject::connect(value, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-                   [constFloat](double a_value) { constFloat->set(static_cast<float>(a_value)); });
+                   [CONST_FLOAT](double a_value) { CONST_FLOAT->set(static_cast<float>(a_value)); });
 }
 
 } // namespace nodes::values
