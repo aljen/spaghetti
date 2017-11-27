@@ -133,9 +133,6 @@ void Package::deserialize(Json const &a_json)
     auto const &fromSocket = from["socket"].get<uint8_t>();
     auto const &toId = to["id"].get<size_t>();
     auto const &toSocket = to["socket"].get<uint8_t>();
-    std::cerr << "from " << fromId << "@" << static_cast<int>(fromSocket) << " to " << toId << "@"
-              << static_cast<int>(toSocket) << std::endl;
-
     connect(fromId, fromSocket, toId, toSocket);
   }
 }
@@ -192,28 +189,27 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   Element *const source{ get(a_sourceId) };
   Element *const target{ get(a_targetId) };
 
-  std::cerr << "source_id: " << a_sourceId << "@" << static_cast<int>(a_outputId) << " "
-            << "target_id: " << a_targetId << "@" << static_cast<int>(a_inputId) << std::endl;
+  core::log::trace("Connecting source: {}@{} to target: {}@{}", a_sourceId, static_cast<int>(a_outputId), a_targetId,
+                   static_cast<int>(a_inputId));
+
   if (a_sourceId != 0 && a_targetId != 0) {
-    std::cerr << "normal connect, element to element" << std::endl;
+    core::log::trace("Normal connect, element to element");
     assert(target->m_inputs[a_inputId].type == source->m_outputs[a_outputId].type);
     target->m_inputs[a_inputId].id = a_sourceId;
     target->m_inputs[a_inputId].slot = a_outputId;
     target->m_inputs[a_inputId].value = &source->m_outputs[a_outputId].value;
   } else if (a_sourceId == 0) {
-    std::cerr << "package connect, package input to element input" << std::endl;
+    core::log::trace("Package connect, package input to element input");
     target->m_inputs[a_inputId].id = a_sourceId;
     target->m_inputs[a_inputId].slot = a_outputId;
     target->m_inputs[a_inputId].value = source->m_inputs[a_outputId].value;
   } else if (a_targetId == 0) {
-    std::cerr << "package connect, element output to package output" << std::endl;
+    core::log::trace("Package connect, element output to package output");
   }
 
-#if TRACE_LOGIC
-  std::cerr << "Notifying " << a_targetId << " (" << target->name() << ")";
-  std::cerr << "@" << static_cast<int32_t>(a_inputId) << " when " << a_sourceId << " (" << source->name() << ")";
-  std::cerr << "@" << static_cast<int32_t>(a_outputId) << " changes.." << std::endl;
-#endif
+  core::log::trace("Notifying {}({})@{} when {}({})@{} changes..", a_targetId, target->name(),
+                   static_cast<int32_t>(a_inputId), a_sourceId, source->name(), static_cast<int32_t>(a_outputId));
+
   m_connections.emplace_back(Connection{ a_sourceId, a_outputId, a_targetId, a_inputId });
   auto const it = std::find(std::begin(m_callbacks[a_sourceId]), std::end(m_callbacks[a_sourceId]), a_targetId);
   if (it == std::end(m_callbacks[a_sourceId])) m_callbacks[a_sourceId].push_back(a_targetId);
@@ -259,14 +255,14 @@ void Package::quitDispatchThread()
 {
   m_quit = true;
   if (m_updatesThread.joinable()) {
-    std::cerr << "Waiting for updates thread join.." << std::endl;
+    core::log::debug("Waiting for updates thread join..");;
     m_updatesThread.join();
-    std::cerr << "After updates thread join.." << std::endl;
+    core::log::debug("After updates thread join..");
   }
   if (m_dispatchThread.joinable()) {
-    std::cerr << "Waiting for dispatch thread join.." << std::endl;
+    core::log::debug("Waiting for dispatch thread join..");
     m_dispatchThread.join();
-    std::cerr << "After dispatch thread join.." << std::endl;
+    core::log::debug("After dispatch thread join..");
   }
 }
 
@@ -275,9 +271,7 @@ bool Package::tryDispatch()
   size_t id{};
   bool const dequeued{ m_queue.try_dequeue(id) };
   if (dequeued) {
-#if TRACE_LOGIC
-    std::cerr << "Dequeued id: " << id << std::endl;
-#endif
+    core::log::trace("Dequeued id: {}", id);
     dispatch(id);
   }
 
@@ -290,18 +284,12 @@ void Package::dispatch(size_t a_id)
   if (source->m_callback) source->m_callback(source);
 
   if (m_callbacks.find(a_id) == std::end(m_callbacks)) {
-#if TRACE_LOGIC
-    std::cerr << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
-              << " don't exist." << std::endl;
-#endif
+    core::log::trace("Callbacks list for id: {}({}) don't exist.", a_id, source->name());
     return;
   }
 
   if (m_callbacks[a_id].empty()) {
-#if TRACE_LOGIC
-    std::cerr << "Callbacks list for id: " << a_id << " (" << source->name() << ")"
-              << " is empty." << std::endl;
-#endif
+    core::log::trace("Callbacks list for id: {}({}) is empty.", a_id, source->name());
     return;
   }
 
