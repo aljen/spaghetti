@@ -24,8 +24,6 @@
 #include "elements/ui/push_button.h"
 
 #include <QCheckBox>
-#include <QGraphicsProxyWidget>
-#include <QPushButton>
 #include <QTableWidget>
 
 namespace nodes::ui {
@@ -55,9 +53,11 @@ class PushButtonWidget : public QGraphicsItem {
     (void)a_option;
     (void)a_widget;
 
-    QBrush brush{ (m_state ? Qt::green : Qt::red) };
-    a_painter->setPen(Qt::NoPen);
-    a_painter->setBrush(brush);
+    QBrush const BRUSH{ (m_state ? QColor{ 203, 217, 81 } : QColor{ 244, 53, 64 }) };
+    QPen const PEN{ Qt::black };
+
+    a_painter->setPen(PEN);
+    a_painter->setBrush(BRUSH);
     a_painter->drawRect(m_boundingRect);
   }
 
@@ -65,7 +65,7 @@ class PushButtonWidget : public QGraphicsItem {
 
  private:
   bool m_state{};
-  QRectF m_boundingRect{ -20, -10, 40, 20 };
+  QRectF m_boundingRect{ 0, 0, 80, 20 };
   elements::ui::PushButton *m_pushButton{};
 };
 
@@ -73,10 +73,6 @@ PushButton::PushButton()
 {
   auto const widget = new PushButtonWidget;
   setCentralWidget(widget);
-
-  auto const pushButton = new QPushButton{ "Test" };
-  auto const pushButtonProxy = new QGraphicsProxyWidget{ this };
-  pushButtonProxy->setWidget(pushButton);
 }
 
 void PushButton::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_option, QWidget *a_widget)
