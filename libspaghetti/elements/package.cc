@@ -24,6 +24,7 @@
 #include <iostream>
 #include <string_view>
 
+#include "core/logger.h"
 #include "core/registry.h"
 #include "elements/logic/clock.h"
 #include "elements/package.h"
@@ -214,7 +215,8 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   std::cerr << "@" << static_cast<int32_t>(a_outputId) << " changes.." << std::endl;
 #endif
   m_connections.emplace_back(Connection{ a_sourceId, a_outputId, a_targetId, a_inputId });
-  m_callbacks[a_sourceId].insert(a_targetId);
+  auto const it = std::find(std::begin(m_callbacks[a_sourceId]), std::end(m_callbacks[a_sourceId]), a_targetId);
+  if (it == std::end(m_callbacks[a_sourceId])) m_callbacks[a_sourceId].push_back(a_targetId);
 
   if (target->calculate()) elementChanged(a_targetId);
 
@@ -303,17 +305,17 @@ void Package::dispatch(size_t a_id)
     return;
   }
 
-#if TRACE_LOGIC
-  std::cerr << "Dispatching dependencies for id: " << a_id << " (" << source->name() << ")" << std::endl;
-#endif
-  for (auto id : m_callbacks[a_id]) {
-    Element *const element{ get(id) };
-#if TRACE_LOGIC
-    std::cerr << "Recalculating id: " << id << " (" << element->name() << ")"
-              << " because id: " << a_id << " (" << source->name() << ")"
-              << " changed." << std::endl;
-#endif
-    if (element->calculate()) elementChanged(id);
+  core::log::trace("Dispatching dependencies for id: {}({}) (callbacks: {})", a_id, source->name(),
+                   m_callbacks[a_id].size());
+
+  auto const &CALLBACKS = m_callbacks[a_id];
+  size_t const SIZE = CALLBACKS.size();
+  for (size_t i = 0; i < SIZE; ++i) {
+    size_t const ID = CALLBACKS[i];
+    Element *const element{ get(ID) };
+    core::log::trace("Recalculating id: {}({}) because id: {}({}) changed. (callbacks: {})", ID, element->name(), a_id,
+                     source->name(), m_callbacks[a_id].size());
+    if (element->calculate()) elementChanged(ID);
   }
 }
 
