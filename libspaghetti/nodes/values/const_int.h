@@ -29,7 +29,15 @@
 namespace nodes::values {
 
 class ConstInt : public Node {
-  void showProperties();
+ public:
+  ConstInt();
+
+ private:
+  void refreshCentralWidget() override;
+  void showProperties() override;
+
+ private:
+  QGraphicsSimpleTextItem *m_info{};
 };
 
 } // namespace nodes::values
