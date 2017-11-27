@@ -73,6 +73,9 @@ void Registry::registerInternalElements()
   registerElement<logic::IfLower>("If A < B (Float)", ":/unknown.png");
   registerElement<logic::IfLowerEqual>("If A <= B (Float)", ":/unknown.png");
 
+  registerElement<logic::MultiplexerInt>("Multiplexer (Int)", ":/unknown.png");
+  registerElement<logic::DemultiplexerInt>("Demultiplexer (Int)", ":/unknown.png");
+
   registerElement<logic::Blinker, nodes::logic::Blinker>("Blinker (Bool)", ":/unknown.png");
   registerElement<logic::Clock, nodes::logic::Clock>("Clock (ms)", ":/logic/clock.png");
   registerElement<logic::Switch>("Switch (Int)", ":/logic/switch.png");

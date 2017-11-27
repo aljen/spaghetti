@@ -36,6 +36,8 @@ set(LIBSPAGHETTI_SOURCES
   elements/logic/blinker.h
   elements/logic/clock.cc
   elements/logic/clock.h
+  elements/logic/demultiplexer_int.cc
+  elements/logic/demultiplexer_int.h
   elements/logic/if_equal.cc
   elements/logic/if_equal.h
   elements/logic/if_greater.cc
@@ -46,6 +48,8 @@ set(LIBSPAGHETTI_SOURCES
   elements/logic/if_lower.h
   elements/logic/if_lower_equal.cc
   elements/logic/if_lower_equal.h
+  elements/logic/multiplexer_int.cc
+  elements/logic/multiplexer_int.h
   elements/logic/switch.cc
   elements/logic/switch.h
 

@@ -20,19 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
-
-#include "elements/logic/blinker.h"
-#include "elements/logic/clock.h"
-#include "elements/logic/demultiplexer_int.h"
-#include "elements/logic/if_equal.h"
-#include "elements/logic/if_greater.h"
-#include "elements/logic/if_greater_equal.h"
-#include "elements/logic/if_lower.h"
-#include "elements/logic/if_lower_equal.h"
 #include "elements/logic/multiplexer_int.h"
-#include "elements/logic/switch.h"
+#include "core/utils.h"
+#include "elements/package.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace elements::logic {
+
+MultiplexerInt::MultiplexerInt()
+  : Element{}
+{
+  setMinInputs(3);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+  addInput(ValueType::eInt, "Select");
+  addInput(ValueType::eInt, "#1");
+  addInput(ValueType::eInt, "#2");
+  addOutput(ValueType::eInt, "Value");
+}
+
+bool MultiplexerInt::calculate()
+{
+  if (!allInputsConnected()) return false;
+
+  int32_t const SELECT =
+      std::clamp<int32_t>(std::get<int32_t>(*m_inputs[0].value), 0, static_cast<int32_t>(m_inputs.size()) - 2);
+  int32_t const VALUE = std::get<int32_t>(*m_inputs[SELECT + 1].value);
+
+  m_outputs[0].value = VALUE;
+
+  return true;
+}
+
+} // namespace elements::logic
