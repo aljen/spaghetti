@@ -25,7 +25,7 @@
 #define ELEMENTS_ELEMENT_H
 
 // clang-format off
-#if _MSC_VER
+#ifdef _MSC_VER
 # pragma warning(disable:4251)
 # pragma warning(disable:4307)
 #endif
