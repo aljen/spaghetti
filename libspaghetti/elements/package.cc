@@ -223,6 +223,31 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   return true;
 }
 
+bool Package::disconnect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, uint8_t a_inputId)
+{
+  Element *const target{ get(a_targetId) };
+
+  core::log::trace("Disconnecting source: {}@{} from target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
+                   a_targetId, static_cast<int>(a_inputId));
+
+  target->m_inputs[a_inputId].id = 0;
+  target->m_inputs[a_inputId].slot = 0;
+  target->m_inputs[a_inputId].value = nullptr;
+
+  auto it = std::remove_if(std::begin(m_connections), std::end(m_connections), [=](Connection &a_connection) {
+    return a_connection.from_id == a_sourceId && a_connection.from_socket == a_outputId &&
+           a_connection.to_id == a_targetId && a_connection.to_socket == a_inputId;
+  });
+  m_connections.erase(it, std::end(m_connections));
+
+  auto &dependencies = m_dependencies[a_sourceId];
+  dependencies.erase(std::find(std::begin(dependencies), std::end(dependencies), a_targetId), std::end(dependencies));
+
+  if (target->calculate()) elementChanged(a_targetId);
+
+  return true;
+}
+
 void Package::dispatchThreadFunction()
 {
   while (!m_quit) tryDispatch();
