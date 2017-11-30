@@ -29,6 +29,7 @@
 
 // clang-format off
 #ifdef _MSC_VER
+# pragma warning(disable:4251)
 # include <unordered_map>
 #else
 # include <sparsepp/spp.h>

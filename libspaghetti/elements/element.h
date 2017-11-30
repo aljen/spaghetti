@@ -24,6 +24,13 @@
 #ifndef ELEMENTS_ELEMENT_H
 #define ELEMENTS_ELEMENT_H
 
+// clang-format off
+#if _MSC_VER
+# pragma warning(disable:4251)
+# pragma warning(disable:4307)
+#endif
+// clang-format on
+
 #include <chrono>
 #include <functional>
 #include <set>
