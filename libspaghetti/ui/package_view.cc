@@ -350,16 +350,35 @@ void PackageView::deleteElement()
 {
   auto selectedItems = m_scene->selectedItems();
 
-  for (auto &&item : selectedItems) {
-    if (item->type() == nodes::NODE_TYPE) {
-      auto const node = reinterpret_cast<nodes::Node *const>(item);
-      auto const element = node->element();
+  m_timer.stop();
+  while (m_timer.isActive()) {
+    // empty
+  }
 
-      delete node;
-      m_nodes.remove(element->id());
-      m_package->remove(element->id());
+  for (auto &&item : selectedItems) {
+    switch (item->type()) {
+      case nodes::NODE_TYPE: {
+        auto const node = reinterpret_cast<nodes::Node *const>(item);
+        auto const ID = node->element()->id();
+        m_nodes.remove(ID);
+
+        if (node == m_selectedNode) setSelectedNode(nullptr);
+        delete node;
+        break;
+      }
+      case LINK_TYPE: {
+        auto const link = reinterpret_cast<LinkItem *const>(item);
+        auto const from = link->from();
+        auto const to = link->to();
+
+        from->disconnect(to);
+        break;
+      }
     }
   }
+
+  m_timer.start();
+  showProperties();
 }
 
 void PackageView::setSelectedNode(nodes::Node *const a_node)
