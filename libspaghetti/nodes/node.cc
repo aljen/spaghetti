@@ -42,7 +42,7 @@ namespace nodes {
 
 constexpr QSizeF ICON_SIZE{ 100.0, 50.0 };
 
-Node::Node(QGraphicsItem *a_parent)
+Node::Node(QGraphicsItem *const a_parent)
   : QGraphicsItem{ a_parent }
 {
   setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);

@@ -50,7 +50,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
     eAnyType = eBoolType | eIntType | eFloatType
   };
 
-  explicit Node(QGraphicsItem *a_parent = nullptr);
+  explicit Node(QGraphicsItem *const a_parent = nullptr);
   ~Node() override;
 
   int type() const override { return NODE_TYPE; }
