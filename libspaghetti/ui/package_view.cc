@@ -294,9 +294,9 @@ void PackageView::drawBackground(QPainter *a_painter, QRectF const &a_rect)
   QPen penAxis{ QColor(156, 156, 156, 128) };
 
   qreal const LEFT{ a_rect.left() };
-  qreal const RIGHT{  a_rect.right() };
-  qreal const TOP{  a_rect.top() };
-  qreal const BOTTOM{  a_rect.bottom() };
+  qreal const RIGHT{ a_rect.right() };
+  qreal const TOP{ a_rect.top() };
+  qreal const BOTTOM{ a_rect.bottom() };
   qreal const GRID_DENSITY{ (m_gridDensity == GridDensity::eSmall ? 100.0 : 10.0) };
 
   qreal const START_X{ std::round(LEFT / GRID_DENSITY) * GRID_DENSITY };
