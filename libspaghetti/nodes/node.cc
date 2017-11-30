@@ -61,7 +61,19 @@ Node::Node(QGraphicsItem *a_parent)
   iconify();
 }
 
-Node::~Node() {}
+Node::~Node()
+{
+  for (auto &input : m_inputs)
+    input->disconnectAll();
+
+  for (auto &output : m_outputs)
+    output->disconnectAll();
+
+  if (m_element) {
+    auto const package = m_element->package();
+    package->remove(m_element);
+  }
+}
 
 QRectF Node::boundingRect() const
 {
