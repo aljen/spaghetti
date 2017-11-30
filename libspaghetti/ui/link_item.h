@@ -52,7 +52,7 @@ class LinkItem final : public QGraphicsPathItem {
 
   void advance(int a_phase) override;
 
-  SocketItem const *from() const { return m_from; }
+  SocketItem *from() const { return m_from; }
   SocketItem *to() const { return m_to; }
   void setFrom(SocketItem *const a_from);
   void setTo(SocketItem *const a_to);
