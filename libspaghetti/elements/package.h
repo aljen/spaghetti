@@ -147,7 +147,7 @@ class SPAGHETTI_API Package final : public Element {
 #if PACKAGE_MAP == PACKAGE_SPP_MAP
   using Callbacks = spp::sparse_hash_map<size_t, std::vector<size_t>>;
 #elif PACKAGE_MAP == PACKAGE_STD_UNORDERED_MAP
-  using Callbacks = std::unordered_map<size_t, std::set<size_t>>;
+  using Callbacks = std::unordered_map<size_t, std::vector<size_t>>;
 #endif
 
   Callbacks m_dependencies{};
