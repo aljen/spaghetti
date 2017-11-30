@@ -91,9 +91,17 @@ class SocketItem final : public QGraphicsItem {
   void setSignal(bool const a_signal);
 
   void connect(SocketItem *const a_other);
+  void disconnect(SocketItem *const a_other);
+  void disconnectAll();
+  void disconnectAllInputs();
+  void disconnectAllOutputs();
 
   void setValueType(ValueType const a_type) { m_valueType = a_type; }
   ValueType valueType() const { return m_valueType; }
+
+ private:
+  void removeLink(LinkItem *const a_linkItem);
+  LinkItem *linkBetween(SocketItem *const a_from, SocketItem *const a_to) const;
 
  private:
   QString m_name{};

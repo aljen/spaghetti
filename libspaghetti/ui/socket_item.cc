@@ -303,3 +303,70 @@ void SocketItem::connect(SocketItem *const a_other)
 
   scene()->addItem(linkItem);
 }
+
+void SocketItem::disconnect(SocketItem *const a_other)
+{
+  auto const link = linkBetween(this, a_other);
+  if (!link) return;
+
+  auto const FROM_ID = elementId();
+  auto const FROM_SOCKET_ID = socketId();
+  auto const TO_ID = a_other->elementId();
+  auto const TO_SOCKET_ID = a_other->socketId();
+
+  auto const packageView = m_node->packageView();
+  auto const package = packageView->package();
+
+  package->disconnect(FROM_ID, FROM_SOCKET_ID, TO_ID, TO_SOCKET_ID);
+
+  removeLink(link);
+  a_other->removeLink(link);
+
+  m_used = false;
+  m_isHover = false;
+  a_other->m_used = false;
+  a_other->m_isHover = false;
+
+  delete link;
+}
+
+void SocketItem::disconnectAll()
+{
+  if (m_type == Type::eInput)
+    disconnectAllInputs();
+  else
+    disconnectAllOutputs();
+}
+
+void SocketItem::disconnectAllInputs()
+{
+  auto links = m_links;
+  for (auto &link : links) {
+    auto const from = link->from();
+    from->disconnect(this);
+  }
+}
+
+void SocketItem::disconnectAllOutputs()
+{
+  auto links = m_links;
+  for (auto &link : links)
+    disconnect(link->to());
+}
+
+void SocketItem::removeLink(LinkItem *const a_linkItem)
+{
+  auto it = std::find(std::begin(m_links), std::end(m_links), a_linkItem);
+  m_links.erase(it, std::end(m_links));
+}
+
+LinkItem *SocketItem::linkBetween(SocketItem *const a_from, SocketItem *const a_to) const
+{
+  auto const it = std::find_if(std::begin(m_links), std::end(m_links), [a_from, a_to](LinkItem *const a_link) {
+    return a_link->from() == a_from && a_link->to() == a_to;
+  });
+
+  if (it == std::end(m_links)) return nullptr;
+
+  return *it;
+}
