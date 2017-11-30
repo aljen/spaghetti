@@ -152,7 +152,7 @@ void SocketItem::dragEnterEvent(QGraphicsSceneDragDropEvent *a_event)
   PackageView *const view{ reinterpret_cast<PackageView *const>(scene()->views()[0]) };
 
   LinkItem *const linkItem{ view->dragLink() };
-  if (!linkItem || m_valueType != linkItem->valueType()) {
+  if (!linkItem || elementId() == linkItem->from()->elementId() || m_valueType != linkItem->valueType()) {
     a_event->ignore();
     return;
   }
