@@ -185,6 +185,7 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
     m_dragNode->setIcon(icon);
     m_dragNode->setPos(dropPosition);
     m_scene->addItem(m_dragNode);
+    m_dragNode->calculateBoundingRect();
 
     a_event->accept();
   } else
