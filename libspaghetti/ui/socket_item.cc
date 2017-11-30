@@ -60,7 +60,8 @@ SocketItem::SocketItem(nodes::Node *const a_node, Type const a_type)
 
 QRectF SocketItem::boundingRect() const
 {
-  return QRectF{ -(static_cast<qreal>(SIZE) / 2.), -(static_cast<qreal>(SIZE) / 2.), static_cast<qreal>(SIZE), static_cast<qreal>(SIZE) };
+  return QRectF{ -(static_cast<qreal>(SIZE) / 2.), -(static_cast<qreal>(SIZE) / 2.), static_cast<qreal>(SIZE),
+                 static_cast<qreal>(SIZE) };
 }
 
 void SocketItem::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_option, QWidget *a_widget)
