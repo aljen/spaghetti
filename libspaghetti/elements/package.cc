@@ -259,7 +259,7 @@ void Package::quitDispatchThread()
 {
   m_quit = true;
   if (m_updatesThread.joinable()) {
-    core::log::debug("Waiting for updates thread join..");;
+    core::log::debug("Waiting for updates thread join..");
     m_updatesThread.join();
     core::log::debug("After updates thread join..");
   }
