@@ -65,6 +65,8 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   using ValueType = elements::Element::ValueType;
 
   void setType(Type const a_type) { m_type = a_type; }
+
+  PackageView *packageView() const { return m_packageView; }
   void setPackageView(PackageView *const a_packageView) { m_packageView = a_packageView; }
 
   void setElement(elements::Element *const a_element);
