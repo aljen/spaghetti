@@ -211,8 +211,12 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
                    static_cast<int32_t>(a_inputId), a_sourceId, source->name(), static_cast<int32_t>(a_outputId));
 
   m_connections.emplace_back(Connection{ a_sourceId, a_outputId, a_targetId, a_inputId });
-  auto const it = std::find(std::begin(m_callbacks[a_sourceId]), std::end(m_callbacks[a_sourceId]), a_targetId);
-  if (it == std::end(m_callbacks[a_sourceId])) m_callbacks[a_sourceId].push_back(a_targetId);
+
+  auto &dependencies = m_dependencies[a_sourceId];
+  auto const it = std::find(std::begin(dependencies), std::end(dependencies), a_targetId);
+  assert(it == std::end(dependencies));
+
+  dependencies.push_back(a_targetId);
 
   if (target->calculate()) elementChanged(a_targetId);
 
@@ -283,26 +287,26 @@ void Package::dispatch(size_t a_id)
   Element *const source{ get(a_id) };
   if (source->m_callback) source->m_callback(source);
 
-  if (m_callbacks.find(a_id) == std::end(m_callbacks)) {
-    core::log::trace("Callbacks list for id: {}({}) don't exist.", a_id, source->name());
+  if (m_dependencies.find(a_id) == std::end(m_dependencies)) {
+    core::log::trace("Dependencies list for id: {}({}) don't exist.", a_id, source->name());
     return;
   }
 
-  if (m_callbacks[a_id].empty()) {
-    core::log::trace("Callbacks list for id: {}({}) is empty.", a_id, source->name());
+  if (m_dependencies[a_id].empty()) {
+    core::log::trace("Dependencies list for id: {}({}) is empty.", a_id, source->name());
     return;
   }
 
   core::log::trace("Dispatching dependencies for id: {}({}) (callbacks: {})", a_id, source->name(),
-                   m_callbacks[a_id].size());
+                   m_dependencies[a_id].size());
 
-  auto const &CALLBACKS = m_callbacks[a_id];
-  size_t const SIZE = CALLBACKS.size();
+  auto const &dependencies = m_dependencies[a_id];
+  size_t const SIZE = dependencies.size();
   for (size_t i = 0; i < SIZE; ++i) {
-    size_t const ID = CALLBACKS[i];
+    size_t const ID = dependencies[i];
     Element *const element{ get(ID) };
     core::log::trace("Recalculating id: {}({}) because id: {}({}) changed. (callbacks: {})", ID, element->name(), a_id,
-                     source->name(), m_callbacks[a_id].size());
+                     source->name(), m_dependencies[a_id].size());
     if (element->calculate()) elementChanged(ID);
   }
 }

@@ -149,7 +149,7 @@ class SPAGHETTI_API Package final : public Element {
   using Callbacks = std::unordered_map<size_t, std::set<size_t>>;
 #endif
 
-  Callbacks m_callbacks{};
+  Callbacks m_dependencies{};
   std::thread m_dispatchThread{};
   std::thread m_updatesThread{};
 
