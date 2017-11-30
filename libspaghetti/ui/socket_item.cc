@@ -32,12 +32,14 @@
 #include <QWidget>
 
 #include "elements/package.h"
+#include "nodes/node.h"
 #include "ui/colors.h"
 #include "ui/link_item.h"
 #include "ui/package_view.h"
 
-SocketItem::SocketItem(Type a_type, QGraphicsItem *const a_parent)
-  : QGraphicsItem{ a_parent }
+SocketItem::SocketItem(nodes::Node *const a_node, Type const a_type)
+  : QGraphicsItem{ a_node }
+  , m_node{ a_node }
   , m_type{ a_type }
 {
   m_font.setFamily("Consolas");

@@ -30,6 +30,10 @@
 
 #include "elements/element.h"
 
+namespace nodes {
+class Node;
+}
+
 class LinkItem;
 
 constexpr int SOCKET_TYPE{ QGraphicsItem::UserType + 3 };
@@ -41,7 +45,7 @@ class SocketItem final : public QGraphicsItem {
 
   constexpr static int SIZE{ 16 };
 
-  SocketItem(Type aType, QGraphicsItem *const a_parent = nullptr);
+  SocketItem(nodes::Node *const a_node, Type const a_type);
 
   int type() const override { return SOCKET_TYPE; }
 
@@ -104,7 +108,9 @@ class SocketItem final : public QGraphicsItem {
   QColor m_colorSignalOff{};
   bool m_isSignalOn{};
 
+  nodes::Node *const m_node{};
   Type m_type{};
+
   bool m_isHover{};
   bool m_isDrop{};
   bool m_used{};
