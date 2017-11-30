@@ -603,7 +603,7 @@ void Node::setOutputType(uint8_t a_socketId, const Node::ValueType a_type)
 
 void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType)
 {
-  auto *const socket{ new SocketItem{ a_type, this } };
+  auto *const socket{ new SocketItem{ this, a_type } };
   socket->setElementId(m_element->id());
   socket->setSocketId(a_id);
 
