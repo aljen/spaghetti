@@ -40,13 +40,10 @@
 
 namespace nodes {
 
-constexpr QSizeF ICON_SIZE{ 100.0, 50.0 };
-
 Node::Node(QGraphicsItem *const a_parent)
   : QGraphicsItem{ a_parent }
 {
   setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
-  //  m_boundingRect = QRectF(QPointF{ 0.0, 0.0 }, ICON_SIZE);
 
   QGraphicsDropShadowEffect *const effect{ new QGraphicsDropShadowEffect };
   //  effect->setColor(QColor(103, 117, 126, 255));
@@ -274,9 +271,9 @@ void Node::paintIcon(QPainter *const a_painter)
   auto const thisSize = m_boundingRect.size();
   auto const iconSize = m_icon.size();
 
-  auto const y = static_cast<int>((thisSize.height() / 2.0) - (iconSize.height() / 2.0));
-  auto const w = iconSize.width();
-  auto const h = iconSize.height();
+  auto const y = static_cast<int>((thisSize.height() / 2.0) - (iconSize.height() / 4.0));
+  auto const w = iconSize.width() / 2;
+  auto const h = iconSize.height() / 2;
   a_painter->drawPixmap(static_cast<int>(m_centralWidgetPosition.x()), y, w, h, m_icon);
 }
 
@@ -500,7 +497,7 @@ void Node::calculateBoundingRect()
   auto const INPUTS_COUNT = m_inputs.count();
   auto const OUTPUTS_COUNT = m_outputs.count();
   auto const SOCKETS_COUNT = std::max(INPUTS_COUNT, OUTPUTS_COUNT);
-  auto const CENTRAL_SIZE = m_centralWidget ? m_centralWidget->boundingRect().size() : ICON_SIZE;
+  auto const CENTRAL_SIZE = m_centralWidget ? m_centralWidget->boundingRect().size() : m_icon.size() / 2;
   auto const SOCKETS_HEIGHT = SOCKETS_COUNT * ROUNDED_SOCKET_SIZE;
 
   auto maxNameWidth = [](auto &&a_a, auto &&a_b) { return a_a->nameWidth() < a_b->nameWidth(); };
