@@ -102,10 +102,11 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   void showInputsProperties(int a_allowedTypes = eAnyType);
   void showOutputsProperties(int a_allowedTypes = eAnyType);
 
+  void calculateBoundingRect();
+
  protected:
   void setCentralWidget(QGraphicsItem *a_centralWidget);
   void propertiesInsertTitle(QString a_title);
-  void calculateBoundingRect();
 
  private:
   void addInput(ValueType const a_type);
