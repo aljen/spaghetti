@@ -31,13 +31,15 @@ namespace nodes::ui {
 IntInfo::IntInfo()
 {
   QFont font{};
-  font.setPixelSize(32);
+  font.setFamily("Consolas");
+  font.setPointSize(10);
   auto widget = new QGraphicsSimpleTextItem("0");
   widget->setFont(font);
-  QPointF widgetPosition{};
-  widgetPosition.rx() = -(widget->boundingRect().width() / 2.0);
-  widgetPosition.ry() = -(widget->boundingRect().height() / 2.0);
-  widget->setPos(widgetPosition);
+
+  auto brush = widget->brush();
+  brush.setColor(Qt::white);
+  widget->setBrush(brush);
+
   setCentralWidget(widget);
 
   m_info = widget;
@@ -48,6 +50,8 @@ void IntInfo::refreshCentralWidget()
   if (!m_element || !m_element->inputs()[0].value) return;
   int32_t const value{ std::get<int32_t>(*m_element->inputs()[0].value) };
   m_info->setText(QString::number(value));
+
+  calculateBoundingRect();
 }
 
 void IntInfo::showProperties()

@@ -31,7 +31,8 @@ namespace nodes::values {
 ConstInt::ConstInt()
 {
   QFont font{};
-  font.setPixelSize(32);
+  font.setFamily("Consolas");
+  font.setPointSize(10);
   auto widget = new QGraphicsSimpleTextItem(QString::number(0));
   widget->setFont(font);
 
