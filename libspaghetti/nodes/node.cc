@@ -38,11 +38,18 @@
 #include "ui/colors.h"
 #include "ui/package_view.h"
 
+constexpr int32_t const SOCKET_SIZE = SocketItem::SIZE;
+qreal const ROUNDED_SOCKET_SIZE = std::round(static_cast<qreal>(SOCKET_SIZE) / 10.0) * 10.0;
+qreal const ROUNDED_SOCKET_SIZE_2 = ROUNDED_SOCKET_SIZE / 2.0;
+
 namespace nodes {
 
 Node::Node(QGraphicsItem *const a_parent)
   : QGraphicsItem{ a_parent }
 {
+  m_nameFont.setFamily("Consolas");
+  m_nameFont.setPointSize(8);
+
   setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
 
   QGraphicsDropShadowEffect *const effect{ new QGraphicsDropShadowEffect };
@@ -220,6 +227,18 @@ void Node::setIcon(QString a_icon)
   m_icon.load(a_icon);
 }
 
+void Node::showName()
+{
+  m_showName = true;
+  calculateBoundingRect();
+}
+
+void Node::hideName()
+{
+  m_showName = false;
+  calculateBoundingRect();
+}
+
 void Node::iconify()
 {
   if (m_element) m_element->iconify(true);
@@ -251,13 +270,36 @@ void Node::paintBorder(QPainter *const a_painter)
 {
   auto rect = boundingRect();
 
-  QPen pen{ get_color(Color::eSocketBorder) };
+  QPen pen{};
+
+  pen.setColor(get_color(Color::eSocketBorder));
   pen.setWidth(2);
   QColor color{ 105, 105, 105, 128 };
   QBrush brush{ color };
-  a_painter->setPen(pen);
+  a_painter->setPen(Qt::NoPen);
   a_painter->setBrush(brush);
   a_painter->drawRect(rect);
+
+  if (m_showName) {
+    QRectF nameRect{ 0.0, 0.0, m_boundingRect.width(), ROUNDED_SOCKET_SIZE };
+    pen.setColor(get_color(Color::eFontName));
+    QColor nameBackground{ get_color(Color::eNameBackground) };
+    nameBackground.setAlpha(128);
+
+    a_painter->setPen(Qt::NoPen);
+    a_painter->setBrush(nameBackground);
+    a_painter->drawRect(nameRect);
+
+    pen.setColor(get_color(Color::eFontName));
+    a_painter->setFont(m_nameFont);
+    a_painter->setPen(pen);
+
+    QFontMetrics const METRICS{ m_nameFont };
+    int const FONT_HEIGHT = METRICS.height();
+    qreal const NAME_Y = (ROUNDED_SOCKET_SIZE / 2.0) + (FONT_HEIGHT - METRICS.strikeOutPos()) / 2.0 - 1.0;
+
+    a_painter->drawText(QPointF{ 5.0, NAME_Y }, m_name);
+  }
 
   pen.setColor(isSelected() ? QColor(156, 156, 156, 255) : QColor(58, 66, 71, 255));
   pen.setWidth(2);
@@ -268,13 +310,12 @@ void Node::paintBorder(QPainter *const a_painter)
 
 void Node::paintIcon(QPainter *const a_painter)
 {
-  auto const thisSize = m_boundingRect.size();
-  auto const iconSize = m_icon.size();
+  auto const HALF_ICON_SIZE = m_icon.size() / 2;
 
-  auto const y = static_cast<int>((thisSize.height() / 2.0) - (iconSize.height() / 4.0));
-  auto const w = iconSize.width() / 2;
-  auto const h = iconSize.height() / 2;
-  a_painter->drawPixmap(static_cast<int>(m_centralWidgetPosition.x()), y, w, h, m_icon);
+  auto const Y = static_cast<int>(m_centralWidgetPosition.y());
+  auto const WIDTH = HALF_ICON_SIZE.width();
+  auto const HEIGHT = HALF_ICON_SIZE.height();
+  a_painter->drawPixmap(static_cast<int>(m_centralWidgetPosition.x()), Y, WIDTH, HEIGHT, m_icon);
 }
 
 void Node::showProperties()
@@ -492,8 +533,6 @@ void Node::calculateBoundingRect()
 {
   prepareGeometryChange();
 
-  constexpr int32_t const SOCKET_SIZE = SocketItem::SIZE;
-  qreal const ROUNDED_SOCKET_SIZE = std::round(static_cast<qreal>(SOCKET_SIZE) / 10.0) * 10.0;
   auto const INPUTS_COUNT = m_inputs.count();
   auto const OUTPUTS_COUNT = m_outputs.count();
   auto const SOCKETS_COUNT = std::max(INPUTS_COUNT, OUTPUTS_COUNT);
@@ -507,15 +546,16 @@ void Node::calculateBoundingRect()
   int const LONGEST_OUTPUTS_NAME_WIDTH = LONGEST_OUTPUT != std::end(m_outputs) ? (*LONGEST_OUTPUT)->nameWidth() : 0;
   int const INPUTS_NAME_WIDTH = m_mode == Mode::eExpanded ? LONGEST_INPUTS_NAME_WIDTH : 0;
   int const OUTPUTS_NAME_WIDTH = m_mode == Mode::eExpanded ? LONGEST_OUTPUTS_NAME_WIDTH : 0;
+  int const NAME_OFFSET = m_showName ? static_cast<int>(ROUNDED_SOCKET_SIZE_2) : 0;
 
   qreal width{ CENTRAL_SIZE.width() };
   qreal height{};
 
   if (SOCKETS_HEIGHT > CENTRAL_SIZE.height())
-    height = SOCKETS_HEIGHT + ROUNDED_SOCKET_SIZE;
+    height = NAME_OFFSET + SOCKETS_HEIGHT + ROUNDED_SOCKET_SIZE;
   else {
-    height = CENTRAL_SIZE.height() + ROUNDED_SOCKET_SIZE / 2.0;
-    if (SOCKETS_COUNT < 2) height += ROUNDED_SOCKET_SIZE / 2.0;
+    height = NAME_OFFSET + CENTRAL_SIZE.height() + ROUNDED_SOCKET_SIZE_2;
+    if (SOCKETS_COUNT < 2) height += ROUNDED_SOCKET_SIZE_2;
   }
 
   width = ROUNDED_SOCKET_SIZE + INPUTS_NAME_WIDTH + CENTRAL_SIZE.width() + OUTPUTS_NAME_WIDTH + ROUNDED_SOCKET_SIZE;
@@ -523,17 +563,17 @@ void Node::calculateBoundingRect()
   height = std::round(height / 10.0) * 10.0;
 
   qreal const CENTRAL_X = ROUNDED_SOCKET_SIZE + INPUTS_NAME_WIDTH;
-  qreal const CENTRAL_Y = (height / 2.0) - (CENTRAL_SIZE.height() / 2.0);
+  qreal const CENTRAL_Y = NAME_OFFSET + (height / 2.0) - (CENTRAL_SIZE.height() / 2.0);
   m_centralWidgetPosition = QPointF{ CENTRAL_X, CENTRAL_Y };
   if (m_centralWidget) m_centralWidget->setPos(m_centralWidgetPosition);
 
-  qreal yOffset{ ROUNDED_SOCKET_SIZE };
+  qreal yOffset{ ROUNDED_SOCKET_SIZE + NAME_OFFSET };
   for (auto &&input : m_inputs) {
     input->setPos(0.0, yOffset);
     yOffset += ROUNDED_SOCKET_SIZE;
   }
 
-  yOffset = ROUNDED_SOCKET_SIZE;
+  yOffset = ROUNDED_SOCKET_SIZE + NAME_OFFSET;
   for (auto &&output : m_outputs) {
     output->setPos(width, yOffset);
     yOffset += ROUNDED_SOCKET_SIZE;

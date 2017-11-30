@@ -81,6 +81,9 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   QPixmap icon() const { return m_icon; }
   QString iconPath() const { return m_iconPath; }
 
+  void showName();
+  void hideName();
+
   void iconify();
   void expand();
 
@@ -132,6 +135,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
  private:
   enum class Mode { eIconified, eExpanded } m_mode{};
   Type m_type{};
+  bool m_showName{ true };
   QString m_name{};
   QString m_path{};
   QString m_iconPath{};
@@ -141,6 +145,8 @@ class SPAGHETTI_API Node : public QGraphicsItem {
 
   Sockets m_inputs{};
   Sockets m_outputs{};
+
+  QFont m_nameFont{};
 };
 
 class Package : public Node {
