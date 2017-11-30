@@ -49,6 +49,7 @@
 
 namespace {
 std::array<QColor, static_cast<size_t>(Color::eCount)> const g_colors{ {
+    {  95, 124, 136, 255 }, // Color::eNameBackground
     { 255, 245, 238, 255 }, // Color::eFontName
     { 169, 169, 169, 255 }, // Color::eFontType
     { 105, 105, 105, 64 },  // Color::eNodeHeader

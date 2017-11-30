@@ -27,6 +27,7 @@
 #include <QColor>
 
 enum class Color {
+  eNameBackground,
   eFontName,
   eFontType,
   eNodeHeader,
