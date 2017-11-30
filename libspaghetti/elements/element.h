@@ -128,6 +128,8 @@ class SPAGHETTI_API Element {
   uint8_t minOutputs() const { return m_minOutputs; }
   uint8_t maxOutputs() const { return m_maxOutputs; }
 
+  Package *package() const { return m_package; }
+
  protected:
   virtual void nameChanged(std::string const a_from, std::string const a_to);
   virtual void inputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to);
