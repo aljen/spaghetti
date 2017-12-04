@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 
 project(Spaghetti
-  VERSION 17.11.24
+  VERSION 17.12.04
   DESCRIPTION "Graphical logic editor/simulator"
   LANGUAGES C CXX
 )
