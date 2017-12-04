@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/logic/switch.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
 Switch::Switch()
 {
@@ -52,4 +52,4 @@ void Switch::set(bool a_state)
   m_package->elementChanged(id());
 }
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic

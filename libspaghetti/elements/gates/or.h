@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_GATES_OR_H
 #define ELEMENTS_GATES_OR_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::gates {
+namespace spaghetti::elements::gates {
 
 class Or final : public Element {
  public:
@@ -41,6 +41,6 @@ class Or final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::gates
+} // namespace spaghetti::elements::gates
 
 #endif // ELEMENTS_GATES_OR_H

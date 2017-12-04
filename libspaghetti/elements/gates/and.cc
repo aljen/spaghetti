@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/gates/and.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::gates {
+namespace spaghetti::elements::gates {
 
 And::And()
   : Element{}
@@ -56,4 +56,4 @@ bool And::calculate()
   return allSets != currentState;
 }
 
-} // namespace elements::gates
+} // namespace spaghetti::elements::gates

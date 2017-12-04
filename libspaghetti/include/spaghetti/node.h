@@ -21,21 +21,21 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_NODE_H
-#define NODES_NODE_H
+#ifndef SPAGHETTI_NODE_H
+#define SPAGHETTI_NODE_H
 
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QVector>
 
-#include "core/api.h"
-#include "elements/element.h"
+#include "spaghetti/api.h"
+#include "spaghetti/element.h"
 #include "ui/socket_item.h"
 
 class PackageView;
 class QTableWidget;
 
-namespace nodes {
+namespace spaghetti {
 
 constexpr int NODE_TYPE{ QGraphicsItem::UserType + 1 };
 
@@ -62,14 +62,14 @@ class SPAGHETTI_API Node : public QGraphicsItem {
 
   enum class Type { eElement, eInputs, eOutputs };
   using SocketType = SocketItem::Type;
-  using ValueType = elements::Element::ValueType;
+  using ValueType = Element::ValueType;
 
   void setType(Type const a_type) { m_type = a_type; }
 
   PackageView *packageView() const { return m_packageView; }
   void setPackageView(PackageView *const a_packageView) { m_packageView = a_packageView; }
 
-  void setElement(elements::Element *const a_element);
+  void setElement(Element *const a_element);
 
   void setName(QString a_name);
   QString name() const { return m_name; }
@@ -87,7 +87,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   void iconify();
   void expand();
 
-  elements::Element *element() const { return m_element; }
+  Element *element() const { return m_element; }
 
   Sockets const &inputs() const { return m_inputs; }
   Sockets const &outputs() const { return m_outputs; }
@@ -124,12 +124,12 @@ class SPAGHETTI_API Node : public QGraphicsItem {
 
   void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType);
   void removeSocket(SocketType const a_type);
-  void setOutputs(elements::Element *const a_element);
+  void setOutputs(Element *const a_element);
 
  protected:
   QGraphicsItem *m_centralWidget{};
   QTableWidget *m_properties{};
-  elements::Element *m_element{};
+  Element *m_element{};
   PackageView *m_packageView{};
 
  private:
@@ -149,16 +149,6 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   QFont m_nameFont{};
 };
 
-class Package : public Node {
-};
+} // namespace spaghetti
 
-namespace logic {
-
-class Test : public Node {
-};
-
-} // namespace logic
-
-} // namespace nodes
-
-#endif // NODES_NODE_H
+#endif // SPAGHETTI_NODE_H

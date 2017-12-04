@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_UI_TOGGLE_BUTTON_H
 #define ELEMENTS_UI_TOGGLE_BUTTON_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::ui {
+namespace spaghetti::elements::ui {
 
 class ToggleButton final : public Element {
  public:
@@ -47,6 +47,6 @@ class ToggleButton final : public Element {
   bool m_currentValue{};
 };
 
-} // namespace elements::ui
+} // namespace spaghetti::elements::ui
 
 #endif // ELEMENTS_UI_TOGGLE_BUTTON_H

@@ -31,13 +31,13 @@
 #include <QMimeData>
 #include <QWidget>
 
-#include "elements/package.h"
-#include "nodes/node.h"
+#include "spaghetti/package.h"
+#include "spaghetti/node.h"
 #include "ui/colors.h"
 #include "ui/link_item.h"
 #include "ui/package_view.h"
 
-SocketItem::SocketItem(nodes::Node *const a_node, Type const a_type)
+SocketItem::SocketItem(spaghetti::Node *const a_node, Type const a_type)
   : QGraphicsItem{ a_node }
   , m_node{ a_node }
   , m_type{ a_type }

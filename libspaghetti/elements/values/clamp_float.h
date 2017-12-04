@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_VALUES_CLAMP_FLOAT_H
 #define ELEMENTS_VALUES_CLAMP_FLOAT_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 class ClampFloat final : public Element {
  public:
@@ -41,6 +41,6 @@ class ClampFloat final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values
 
 #endif // ELEMENTS_VALUES_CLAMP_FLOAT_H

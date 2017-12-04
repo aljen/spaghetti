@@ -23,9 +23,9 @@
 #include "int_info.h"
 
 #include <iostream>
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::ui {
+namespace spaghetti::elements::ui {
 
 IntInfo::IntInfo()
 {
@@ -44,4 +44,4 @@ bool IntInfo::calculate()
   return true;
 }
 
-} // namespace elements::ui
+} // namespace spaghetti::elements::ui

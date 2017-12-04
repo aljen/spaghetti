@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/values/float_to_int.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 Float2Int::Float2Int()
 {
@@ -45,4 +45,4 @@ bool Float2Int::calculate()
   return true;
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

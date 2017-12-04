@@ -24,9 +24,9 @@
 #ifndef NODES_UI_INT_INFO_H
 #define NODES_UI_INT_INFO_H
 
-#include "nodes/node.h"
+#include "spaghetti/node.h"
 
-namespace nodes::ui {
+namespace spaghetti::nodes::ui {
 
 class IntInfo : public Node {
  public:
@@ -40,6 +40,6 @@ class IntInfo : public Node {
   QGraphicsSimpleTextItem *m_info{};
 };
 
-} // namespace nodes::ui
+} // namespace spaghetti::nodes::ui
 
 #endif // NODES_UI_INT_INFO_H

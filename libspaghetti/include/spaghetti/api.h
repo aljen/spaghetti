@@ -21,17 +21,23 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef CORE_METADATA_H
-#define CORE_METADATA_H
+#ifndef SPAGHETTI_API_H
+#define SPAGHETTI_API_H
 
-namespace core {
+// clang-format off
+#if defined(_WIN64) || defined(_WIN32)
+# if defined(SPAGHETTI_SHARED)
+#  if defined(SPAGHETTI_EXPORTS)
+#   define SPAGHETTI_API __declspec(dllexport)
+#  else
+#   define SPAGHETTI_API __declspec(dllimport)
+#  endif
+# else
+#  define SPAGHETTI_API
+# endif
+#else
+# define SPAGHETTI_API __attribute__((visibility("default")))
+#endif
+// clang-format on
 
-struct MetaData {
-  char const *const name{};
-  char const *const path{};
-  char const *const icon{};
-};
-
-} // namespace core
-
-#endif // CORE_METADATA_H
+#endif // SPAGHETTI_API_H

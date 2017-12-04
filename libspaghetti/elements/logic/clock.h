@@ -26,9 +26,9 @@
 
 #include <chrono>
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
 class Clock final : public Element {
  public:
@@ -56,6 +56,6 @@ class Clock final : public Element {
   duration_t m_duration{ 500 };
 };
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic
 
 #endif // ELEMENTS_LOGIC_CLOCK_H

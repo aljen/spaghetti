@@ -28,13 +28,10 @@
 #include <QHash>
 #include <QTimer>
 
-namespace elements {
+namespace spaghetti {
 class Package;
-} // namespace elements
-
-namespace nodes {
 class Node;
-} // namespace nodes
+} // namespace spaghetti
 
 class LinkItem;
 
@@ -44,9 +41,9 @@ class PackageView final : public QGraphicsView {
   Q_OBJECT
 
  public:
-  using Nodes = QHash<size_t, nodes::Node *>;
+  using Nodes = QHash<size_t, spaghetti::Node *>;
 
-  explicit PackageView(QTableWidget *const a_properties, elements::Package *const a_package = nullptr);
+  explicit PackageView(QTableWidget *const a_properties, spaghetti::Package *const a_package = nullptr);
   ~PackageView() override;
 
   void open();
@@ -66,8 +63,8 @@ class PackageView final : public QGraphicsView {
   void acceptDragLink() { m_dragLink = nullptr; }
   void cancelDragLink();
 
-  elements::Package const *package() const { return m_package; }
-  elements::Package *package() { return m_package; }
+  spaghetti::Package const *package() const { return m_package; }
+  spaghetti::Package *package() { return m_package; }
 
   bool canClose();
   void center();
@@ -83,9 +80,9 @@ class PackageView final : public QGraphicsView {
   Nodes &nodes() { return m_nodes; }
   Nodes const &nodes() const { return m_nodes; }
 
-  nodes::Node *getNode(size_t const a_id) const { return m_nodes[a_id]; }
+  spaghetti::Node *getNode(size_t const a_id) const { return m_nodes[a_id]; }
 
-  void setSelectedNode(nodes::Node *const a_node);
+  void setSelectedNode(spaghetti::Node *const a_node);
 
   void setVisible(bool a_visible) override;
 
@@ -94,15 +91,15 @@ class PackageView final : public QGraphicsView {
 
  private:
   QTableWidget *const m_properties{};
-  elements::Package *const m_package{};
+  spaghetti::Package *const m_package{};
   Nodes m_nodes{};
   QGraphicsScene *const m_scene{};
   QTimer m_timer{};
-  nodes::Node *const m_inputs{};
-  nodes::Node *const m_outputs{};
-  nodes::Node *const m_packageNode{};
-  nodes::Node *m_dragNode{};
-  nodes::Node *m_selectedNode{};
+  spaghetti::Node *const m_inputs{};
+  spaghetti::Node *const m_outputs{};
+  spaghetti::Node *const m_packageNode{};
+  spaghetti::Node *m_dragNode{};
+  spaghetti::Node *m_selectedNode{};
   LinkItem *m_dragLink{};
   int32_t m_scheduledScalings{};
   enum class GridDensity { eLarge, eSmall } m_gridDensity{};

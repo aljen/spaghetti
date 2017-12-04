@@ -26,7 +26,7 @@
 #include <QGraphicsSimpleTextItem>
 #include <QTableWidget>
 
-namespace nodes::ui {
+namespace spaghetti::nodes::ui {
 
 IntInfo::IntInfo()
 {
@@ -61,4 +61,4 @@ void IntInfo::showProperties()
   showOutputsProperties();
 }
 
-} // namespace nodes::ui
+} // namespace spaghetti::nodes::ui

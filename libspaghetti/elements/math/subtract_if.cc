@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/math/subtract_if.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 SubtractIf::SubtractIf()
   : Element{}
@@ -61,4 +61,4 @@ bool SubtractIf::calculate()
   return true;
 }
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math

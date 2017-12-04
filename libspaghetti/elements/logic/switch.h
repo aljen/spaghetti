@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_LOGIC_SWITCH_H
 #define ELEMENTS_LOGIC_SWITCH_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
 class Switch final : public Element {
  public:
@@ -42,6 +42,6 @@ class Switch final : public Element {
   void set(bool a_state);
 };
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic
 
 #endif // ELEMENTS_LOGIC_SWITCH_H

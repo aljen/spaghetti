@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_MATH_SUBTRACT_H
 #define ELEMENTS_MATH_SUBTRACT_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 class Subtract final : public Element {
  public:
@@ -41,6 +41,6 @@ class Subtract final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math
 
 #endif // ELEMENTS_MATH_SUBTRACT_H

@@ -24,14 +24,14 @@
 #ifndef NODES_LOGIC_CLOCK_H
 #define NODES_LOGIC_CLOCK_H
 
-#include "nodes/node.h"
+#include "spaghetti/node.h"
 
-namespace nodes::logic {
+namespace spaghetti::nodes::logic {
 
 class Clock : public Node {
   void showProperties();
 };
 
-} // namespace nodes
+} // namespace spaghetti::nodes::logic
 
 #endif // NODES_LOGIC_CLOCK_H

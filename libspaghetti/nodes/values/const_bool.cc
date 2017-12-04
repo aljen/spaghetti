@@ -26,7 +26,7 @@
 #include <QCheckBox>
 #include <QTableWidget>
 
-namespace nodes::values {
+namespace spaghetti::nodes::values {
 
 void ConstBool::showProperties()
 {
@@ -54,4 +54,4 @@ void ConstBool::showProperties()
   QObject::connect(value, &QCheckBox::stateChanged, [constBool](int a_state) { constBool->set(a_state == 2); });
 }
 
-} // namespace nodes::values
+} // namespace spaghetti::nodes::values

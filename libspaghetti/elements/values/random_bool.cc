@@ -22,14 +22,16 @@
 
 #include <random>
 
-#include "elements/package.h"
 #include "elements/values/random_bool.h"
+#include "spaghetti/package.h"
 
+namespace {
 std::random_device g_random{};
 std::mt19937 g_generator{ g_random() };
 std::bernoulli_distribution g_distrib(0.47);
+} // namespace
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 RandomBool::RandomBool()
   : Element{}
@@ -50,4 +52,4 @@ bool RandomBool::calculate()
   return newState != currentState;
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

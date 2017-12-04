@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/node.h"
+#include "spaghetti/node.h"
 
 #include <bitset>
 #include <cmath>
@@ -34,7 +34,7 @@
 #include <QTableWidget>
 #include <QTreeWidget>
 
-#include "elements/package.h"
+#include "spaghetti/package.h"
 #include "ui/colors.h"
 #include "ui/package_view.h"
 
@@ -42,7 +42,7 @@ constexpr int32_t const SOCKET_SIZE = SocketItem::SIZE;
 qreal const ROUNDED_SOCKET_SIZE = std::round(static_cast<qreal>(SOCKET_SIZE) / 10.0) * 10.0;
 qreal const ROUNDED_SOCKET_SIZE_2 = ROUNDED_SOCKET_SIZE / 2.0;
 
-namespace nodes {
+namespace spaghetti {
 
 Node::Node(QGraphicsItem *const a_parent)
   : QGraphicsItem{ a_parent }
@@ -67,11 +67,9 @@ Node::Node(QGraphicsItem *const a_parent)
 
 Node::~Node()
 {
-  for (auto &input : m_inputs)
-    input->disconnectAll();
+  for (auto &input : m_inputs) input->disconnectAll();
 
-  for (auto &output : m_outputs)
-    output->disconnectAll();
+  for (auto &output : m_outputs) output->disconnectAll();
 
   if (m_element) {
     auto const package = m_element->package();
@@ -100,10 +98,10 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
 
   switch (a_change) {
     case ItemSelectedHasChanged: {
-      nodes::Node *lastSelected{};
+      Node *lastSelected{};
       auto selectedItems = scene()->selectedItems();
       for (auto &&item : selectedItems) {
-        if (item->type() == NODE_TYPE) lastSelected = static_cast<nodes::Node *>(item);
+        if (item->type() == NODE_TYPE) lastSelected = static_cast<Node *>(item);
       }
       m_packageView->setSelectedNode(lastSelected);
       m_packageView->showProperties();
@@ -122,12 +120,12 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
         switch (m_type) {
           case Type::eElement: m_element->setPosition(position.x(), position.y()); break;
           case Type::eInputs: {
-            auto const package = reinterpret_cast<elements::Package *const>(m_element);
+            auto const package = reinterpret_cast<Package *const>(m_element);
             package->setInputsPosition(position.x(), position.y());
             break;
           }
           case Type::eOutputs: {
-            auto const package = reinterpret_cast<elements::Package *const>(m_element);
+            auto const package = reinterpret_cast<Package *const>(m_element);
             package->setOutputsPosition(position.x(), position.y());
             break;
           }
@@ -157,7 +155,7 @@ void Node::advance(int a_phase)
   update();
 }
 
-void Node::setElement(elements::Element *const a_element)
+void Node::setElement(Element *const a_element)
 {
   if (m_element) qDebug() << "Already have element!";
 
@@ -191,7 +189,7 @@ void Node::setElement(elements::Element *const a_element)
       break;
   }
 
-  m_element->onChange([&](elements::Element *const a_changed) { setOutputs(a_changed); });
+  m_element->onChange([&](Element *const a_changed) { setOutputs(a_changed); });
 
   m_element->setPosition(x(), y());
   m_element->iconify(m_mode == Mode::eIconified);
@@ -368,12 +366,12 @@ void Node::showCommonProperties()
   QObject::connect(nameEdit, &QLineEdit::textChanged, [this](QString const &a_text) { setName(a_text); });
 }
 
-QString valueType2QString(elements::Element::ValueType a_type)
+QString valueType2QString(Element::ValueType a_type)
 {
   switch (a_type) {
-    case elements::Element::ValueType::eBool: return "Bool";
-    case elements::Element::ValueType::eInt: return "Int";
-    case elements::Element::ValueType::eFloat: return "Float";
+    case Element::ValueType::eBool: return "Bool";
+    case Element::ValueType::eInt: return "Int";
+    case Element::ValueType::eFloat: return "Float";
   }
   return "Unknown";
 }
@@ -694,7 +692,7 @@ void Node::removeSocket(const Node::SocketType a_type)
   }
 }
 
-void Node::setOutputs(elements::Element *const a_element)
+void Node::setOutputs(Element *const a_element)
 {
   assert(a_element == m_element);
   auto const &changedOutputs = a_element->outputs();
@@ -710,4 +708,4 @@ void Node::setOutputs(elements::Element *const a_element)
   }
 }
 
-} // namespace nodes
+} // namespace spaghetti

@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/math/add.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 Add::Add()
   : Element{}
@@ -48,4 +48,4 @@ bool Add::calculate()
   return true;
 }
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math

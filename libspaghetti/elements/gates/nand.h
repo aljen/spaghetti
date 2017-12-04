@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_GATES_NAND_H
 #define ELEMENTS_GATES_NAND_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::gates {
+namespace spaghetti::elements::gates {
 
 class Nand final : public Element {
  public:
@@ -41,6 +41,6 @@ class Nand final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::gates
+} // namespace spaghetti::elements::gates
 
 #endif // ELEMENTS_GATES_NAND_H

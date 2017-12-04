@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #include "elements/values/degree_to_radian.h"
-#include "core/utils.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
+#include "spaghetti/utils.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 Degree2Radian::Degree2Radian()
 {
@@ -41,9 +41,9 @@ bool Degree2Radian::calculate()
   if (!allInputsConnected()) return false;
 
   float const input{ std::get<float>(*m_inputs[0].value) };
-  m_outputs[0].value = input * core::DEG2RAD;
+  m_outputs[0].value = input * spaghetti::DEG2RAD;
 
   return true;
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

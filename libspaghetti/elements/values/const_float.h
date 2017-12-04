@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_VALUES_CONST_FLOAT_H
 #define ELEMENTS_VALUES_CONST_FLOAT_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 class ConstFloat final : public Element {
  public:
@@ -49,6 +49,6 @@ class ConstFloat final : public Element {
   float m_currentValue{};
 };
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values
 
 #endif // ELEMENTS_VALUES_CONST_FLOAT_H

@@ -21,21 +21,46 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef CORE_VERSION_H
-#define CORE_VERSION_H
+#ifndef SPAGHETTI_STRINGS_H
+#define SPAGHETTI_STRINGS_H
 
-namespace core::version {
+#include <cstdint>
 
-constexpr char const *const STRING{ "@Spaghetti_VERSION@" };
-constexpr uint8_t const MAJOR{ @Spaghetti_VERSION_MAJOR@ };
-constexpr uint8_t const MINOR{ @Spaghetti_VERSION_MINOR@ };
-constexpr uint8_t const PATCH{ @Spaghetti_VERSION_PATCH@ };
-constexpr uint32_t const VERSION{ MAJOR * 10000 + MINOR * 100 + PATCH };
+#define HASH_SIZE_32 32
+#define HASH_SIZE_64 64
+#define HASH_SIZE HASH_SIZE_32
 
-constexpr char const *const BRANCH{ "@Spaghetti_GIT_BRANCH@" };
-constexpr char const *const COMMIT_HASH{ "@Spaghetti_GIT_COMMIT_HASH@" };
-constexpr char const *const COMMIT_SHORT_HASH{ "@Spaghetti_GIT_COMMIT_SHORT_HASH@" };
+namespace spaghetti::string {
 
-} // namespace core::version
+constexpr size_t length(char const *const a_string)
+{
+  return *a_string ? 1 + length(a_string + 1) : 0;
+}
 
-#endif // CORE_VERSION_H
+  // fnv1a hash
+
+#if HASH_SIZE == HASH_SIZE_32
+using hash_t = uint32_t;
+constexpr hash_t FNV_OFFSET{ 0x811c9dc5u };
+constexpr hash_t FNV_PRIME{ 0x01000193u };
+#elif HASH_SIZE == HASH_SIZE_64
+using hash_t = uint64_t;
+constexpr hash_t FNV_OFFSET{ 0xcbf29ce484222325 };
+constexpr hash_t FNV_PRIME{ 0x100000001b3 };
+#endif
+
+constexpr hash_t hash(char const *const a_key, hash_t const &a_offset = FNV_OFFSET, hash_t const &a_prime = FNV_PRIME)
+{
+  hash_t value{ a_offset };
+  size_t const size{ length(a_key) };
+  for (size_t i = 0; i < size; ++i) {
+    value ^= static_cast<hash_t>(a_key[i]);
+    value *= a_prime;
+  }
+
+  return value;
+}
+
+} // namespace spaghetti::string
+
+#endif // SPAGHETTI_STRINGS_H

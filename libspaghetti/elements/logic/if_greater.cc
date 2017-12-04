@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/logic/if_greater.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
 IfGreater::IfGreater()
   : Element{}
@@ -54,4 +54,4 @@ bool IfGreater::calculate()
   return changed;
 }
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic

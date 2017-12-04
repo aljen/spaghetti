@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/ui/toggle_button.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::ui {
+namespace spaghetti::elements::ui {
 
 ToggleButton::ToggleButton()
 {
@@ -52,4 +52,4 @@ void ToggleButton::set(bool a_state)
   m_package->elementChanged(id());
 }
 
-} // namespace elements::ui
+} // namespace spaghetti::elements::ui

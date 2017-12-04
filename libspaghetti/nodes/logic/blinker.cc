@@ -25,7 +25,7 @@
 
 #include <QTableWidget>
 
-namespace nodes::logic {
+namespace spaghetti::nodes::logic {
 
 void Blinker::showProperties()
 {
@@ -35,4 +35,4 @@ void Blinker::showProperties()
   propertiesInsertTitle("Blinker");
 }
 
-} // namespace nodes::logic
+} // namespace spaghetti::nodes::logic

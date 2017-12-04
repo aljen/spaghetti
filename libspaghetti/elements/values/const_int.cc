@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/values/const_int.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 ConstInt::ConstInt()
 {
@@ -62,4 +62,4 @@ void ConstInt::set(int32_t a_value)
   m_package->elementChanged(id());
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

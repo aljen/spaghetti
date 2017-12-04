@@ -24,14 +24,15 @@
 #include <iostream>
 #include <string_view>
 
-#include "core/logger.h"
-#include "core/registry.h"
+#include "spaghetti/package.h"
+
 #include "elements/logic/clock.h"
-#include "elements/package.h"
+#include "spaghetti/logger.h"
+#include "spaghetti/registry.h"
 
 #define TRACE_LOGIC 0
 
-namespace elements {
+namespace spaghetti {
 
 Package::Package()
   : Element{}
@@ -139,7 +140,7 @@ void Package::deserialize(Json const &a_json)
 
 Element *Package::add(string::hash_t a_hash)
 {
-  core::Registry &registry{ core::Registry::get() };
+  spaghetti::Registry &registry{ spaghetti::Registry::get() };
 
   Element *const element{ registry.createElement(a_hash) };
   assert(element);
@@ -189,26 +190,26 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   Element *const source{ get(a_sourceId) };
   Element *const target{ get(a_targetId) };
 
-  core::log::trace("Connecting source: {}@{} to target: {}@{}", a_sourceId, static_cast<int>(a_outputId), a_targetId,
-                   static_cast<int>(a_inputId));
+  spaghetti::log::trace("Connecting source: {}@{} to target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
+                        a_targetId, static_cast<int>(a_inputId));
 
   if (a_sourceId != 0 && a_targetId != 0) {
-    core::log::trace("Normal connect, element to element");
+    spaghetti::log::trace("Normal connect, element to element");
     assert(target->m_inputs[a_inputId].type == source->m_outputs[a_outputId].type);
     target->m_inputs[a_inputId].id = a_sourceId;
     target->m_inputs[a_inputId].slot = a_outputId;
     target->m_inputs[a_inputId].value = &source->m_outputs[a_outputId].value;
   } else if (a_sourceId == 0) {
-    core::log::trace("Package connect, package input to element input");
+    spaghetti::log::trace("Package connect, package input to element input");
     target->m_inputs[a_inputId].id = a_sourceId;
     target->m_inputs[a_inputId].slot = a_outputId;
     target->m_inputs[a_inputId].value = source->m_inputs[a_outputId].value;
   } else if (a_targetId == 0) {
-    core::log::trace("Package connect, element output to package output");
+    spaghetti::log::trace("Package connect, element output to package output");
   }
 
-  core::log::trace("Notifying {}({})@{} when {}({})@{} changes..", a_targetId, target->name(),
-                   static_cast<int32_t>(a_inputId), a_sourceId, source->name(), static_cast<int32_t>(a_outputId));
+  spaghetti::log::trace("Notifying {}({})@{} when {}({})@{} changes..", a_targetId, target->name(),
+                        static_cast<int32_t>(a_inputId), a_sourceId, source->name(), static_cast<int32_t>(a_outputId));
 
   m_connections.emplace_back(Connection{ a_sourceId, a_outputId, a_targetId, a_inputId });
 
@@ -227,8 +228,8 @@ bool Package::disconnect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetI
 {
   Element *const target{ get(a_targetId) };
 
-  core::log::trace("Disconnecting source: {}@{} from target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
-                   a_targetId, static_cast<int>(a_inputId));
+  spaghetti::log::trace("Disconnecting source: {}@{} from target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
+                        a_targetId, static_cast<int>(a_inputId));
 
   target->m_inputs[a_inputId].id = 0;
   target->m_inputs[a_inputId].slot = 0;
@@ -284,14 +285,14 @@ void Package::quitDispatchThread()
 {
   m_quit = true;
   if (m_updatesThread.joinable()) {
-    core::log::debug("Waiting for updates thread join..");
+    spaghetti::log::debug("Waiting for updates thread join..");
     m_updatesThread.join();
-    core::log::debug("After updates thread join..");
+    spaghetti::log::debug("After updates thread join..");
   }
   if (m_dispatchThread.joinable()) {
-    core::log::debug("Waiting for dispatch thread join..");
+    spaghetti::log::debug("Waiting for dispatch thread join..");
     m_dispatchThread.join();
-    core::log::debug("After dispatch thread join..");
+    spaghetti::log::debug("After dispatch thread join..");
   }
 }
 
@@ -300,7 +301,7 @@ bool Package::tryDispatch()
   size_t id{};
   bool const dequeued{ m_queue.try_dequeue(id) };
   if (dequeued) {
-    core::log::trace("Dequeued id: {}", id);
+    spaghetti::log::trace("Dequeued id: {}", id);
     dispatch(id);
   }
 
@@ -313,25 +314,25 @@ void Package::dispatch(size_t a_id)
   if (source->m_callback) source->m_callback(source);
 
   if (m_dependencies.find(a_id) == std::end(m_dependencies)) {
-    core::log::trace("Dependencies list for id: {}({}) don't exist.", a_id, source->name());
+    spaghetti::log::trace("Dependencies list for id: {}({}) don't exist.", a_id, source->name());
     return;
   }
 
   if (m_dependencies[a_id].empty()) {
-    core::log::trace("Dependencies list for id: {}({}) is empty.", a_id, source->name());
+    spaghetti::log::trace("Dependencies list for id: {}({}) is empty.", a_id, source->name());
     return;
   }
 
-  core::log::trace("Dispatching dependencies for id: {}({}) (callbacks: {})", a_id, source->name(),
-                   m_dependencies[a_id].size());
+  spaghetti::log::trace("Dispatching dependencies for id: {}({}) (callbacks: {})", a_id, source->name(),
+                        m_dependencies[a_id].size());
 
   auto const &dependencies = m_dependencies[a_id];
   size_t const SIZE = dependencies.size();
   for (size_t i = 0; i < SIZE; ++i) {
     size_t const ID = dependencies[i];
     Element *const element{ get(ID) };
-    core::log::trace("Recalculating id: {}({}) because id: {}({}) changed. (callbacks: {})", ID, element->name(), a_id,
-                     source->name(), m_dependencies[a_id].size());
+    spaghetti::log::trace("Recalculating id: {}({}) because id: {}({}) changed. (callbacks: {})", ID, element->name(),
+                          a_id, source->name(), m_dependencies[a_id].size());
     if (element->calculate()) elementChanged(ID);
   }
 }
@@ -361,4 +362,4 @@ void Package::save(std::string const &a_filename)
   file << json.dump(2);
 }
 
-} // namespace elements
+} // namespace spaghetti

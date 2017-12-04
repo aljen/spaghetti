@@ -26,7 +26,7 @@
 #include <QCheckBox>
 #include <QTableWidget>
 
-namespace nodes::ui {
+namespace spaghetti::nodes::ui {
 
 class PushButton;
 
@@ -115,4 +115,4 @@ void PushButton::elementSet()
   pushButtonWidget->setPushButton(static_cast<elements::ui::PushButton *const>(m_element));
 }
 
-} // namespace nodes::ui
+} // namespace spaghetti::nodes::ui

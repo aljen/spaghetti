@@ -48,10 +48,10 @@
 #include <typeinfo>
 #include <vector>
 
-#include "core/registry.h"
+#include "spaghetti/registry.h"
 #include "core/version.h"
 #include "elements/logic/all.h"
-#include "nodes/node.h"
+#include "spaghetti/node.h"
 #include "ui/expander_widget.h"
 #include "ui/package_view.h"
 
@@ -116,7 +116,7 @@ void Editor::tabChanged(int a_index)
 
 void Editor::populateLibrary()
 {
-  core::Registry const &registry{ core::Registry::get() };
+  spaghetti::Registry const &registry{ spaghetti::Registry::get() };
   auto const &elements{ registry.elements() };
 
   for (auto &&element : elements) {

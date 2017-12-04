@@ -26,7 +26,7 @@
 #include <QGraphicsSimpleTextItem>
 #include <QTableWidget>
 
-namespace nodes::ui {
+namespace spaghetti::nodes::ui {
 
 FloatInfo::FloatInfo()
 {
@@ -61,4 +61,4 @@ void FloatInfo::showProperties()
   showOutputsProperties();
 }
 
-} // namespace nodes::ui
+} // namespace spaghetti::nodes::ui

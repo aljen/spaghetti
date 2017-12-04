@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/gates/nor.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::gates {
+namespace spaghetti::elements::gates {
 
 Nor::Nor()
   : Element{}
@@ -56,4 +56,4 @@ bool Nor::calculate()
   return somethingSet != currentState;
 }
 
-} // namespace elements::gates
+} // namespace spaghetti::elements::gates

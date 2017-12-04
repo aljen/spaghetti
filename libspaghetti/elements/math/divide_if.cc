@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/math/divide_if.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 DivideIf::DivideIf()
   : Element{}
@@ -61,4 +61,4 @@ bool DivideIf::calculate()
   return true;
 }
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math

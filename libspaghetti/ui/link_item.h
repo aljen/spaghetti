@@ -26,7 +26,7 @@
 
 #include <QGraphicsPathItem>
 #include <QPainter>
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
 class QGraphicsDropShadowEffect;
 
@@ -36,7 +36,7 @@ class SocketItem;
 
 class LinkItem final : public QGraphicsPathItem {
  public:
-  using ValueType = elements::Element::ValueType;
+  using ValueType = spaghetti::Element::ValueType;
 
   LinkItem(QGraphicsItem *a_parent = nullptr);
 

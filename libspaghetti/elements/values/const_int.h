@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_VALUES_CONST_INT_H
 #define ELEMENTS_VALUES_CONST_INT_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 class ConstInt final : public Element {
  public:
@@ -49,6 +49,6 @@ class ConstInt final : public Element {
   int32_t m_currentValue{};
 };
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values
 
 #endif // ELEMENTS_VALUES_CONST_INT_H

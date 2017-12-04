@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/math/divide.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 Divide::Divide()
   : Element{}
@@ -49,4 +49,4 @@ bool Divide::calculate()
   return true;
 }
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math

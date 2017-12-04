@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_MATH_MULTIPLY_H
 #define ELEMENTS_MATH_MULTIPLY_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 class Multiply final : public Element {
  public:
@@ -41,6 +41,6 @@ class Multiply final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math
 
 #endif // ELEMENTS_MATH_MULTIPLY_H

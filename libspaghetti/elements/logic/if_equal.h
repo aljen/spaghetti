@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_LOGIC_IF_EQUAL_H
 #define ELEMENTS_LOGIC_IF_EQUAL_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
 class IfEqual final : public Element {
  public:
@@ -41,6 +41,6 @@ class IfEqual final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic
 
 #endif // ELEMENTS_LOGIC_IF_EQUAL_H

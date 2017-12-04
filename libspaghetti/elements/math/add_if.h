@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_MATH_ADD_IF_H
 #define ELEMENTS_MATH_ADD_IF_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 class AddIf final : public Element {
  public:
@@ -44,6 +44,6 @@ class AddIf final : public Element {
   bool m_enabled{};
 };
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math
 
 #endif // ELEMENTS_MATH_ADD_IF_H

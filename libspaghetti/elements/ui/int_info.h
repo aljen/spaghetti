@@ -24,11 +24,11 @@
 #ifndef ELEMENTS_UI_INT_INFO_H
 #define ELEMENTS_UI_INT_INFO_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::ui {
+namespace spaghetti::elements::ui {
 
-class IntInfo final : public elements::Element {
+class IntInfo final : public Element {
  public:
   static constexpr char const *const TYPE{ "ui/int_info" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
@@ -42,6 +42,6 @@ class IntInfo final : public elements::Element {
   bool calculate() override;
 };
 
-} // namespace elements::ui
+} // namespace spaghetti::elements::ui
 
 #endif // ELEMENTS_UI_INT_INFO_H

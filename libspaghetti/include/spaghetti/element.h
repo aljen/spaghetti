@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_ELEMENT_H
-#define ELEMENTS_ELEMENT_H
+#ifndef SPAGHETTI_ELEMENT_H
+#define SPAGHETTI_ELEMENT_H
 
 // clang-format off
 #ifdef _MSC_VER
@@ -41,10 +41,10 @@
 
 #include <json.hpp>
 
-#include "core/api.h"
-#include "core/strings.h"
+#include "spaghetti/api.h"
+#include "spaghetti/strings.h"
 
-namespace elements {
+namespace spaghetti {
 
 class Package;
 
@@ -187,6 +187,6 @@ inline void Element::outputNameChanged(uint8_t const a_id, std::string const a_f
   (void)a_to;
 }
 
-} // namespace elements
+} // namespace spaghetti
 
-#endif // ELEMENTS_ELEMENT_H
+#endif // SPAGHETTI_ELEMENT_H

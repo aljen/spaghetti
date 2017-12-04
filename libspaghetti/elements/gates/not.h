@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_GATES_NOT_H
 #define ELEMENTS_GATES_NOT_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::gates {
+namespace spaghetti::elements::gates {
 
 class Not final : public Element {
  public:
@@ -41,6 +41,6 @@ class Not final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::gates
+} // namespace spaghetti::elements::gates
 
 #endif // ELEMENTS_GATES_NOT_H

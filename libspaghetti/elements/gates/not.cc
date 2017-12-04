@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/gates/not.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::gates {
+namespace spaghetti::elements::gates {
 
 Not::Not()
   : Element{}
@@ -45,4 +45,4 @@ bool Not::calculate()
   return true;
 }
 
-} // namespace elements::gates
+} // namespace spaghetti::elements::gates

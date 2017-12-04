@@ -24,14 +24,14 @@
 #ifndef NODES_LOGIC_BLINKER_H
 #define NODES_LOGIC_BLINKER_H
 
-#include "nodes/node.h"
+#include "spaghetti/node.h"
 
-namespace nodes::logic {
+namespace spaghetti::nodes::logic {
 
 class Blinker : public Node {
   void showProperties();
 };
 
-} // namespace nodes::logic
+} // namespace spaghetti::nodes::logic
 
 #endif // NODES_LOGIC_BLINKER_H

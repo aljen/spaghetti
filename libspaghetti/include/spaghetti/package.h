@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_PACKAGE_H
-#define ELEMENTS_PACKAGE_H
+#ifndef SPAGHETTI_PACKAGE_H
+#define SPAGHETTI_PACKAGE_H
 
 #include <concurrentqueue.h>
 // clang-format off
@@ -33,9 +33,9 @@
 #endif
 // clang-format on
 
-#include "core/api.h"
-#include "core/strings.h"
-#include "elements/element.h"
+#include "spaghetti/api.h"
+#include "spaghetti/strings.h"
+#include "spaghetti/element.h"
 
 // clang-format off
 #define PACKAGE_SPP_MAP 1
@@ -47,7 +47,7 @@
 #endif
 // clang-format on
 
-namespace elements {
+namespace spaghetti {
 
 class SPAGHETTI_API Package final : public Element {
  public:
@@ -157,6 +157,6 @@ class SPAGHETTI_API Package final : public Element {
   bool m_quit{};
 };
 
-} // namespace elements
+} // namespace spaghetti
 
-#endif // ELEMENTS_PACKAGE_H
+#endif // SPAGHETTI_PACKAGE_H

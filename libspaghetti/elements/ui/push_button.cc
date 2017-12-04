@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/ui/push_button.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::ui {
+namespace spaghetti::elements::ui {
 
 PushButton::PushButton()
 {
@@ -52,4 +52,4 @@ void PushButton::set(bool a_state)
   m_package->elementChanged(id());
 }
 
-} // namespace elements::ui
+} // namespace spaghetti::elements::ui

@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/math/add_if.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 AddIf::AddIf()
   : Element{}
@@ -62,4 +62,4 @@ bool AddIf::calculate()
   return true;
 }
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math

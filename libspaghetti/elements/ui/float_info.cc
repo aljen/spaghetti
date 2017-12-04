@@ -23,9 +23,9 @@
 #include "float_info.h"
 
 #include <iostream>
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::ui {
+namespace spaghetti::elements::ui {
 
 FloatInfo::FloatInfo()
 {
@@ -44,4 +44,4 @@ bool FloatInfo::calculate()
   return true;
 }
 
-} // namespace elements::ui
+} // namespace spaghetti::elements::ui

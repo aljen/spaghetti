@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/gates/nand.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::gates {
+namespace spaghetti::elements::gates {
 
 Nand::Nand()
   : Element{}

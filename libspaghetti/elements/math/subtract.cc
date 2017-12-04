@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/math/subtract.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 Subtract::Subtract()
   : Element{}
@@ -49,4 +49,4 @@ bool Subtract::calculate()
   return true;
 }
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math

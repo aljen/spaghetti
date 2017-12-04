@@ -25,7 +25,7 @@
 #include <QStyleFactory>
 #include <iostream>
 
-#include "core/registry.h"
+#include "spaghetti/registry.h"
 #include "ui/editor.h"
 
 int main(int argc, char **argv)
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 
   std::locale::global(std::locale("C"));
 
-  core::Registry &registry{ core::Registry::get() };
+  spaghetti::Registry &registry{ spaghetti::Registry::get() };
   registry.registerInternalElements();
   registry.loadPlugins();
 

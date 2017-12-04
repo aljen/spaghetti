@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_VALUES_RADIAN_TO_DEGREE_H
 #define ELEMENTS_VALUES_RADIAN_TO_DEGREE_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 class Radian2Degree final : public Element {
  public:
@@ -41,6 +41,6 @@ class Radian2Degree final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values
 
 #endif // ELEMENTS_VALUES_RADIAN_TO_DEGREE_H

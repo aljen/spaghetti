@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/math/abs.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 Abs::Abs()
   : Element{}
@@ -48,4 +48,4 @@ bool Abs::calculate()
   return true;
 }
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math

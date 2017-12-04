@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/gates/or.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::gates {
+namespace spaghetti::elements::gates {
 
 Or::Or()
   : Element{}
@@ -54,4 +54,4 @@ bool Or::calculate()
   return somethingSet != currentState;
 }
 
-} // namespace elements::gates
+} // namespace spaghetti::elements::gates

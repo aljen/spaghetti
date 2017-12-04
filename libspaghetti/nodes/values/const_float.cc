@@ -28,7 +28,7 @@
 #include <QGraphicsSimpleTextItem>
 #include <QTableWidget>
 
-namespace nodes::values {
+namespace spaghetti::nodes::values {
 
 ConstFloat::ConstFloat()
 {
@@ -85,4 +85,4 @@ void ConstFloat::showProperties()
                    [CONST_FLOAT](double a_value) { CONST_FLOAT->set(static_cast<float>(a_value)); });
 }
 
-} // namespace nodes::values
+} // namespace spaghetti::nodes::values

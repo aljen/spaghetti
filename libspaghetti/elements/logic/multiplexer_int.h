@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_LOGIC_MULTIPLEXER_INT_H
 #define ELEMENTS_LOGIC_MULTIPLEXER_INT_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
 class MultiplexerInt final : public Element {
  public:
@@ -41,6 +41,6 @@ class MultiplexerInt final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic
 
 #endif // ELEMENTS_LOGIC_MULTIPLEXER_INT_H

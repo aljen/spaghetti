@@ -23,9 +23,9 @@
 #include <algorithm>
 
 #include "elements/values/clamp_float.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 ClampFloat::ClampFloat()
 {
@@ -51,4 +51,4 @@ bool ClampFloat::calculate()
   return true;
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

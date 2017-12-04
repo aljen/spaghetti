@@ -1,6 +1,6 @@
-#include "core/logger.h"
+#include "spaghetti/logger.h"
 
-namespace core::log {
+namespace spaghetti::log {
 
 Logger g_loggerConsole{};
 Logger g_loggerFile{};
@@ -18,4 +18,4 @@ Loggers get()
   return { g_loggerConsole, g_loggerFile };
 }
 
-} // namespace core::log
+} // namespace spaghetti::log

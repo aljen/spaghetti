@@ -21,24 +21,64 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef CORE_UTILS_H
-#define CORE_UTILS_H
+#ifndef SPAGHETTI_LOGGER_H
+#define SPAGHETTI_LOGGER_H
 
-#include <cmath>
-#include <limits>
+#include "spaghetti/api.h"
 
-namespace core {
+#include <spdlog/spdlog.h>
 
-constexpr float const PI = 3.1415926535897932f;
-constexpr float const RAD2DEG = 180.0f / PI;
-constexpr float const DEG2RAD = PI / 180.0f;
+namespace spaghetti::log {
 
-inline bool nearly_equal(float const &a_a, float const &a_b)
+using Logger = std::shared_ptr<spdlog::logger>;
+using Loggers = std::vector<Logger>;
+
+template<typename... Args>
+void info(Args... a_args)
 {
-  return std::nextafter(a_a, std::numeric_limits<float>::lowest()) <= a_b &&
-         std::nextafter(a_a, std::numeric_limits<float>::max()) >= a_b;
+  spdlog::apply_all([&](Logger l) { l->info(a_args...); });
 }
 
-} // namespace core
+template<typename... Args>
+void warn(Args... a_args)
+{
+  spdlog::apply_all([&](Logger l) { l->warn(a_args...); });
+}
 
-#endif // CORE_UTILS_H
+template<typename... Args>
+void error(Args... a_args)
+{
+  spdlog::apply_all([&](Logger l) { l->error(a_args...); });
+}
+
+template<typename... Args>
+void critical(Args... a_args)
+{
+  spdlog::apply_all([&](Logger l) { l->critical(a_args...); });
+}
+
+template<typename... Args>
+void debug(Args... a_args)
+{
+  spdlog::apply_all([&](Logger l) { l->debug(a_args...); });
+}
+
+template<typename... Args>
+void trace(Args... a_args)
+{
+  spdlog::apply_all([&](Logger l) { l->trace(a_args...); });
+}
+
+SPAGHETTI_API void init();
+
+SPAGHETTI_API Loggers get();
+
+inline void init_from_plugin()
+{
+  auto loggers = get();
+  for (auto &&logger : loggers) spdlog::register_logger(logger);
+}
+
+} // namespace spaghetti::log
+
+#endif // SPAGHETTI_LOGGER_H

@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/math/cos.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 Cos::Cos()
   : Element{}
@@ -48,4 +48,4 @@ bool Cos::calculate()
   return true;
 }
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math

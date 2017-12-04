@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_MATH_COS_H
 #define ELEMENTS_MATH_COS_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 class Cos final : public Element {
  public:
@@ -41,6 +41,6 @@ class Cos final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math
 
 #endif // ELEMENTS_MATH_COS_H

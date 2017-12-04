@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/values/min_int.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 MinInt::MinInt()
 {
@@ -47,4 +47,4 @@ bool MinInt::calculate()
   return true;
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

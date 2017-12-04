@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/values/max_float.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 MaxFloat::MaxFloat()
 {
@@ -47,4 +47,4 @@ bool MaxFloat::calculate()
   return true;
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

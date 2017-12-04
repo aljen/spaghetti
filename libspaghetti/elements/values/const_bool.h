@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_VALUES_CONST_BOOL_H
 #define ELEMENTS_VALUES_CONST_BOOL_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 class ConstBool final : public Element {
  public:
@@ -50,6 +50,6 @@ class ConstBool final : public Element {
   bool m_currentValue{};
 };
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values
 
 #endif // ELEMENTS_VALUES_CONST_BOOL_H

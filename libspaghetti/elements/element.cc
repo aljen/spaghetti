@@ -20,14 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
 #include <cassert>
 #include <iostream>
 
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements {
+namespace spaghetti {
 
 void Element::serialize(Element::Json &a_json)
 {
@@ -247,4 +247,4 @@ void Element::setMaxOutputs(uint8_t const a_max)
   m_maxOutputs = a_max;
 }
 
-} // namespace elements
+} // namespace spaghetti

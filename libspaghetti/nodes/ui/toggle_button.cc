@@ -27,7 +27,7 @@
 #include <QCheckBox>
 #include <QTableWidget>
 
-namespace nodes::ui {
+namespace spaghetti::nodes::ui {
 
 class ToggleButton;
 
@@ -122,4 +122,4 @@ void ToggleButton::elementSet()
   widget->setToggleButton(static_cast<elements::ui::ToggleButton *const>(m_element));
 }
 
-} // namespace nodes::ui
+} // namespace spaghetti::nodes::ui

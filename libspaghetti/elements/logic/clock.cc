@@ -23,9 +23,9 @@
 #include <iostream>
 
 #include "elements/logic/clock.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
 Clock::Clock()
   : Element{}
@@ -53,4 +53,4 @@ void Clock::update(duration_t const &a_delta)
   }
 }
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic

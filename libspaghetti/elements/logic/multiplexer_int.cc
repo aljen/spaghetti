@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #include "elements/logic/multiplexer_int.h"
-#include "core/utils.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
+#include "spaghetti/utils.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
 MultiplexerInt::MultiplexerInt()
   : Element{}
@@ -51,4 +51,4 @@ bool MultiplexerInt::calculate()
   return true;
 }
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic

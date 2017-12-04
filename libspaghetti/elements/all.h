@@ -29,6 +29,6 @@
 #include "elements/math/all.h"
 #include "elements/ui/all.h"
 #include "elements/values/all.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
 #endif // ELEMENTS_ALL_H

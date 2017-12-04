@@ -24,14 +24,14 @@
 #ifndef NODES_VALUES_CONST_BOOL_H
 #define NODES_VALUES_CONST_BOOL_H
 
-#include "nodes/node.h"
+#include "spaghetti/node.h"
 
-namespace nodes::values {
+namespace spaghetti::nodes::values {
 
 class ConstBool : public Node {
   void showProperties();
 };
 
-} // namespace nodes::values
+} // namespace spaghetti::nodes::values
 
 #endif // NODES_VALUES_CONST_BOOL_H

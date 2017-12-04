@@ -23,9 +23,9 @@
 #include <iostream>
 
 #include "elements/logic/blinker.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
 Blinker::Blinker()
 {
@@ -84,4 +84,4 @@ bool Blinker::calculate()
   return changed;
 }
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic

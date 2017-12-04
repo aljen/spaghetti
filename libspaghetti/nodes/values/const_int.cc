@@ -26,7 +26,7 @@
 #include <QSpinBox>
 #include <QTableWidget>
 
-namespace nodes::values {
+namespace spaghetti::nodes::values {
 
 ConstInt::ConstInt()
 {
@@ -82,4 +82,4 @@ void ConstInt::showProperties()
                    [CONST_INT](int a_value) { CONST_INT->set(a_value); });
 }
 
-} // namespace nodes::values
+} // namespace spaghetti::nodes::values

@@ -23,9 +23,9 @@
 #include <algorithm>
 
 #include "elements/values/clamp_int.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 ClampInt::ClampInt()
 {
@@ -51,4 +51,4 @@ bool ClampInt::calculate()
   return true;
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

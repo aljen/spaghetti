@@ -28,9 +28,9 @@
 #include <QPainter>
 #include <QVector>
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace nodes {
+namespace spaghetti {
 class Node;
 }
 
@@ -41,11 +41,11 @@ constexpr int SOCKET_TYPE{ QGraphicsItem::UserType + 3 };
 class SocketItem final : public QGraphicsItem {
  public:
   enum class Type { eInput, eOutput };
-  using ValueType = elements::Element::ValueType;
+  using ValueType = spaghetti::Element::ValueType;
 
   constexpr static int SIZE{ 16 };
 
-  SocketItem(nodes::Node *const a_node, Type const a_type);
+  SocketItem(spaghetti::Node *const a_node, Type const a_type);
 
   int type() const override { return SOCKET_TYPE; }
 
@@ -116,7 +116,7 @@ class SocketItem final : public QGraphicsItem {
   QColor m_colorSignalOff{};
   bool m_isSignalOn{};
 
-  nodes::Node *const m_node{};
+  spaghetti::Node *const m_node{};
   Type m_type{};
 
   bool m_isHover{};

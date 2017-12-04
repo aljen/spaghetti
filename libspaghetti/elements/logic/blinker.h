@@ -24,11 +24,11 @@
 #ifndef ELEMENTS_LOGIC_BLINKER_H
 #define ELEMENTS_LOGIC_BLINKER_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
-class Blinker final : public elements::Element {
+class Blinker final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/blinker" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
@@ -52,6 +52,6 @@ class Blinker final : public elements::Element {
   duration_t m_time{};
 };
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic
 
 #endif // ELEMENTS_LOGIC_BLINKER_H

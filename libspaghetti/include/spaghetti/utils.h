@@ -21,23 +21,24 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef CORE_API_H
-#define CORE_API_H
+#ifndef SPAGHETTI_UTILS_H
+#define SPAGHETTI_UTILS_H
 
-// clang-format off
-#if defined(_WIN64) || defined(_WIN32)
-# if defined(SPAGHETTI_SHARED)
-#  if defined(SPAGHETTI_EXPORTS)
-#   define SPAGHETTI_API __declspec(dllexport)
-#  else
-#   define SPAGHETTI_API __declspec(dllimport)
-#  endif
-# else
-#  define SPAGHETTI_API
-# endif
-#else
-# define SPAGHETTI_API __attribute__((visibility("default")))
-#endif
-// clang-format on
+#include <cmath>
+#include <limits>
 
-#endif // CORE_API_H
+namespace spaghetti {
+
+constexpr float const PI = 3.1415926535897932f;
+constexpr float const RAD2DEG = 180.0f / PI;
+constexpr float const DEG2RAD = PI / 180.0f;
+
+inline bool nearly_equal(float const &a_a, float const &a_b)
+{
+  return std::nextafter(a_a, std::numeric_limits<float>::lowest()) <= a_b &&
+         std::nextafter(a_a, std::numeric_limits<float>::max()) >= a_b;
+}
+
+} // namespace spaghetti
+
+#endif // SPAGHETTI_UTILS_H

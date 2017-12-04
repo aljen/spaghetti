@@ -24,9 +24,9 @@
 #ifndef NODES_VALUES_CONST_FLOAT_H
 #define NODES_VALUES_CONST_FLOAT_H
 
-#include "nodes/node.h"
+#include "spaghetti/node.h"
 
-namespace nodes::values {
+namespace spaghetti::nodes::values {
 
 class ConstFloat : public Node {
  public:
@@ -40,6 +40,6 @@ class ConstFloat : public Node {
   QGraphicsSimpleTextItem *m_info{};
 };
 
-} // namespace nodes::values
+} // namespace spaghetti::nodes::values
 
 #endif // NODES_VALUES_CONST_FLOAT_H

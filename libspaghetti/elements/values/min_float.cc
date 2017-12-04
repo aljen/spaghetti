@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/values/min_float.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 MinFloat::MinFloat()
 {
@@ -47,4 +47,4 @@ bool MinFloat::calculate()
   return true;
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

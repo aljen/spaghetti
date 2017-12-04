@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #include "elements/logic/if_equal.h"
-#include "core/utils.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
+#include "spaghetti/utils.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
 IfEqual::IfEqual()
   : Element{}
@@ -47,7 +47,7 @@ bool IfEqual::calculate()
   float const A{ std::get<float>(*m_inputs[0].value) };
   float const B{ std::get<float>(*m_inputs[1].value) };
 
-  bool const state{ core::nearly_equal(A, B) };
+  bool const state{ spaghetti::nearly_equal(A, B) };
 
   bool const changed{ state != currentState };
   if (changed) m_outputs[0].value = state;
@@ -55,4 +55,4 @@ bool IfEqual::calculate()
   return changed;
 }
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic

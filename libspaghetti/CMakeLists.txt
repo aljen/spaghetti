@@ -6,18 +6,23 @@ find_package(Threads REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem system)
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
 
-configure_file(core/version.h.in core/version.h)
+configure_file(include/spaghetti/version.h.in include/spaghetti/version.h)
 
 set(LIBSPAGHETTI_SOURCES
-  ${CMAKE_CURRENT_BINARY_DIR}/core/version.h
-  core/api.h
+  include/spaghetti/api.h
+  include/spaghetti/element.h
+  include/spaghetti/logger.h
+  include/spaghetti/node.h
+  include/spaghetti/package.h
+  include/spaghetti/registry.h
+  include/spaghetti/strings.h
+  include/spaghetti/utils.h
+  include/spaghetti/version.h.in
+
+  ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
+
   core/logger.cc
-  core/logger.h
   core/registry.cc
-  core/registry.h
-  core/strings.h
-  core/utils.h
-  core/version.h.in
 
   elements/gates/all.h
   elements/gates/and.cc
@@ -119,9 +124,7 @@ set(LIBSPAGHETTI_SOURCES
 
   elements/all.h
   elements/element.cc
-  elements/element.h
   elements/package.cc
-  elements/package.h
 
   icons/icons.qrc
 
@@ -158,7 +161,6 @@ set(LIBSPAGHETTI_SOURCES
 
   nodes/all.h
   nodes/node.cc
-  nodes/node.h
 
   ui/colors.cc
   ui/colors.h
@@ -196,7 +198,8 @@ target_compile_options(Spaghetti
   )
 target_include_directories(Spaghetti PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
 #  $<INSTALL_INTERFACE:include>
   )
 target_include_directories(Spaghetti SYSTEM PUBLIC

@@ -26,7 +26,7 @@
 #include <QSpinBox>
 #include <QTableWidget>
 
-namespace nodes::logic {
+namespace spaghetti::nodes::logic {
 
 void Clock::showProperties()
 {
@@ -58,4 +58,4 @@ void Clock::showProperties()
   });
 }
 
-} // namespace nodes::logic
+} // namespace spaghetti::nodes::logic

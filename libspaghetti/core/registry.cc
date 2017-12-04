@@ -23,11 +23,11 @@
 #include <boost/dll.hpp>
 #include <boost/filesystem.hpp>
 
-#include "core/logger.h"
-#include "core/registry.h"
-#include "core/version.h"
 #include "elements/all.h"
 #include "nodes/all.h"
+#include "spaghetti/logger.h"
+#include "spaghetti/registry.h"
+#include "spaghetti/version.h"
 
 namespace fs = boost::filesystem;
 namespace dll = boost::dll;
@@ -37,7 +37,7 @@ inline void init_resources()
   Q_INIT_RESOURCE(icons);
 }
 
-namespace core {
+namespace spaghetti {
 
 Registry &Registry::get()
 {
@@ -133,11 +133,11 @@ void Registry::loadPlugins()
 
     if (error.value() != 0 || !plugin->has("register_plugin")) continue;
 
-    auto registerPlugin = plugin->get<void(core::Registry &)>("register_plugin");
+    auto registerPlugin = plugin->get<void(Registry &)>("register_plugin");
     registerPlugin(*this);
 
     m_plugins.emplace_back(std::move(plugin));
   }
 }
 
-} // namespace core
+} // namespace spaghetti

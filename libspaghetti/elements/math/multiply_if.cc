@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/math/multiply_if.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 MultiplyIf::MultiplyIf()
   : Element{}
@@ -60,4 +60,4 @@ bool MultiplyIf::calculate()
   return true;
 }
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math

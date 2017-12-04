@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/values/const_float.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 ConstFloat::ConstFloat()
 {
@@ -62,4 +62,4 @@ void ConstFloat::set(float a_value)
   m_package->elementChanged(id());
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

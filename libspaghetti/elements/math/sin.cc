@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/math/sin.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 Sin::Sin()
   : Element{}
@@ -48,4 +48,4 @@ bool Sin::calculate()
   return true;
 }
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math

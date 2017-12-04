@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef CORE_REGISTRY_H
-#define CORE_REGISTRY_H
+#ifndef SPAGHETTI_REGISTRY_H
+#define SPAGHETTI_REGISTRY_H
 
 #include <cassert>
 #include <type_traits>
@@ -36,18 +36,11 @@
 #endif
 // clang-format on
 
-#include "core/api.h"
-#include "core/strings.h"
+#include "spaghetti/api.h"
+#include "spaghetti/strings.h"
 
 namespace boost::dll {
 class shared_library;
-}
-
-namespace elements {
-class Element;
-}
-namespace nodes {
-class Node;
 }
 
 // clang-format off
@@ -60,7 +53,10 @@ class Node;
 #endif
 // clang-format on
 
-namespace core {
+namespace spaghetti {
+
+class Element;
+class Node;
 
 class SPAGHETTI_API Registry final {
   struct MetaInfo {
@@ -69,8 +65,8 @@ class SPAGHETTI_API Registry final {
     std::string icon{};
     template<typename T>
     using CloneFunc = T *(*)();
-    CloneFunc<elements::Element> cloneElement{};
-    CloneFunc<nodes::Node> cloneNode{};
+    CloneFunc<Element> cloneElement{};
+    CloneFunc<Node> cloneNode{};
   };
 
  public:
@@ -85,27 +81,27 @@ class SPAGHETTI_API Registry final {
   void registerInternalElements();
   void loadPlugins();
 
-  template<typename Element, typename Node = nodes::Node>
-  typename std::enable_if_t<(std::is_base_of_v<elements::Element, Element> && std::is_base_of_v<nodes::Node, Node>)>
+  template<typename ElementDerived, typename NodeDerived = Node>
+  typename std::enable_if_t<(std::is_base_of_v<Element, ElementDerived> && std::is_base_of_v<Node, NodeDerived>)>
   registerElement(std::string a_name, std::string a_icon)
   {
-    string::hash_t const hash{ Element::HASH };
+    string::hash_t const hash{ ElementDerived::HASH };
     assert(m_elements.find(hash) == std::end(m_elements));
-    MetaInfo const info{ Element::TYPE, std::move(a_name), std::move(a_icon), &cloneElement<Element>,
-                         &cloneNode<Node> };
+    MetaInfo const info{ ElementDerived::TYPE, std::move(a_name), std::move(a_icon), &cloneElement<ElementDerived>,
+                         &cloneNode<NodeDerived> };
     m_elements[hash] = info;
   }
 
-  elements::Element *createElement(char const *const a_name) { return createElement(string::hash(a_name)); }
-  elements::Element *createElement(string::hash_t const a_hash)
+  Element *createElement(char const *const a_name) { return createElement(string::hash(a_name)); }
+  Element *createElement(string::hash_t const a_hash)
   {
     if (m_elements.find(a_hash) == std::end(m_elements)) return nullptr;
     assert(m_elements[a_hash].cloneElement);
     return m_elements[a_hash].cloneElement();
   }
 
-  nodes::Node *createNode(char const *const a_name) { return createNode(string::hash(a_name)); }
-  nodes::Node *createNode(string::hash_t const a_hash)
+  Node *createNode(char const *const a_name) { return createNode(string::hash(a_name)); }
+  Node *createNode(string::hash_t const a_hash)
   {
     if (m_elements.find(a_hash) == std::end(m_elements)) return nullptr;
     assert(m_elements[a_hash].cloneNode);
@@ -132,13 +128,13 @@ class SPAGHETTI_API Registry final {
   Registry();
 
   template<typename T>
-  static elements::Element *cloneElement()
+  static Element *cloneElement()
   {
     return new T;
   }
 
   template<typename T>
-  static nodes::Node *cloneNode()
+  static Node *cloneNode()
   {
     return new T;
   }
@@ -149,6 +145,6 @@ class SPAGHETTI_API Registry final {
   Plugins m_plugins{};
 };
 
-} // namespace core
+} // namespace spaghetti
 
-#endif // CORE_REGISTRY_H
+#endif // SPAGHETTI_REGISTRY_H

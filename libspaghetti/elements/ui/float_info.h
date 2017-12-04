@@ -24,11 +24,11 @@
 #ifndef ELEMENTS_UI_FLOAT_INFO_H
 #define ELEMENTS_UI_FLOAT_INFO_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::ui {
+namespace spaghetti::elements::ui {
 
-class FloatInfo final : public elements::Element {
+class FloatInfo final : public Element {
  public:
   static constexpr char const *const TYPE{ "ui/float_info" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
@@ -42,6 +42,6 @@ class FloatInfo final : public elements::Element {
   bool calculate() override;
 };
 
-} // namespace elements::ui
+} // namespace spaghetti::elements::ui
 
 #endif // ELEMENTS_UI_FLOAT_INFO_H

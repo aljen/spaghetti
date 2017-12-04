@@ -24,9 +24,9 @@
 #ifndef NODES_UI_TOGGLE_BUTTON_H
 #define NODES_UI_TOGGLE_BUTTON_H
 
-#include "nodes/node.h"
+#include "spaghetti/node.h"
 
-namespace nodes::ui {
+namespace spaghetti::nodes::ui {
 
 class ToggleButton : public Node {
  public:
@@ -39,6 +39,6 @@ class ToggleButton : public Node {
   void elementSet() override;
 };
 
-} // namespace nodes::ui
+} // namespace spaghetti::nodes::ui
 
 #endif // NODES_UI_TOGGLE_BUTTON_H

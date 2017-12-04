@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/values/const_bool.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 ConstBool::ConstBool()
 {
@@ -70,4 +70,4 @@ void ConstBool::set(bool a_state)
   m_package->elementChanged(id());
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/values/max_int.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 MaxInt::MaxInt()
 {
@@ -47,4 +47,4 @@ bool MaxInt::calculate()
   return true;
 }
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values

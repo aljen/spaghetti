@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/logic/if_lower_equal.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::logic {
+namespace spaghetti::elements::logic {
 
 IfLowerEqual::IfLowerEqual()
   : Element{}
@@ -54,4 +54,4 @@ bool IfLowerEqual::calculate()
   return changed;
 }
 
-} // namespace elements::logic
+} // namespace spaghetti::elements::logic

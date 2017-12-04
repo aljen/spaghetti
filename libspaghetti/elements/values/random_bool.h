@@ -24,9 +24,9 @@
 #ifndef ELEMENTS_VALUES_RANDOM_BOOL_H
 #define ELEMENTS_VALUES_RANDOM_BOOL_H
 
-#include "elements/element.h"
+#include "spaghetti/element.h"
 
-namespace elements::values {
+namespace spaghetti::elements::values {
 
 class RandomBool final : public Element {
  public:
@@ -41,6 +41,6 @@ class RandomBool final : public Element {
   bool calculate() override;
 };
 
-} // namespace elements::values
+} // namespace spaghetti::elements::values
 
 #endif // ELEMENTS_VALUES_RANDOM_BOOL_H

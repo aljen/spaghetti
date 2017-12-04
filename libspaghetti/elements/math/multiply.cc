@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "elements/math/multiply.h"
-#include "elements/package.h"
+#include "spaghetti/package.h"
 
-namespace elements::math {
+namespace spaghetti::elements::math {
 
 Multiply::Multiply()
   : Element{}
@@ -48,4 +48,4 @@ bool Multiply::calculate()
   return true;
 }
 
-} // namespace elements::math
+} // namespace spaghetti::elements::math
