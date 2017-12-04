@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 project(libSpaghetti VERSION ${Spaghetti_VERSION} LANGUAGES C CXX)
 
 find_package(Threads REQUIRED)
-find_package(Boost REQUIRED COMPONENTS filesystem)
+find_package(Boost REQUIRED COMPONENTS filesystem system)
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
 
 configure_file(core/version.h.in core/version.h)
@@ -178,20 +178,43 @@ set(LIBSPAGHETTI_SOURCES
   )
 
 add_library(Spaghetti SHARED ${LIBSPAGHETTI_SOURCES})
+target_compile_features(Spaghetti PUBLIC cxx_std_17)
 target_compile_definitions(Spaghetti
-  PUBLIC -DSPAGHETTI_SHARED
-  PRIVATE -DSPAGHETTI_EXPORTS
+  PUBLIC SPAGHETTI_SHARED
+  PRIVATE SPAGHETTI_EXPORTS ${SPAGHETTI_DEFINITIONS}
+  PRIVATE $<$<CONFIG:Debug>:${SPAGHETTI_DEFINITIONS_DEBUG}>
+  PRIVATE $<$<CONFIG:Release>:${SPAGHETTI_DEFINITIONS_RELEASE}>
   )
-target_include_directories(Spaghetti
-  SYSTEM PUBLIC ${PROJECT_ROOT}/vendor/spdlog/include
-)
+target_compile_options(Spaghetti
+  PRIVATE ${SPAGHETTI_FLAGS}
+  PRIVATE ${SPAGHETTI_FLAGS_C}
+  PRIVATE ${SPAGHETTI_FLAGS_CXX}
+  PRIVATE ${SPAGHETTI_FLAGS_LINKER}
+  PRIVATE $<$<CONFIG:Debug>:${SPAGHETTI_FLAGS_DEBUG}>
+  PRIVATE $<$<CONFIG:Debug>:${SPAGHETTI_WARNINGS}>
+  PRIVATE $<$<CONFIG:Release>:${SPAGHETTI_FLAGS_RELEASE}>
+  )
 target_include_directories(Spaghetti PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-  $<INSTALL_INTERFACE:include>
-)
+#  $<INSTALL_INTERFACE:include>
+  )
+target_include_directories(Spaghetti SYSTEM PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
+  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
+##  $<INSTALL_INTERFACE:vendor>
+##  $<INSTALL_INTERFACE:vendor/spdlog/include>
+  )
 target_link_libraries(Spaghetti
   PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
   PRIVATE ${CMAKE_DL_LIBS} Boost::system Boost::filesystem
 )
 
+install(TARGETS Spaghetti EXPORT Spaghetti
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  )
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(EXPORT Spaghetti DESTINATION share/Spaghetti/cmake)
+export(TARGETS Spaghetti FILE Spaghetti.cmake)
