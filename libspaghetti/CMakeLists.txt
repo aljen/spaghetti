@@ -213,6 +213,10 @@ target_link_libraries(Spaghetti
   PRIVATE ${CMAKE_DL_LIBS} Boost::system Boost::filesystem
 )
 
+if (CLANG)
+  target_link_libraries(Spaghetti PUBLIC -stdlib=libc++)
+endif ()
+
 install(TARGETS Spaghetti EXPORT Spaghetti
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
