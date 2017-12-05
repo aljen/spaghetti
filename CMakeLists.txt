@@ -12,6 +12,7 @@ include(BuildDirectories)
 include(BuildType)
 include(CompilerType)
 include(CompilerFlags)
+include(DetectCxxFilesystem)
 
 option(SPAGHETTI_USE_CLANG_TIDY "Use clang-tidy" OFF)
 option(SPAGHETTI_ENABLE_CPACK "Enable CPack" OFF)
