@@ -30,8 +30,6 @@
 #include "spaghetti/logger.h"
 #include "spaghetti/registry.h"
 
-#define TRACE_LOGIC 0
-
 namespace spaghetti {
 
 Package::Package()

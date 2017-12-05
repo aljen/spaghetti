@@ -33,7 +33,7 @@ FloatInfo::FloatInfo()
   QFont font{};
   font.setFamily("Consolas");
   font.setPointSize(10);
-  auto widget = new QGraphicsSimpleTextItem(QString::number(0.0f, 'f', 4));
+  auto widget = new QGraphicsSimpleTextItem(QString::number(0.0, 'f', 4));
   widget->setFont(font);
 
   auto brush = widget->brush();
@@ -49,7 +49,7 @@ void FloatInfo::refreshCentralWidget()
 {
   if (!m_element || !m_element->inputs()[0].value) return;
   float const value{ std::get<float>(*m_element->inputs()[0].value) };
-  m_info->setText(QString::number(value, 'f', 4));
+  m_info->setText(QString::number(static_cast<qreal>(value), 'f', 4));
 
   calculateBoundingRect();
 }

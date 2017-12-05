@@ -73,5 +73,5 @@ std::array<QColor, static_cast<size_t>(Color::eCount)> const g_colors{ {
 
 QColor get_color(Color const a_color)
 {
-  return g_colors[static_cast<char>(a_color)];
+  return g_colors[static_cast<size_t>(a_color)];
 }

@@ -29,7 +29,7 @@
 namespace spaghetti::nodes::logic {
 
 class Clock : public Node {
-  void showProperties();
+  void showProperties() override;
 };
 
 } // namespace spaghetti::nodes::logic

@@ -29,7 +29,7 @@
 namespace spaghetti::nodes::values {
 
 class ConstBool : public Node {
-  void showProperties();
+  void showProperties() override;
 };
 
 } // namespace spaghetti::nodes::values

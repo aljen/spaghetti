@@ -112,7 +112,6 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
       qreal const x{ std::round(position.x() / 10.0) * 10.0 };
       qreal const y{ std::round(position.y() / 10.0) * 10.0 };
       return QPointF{ x, y };
-      break;
     }
     case ItemPositionHasChanged: {
       if (m_element) {
@@ -420,10 +419,10 @@ void Node::showInputsProperties(int a_allowedTypes)
 
     row = m_properties->rowCount();
     m_properties->insertRow(row);
-    QLineEdit *const inputName = new QLineEdit{ QString::fromStdString(inputs[i].name) };
+    QLineEdit *const inputName = new QLineEdit{ QString::fromStdString(inputs[static_cast<size_t>(i)].name) };
     m_properties->setCellWidget(row, 0, inputName);
 
-    QString const inputType = valueType2QString(inputs[i].type);
+    QString const inputType = valueType2QString(inputs[static_cast<size_t>(i)].type);
 
     if (allowedTypes.count() <= 1) {
       item = new QTableWidgetItem{ inputType };
@@ -489,10 +488,10 @@ void Node::showOutputsProperties(int a_allowedTypes)
 
     row = m_properties->rowCount();
     m_properties->insertRow(row);
-    QLineEdit *const outputName = new QLineEdit{ QString::fromStdString(outputs[i].name) };
+    QLineEdit *const outputName = new QLineEdit{ QString::fromStdString(outputs[static_cast<size_t>(i)].name) };
     m_properties->setCellWidget(row, 0, outputName);
 
-    QString const outputType = valueType2QString(outputs[i].type);
+    QString const outputType = valueType2QString(outputs[static_cast<size_t>(i)].type);
 
     item = new QTableWidgetItem{ outputType };
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);

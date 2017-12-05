@@ -46,7 +46,7 @@ bool DemultiplexerInt::calculate()
       std::clamp<int32_t>(std::get<int32_t>(*m_inputs[0].value), 0, static_cast<int32_t>(m_outputs.size()) - 1);
   int32_t const VALUE = std::get<int32_t>(*m_inputs[1].value);
 
-  m_outputs[SELECT].value = VALUE;
+  m_outputs[static_cast<size_t>(SELECT)].value = VALUE;
 
   return true;
 }

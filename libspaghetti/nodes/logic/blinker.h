@@ -29,7 +29,7 @@
 namespace spaghetti::nodes::logic {
 
 class Blinker : public Node {
-  void showProperties();
+  void showProperties() override;
 };
 
 } // namespace spaghetti::nodes::logic

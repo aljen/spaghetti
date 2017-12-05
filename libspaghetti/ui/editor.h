@@ -55,7 +55,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   int packageViewIndex() const { return m_packageViewIndex; }
 
  protected:
-  void showEvent(QShowEvent *a_event);
+  void showEvent(QShowEvent *a_event) override;
 
   PackageView *packageViewForIndex(int const a_index = -1) const;
   int openPackageViews() const;

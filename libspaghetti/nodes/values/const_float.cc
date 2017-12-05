@@ -35,7 +35,7 @@ ConstFloat::ConstFloat()
   QFont font{};
   font.setFamily("Consolas");
   font.setPointSize(10);
-  auto widget = new QGraphicsSimpleTextItem(QString::number(0.0f, 'f', 4));
+  auto widget = new QGraphicsSimpleTextItem(QString::number(0.0, 'f', 4));
   widget->setFont(font);
 
   auto brush = widget->brush();
@@ -51,7 +51,7 @@ void ConstFloat::refreshCentralWidget()
 {
   if (!m_element) return;
   float const VALUE{ std::get<float>(m_element->outputs()[0].value) };
-  m_info->setText(QString::number(VALUE, 'f', 4));
+  m_info->setText(QString::number(static_cast<qreal>(VALUE), 'f', 4));
 
   calculateBoundingRect();
 }
@@ -78,7 +78,7 @@ void ConstFloat::showProperties()
   QDoubleSpinBox *const value = new QDoubleSpinBox;
   value->setRange(-9999999.0, 9999999.0);
   value->setDecimals(4);
-  value->setValue(CURRENT);
+  value->setValue(static_cast<qreal>(CURRENT));
   m_properties->setCellWidget(row, 1, value);
 
   QObject::connect(value, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),

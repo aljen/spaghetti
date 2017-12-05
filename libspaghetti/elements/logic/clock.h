@@ -41,13 +41,11 @@ class Clock final : public Element {
   string::hash_t hash() const noexcept override { return HASH; }
 
   bool calculate() override;
-
-  void setDuration(duration_t a_duration) { m_duration = a_duration; }
-  void reset() { m_time = duration_t{ 0.0 }; }
-
+  void reset() override { m_time = duration_t{ 0.0 }; }
+  void update(duration_t const &a_delta) override;
   bool isUpdatable() const override { return true; }
 
-  void update(duration_t const &a_delta);
+  void setDuration(duration_t a_duration) { m_duration = a_duration; }
 
   duration_t duration() const { return m_duration; }
 

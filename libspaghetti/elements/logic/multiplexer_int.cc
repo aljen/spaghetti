@@ -44,7 +44,7 @@ bool MultiplexerInt::calculate()
 
   int32_t const SELECT =
       std::clamp<int32_t>(std::get<int32_t>(*m_inputs[0].value), 0, static_cast<int32_t>(m_inputs.size()) - 2);
-  int32_t const VALUE = std::get<int32_t>(*m_inputs[SELECT + 1].value);
+  int32_t const VALUE = std::get<int32_t>(*m_inputs[static_cast<size_t>(SELECT) + 1].value);
 
   m_outputs[0].value = VALUE;
 
