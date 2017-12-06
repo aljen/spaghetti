@@ -358,8 +358,7 @@ void SocketItem::disconnectAllOutputs()
 
 void SocketItem::removeLink(LinkItem *const a_linkItem)
 {
-  auto it = std::find(std::begin(m_links), std::end(m_links), a_linkItem);
-  m_links.erase(it, std::end(m_links));
+  m_links.removeAll(a_linkItem);
 }
 
 LinkItem *SocketItem::linkBetween(SocketItem *const a_from, SocketItem *const a_to) const
