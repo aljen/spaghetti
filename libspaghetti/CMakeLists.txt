@@ -184,6 +184,8 @@ set(LIBSPAGHETTI_SOURCES
   source/node.cc
   source/package.cc
   source/registry.cc
+  source/shared_library.cc
+  source/shared_library.h
   source/filesystem.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/include/filesystem.h
   )
