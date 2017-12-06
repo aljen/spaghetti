@@ -11,6 +11,7 @@ configure_file(include/spaghetti/version.h.in include/spaghetti/version.h)
 set(LIBSPAGHETTI_SOURCES
   ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
   include/spaghetti/api.h
+  include/spaghetti/editor.h
   include/spaghetti/element.h
   include/spaghetti/logger.h
   include/spaghetti/node.h
@@ -158,7 +159,6 @@ set(LIBSPAGHETTI_SOURCES
   source/ui/colors.cc
   source/ui/colors.h
   source/ui/editor.cc
-  source/ui/editor.h
   source/ui/editor.ui
   source/ui/elements_list.cc
   source/ui/elements_list.h

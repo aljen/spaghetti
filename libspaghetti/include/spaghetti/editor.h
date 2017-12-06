@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef UI_EDITOR_WINDOW_H
-#define UI_EDITOR_WINDOW_H
+#ifndef SPAGHETTI_EDITOR_H
+#define SPAGHETTI_EDITOR_H
 
 #include <QMainWindow>
 #include <QMap>
@@ -43,8 +43,8 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   explicit Editor(QWidget *const a_parent = nullptr);
   ~Editor() override;
 
-  void tabCloseRequested(int a_index);
-  void tabChanged(int a_index);
+  void tabCloseRequested(int const a_index);
+  void tabChanged(int const a_index);
 
   void populateLibrary();
   void addElement(QString a_category, QString a_name, QString a_type, QString a_icon);
@@ -83,4 +83,4 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   int m_packageViewIndex{ -1 };
 };
 
-#endif // UI_EDITOR_WINDOW_H
+#endif // SPAGHETTI_EDITOR_H

@@ -25,8 +25,8 @@
 #include <QStyleFactory>
 #include <iostream>
 
-#include "spaghetti/registry.h"
-#include "ui/editor.h"
+#include <spaghetti/registry.h>
+#include <spaghetti/editor.h>
 
 int main(int argc, char **argv)
 {

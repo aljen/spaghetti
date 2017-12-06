@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "ui/editor.h"
+#include "spaghetti/editor.h"
 #include "ui_editor.h"
 
 #include "ui/link_item.h"
@@ -97,7 +97,7 @@ Editor::~Editor()
   delete m_ui;
 }
 
-void Editor::tabCloseRequested(int a_index)
+void Editor::tabCloseRequested(int const a_index)
 {
   QTabWidget *const tab{ m_ui->tabWidget };
   QWidget *const widget{ tab->widget(a_index) };
@@ -109,7 +109,7 @@ void Editor::tabCloseRequested(int a_index)
   }
 }
 
-void Editor::tabChanged(int a_index)
+void Editor::tabChanged(int const a_index)
 {
   m_packageViewIndex = a_index;
 }

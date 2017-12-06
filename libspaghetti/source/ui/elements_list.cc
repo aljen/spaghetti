@@ -22,7 +22,7 @@
 
 #include "ui/elements_list.h"
 
-#include "ui/editor.h"
+#include "spaghetti/editor.h"
 #include "ui/package_view.h"
 
 #include <QDebug>
