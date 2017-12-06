@@ -325,7 +325,7 @@ void SocketItem::disconnect(SocketItem *const a_other)
   removeLink(link);
   a_other->removeLink(link);
 
-  m_used = false;
+  if (m_links.empty()) m_used = false;
   m_isHover = false;
   a_other->m_used = false;
   a_other->m_isHover = false;
