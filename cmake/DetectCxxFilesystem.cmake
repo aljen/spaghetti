@@ -35,16 +35,19 @@ if (NOT HAVE_CXX_FILESYSTEM)
   "}\n"
   )
   message(STATUS "Detecting CXX std::experimental::filesystem support")
+  if (NOT MSVC)
+    set(TEMP_FILESYSTEM_LIBS stdc++fs)
+  endif ()
   try_compile(HAVE_CXX_EXPERIMENTAL_FILESYSTEM
     ${CMAKE_CURRENT_BINARY_DIR}/CMakeTemp/HaveCxxExperimentalFilesystem
     ${CMAKE_CURRENT_BINARY_DIR}/CMakeTemp/test_cxx_experimental_filesystem.cc
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED 17
-    LINK_LIBRARIES stdc++fs
+    LINK_LIBRARIES ${TEMP_FILESYSTEM_LIBS}
     OUTPUT_VARIABLE OUTPUT
   )
   if (HAVE_CXX_EXPERIMENTAL_FILESYSTEM)
-    set(CXX_FILESYSTEM_LIBS stdc++fs)
+    set(CXX_FILESYSTEM_LIBS ${TEMP_FILESYSTEM_LIBS})
     message(STATUS "Detecting CXX std::experimental::filesystem support -- found")
   else ()
     message(STATUS "Detecting CXX std::experimental::filesystem support -- NOT FOUND")
