@@ -27,7 +27,7 @@
 #include <QMainWindow>
 #include <QMap>
 
-#include "spaghetti/api.h"
+#include <spaghetti/api.h>
 
 namespace Ui {
 class Editor;
