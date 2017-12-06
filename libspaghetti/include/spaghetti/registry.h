@@ -39,9 +39,9 @@
 #include <spaghetti/api.h>
 #include <spaghetti/strings.h>
 
-namespace boost::dll {
-class shared_library;
-}
+//namespace boost::dll {
+//class shared_library;
+//}
 
 // clang-format off
 #define REGISTRY_SPP_MAP 1
@@ -140,9 +140,9 @@ class SPAGHETTI_API Registry final {
   }
 
  private:
-  using Plugins = std::vector<std::shared_ptr<boost::dll::shared_library>>;
+//  using Plugins = std::vector<std::shared_ptr<boost::dll::shared_library>>;
   Elements m_elements{};
-  Plugins m_plugins{};
+//  Plugins m_plugins{};
 };
 
 } // namespace spaghetti

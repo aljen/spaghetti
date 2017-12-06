@@ -20,16 +20,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <boost/dll.hpp>
+#include "spaghetti/registry.h"
+
+//#include <boost/dll.hpp>
 
 #include "filesystem.h"
 #include "elements/all.h"
 #include "nodes/all.h"
 #include "spaghetti/logger.h"
-#include "spaghetti/registry.h"
 #include "spaghetti/version.h"
 
-namespace dll = boost::dll;
+//namespace dll = boost::dll;
 
 inline void init_resources()
 {
@@ -124,6 +125,7 @@ void Registry::loadPlugins()
 
   if (!fs::is_directory(pluginsDir)) return;
 
+#if 0
   for (auto const &entry : fs::directory_iterator(pluginsDir)) {
     if (!fs::is_regular_file(entry)) continue;
 
@@ -137,6 +139,7 @@ void Registry::loadPlugins()
 
     m_plugins.emplace_back(std::move(plugin));
   }
+#endif
 }
 
 } // namespace spaghetti
