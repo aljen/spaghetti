@@ -57,7 +57,7 @@
 
 QString const PACKAGES_DIR{ "../packages" };
 
-Editor::Editor(QWidget *a_parent)
+Editor::Editor(QWidget *const a_parent)
   : QMainWindow{ a_parent }
   , m_ui{ new Ui::Editor }
 {

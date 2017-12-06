@@ -40,7 +40,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   Q_OBJECT
 
  public:
-  explicit Editor(QWidget *a_parent = nullptr);
+  explicit Editor(QWidget *const a_parent = nullptr);
   ~Editor() override;
 
   void tabCloseRequested(int a_index);
@@ -79,7 +79,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   void aboutQt();
 
  private:
-  Ui::Editor *m_ui{};
+  Ui::Editor *const m_ui{};
   int m_packageViewIndex{ -1 };
 };
 
