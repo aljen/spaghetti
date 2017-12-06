@@ -41,7 +41,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
 
  public:
   explicit Editor(QWidget *a_parent = nullptr);
-  ~Editor();
+  ~Editor() override;
 
   void tabCloseRequested(int a_index);
   void tabChanged(int a_index);
