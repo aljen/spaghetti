@@ -30,14 +30,15 @@
 
 #include <spaghetti/api.h>
 #include <spaghetti/element.h>
-#include "ui/socket_item.h"
+#include <spaghetti/socket_item.h>
 
-class PackageView;
 class QTableWidget;
 
 namespace spaghetti {
 
 constexpr int NODE_TYPE{ QGraphicsItem::UserType + 1 };
+
+class PackageView;
 
 class SPAGHETTI_API Node : public QGraphicsItem {
  public:

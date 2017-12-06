@@ -30,13 +30,15 @@
 
 class QGraphicsDropShadowEffect;
 
+namespace spaghetti {
+
 constexpr int LINK_TYPE{ QGraphicsItem::UserType + 2 };
 
 class SocketItem;
 
 class LinkItem final : public QGraphicsPathItem {
  public:
-  using ValueType = spaghetti::Element::ValueType;
+  using ValueType = Element::ValueType;
 
   LinkItem(QGraphicsItem *a_parent = nullptr);
 
@@ -91,5 +93,7 @@ class LinkItem final : public QGraphicsPathItem {
   bool m_isSnapped{};
   qreal m_dashOffset{};
 };
+
+} // namespace spaghetti
 
 #endif // UI_LINK_ITEM_H

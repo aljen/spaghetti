@@ -29,7 +29,9 @@
 #include <QStyleOptionGraphicsItem>
 
 #include "colors.h"
-#include "ui/socket_item.h"
+#include "spaghetti/socket_item.h"
+
+namespace spaghetti {
 
 LinkItem::LinkItem(QGraphicsItem *a_parent)
   : QGraphicsPathItem{ a_parent }
@@ -187,3 +189,5 @@ void LinkItem::trackNodes()
   stroker.setWidth(15);
   m_shape = stroker.createStroke(m_path);
 }
+
+} // namespace spaghetti

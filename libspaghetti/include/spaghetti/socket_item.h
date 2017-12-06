@@ -21,19 +21,18 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef UI_SOCKET_ITEM_H
-#define UI_SOCKET_ITEM_H
+#ifndef SPAGHETTI_SOCKET_ITEM_H
+#define SPAGHETTI_SOCKET_ITEM_H
 
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QVector>
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti {
-class Node;
-}
 
+class Node;
 class LinkItem;
 
 constexpr int SOCKET_TYPE{ QGraphicsItem::UserType + 3 };
@@ -41,11 +40,11 @@ constexpr int SOCKET_TYPE{ QGraphicsItem::UserType + 3 };
 class SocketItem final : public QGraphicsItem {
  public:
   enum class Type { eInput, eOutput };
-  using ValueType = spaghetti::Element::ValueType;
+  using ValueType = Element::ValueType;
 
   constexpr static int SIZE{ 16 };
 
-  SocketItem(spaghetti::Node *const a_node, Type const a_type);
+  SocketItem(Node *const a_node, Type const a_type);
 
   int type() const override { return SOCKET_TYPE; }
 
@@ -116,7 +115,7 @@ class SocketItem final : public QGraphicsItem {
   QColor m_colorSignalOff{};
   bool m_isSignalOn{};
 
-  spaghetti::Node *const m_node{};
+  Node *const m_node{};
   Type m_type{};
 
   bool m_isHover{};
@@ -127,4 +126,6 @@ class SocketItem final : public QGraphicsItem {
   QVector<LinkItem *> m_links{};
 };
 
-#endif // UI_SOCKET_ITEM_H
+} // namespace spaghetti
+
+#endif // SPAGHETTI_SOCKET_ITEM_H

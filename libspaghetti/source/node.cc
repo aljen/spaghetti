@@ -38,11 +38,11 @@
 #include "ui/colors.h"
 #include "ui/package_view.h"
 
+namespace spaghetti {
+
 constexpr int32_t const SOCKET_SIZE = SocketItem::SIZE;
 qreal const ROUNDED_SOCKET_SIZE = std::round(static_cast<qreal>(SOCKET_SIZE) / 10.0) * 10.0;
 qreal const ROUNDED_SOCKET_SIZE_2 = ROUNDED_SOCKET_SIZE / 2.0;
-
-namespace spaghetti {
 
 Node::Node(QGraphicsItem *const a_parent)
   : QGraphicsItem{ a_parent }

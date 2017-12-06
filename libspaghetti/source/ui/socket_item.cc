@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "ui/socket_item.h"
+#include "spaghetti/socket_item.h"
 
 #include <QApplication>
 #include <QCursor>
@@ -31,13 +31,15 @@
 #include <QMimeData>
 #include <QWidget>
 
-#include "spaghetti/package.h"
 #include "spaghetti/node.h"
+#include "spaghetti/package.h"
 #include "ui/colors.h"
 #include "ui/link_item.h"
 #include "ui/package_view.h"
 
-SocketItem::SocketItem(spaghetti::Node *const a_node, Type const a_type)
+namespace spaghetti {
+
+SocketItem::SocketItem(Node *const a_node, Type const a_type)
   : QGraphicsItem{ a_node }
   , m_node{ a_node }
   , m_type{ a_type }
@@ -351,8 +353,7 @@ void SocketItem::disconnectAllInputs()
 void SocketItem::disconnectAllOutputs()
 {
   auto links = m_links;
-  for (auto &link : links)
-    disconnect(link->to());
+  for (auto &link : links) disconnect(link->to());
 }
 
 void SocketItem::removeLink(LinkItem *const a_linkItem)
@@ -371,3 +372,5 @@ LinkItem *SocketItem::linkBetween(SocketItem *const a_from, SocketItem *const a_
 
   return *it;
 }
+
+} // namespace spaghetti

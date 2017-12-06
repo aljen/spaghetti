@@ -28,22 +28,21 @@
 #include <QHash>
 #include <QTimer>
 
+class QTableWidget;
+
 namespace spaghetti {
+
 class Package;
 class Node;
-} // namespace spaghetti
-
 class LinkItem;
-
-class QTableWidget;
 
 class PackageView final : public QGraphicsView {
   Q_OBJECT
 
  public:
-  using Nodes = QHash<size_t, spaghetti::Node *>;
+  using Nodes = QHash<size_t, Node *>;
 
-  explicit PackageView(QTableWidget *const a_properties, spaghetti::Package *const a_package = nullptr);
+  explicit PackageView(QTableWidget *const a_properties, Package *const a_package = nullptr);
   ~PackageView() override;
 
   void open();
@@ -63,8 +62,8 @@ class PackageView final : public QGraphicsView {
   void acceptDragLink() { m_dragLink = nullptr; }
   void cancelDragLink();
 
-  spaghetti::Package const *package() const { return m_package; }
-  spaghetti::Package *package() { return m_package; }
+  Package const *package() const { return m_package; }
+  Package *package() { return m_package; }
 
   bool canClose();
   void center();
@@ -80,9 +79,9 @@ class PackageView final : public QGraphicsView {
   Nodes &nodes() { return m_nodes; }
   Nodes const &nodes() const { return m_nodes; }
 
-  spaghetti::Node *getNode(size_t const a_id) const { return m_nodes[a_id]; }
+  Node *getNode(size_t const a_id) const { return m_nodes[a_id]; }
 
-  void setSelectedNode(spaghetti::Node *const a_node);
+  void setSelectedNode(Node *const a_node);
 
   void setVisible(bool a_visible) override;
 
@@ -91,15 +90,15 @@ class PackageView final : public QGraphicsView {
 
  private:
   QTableWidget *const m_properties{};
-  spaghetti::Package *const m_package{};
+  Package *const m_package{};
   Nodes m_nodes{};
   QGraphicsScene *const m_scene{};
   QTimer m_timer{};
-  spaghetti::Node *const m_inputs{};
-  spaghetti::Node *const m_outputs{};
-  spaghetti::Node *const m_packageNode{};
-  spaghetti::Node *m_dragNode{};
-  spaghetti::Node *m_selectedNode{};
+  Node *const m_inputs{};
+  Node *const m_outputs{};
+  Node *const m_packageNode{};
+  Node *m_dragNode{};
+  Node *m_selectedNode{};
   LinkItem *m_dragLink{};
   int32_t m_scheduledScalings{};
   enum class GridDensity { eLarge, eSmall } m_gridDensity{};
@@ -107,5 +106,7 @@ class PackageView final : public QGraphicsView {
   bool m_snapToGrid{};
   bool m_standalone{};
 };
+
+} // namespace spaghetti
 
 #endif // UI_PACKAGE_VIEW_H

@@ -30,6 +30,8 @@
 #include <QMimeData>
 #include <cassert>
 
+namespace spaghetti {
+
 ElementsList::ElementsList(Editor *const a_parent)
   : QListWidget{}
   , m_editor{ a_parent }
@@ -68,3 +70,5 @@ void ElementsList::startDrag(Qt::DropActions a_supportedActions)
   drag->setMimeData(mimeData);
   drag->exec(Qt::CopyAction);
 }
+
+} // namespace spaghetti

@@ -32,20 +32,22 @@
 #include <QTableWidget>
 #include <QTimeLine>
 
-#include "spaghetti/registry.h"
-#include "spaghetti/package.h"
 #include "spaghetti/node.h"
+#include "spaghetti/package.h"
+#include "spaghetti/registry.h"
 #include "ui/elements_list.h"
 #include "ui/link_item.h"
 
-PackageView::PackageView(QTableWidget *const a_properties, spaghetti::Package *const a_package)
+namespace spaghetti {
+
+PackageView::PackageView(QTableWidget *const a_properties, Package *const a_package)
   : QGraphicsView{ new QGraphicsScene }
   , m_properties{ a_properties }
-  , m_package{ (a_package ? a_package : new spaghetti::Package) }
+  , m_package{ (a_package ? a_package : new Package) }
   , m_scene{ scene() }
-  , m_inputs{ new spaghetti::Node }
-  , m_outputs{ new spaghetti::Node }
-  , m_packageNode{ spaghetti::Registry::get().createNode("logic/package") }
+  , m_inputs{ new Node }
+  , m_outputs{ new Node }
+  , m_packageNode{ Registry::get().createNode("logic/package") }
   , m_standalone{ !a_package }
 {
   setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing |
@@ -75,7 +77,7 @@ PackageView::PackageView(QTableWidget *const a_properties, spaghetti::Package *c
 
   setAcceptDrops(true);
 
-  using NodeType = spaghetti::Node::Type;
+  using NodeType = Node::Type;
   m_inputs->setPos(-600.0, 0.0);
   m_inputs->setType(NodeType::eInputs);
   m_inputs->setElement(m_package);
@@ -89,7 +91,7 @@ PackageView::PackageView(QTableWidget *const a_properties, spaghetti::Package *c
   m_outputs->setPackageView(this);
   m_outputs->iconify();
 
-  spaghetti::Registry &registry{ spaghetti::Registry::get() };
+  Registry &registry{ Registry::get() };
 
   m_package->setInputsPosition(m_inputs->x(), m_inputs->y());
   m_package->setOutputsPosition(m_outputs->x(), m_outputs->y());
@@ -124,7 +126,7 @@ void PackageView::open()
   m_inputs->setPos(inputsPosition.x, inputsPosition.y);
   m_outputs->setPos(outputsPosition.x, outputsPosition.y);
 
-  spaghetti::Registry &registry{ spaghetti::Registry::get() };
+  Registry &registry{ Registry::get() };
 
   auto const &elements = m_package->elements();
   size_t const SIZE{ elements.size() };
@@ -174,7 +176,7 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
 
     auto const dropPosition = mapToScene(a_event->pos());
 
-    spaghetti::Registry &registry{ spaghetti::Registry::get() };
+    Registry &registry{ Registry::get() };
 
     assert(m_dragNode == nullptr);
     m_dragNode = registry.createNode(path);
@@ -252,7 +254,7 @@ void PackageView::keyReleaseEvent(QKeyEvent *a_event)
 
   auto const selected = m_scene->selectedItems();
   for (auto &&item : selected) {
-    if (item->type() == spaghetti::NODE_TYPE) {
+    if (item->type() == NODE_TYPE) {
       //      qDebug() << "Node:" << item;
     }
   }
@@ -358,8 +360,8 @@ void PackageView::deleteElement()
 
   for (auto &&item : selectedItems) {
     switch (item->type()) {
-      case spaghetti::NODE_TYPE: {
-        auto const node = reinterpret_cast<spaghetti::Node *const>(item);
+      case NODE_TYPE: {
+        auto const node = reinterpret_cast<Node *const>(item);
         auto const ID = node->element()->id();
         m_nodes.remove(ID);
 
@@ -382,7 +384,7 @@ void PackageView::deleteElement()
   showProperties();
 }
 
-void PackageView::setSelectedNode(spaghetti::Node *const a_node)
+void PackageView::setSelectedNode(Node *const a_node)
 {
   if (a_node == nullptr)
     m_selectedNode = m_packageNode;
@@ -410,3 +412,5 @@ void PackageView::updateGrid(qreal const a_scale)
 
   m_gridDensity = newDensity;
 }
+
+} // namespace spaghetti

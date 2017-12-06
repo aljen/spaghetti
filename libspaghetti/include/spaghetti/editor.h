@@ -34,6 +34,9 @@ class Editor;
 }
 
 class QGraphicsItem;
+
+namespace spaghetti {
+
 class PackageView;
 
 class SPAGHETTI_API Editor final : public QMainWindow {
@@ -82,5 +85,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   Ui::Editor *const m_ui{};
   int m_packageViewIndex{ -1 };
 };
+
+} // namespace spaghetti
 
 #endif // SPAGHETTI_EDITOR_H

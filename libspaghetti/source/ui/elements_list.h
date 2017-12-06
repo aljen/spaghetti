@@ -26,6 +26,8 @@
 
 #include <QListWidget>
 
+namespace spaghetti {
+
 class Editor;
 
 class ElementsList : public QListWidget {
@@ -46,5 +48,7 @@ class ElementsList : public QListWidget {
  private:
   Editor *const m_editor{};
 };
+
+} // namespace spaghetti
 
 #endif // UI_ELEMENTS_LIST_H

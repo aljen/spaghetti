@@ -56,8 +56,8 @@ int main(int argc, char **argv)
   registry.registerInternalElements();
   registry.loadPlugins();
 
-  Editor editor{};
-  QObject::connect(&app, &QApplication::aboutToQuit, &editor, &Editor::aboutToQuit);
+  spaghetti::Editor editor{};
+  QObject::connect(&app, &QApplication::aboutToQuit, &editor, &spaghetti::Editor::aboutToQuit);
   editor.show();
   // editor.showMaximized();
 

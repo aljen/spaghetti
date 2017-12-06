@@ -23,11 +23,10 @@
 #include "spaghetti/editor.h"
 #include "ui_editor.h"
 
-#include "ui/link_item.h"
-#include "ui/socket_item.h"
-
+#include "spaghetti/socket_item.h"
 #include "ui/colors.h"
 #include "ui/elements_list.h"
+#include "ui/link_item.h"
 
 #include <QAction>
 #include <QDebug>
@@ -48,14 +47,16 @@
 #include <typeinfo>
 #include <vector>
 
-#include "spaghetti/registry.h"
-#include "spaghetti/version.h"
 #include "elements/logic/all.h"
 #include "spaghetti/node.h"
+#include "spaghetti/registry.h"
+#include "spaghetti/version.h"
 #include "ui/expander_widget.h"
 #include "ui/package_view.h"
 
 QString const PACKAGES_DIR{ "../packages" };
+
+namespace spaghetti {
 
 Editor::Editor(QWidget *const a_parent)
   : QMainWindow{ a_parent }
@@ -116,7 +117,7 @@ void Editor::tabChanged(int const a_index)
 
 void Editor::populateLibrary()
 {
-  spaghetti::Registry const &registry{ spaghetti::Registry::get() };
+  Registry const &registry{ Registry::get() };
   auto const &elements{ registry.elements() };
 
   for (auto &&element : elements) {
@@ -289,13 +290,15 @@ void Editor::showProperties(bool a_checked)
 
 void Editor::buildCommit()
 {
-  QUrl const url{ QString("https://github.com/aljen/spaghetti/tree/%1").arg(spaghetti::version::COMMIT_HASH) };
+  QUrl const url{ QString("https://github.com/aljen/spaghetti/tree/%1").arg(version::COMMIT_HASH) };
   QDesktopServices::openUrl(url);
 }
 
 void Editor::recentChanges()
 {
-  QUrl const url{ QString("https://github.com/aljen/spaghetti/compare/%1...master").arg(spaghetti::version::COMMIT_HASH) };
+  QUrl const url{
+    QString("https://github.com/aljen/spaghetti/compare/%1...master").arg(version::COMMIT_HASH)
+  };
   QDesktopServices::openUrl(url);
 }
 
@@ -318,14 +321,16 @@ void Editor::about()
               "<a href='https://github.com/greg7mdp/sparsepp'>A fast, memory efficient hash map for C++</a> by "
               "<b>Gregory Popovitch</b><br>"
               "<a href='http://www.boost.org/'>Boost libraries</a><br>")
-          .arg(spaghetti::version::STRING)
+          .arg(version::STRING)
           .arg(__DATE__)
           .arg(__TIME__)
-          .arg(spaghetti::version::BRANCH)
-          .arg(spaghetti::version::COMMIT_SHORT_HASH));
+          .arg(version::BRANCH)
+          .arg(version::COMMIT_SHORT_HASH));
 }
 
 void Editor::aboutQt()
 {
   QMessageBox::aboutQt(this);
 }
+
+} // namespace spaghetti
