@@ -17,6 +17,7 @@ set(LIBSPAGHETTI_SOURCES
   include/spaghetti/node.h
   include/spaghetti/package.h
   include/spaghetti/registry.h
+  include/spaghetti/socket_item.h
   include/spaghetti/strings.h
   include/spaghetti/utils.h
   include/spaghetti/version.h.in
@@ -169,7 +170,6 @@ set(LIBSPAGHETTI_SOURCES
   source/ui/package_view.cc
   source/ui/package_view.h
   source/ui/socket_item.cc
-  source/ui/socket_item.h
 
   source/element.cc
   source/logger.cc
