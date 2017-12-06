@@ -213,9 +213,7 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
 
   auto &dependencies = m_dependencies[a_sourceId];
   auto const it = std::find(std::begin(dependencies), std::end(dependencies), a_targetId);
-  assert(it == std::end(dependencies));
-
-  dependencies.push_back(a_targetId);
+  if (it == std::end(dependencies)) dependencies.push_back(a_targetId);
 
   if (target->calculate()) elementChanged(a_targetId);
 
