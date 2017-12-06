@@ -22,15 +22,13 @@
 
 #include "spaghetti/registry.h"
 
-//#include <boost/dll.hpp>
-
 #include "filesystem.h"
+#include "shared_library.h"
+
 #include "elements/all.h"
 #include "nodes/all.h"
 #include "spaghetti/logger.h"
 #include "spaghetti/version.h"
-
-//namespace dll = boost::dll;
 
 inline void init_resources()
 {
@@ -125,12 +123,11 @@ void Registry::loadPlugins()
 
   if (!fs::is_directory(pluginsDir)) return;
 
-#if 0
   for (auto const &entry : fs::directory_iterator(pluginsDir)) {
     if (!fs::is_regular_file(entry)) continue;
 
-    boost::system::error_code error{};
-    auto plugin = std::make_shared<dll::shared_library>(entry, error, dll::load_mode::append_decorations);
+    std::error_code error{};
+    auto plugin = std::make_shared<SharedLibrary>(entry, error);
 
     if (error.value() != 0 || !plugin->has("register_plugin")) continue;
 
@@ -139,7 +136,6 @@ void Registry::loadPlugins()
 
     m_plugins.emplace_back(std::move(plugin));
   }
-#endif
 }
 
 } // namespace spaghetti

@@ -39,10 +39,6 @@
 #include <spaghetti/api.h>
 #include <spaghetti/strings.h>
 
-//namespace boost::dll {
-//class shared_library;
-//}
-
 // clang-format off
 #define REGISTRY_SPP_MAP 1
 #define REGISTRY_STD_UNORDERED_MAP 2
@@ -57,6 +53,7 @@ namespace spaghetti {
 
 class Element;
 class Node;
+class SharedLibrary;
 
 class SPAGHETTI_API Registry final {
   struct MetaInfo {
@@ -140,9 +137,9 @@ class SPAGHETTI_API Registry final {
   }
 
  private:
-//  using Plugins = std::vector<std::shared_ptr<boost::dll::shared_library>>;
+  using Plugins = std::vector<std::shared_ptr<SharedLibrary>>;
   Elements m_elements{};
-//  Plugins m_plugins{};
+  Plugins m_plugins{};
 };
 
 } // namespace spaghetti
