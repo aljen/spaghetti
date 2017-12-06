@@ -21,15 +21,14 @@
 // SOFTWARE.
 
 #include <boost/dll.hpp>
-#include <boost/filesystem.hpp>
 
+#include "filesystem.h"
 #include "elements/all.h"
 #include "nodes/all.h"
 #include "spaghetti/logger.h"
 #include "spaghetti/registry.h"
 #include "spaghetti/version.h"
 
-namespace fs = boost::filesystem;
 namespace dll = boost::dll;
 
 inline void init_resources()

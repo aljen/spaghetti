@@ -3,9 +3,17 @@ cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 project(libSpaghetti VERSION ${Spaghetti_VERSION} LANGUAGES C CXX)
 
 find_package(Threads REQUIRED)
-find_package(Boost REQUIRED COMPONENTS filesystem system)
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
 
+if (HAVE_CXX_FILESYSTEM)
+  set(SPAGHETTI_FILESYSTEM_IMPLEMENTATION SPAGHETTI_FS_STD_FILESYSTEM)
+elseif (HAVE_CXX_EXPERIMENTAL_FILESYSTEM)
+  set(SPAGHETTI_FILESYSTEM_IMPLEMENTATION SPAGHETTI_FS_STD_EXPERIMENTAL_FILESYSTEM)
+elseif (HAVE_BOOST_FILESYSTEM)
+  set(SPAGHETTI_FILESYSTEM_IMPLEMENTATION SPAGHETTI_FS_BOOST_FILESYSTEM)
+endif ()
+
+configure_file(source/filesystem.h.in include/filesystem.h)
 configure_file(include/spaghetti/version.h.in include/spaghetti/version.h)
 
 set(LIBSPAGHETTI_SOURCES
@@ -176,6 +184,8 @@ set(LIBSPAGHETTI_SOURCES
   source/node.cc
   source/package.cc
   source/registry.cc
+  source/filesystem.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/include/filesystem.h
   )
 
 add_library(Spaghetti SHARED ${LIBSPAGHETTI_SOURCES})
@@ -210,7 +220,7 @@ target_include_directories(Spaghetti SYSTEM PUBLIC
   )
 target_link_libraries(Spaghetti
   PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
-  PRIVATE ${CMAKE_DL_LIBS} Boost::system Boost::filesystem
+  PRIVATE ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
 )
 
 if (CLANG)
