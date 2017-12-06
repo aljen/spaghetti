@@ -28,8 +28,8 @@
 #include <QPainter>
 #include <QVector>
 
-#include "spaghetti/api.h"
-#include "spaghetti/element.h"
+#include <spaghetti/api.h>
+#include <spaghetti/element.h>
 #include "ui/socket_item.h"
 
 class PackageView;

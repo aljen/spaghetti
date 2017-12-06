@@ -36,8 +36,8 @@
 #endif
 // clang-format on
 
-#include "spaghetti/api.h"
-#include "spaghetti/strings.h"
+#include <spaghetti/api.h>
+#include <spaghetti/strings.h>
 
 namespace boost::dll {
 class shared_library;

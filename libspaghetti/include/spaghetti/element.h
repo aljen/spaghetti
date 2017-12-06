@@ -41,8 +41,8 @@
 
 #include <json.hpp>
 
-#include "spaghetti/api.h"
-#include "spaghetti/strings.h"
+#include <spaghetti/api.h>
+#include <spaghetti/strings.h>
 
 namespace spaghetti {
 

@@ -33,9 +33,9 @@
 #endif
 // clang-format on
 
-#include "spaghetti/api.h"
-#include "spaghetti/strings.h"
-#include "spaghetti/element.h"
+#include <spaghetti/api.h>
+#include <spaghetti/element.h>
+#include <spaghetti/strings.h>
 
 // clang-format off
 #define PACKAGE_SPP_MAP 1

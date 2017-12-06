@@ -24,7 +24,7 @@
 #ifndef SPAGHETTI_LOGGER_H
 #define SPAGHETTI_LOGGER_H
 
-#include "spaghetti/api.h"
+#include <spaghetti/api.h>
 
 #include <spdlog/spdlog.h>
 
