@@ -118,10 +118,10 @@ void Editor::tabChanged(int const a_index)
 void Editor::populateLibrary()
 {
   Registry const &registry{ Registry::get() };
-  auto const &elements{ registry.elements() };
+  auto const &SIZE{ registry.size() };
 
-  for (auto &&element : elements) {
-    auto const &info = element.second;
+  for (size_t i = 0; i < SIZE; ++i) {
+    auto const &info = registry.metaInfoAt(i);
     std::string const path{ info.type };
     std::string category{ path };
 

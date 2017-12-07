@@ -25,39 +25,20 @@
 #define SPAGHETTI_REGISTRY_H
 
 #include <cassert>
-#include <type_traits>
 #include <memory>
-
-// clang-format off
-#ifdef _MSC_VER
-# pragma warning(disable:4251)
-# include <unordered_map>
-#else
-# include <sparsepp/spp.h>
-#endif
-// clang-format on
+#include <type_traits>
 
 #include <spaghetti/api.h>
 #include <spaghetti/strings.h>
-
-// clang-format off
-#define REGISTRY_SPP_MAP 1
-#define REGISTRY_STD_UNORDERED_MAP 2
-#ifdef _MSC_VER
-# define REGISTRY_MAP REGISTRY_STD_UNORDERED_MAP
-#else
-# define REGISTRY_MAP REGISTRY_SPP_MAP
-#endif
-// clang-format on
 
 namespace spaghetti {
 
 class Element;
 class Node;
-class SharedLibrary;
 
 class SPAGHETTI_API Registry final {
   struct MetaInfo {
+    string::hash_t hash{};
     std::string type{};
     std::string name{};
     std::string icon{};
@@ -68,12 +49,6 @@ class SPAGHETTI_API Registry final {
   };
 
  public:
-#if REGISTRY_MAP == REGISTRY_SPP_MAP
-  using Elements = spp::sparse_hash_map<string::hash_t, MetaInfo>;
-#elif REGISTRY_MAP == REGISTRY_STD_UNORDERED_MAP
-  using Elements = std::unordered_map<string::hash_t, MetaInfo>;
-#endif
-
   static Registry &get();
 
   void registerInternalElements();
@@ -84,46 +59,38 @@ class SPAGHETTI_API Registry final {
   registerElement(std::string a_name, std::string a_icon)
   {
     string::hash_t const hash{ ElementDerived::HASH };
-    assert(m_elements.find(hash) == std::end(m_elements));
-    MetaInfo const info{ ElementDerived::TYPE, std::move(a_name), std::move(a_icon), &cloneElement<ElementDerived>,
-                         &cloneNode<NodeDerived> };
-    m_elements[hash] = info;
+    assert(!hasElement(hash));
+    MetaInfo info{ hash,
+                   ElementDerived::TYPE,
+                   std::move(a_name),
+                   std::move(a_icon),
+                   &cloneElement<ElementDerived>,
+                   &cloneNode<NodeDerived> };
+    addElement(info);
   }
 
   Element *createElement(char const *const a_name) { return createElement(string::hash(a_name)); }
-  Element *createElement(string::hash_t const a_hash)
-  {
-    if (m_elements.find(a_hash) == std::end(m_elements)) return nullptr;
-    assert(m_elements[a_hash].cloneElement);
-    return m_elements[a_hash].cloneElement();
-  }
+  Element *createElement(string::hash_t const a_hash);
 
   Node *createNode(char const *const a_name) { return createNode(string::hash(a_name)); }
-  Node *createNode(string::hash_t const a_hash)
-  {
-    if (m_elements.find(a_hash) == std::end(m_elements)) return nullptr;
-    assert(m_elements[a_hash].cloneNode);
-    return m_elements[a_hash].cloneNode();
-  }
+  Node *createNode(string::hash_t const a_hash);
 
   std::string elementName(char const *const a_name) { return elementName(string::hash(a_name)); }
-  std::string elementName(string::hash_t const a_hash)
-  {
-    assert(m_elements.find(a_hash) != std::end(m_elements));
-    return m_elements[a_hash].name;
-  }
+  std::string elementName(string::hash_t const a_hash);
 
   std::string elementIcon(char const *const a_name) { return elementIcon(string::hash(a_name)); }
-  std::string elementIcon(string::hash_t const a_hash)
-  {
-    assert(m_elements.find(a_hash) != std::end(m_elements));
-    return m_elements[a_hash].icon;
-  }
+  std::string elementIcon(string::hash_t const a_hash);
 
-  Elements const &elements() const { return m_elements; }
+  bool hasElement(string::hash_t const a_hash) const;
+
+  size_t size() const;
+  MetaInfo const &metaInfoFor(string::hash_t const a_hash) const;
+  MetaInfo const &metaInfoAt(size_t const a_index) const;
 
  private:
   Registry();
+
+  void addElement(MetaInfo &a_metaInfo);
 
   template<typename T>
   static Element *cloneElement()
@@ -138,9 +105,8 @@ class SPAGHETTI_API Registry final {
   }
 
  private:
-  using Plugins = std::vector<std::shared_ptr<SharedLibrary>>;
-  Elements m_elements{};
-  Plugins m_plugins{};
+  struct PIMPL;
+  std::unique_ptr<PIMPL> m_pimpl;
 };
 
 } // namespace spaghetti

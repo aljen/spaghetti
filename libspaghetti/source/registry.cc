@@ -22,6 +22,8 @@
 
 #include "spaghetti/registry.h"
 
+#include <vector>
+
 #include "filesystem.h"
 #include "shared_library.h"
 
@@ -37,6 +39,13 @@ inline void init_resources()
 
 namespace spaghetti {
 
+struct Registry::PIMPL {
+  using Plugins = std::vector<std::shared_ptr<SharedLibrary>>;
+  using MetaInfos = std::vector<MetaInfo>;
+  MetaInfos metaInfos{};
+  Plugins plugins{};
+};
+
 Registry &Registry::get()
 {
   static Registry s_registry{};
@@ -44,6 +53,7 @@ Registry &Registry::get()
 }
 
 Registry::Registry()
+  : m_pimpl{ std::make_unique<PIMPL>() }
 {
   log::init();
 
@@ -134,8 +144,69 @@ void Registry::loadPlugins()
     auto registerPlugin = plugin->get<void(Registry &)>("register_plugin");
     registerPlugin(*this);
 
-    m_plugins.emplace_back(std::move(plugin));
+    m_pimpl->plugins.emplace_back(std::move(plugin));
   }
+}
+
+Element *Registry::createElement(string::hash_t const a_hash)
+{
+  auto const &metaInfo = metaInfoFor(a_hash);
+  assert(metaInfo.cloneElement);
+  return metaInfo.cloneElement();
+}
+
+Node *Registry::createNode(string::hash_t const a_hash)
+{
+  auto const &metaInfo = metaInfoFor(a_hash);
+  assert(metaInfo.cloneNode);
+  return metaInfo.cloneNode();
+}
+
+std::string Registry::elementName(string::hash_t const a_hash)
+{
+  auto const &metaInfo = metaInfoFor(a_hash);
+  return metaInfo.name;
+}
+
+std::string Registry::elementIcon(string::hash_t const a_hash)
+{
+  auto const &metaInfo = metaInfoFor(a_hash);
+  return metaInfo.icon;
+}
+
+void Registry::addElement(MetaInfo &a_metaInfo)
+{
+  auto &metaInfos = m_pimpl->metaInfos;
+  metaInfos.push_back(std::move(a_metaInfo));
+}
+
+bool Registry::hasElement(string::hash_t const a_hash) const
+{
+  auto const &metaInfos = m_pimpl->metaInfos;
+  auto const it = std::find_if(std::begin(metaInfos), std::end(metaInfos),
+                               [a_hash](auto const &a_metaInfo) { return a_metaInfo.hash == a_hash; });
+  return it != std::end(metaInfos);
+}
+
+size_t Registry::size() const
+{
+  auto const &metaInfos = m_pimpl->metaInfos;
+  return metaInfos.size();
+}
+
+Registry::MetaInfo const &Registry::metaInfoFor(string::hash_t const a_hash) const
+{
+  auto &metaInfos = m_pimpl->metaInfos;
+  assert(hasElement(a_hash));
+  auto const it = std::find_if(std::begin(metaInfos), std::end(metaInfos),
+                               [a_hash](auto const &a_metaInfo) { return a_metaInfo.hash == a_hash; });
+  return *it;
+}
+
+Registry::MetaInfo const &Registry::metaInfoAt(size_t const a_index) const
+{
+  auto const &metaInfos = m_pimpl->metaInfos;
+  return metaInfos[a_index];
 }
 
 } // namespace spaghetti
