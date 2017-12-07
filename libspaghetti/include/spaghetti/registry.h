@@ -26,6 +26,7 @@
 
 #include <cassert>
 #include <type_traits>
+#include <memory>
 
 // clang-format off
 #ifdef _MSC_VER
