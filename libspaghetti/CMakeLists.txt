@@ -232,11 +232,17 @@ if (CLANG)
   target_link_libraries(Spaghetti PUBLIC -stdlib=libc++)
 endif ()
 
-install(TARGETS Spaghetti EXPORT Spaghetti
+install(TARGETS Spaghetti
+  COMPONENT SDK
+  EXPORT Spaghetti
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   )
-install(FILES ${LIBSPAGHETTI_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
-install(EXPORT Spaghetti DESTINATION share/Spaghetti/cmake)
+install(FILES ${LIBSPAGHETTI_PUBLIC_HEADERS}
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
+install(EXPORT Spaghetti
+  COMPONENT SDK
+  DESTINATION share/Spaghetti/cmake)
 export(TARGETS Spaghetti FILE Spaghetti.cmake)

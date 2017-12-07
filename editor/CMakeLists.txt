@@ -21,6 +21,8 @@ target_compile_options(SpaghettiEditor
   )
 target_link_libraries(SpaghettiEditor Spaghetti)
 
-install(TARGETS SpaghettiEditor EXPORT SpaghettiEditor
+install(TARGETS SpaghettiEditor
+  COMPONENT Editor
+  EXPORT SpaghettiEditor
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   )

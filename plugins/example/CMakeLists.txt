@@ -19,6 +19,8 @@ set_target_properties(Example PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINAR
 
 target_link_libraries(Example Spaghetti)
 
-install(TARGETS Example EXPORT Example
+install(TARGETS Example
+  COMPONENT ExamplePlugin
+  EXPORT Example
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/spaghetti
   )
