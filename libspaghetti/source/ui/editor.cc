@@ -296,9 +296,7 @@ void Editor::buildCommit()
 
 void Editor::recentChanges()
 {
-  QUrl const url{
-    QString("https://github.com/aljen/spaghetti/compare/%1...master").arg(version::COMMIT_HASH)
-  };
+  QUrl const url{ QString("https://github.com/aljen/spaghetti/compare/%1...master").arg(version::COMMIT_HASH) };
   QDesktopServices::openUrl(url);
 }
 
