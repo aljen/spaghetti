@@ -24,6 +24,8 @@
 #ifndef SPAGHETTI_VERSION_H
 #define SPAGHETTI_VERSION_H
 
+#include <cstdint>
+
 namespace spaghetti::version {
 
 constexpr char const *const STRING{ "@Spaghetti_VERSION@" };
