@@ -20,3 +20,7 @@ target_compile_options(SpaghettiEditor
   PRIVATE $<$<CONFIG:Release>:${SPAGHETTI_FLAGS_RELEASE}>
   )
 target_link_libraries(SpaghettiEditor Spaghetti)
+
+install(TARGETS SpaghettiEditor EXPORT SpaghettiEditor
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  )
