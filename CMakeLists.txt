@@ -40,3 +40,40 @@ endif ()
 if (SPAGHETTI_BUILD_EXAMPLE_PLUGIN)
   add_subdirectory(plugins)
 endif ()
+
+if (SPAGHETTI_ENABLE_CPACK)
+  include(InstallRequiredSystemLibraries)
+#  set(CPACK_GENERATOR TBZ2)
+  list(APPEND CPACK_GENERATOR IFW)
+  if (WIN32)
+    list(APPEND CPACK_GENERATOR NSIS64)
+  endif ()
+  set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE)
+  set(CPACK_PACKAGE_NAME ${CMAKE_PROJECT_NAME})
+  set(CPACK_PACKAGE_DESCRIPTION "Graphical logic editor/simulator")
+  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Graphical logic editor/simulator")
+  set(CPACK_PACKAGE_VENDOR "Artur Wyszyński")
+  set(CPACK_PACKAGE_CONTACT "spaghetti@hitomi.pl")
+  set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+  set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+  set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+  set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+  set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}_${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+
+  set(CPACK_IFW_PRODUCT_URL "https://github.com/aljen/spaghetti")
+  set(CPACK_IFW_PACKAGE_ALLOW_SPACE_IN_PATH OFF)
+
+  include(CPack)
+  include(CPackIFW)
+
+  cpack_add_component(SDK
+    DISPLAY_NAME "Spaghetti SDK"
+    REQUIRED
+  )
+  cpack_add_component(Editor
+    DISPLAY_NAME "Editor"
+    )
+  cpack_add_component(ExamplePlugin
+    DISPLAY_NAME "Example plugin"
+    )
+endif ()
