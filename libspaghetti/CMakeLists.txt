@@ -16,7 +16,7 @@ endif ()
 configure_file(source/filesystem.h.in include/filesystem.h)
 configure_file(include/spaghetti/version.h.in include/spaghetti/version.h)
 
-set(LIBSPAGHETTI_SOURCES
+set(LIBSPAGHETTI_PUBLIC_HEADERS
   ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
   include/spaghetti/api.h
   include/spaghetti/editor.h
@@ -28,6 +28,9 @@ set(LIBSPAGHETTI_SOURCES
   include/spaghetti/socket_item.h
   include/spaghetti/strings.h
   include/spaghetti/utils.h
+  )
+set(LIBSPAGHETTI_SOURCES
+  ${LIBSPAGHETTI_PUBLIC_HEADERS}
   include/spaghetti/version.h.in
 
   source/elements/gates/all.h
@@ -211,8 +214,8 @@ target_include_directories(Spaghetti
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+  PUBLIC $<INSTALL_INTERFACE:include>
   PRIVATE source
-#  $<INSTALL_INTERFACE:include>
   )
 target_include_directories(Spaghetti SYSTEM PUBLIC
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
@@ -234,6 +237,6 @@ install(TARGETS Spaghetti EXPORT Spaghetti
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   )
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES ${LIBSPAGHETTI_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
 install(EXPORT Spaghetti DESTINATION share/Spaghetti/cmake)
 export(TARGETS Spaghetti FILE Spaghetti.cmake)
