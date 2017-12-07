@@ -13,6 +13,7 @@ include(BuildType)
 include(CompilerType)
 include(CompilerFlags)
 include(DetectCxxFilesystem)
+include(GetRepoInfo)
 
 option(SPAGHETTI_BUILD_EDITOR "Build editor" ON)
 option(SPAGHETTI_BUILD_EXAMPLE_PLUGIN "Build example plugin" ON)
@@ -30,31 +31,12 @@ if (SPAGHETTI_USE_CLANG_TIDY)
   set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=-cppcoreguidelines-pro-type-const-cast")
 endif ()
 
-execute_process(
-  COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  OUTPUT_VARIABLE Spaghetti_GIT_BRANCH
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
-execute_process(
-  COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  OUTPUT_VARIABLE Spaghetti_GIT_COMMIT_HASH
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
-execute_process(
-  COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  OUTPUT_VARIABLE Spaghetti_GIT_COMMIT_SHORT_HASH
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
 add_subdirectory(libspaghetti)
+
 if (SPAGHETTI_BUILD_EDITOR)
   add_subdirectory(editor)
 endif ()
+
 if (SPAGHETTI_BUILD_EXAMPLE_PLUGIN)
   add_subdirectory(plugins)
 endif ()
