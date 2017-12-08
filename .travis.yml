@@ -7,5 +7,5 @@ addons:
     - ubuntu-toolchain-r-test
     packages:
     - cmake
-    - gcc-6
-    - g++-6
+    - gcc-7
+    - g++-7
