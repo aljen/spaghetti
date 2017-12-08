@@ -1,6 +1,6 @@
 # Spaghetti - graphical logic editor/simulator
-[![Build status][travis-badge]](travis-link)
-[![Build status][appveyor-badge]](appveyor-link)
+[![Build status][travis-badge]][travis-link]
+[![Build status][appveyor-badge]][appveyor-link]
 [![MIT License][license-badge]](LICENSE.md)
 
 ![spaghetti.gif](docs/spaghetti.gif)
