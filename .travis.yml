@@ -1,1 +1,11 @@
 language: cpp
+sudo: false
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - cmake
+    - gcc-6
+    - g++-6
