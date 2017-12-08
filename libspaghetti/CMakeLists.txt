@@ -246,3 +246,12 @@ install(EXPORT Spaghetti
   COMPONENT SDK
   DESTINATION share/Spaghetti/cmake)
 export(TARGETS Spaghetti FILE Spaghetti.cmake)
+
+# Copy vendor headers to libspaghetti/include
+message (STATUS "Synchronizing vendor headers...")
+foreach(HEADER ${VENDOR_FREE_STANDING_HEADERS})
+  configure_file(${VENDOR_ROOT}/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/${HEADER} COPYONLY)
+endforeach ()
+foreach(HEADER ${VENDOR_SPDLOG_HEADERS})
+  configure_file(${VENDOR_ROOT}/spdlog/include/spdlog/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/spdlog/${HEADER} COPYONLY)
+endforeach ()
