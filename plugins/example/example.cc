@@ -23,30 +23,30 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "core/logger.h"
-#include "core/registry.h"
-#include "elements/element.h"
-#include "nodes/node.h"
+#include "spaghetti/element.h"
+#include "spaghetti/logger.h"
+#include "spaghetti/node.h"
+#include "spaghetti/registry.h"
 
-class Example final : public elements::Element {
+class Example final : public spaghetti::Element {
  public:
   static constexpr char const *const TYPE{ "plugins/example" };
-  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+  static constexpr spaghetti::string::hash_t const HASH{ spaghetti::string::hash(TYPE) };
 
   Example()
-    : elements::Element{}
+    : spaghetti::Element{}
   {
   }
 
   char const *type() const noexcept override { return TYPE; }
-  string::hash_t hash() const noexcept override { return HASH; }
+  spaghetti::string::hash_t hash() const noexcept override { return HASH; }
 
   bool calculate() override { return false; }
 };
 
-extern "C" SPAGHETTI_API void register_plugin(core::Registry &a_registry)
+extern "C" SPAGHETTI_API void register_plugin(spaghetti::Registry &a_registry)
 {
-  core::log::init_from_plugin();
+  spaghetti::log::init_from_plugin();
 
   a_registry.registerElement<Example>("Example (Bool)", ":/unknown.png");
 }

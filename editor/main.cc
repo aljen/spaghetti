@@ -25,8 +25,8 @@
 #include <QStyleFactory>
 #include <iostream>
 
-#include "core/registry.h"
-#include "ui/editor.h"
+#include <spaghetti/registry.h>
+#include <spaghetti/editor.h>
 
 int main(int argc, char **argv)
 {
@@ -52,12 +52,12 @@ int main(int argc, char **argv)
 
   std::locale::global(std::locale("C"));
 
-  core::Registry &registry{ core::Registry::get() };
+  spaghetti::Registry &registry{ spaghetti::Registry::get() };
   registry.registerInternalElements();
   registry.loadPlugins();
 
-  Editor editor{};
-  QObject::connect(&app, &QApplication::aboutToQuit, &editor, &Editor::aboutToQuit);
+  spaghetti::Editor editor{};
+  QObject::connect(&app, &QApplication::aboutToQuit, &editor, &spaghetti::Editor::aboutToQuit);
   editor.show();
   // editor.showMaximized();
 
