@@ -12,6 +12,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - qt5-default
             - g++-7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
