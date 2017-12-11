@@ -243,7 +243,7 @@ void SocketItem::mouseMoveEvent(QGraphicsSceneMouseEvent *a_event)
 
   Qt::DropAction const action{ drag->exec() };
   if (action == Qt::IgnoreAction) {
-    m_links.removeAll(linkItem);
+    removeLink(linkItem);
     scene()->removeItem(linkItem);
     view->cancelDragLink();
   } else
@@ -358,7 +358,8 @@ void SocketItem::disconnectAllOutputs()
 
 void SocketItem::removeLink(LinkItem *const a_linkItem)
 {
-  m_links.removeAll(a_linkItem);
+  auto const it = std::remove(std::begin(m_links), std::end(m_links), a_linkItem);
+  m_links.erase(it, std::end(m_links));
 }
 
 LinkItem *SocketItem::linkBetween(SocketItem *const a_from, SocketItem *const a_to) const
