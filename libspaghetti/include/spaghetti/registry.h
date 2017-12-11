@@ -26,6 +26,7 @@
 
 #include <cassert>
 #include <memory>
+#include <string>
 #include <type_traits>
 
 #include <spaghetti/api.h>
@@ -50,6 +51,8 @@ class SPAGHETTI_API Registry final {
 
  public:
   static Registry &get();
+
+  ~Registry();
 
   void registerInternalElements();
   void loadPlugins();

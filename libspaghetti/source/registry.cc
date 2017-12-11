@@ -52,6 +52,8 @@ Registry &Registry::get()
   return s_registry;
 }
 
+Registry::~Registry() = default;
+
 Registry::Registry()
   : m_pimpl{ std::make_unique<PIMPL>() }
 {
