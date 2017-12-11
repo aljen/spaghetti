@@ -9,6 +9,9 @@ configuration:
 matrix:
   fast_finish: true
 
+install:
+  - git submodule update --init --recursive
+
 before_build:
 - cmd: >-
     mkdir build
