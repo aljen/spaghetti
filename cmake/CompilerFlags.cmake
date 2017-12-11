@@ -34,9 +34,9 @@ elseif (GCC OR CLANG)
   list(APPEND SPAGHETTI_FLAGS -pedantic)
 
   list(APPEND SPAGHETTI_FLAGS_DEBUG -ggdb3 -O0 -fno-inline -fno-omit-frame-pointer -fno-optimize-sibling-calls)
-  if (UNIX)
-    list(APPEND SPAGHETTI_FLAGS_DEBUG -gz)
-  endif ()
+#  if (UNIX)
+#    list(APPEND SPAGHETTI_FLAGS_DEBUG -gz)
+#  endif ()
   list(APPEND SPAGHETTI_FLAGS_RELEASE -O3 -flto -fuse-linker-plugin)
   list(APPEND SPAGHETTI_FLAGS_LINKER -Wl,-O1 -Wl,--fatal-warnings -Wl,--discard-all -Wl,--build-id=sha1)
 
