@@ -12,8 +12,11 @@ matrix:
 before_build:
 - cmd: >-
     mkdir build
+
     cd build
+
     cmake --version
+
     cmake .. -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=C:\Qt\5.9.2\msvc2017_64
 
 build:
