@@ -40,9 +40,9 @@ before_install:
 before_script:
 - mkdir -p build/{debug,release}
 - cd build/debug
-- cmake -DCMAKE_BUILD_TYPE=Debug ..
+- cmake -DCMAKE_BUILD_TYPE=Debug ../..
 - cd ../release
-- cmake -DCMAKE_BUILD_TYPE=Release ..
+- cmake -DCMAKE_BUILD_TYPE=Release ../..
 - cd ..
 
 script:
