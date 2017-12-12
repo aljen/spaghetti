@@ -24,6 +24,12 @@
 #ifndef SPAGHETTI_REGISTRY_H
 #define SPAGHETTI_REGISTRY_H
 
+// clang-format off
+#ifdef _MSC_VER
+# pragma warning(disable:4251)
+#endif
+// clang-format on
+
 #include <cassert>
 #include <memory>
 #include <string>
