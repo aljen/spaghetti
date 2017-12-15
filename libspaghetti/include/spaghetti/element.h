@@ -90,7 +90,6 @@ class SPAGHETTI_API Element {
   virtual void calculate() {}
   virtual void reset() {}
 
-  virtual bool isUpdatable() const { return false; }
   virtual void update(duration_t const &a_delta) { (void)a_delta; }
 
   size_t id() const noexcept { return m_id; }
