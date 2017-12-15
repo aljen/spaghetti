@@ -32,9 +32,11 @@ ClampInt::ClampInt()
   setMaxInputs(3);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eInt, "Minimum");
   addInput(ValueType::eInt, "Maximum");
   addInput(ValueType::eInt, "Value");
+
   addOutput(ValueType::eInt, "clamp(v, min, max)");
 }
 

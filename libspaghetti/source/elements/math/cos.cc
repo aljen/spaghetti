@@ -31,7 +31,9 @@ Cos::Cos()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "Angle (Rad)");
+
   addOutput(ValueType::eFloat, "cos(angle)");
 }
 

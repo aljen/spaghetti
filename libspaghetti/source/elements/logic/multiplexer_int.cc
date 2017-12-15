@@ -31,9 +31,11 @@ MultiplexerInt::MultiplexerInt()
   setMinInputs(3);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eInt, "Select");
   addInput(ValueType::eInt, "#1");
   addInput(ValueType::eInt, "#2");
+
   addOutput(ValueType::eInt, "Value");
 }
 

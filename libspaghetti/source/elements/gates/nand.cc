@@ -30,8 +30,10 @@ Nand::Nand()
   setMinInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eBool, "#1");
   addInput(ValueType::eBool, "#2");
+
   addOutput(ValueType::eBool, "State");
 }
 

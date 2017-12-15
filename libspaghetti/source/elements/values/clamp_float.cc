@@ -32,9 +32,11 @@ ClampFloat::ClampFloat()
   setMaxInputs(3);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "Minimum");
   addInput(ValueType::eFloat, "Maximum");
   addInput(ValueType::eFloat, "Value");
+
   addOutput(ValueType::eFloat, "clamp(v, min, max)");
 }
 

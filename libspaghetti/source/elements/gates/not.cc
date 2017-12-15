@@ -31,7 +31,9 @@ Not::Not()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eBool, "#1");
+
   addOutput(ValueType::eBool, "State");
 }
 

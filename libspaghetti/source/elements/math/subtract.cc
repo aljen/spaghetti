@@ -30,8 +30,10 @@ Subtract::Subtract()
   setMinInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "#1");
   addInput(ValueType::eFloat, "#2");
+
   addOutput(ValueType::eFloat, "Value");
 }
 

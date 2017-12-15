@@ -30,8 +30,10 @@ MaxInt::MaxInt()
   setMaxInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eInt, "A");
   addInput(ValueType::eInt, "B");
+
   addOutput(ValueType::eInt, "max(A, B)");
 }
 

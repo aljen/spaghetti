@@ -31,7 +31,9 @@ Abs::Abs()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "Value");
+
   addOutput(ValueType::eFloat, "abs(value)");
 }
 

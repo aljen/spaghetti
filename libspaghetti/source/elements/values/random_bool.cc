@@ -39,7 +39,9 @@ RandomBool::RandomBool()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eBool, "Trigger");
+
   addOutput(ValueType::eBool, "Value");
 }
 

@@ -30,8 +30,10 @@ MaxFloat::MaxFloat()
   setMaxInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "A");
   addInput(ValueType::eFloat, "B");
+
   addOutput(ValueType::eFloat, "max(A, B)");
 }
 

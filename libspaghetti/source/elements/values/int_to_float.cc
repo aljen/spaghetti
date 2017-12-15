@@ -30,7 +30,9 @@ Int2Float::Int2Float()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eInt, "Int");
+
   addOutput(ValueType::eFloat, "Float");
 }
 

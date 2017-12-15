@@ -31,7 +31,9 @@ Radian2Degree::Radian2Degree()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "Radian");
+
   addOutput(ValueType::eFloat, "Degree");
 }
 

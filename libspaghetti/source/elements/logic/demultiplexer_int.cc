@@ -31,8 +31,10 @@ DemultiplexerInt::DemultiplexerInt()
   setMinInputs(2);
   setMaxInputs(2);
   setMinOutputs(2);
+
   addInput(ValueType::eInt, "Select");
   addInput(ValueType::eInt, "Value");
+
   addOutput(ValueType::eInt, "#1");
   addOutput(ValueType::eInt, "#2");
 }

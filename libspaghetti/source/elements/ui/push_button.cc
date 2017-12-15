@@ -30,6 +30,7 @@ PushButton::PushButton()
   setMaxInputs(0);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addOutput(ValueType::eBool, "State");
 }
 
