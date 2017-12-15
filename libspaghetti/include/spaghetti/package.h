@@ -97,19 +97,11 @@ class SPAGHETTI_API Package final : public Element {
   void startDispatchThread();
   void quitDispatchThread();
 
-  void setInputsPosition(double const a_x, double const a_y)
-  {
-    m_inputsPosition.x = a_x;
-    m_inputsPosition.y = a_y;
-  }
+  void setInputsPosition(double const a_x, double const a_y);
   void setInputsPosition(Vec2 const a_position) { m_inputsPosition = a_position; }
   Vec2 const &inputsPosition() const { return m_inputsPosition; }
 
-  void setOutputsPosition(double const a_x, double const a_y)
-  {
-    m_outputsPosition.x = a_x;
-    m_outputsPosition.y = a_y;
-  }
+  void setOutputsPosition(double const a_x, double const a_y);
   void setOutputsPosition(Vec2 const a_position) { m_outputsPosition = a_position; }
   Vec2 const &outputsPosition() const { return m_outputsPosition; }
 
@@ -141,6 +133,18 @@ class SPAGHETTI_API Package final : public Element {
 
   bool m_quit{};
 };
+
+inline void Package::setInputsPosition(const double a_x, const double a_y)
+{
+  m_inputsPosition.x = a_x;
+  m_inputsPosition.y = a_y;
+}
+
+inline void Package::setOutputsPosition(const double a_x, const double a_y)
+{
+  m_outputsPosition.x = a_x;
+  m_outputsPosition.y = a_y;
+}
 
 } // namespace spaghetti
 
