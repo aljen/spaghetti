@@ -158,8 +158,6 @@ Element *Package::add(string::hash_t a_hash)
   element->m_id = index;
   element->reset();
 
-  if (element->isUpdatable()) m_addUpdatableQueue.enqueue(element);
-
   return element;
 }
 
@@ -253,11 +251,6 @@ void Package::updatesThreadFunction()
   auto last = clock_t::now();
 
   while (!m_quit) {
-    Element *temp{};
-    while (m_addUpdatableQueue.try_dequeue(temp)) m_updatables.push_back(temp);
-    while (m_removeUpdatableQueue.try_dequeue(temp))
-      std::remove(std::begin(m_updatables), std::end(m_updatables), temp);
-
     auto const now = clock_t::now();
     auto const delta = now - last;
     for (auto &&updatable : m_updatables) updatable->update(delta);

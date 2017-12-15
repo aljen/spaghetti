@@ -139,8 +139,6 @@ class SPAGHETTI_API Package final : public Element {
   std::vector<Element *> m_updatables{};
 
   moodycamel::ConcurrentQueue<size_t> m_queue{};
-  moodycamel::ConcurrentQueue<Element *> m_addUpdatableQueue{};
-  moodycamel::ConcurrentQueue<Element *> m_removeUpdatableQueue{};
 
 #if PACKAGE_MAP == PACKAGE_SPP_MAP
   using Callbacks = spp::sparse_hash_map<size_t, std::vector<size_t>>;
