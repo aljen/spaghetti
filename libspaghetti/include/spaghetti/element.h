@@ -118,9 +118,6 @@ class SPAGHETTI_API Element {
 
   bool connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t const a_inputId);
 
-  using CallbackFunction = std::function<void(Element *const)>;
-  void onChange(CallbackFunction &&a_callback) { m_callback = a_callback; }
-
   uint8_t minInputs() const { return m_minInputs; }
   uint8_t maxInputs() const { return m_maxInputs; }
   uint8_t minOutputs() const { return m_minOutputs; }
@@ -150,7 +147,6 @@ class SPAGHETTI_API Element {
   size_t m_id{};
   std::string m_name{};
   Vec2 m_position{};
-  CallbackFunction m_callback{};
   bool m_isIconified{};
   uint8_t m_minInputs{};
   uint8_t m_maxInputs{ std::numeric_limits<uint8_t>::max() };

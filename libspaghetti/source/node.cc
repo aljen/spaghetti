@@ -188,8 +188,6 @@ void Node::setElement(Element *const a_element)
       break;
   }
 
-  m_element->onChange([&](Element *const a_changed) { setOutputs(a_changed); });
-
   m_element->setPosition(x(), y());
   m_element->iconify(m_mode == Mode::eIconified);
 
