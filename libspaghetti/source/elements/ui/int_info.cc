@@ -34,6 +34,4 @@ IntInfo::IntInfo()
   addInput(ValueType::eInt, "Int");
 }
 
-IntInfo::~IntInfo() {}
-
 } // namespace spaghetti::elements::ui

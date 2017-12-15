@@ -34,6 +34,4 @@ FloatInfo::FloatInfo()
   addInput(ValueType::eFloat, "Float");
 }
 
-FloatInfo::~FloatInfo() {}
-
 } // namespace spaghetti::elements::ui

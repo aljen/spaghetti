@@ -34,7 +34,6 @@ class Blinker final : public Element {
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   Blinker();
-  ~Blinker() override;
 
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }

@@ -38,8 +38,6 @@ Blinker::Blinker()
   addOutput(ValueType::eBool, "State");
 }
 
-Blinker::~Blinker() {}
-
 void Blinker::update(duration_t const &a_delta)
 {
   if (m_enabled) {
