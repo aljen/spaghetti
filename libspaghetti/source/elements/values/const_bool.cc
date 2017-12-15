@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/values/const_bool.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::values {
 
@@ -56,8 +55,6 @@ void ConstBool::toggle()
 {
   m_currentValue = !m_currentValue;
   m_outputs[0].value = m_currentValue;
-
-  m_package->elementChanged(id());
 }
 
 void ConstBool::set(bool a_state)
@@ -66,8 +63,6 @@ void ConstBool::set(bool a_state)
 
   m_currentValue = a_state;
   m_outputs[0].value = a_state;
-
-  m_package->elementChanged(id());
 }
 
 } // namespace spaghetti::elements::values

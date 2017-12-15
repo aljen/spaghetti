@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/gates/or.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::gates {
 

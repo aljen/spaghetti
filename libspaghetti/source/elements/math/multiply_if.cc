@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/multiply_if.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 

@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/values/radian_to_degree.h"
-#include "spaghetti/package.h"
 #include "spaghetti/utils.h"
 
 namespace spaghetti::elements::values {

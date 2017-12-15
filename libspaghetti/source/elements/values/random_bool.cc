@@ -23,7 +23,6 @@
 #include <random>
 
 #include "elements/values/random_bool.h"
-#include "spaghetti/package.h"
 
 namespace {
 std::random_device g_random{};

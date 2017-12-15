@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/values/int_to_float.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::values {
 

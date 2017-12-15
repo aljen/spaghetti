@@ -20,10 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <iostream>
-
 #include "elements/logic/blinker.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::logic {
 
@@ -53,7 +50,6 @@ void Blinker::update(duration_t const &a_delta)
       m_time = duration_t{};
       m_state = !m_state;
       m_outputs[0].value = m_state;
-      m_package->elementChanged(id());
     }
   }
 }

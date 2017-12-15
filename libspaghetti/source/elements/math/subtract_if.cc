@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/subtract_if.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 

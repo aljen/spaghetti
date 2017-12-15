@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/ui/push_button.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::ui {
 
@@ -38,8 +37,6 @@ void PushButton::toggle()
 {
   m_currentValue = !m_currentValue;
   m_outputs[0].value = m_currentValue;
-
-  m_package->elementChanged(id());
 }
 
 void PushButton::set(bool a_state)
@@ -48,8 +45,6 @@ void PushButton::set(bool a_state)
 
   m_currentValue = a_state;
   m_outputs[0].value = a_state;
-
-  m_package->elementChanged(id());
 }
 
 } // namespace spaghetti::elements::ui

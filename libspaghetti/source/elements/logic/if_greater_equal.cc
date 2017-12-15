@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/logic/if_greater_equal.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::logic {
 

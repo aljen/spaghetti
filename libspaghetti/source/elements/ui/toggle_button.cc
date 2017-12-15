@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/ui/toggle_button.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::ui {
 

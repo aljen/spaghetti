@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/add_if.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 

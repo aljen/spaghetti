@@ -20,10 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "float_info.h"
-
-#include <iostream>
-#include "spaghetti/package.h"
+#include "elements/ui/float_info.h"
 
 namespace spaghetti::elements::ui {
 

@@ -99,8 +99,6 @@ class SPAGHETTI_API Package final : public Element {
   void startDispatchThread();
   void quitDispatchThread();
 
-  void elementChanged(size_t a_id);
-
   void setInputsPosition(double const a_x, double const a_y)
   {
     m_inputsPosition.x = a_x;

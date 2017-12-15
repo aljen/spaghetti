@@ -215,8 +215,6 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   auto const it = std::find(std::begin(dependencies), std::end(dependencies), a_targetId);
   if (it == std::end(dependencies)) dependencies.push_back(a_targetId);
 
-  if (target->calculate()) elementChanged(a_targetId);
-
   return true;
 }
 
@@ -239,8 +237,6 @@ bool Package::disconnect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetI
 
   auto &dependencies = m_dependencies[a_sourceId];
   dependencies.erase(std::find(std::begin(dependencies), std::end(dependencies), a_targetId), std::end(dependencies));
-
-  if (target->calculate()) elementChanged(a_targetId);
 
   return true;
 }
@@ -331,11 +327,6 @@ void Package::dispatch(size_t a_id)
                           a_id, source->name(), m_dependencies[a_id].size());
     if (element->calculate()) elementChanged(ID);
   }
-}
-
-void Package::elementChanged(size_t a_id)
-{
-  m_queue.enqueue(a_id);
 }
 
 void Package::open(std::string const &a_filename)

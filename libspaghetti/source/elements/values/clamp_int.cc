@@ -23,7 +23,6 @@
 #include <algorithm>
 
 #include "elements/values/clamp_int.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::values {
 

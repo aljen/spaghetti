@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/values/max_int.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::values {
 

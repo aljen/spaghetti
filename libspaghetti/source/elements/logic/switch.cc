@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/logic/switch.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::logic {
 
@@ -38,8 +37,6 @@ Switch::Switch()
 void Switch::toggle()
 {
   m_outputs[0].value = !std::get<bool>(m_outputs[0].value);
-
-  m_package->elementChanged(id());
 }
 
 void Switch::set(bool a_state)
@@ -48,8 +45,6 @@ void Switch::set(bool a_state)
   if (a_state == currentState) return;
 
   m_outputs[0].value = a_state;
-
-  m_package->elementChanged(id());
 }
 
 } // namespace spaghetti::elements::logic

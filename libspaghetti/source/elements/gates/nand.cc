@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/gates/nand.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::gates {
 
