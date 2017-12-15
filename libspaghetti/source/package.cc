@@ -35,7 +35,7 @@ namespace spaghetti {
 Package::Package()
   : Element{}
 {
-  m_data.push_back(this);
+  m_elements.push_back(this);
 
   addInput(ValueType::eBool, "#1");
   addInput(ValueType::eBool, "#2");
@@ -45,8 +45,8 @@ Package::Package()
 
 Package::~Package()
 {
-  size_t const SIZE{ m_data.size() };
-  for (size_t i = 1; i < SIZE; ++i) delete m_data[i];
+  size_t const SIZE{ m_elements.size() };
+  for (size_t i = 1; i < SIZE; ++i) delete m_elements[i];
 }
 
 void Package::serialize(Element::Json &a_json)
@@ -66,9 +66,9 @@ void Package::serialize(Element::Json &a_json)
 
   auto jsonElements = Json::array();
   // TODO(aljen): fix holes
-  size_t const DATA_SIZE{ m_data.size() };
+  size_t const DATA_SIZE{ m_elements.size() };
   for (size_t i = 1; i < DATA_SIZE; ++i) {
-    auto const element = m_data[i];
+    auto const element = m_elements[i];
     if (element == nullptr) continue;
 
     Json jsonElement{};
@@ -145,12 +145,12 @@ Element *Package::add(string::hash_t a_hash)
 
   size_t index{};
   if (m_free.empty()) {
-    index = m_data.size();
-    m_data.emplace_back(element);
+    index = m_elements.size();
+    m_elements.emplace_back(element);
   } else {
     index = m_free.back();
-    assert(m_data[index] == nullptr);
-    m_data[index] = element;
+    assert(m_elements[index] == nullptr);
+    m_elements[index] = element;
     m_free.pop_back();
   }
 
@@ -164,21 +164,19 @@ Element *Package::add(string::hash_t a_hash)
 void Package::remove(size_t a_id)
 {
   assert(a_id > 0);
-  assert(a_id < m_data.size());
+  assert(a_id < m_elements.size());
   assert(std::find(std::begin(m_free), std::end(m_free), a_id) == std::end(m_free));
 
-  if (m_data[a_id]->isUpdatable()) std::remove(std::begin(m_updatables), std::end(m_updatables), m_data[a_id]);
-
-  delete m_data[a_id];
-  m_data[a_id] = nullptr;
+  delete m_elements[a_id];
+  m_elements[a_id] = nullptr;
   m_free.emplace_back(a_id);
 }
 
 Element *Package::get(size_t a_id) const
 {
-  assert(a_id < m_data.size());
+  assert(a_id < m_elements.size());
   assert(std::find(std::begin(m_free), std::end(m_free), a_id) == std::end(m_free));
-  return m_data[a_id];
+  return m_elements[a_id];
 }
 
 bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, uint8_t a_inputId)
@@ -195,10 +193,12 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
     target->m_inputs[a_inputId].id = a_sourceId;
     target->m_inputs[a_inputId].slot = a_outputId;
   } else if (a_sourceId == 0) {
+    // TODO(aljen): Handle this case
     spaghetti::log::trace("Package connect, package input to element input");
     target->m_inputs[a_inputId].id = a_sourceId;
     target->m_inputs[a_inputId].slot = a_outputId;
   } else if (a_targetId == 0) {
+    // TODO(aljen): Handle this case
     spaghetti::log::trace("Package connect, element output to package output");
   }
 
@@ -238,84 +238,54 @@ bool Package::disconnect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetI
 
 void Package::dispatchThreadFunction()
 {
-  while (!m_quit) tryDispatch();
-}
-
-void Package::updatesThreadFunction()
-{
   using clock_t = std::chrono::high_resolution_clock;
-
   auto last = clock_t::now();
 
   while (!m_quit) {
     auto const now = clock_t::now();
     auto const delta = now - last;
-    for (auto &&updatable : m_updatables) updatable->update(delta);
-    last = now;
+    for (auto &&connection : m_connections) {
+      Element *const source{ get(connection.from_id) };
+      Element *const target{ get(connection.to_id) };
 
+      auto const &sourceOutputs = source->outputs();
+      auto &targetInputs = target->inputs();
+      targetInputs[connection.to_socket].value = sourceOutputs[connection.from_socket].value;
+    }
+
+    for (auto &&element : m_elements) {
+      element->update(delta);
+      element->calculate();
+    }
+
+//    for (auto &&element : m_elements) {
+//      auto &elementInputs = element->inputs();
+//      for (auto &&input : elementInputs) {
+//        switch (input.type) {
+//          case ValueType::eBool: input.value = false; break;
+//          case ValueType::eFloat: input.value = 0.0f; break;
+//          case ValueType::eInt: input.value = 0; break;
+//        }
+//      }
+//    }
+
+    last = now;
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 }
 
 void Package::startDispatchThread()
 {
-  m_updatesThread = std::thread(&Package::updatesThreadFunction, this);
   m_dispatchThread = std::thread(&Package::dispatchThreadFunction, this);
 }
 
 void Package::quitDispatchThread()
 {
   m_quit = true;
-  if (m_updatesThread.joinable()) {
-    spaghetti::log::debug("Waiting for updates thread join..");
-    m_updatesThread.join();
-    spaghetti::log::debug("After updates thread join..");
-  }
   if (m_dispatchThread.joinable()) {
     spaghetti::log::debug("Waiting for dispatch thread join..");
     m_dispatchThread.join();
     spaghetti::log::debug("After dispatch thread join..");
-  }
-}
-
-bool Package::tryDispatch()
-{
-  size_t id{};
-  bool const dequeued{ m_queue.try_dequeue(id) };
-  if (dequeued) {
-    spaghetti::log::trace("Dequeued id: {}", id);
-    dispatch(id);
-  }
-
-  return dequeued;
-}
-
-void Package::dispatch(size_t a_id)
-{
-  Element *const source{ get(a_id) };
-  if (source->m_callback) source->m_callback(source);
-
-  if (m_dependencies.find(a_id) == std::end(m_dependencies)) {
-    spaghetti::log::trace("Dependencies list for id: {}({}) don't exist.", a_id, source->name());
-    return;
-  }
-
-  if (m_dependencies[a_id].empty()) {
-    spaghetti::log::trace("Dependencies list for id: {}({}) is empty.", a_id, source->name());
-    return;
-  }
-
-  spaghetti::log::trace("Dispatching dependencies for id: {}({}) (callbacks: {})", a_id, source->name(),
-                        m_dependencies[a_id].size());
-
-  auto const &dependencies = m_dependencies[a_id];
-  size_t const SIZE = dependencies.size();
-  for (size_t i = 0; i < SIZE; ++i) {
-    size_t const ID = dependencies[i];
-    Element *const element{ get(ID) };
-    spaghetti::log::trace("Recalculating id: {}({}) because id: {}({}) changed. (callbacks: {})", ID, element->name(),
-                          a_id, source->name(), m_dependencies[a_id].size());
-    element->calculate();
   }
 }
 
