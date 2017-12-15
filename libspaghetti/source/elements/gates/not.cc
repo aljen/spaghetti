@@ -38,8 +38,6 @@ Not::Not()
 
 bool Not::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   m_outputs[0].value = !std::get<bool>(*m_inputs[0].value);
 
   return true;

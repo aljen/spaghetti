@@ -125,8 +125,6 @@ class SPAGHETTI_API Element {
 
   bool connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t const a_inputId);
 
-  bool allInputsConnected() const;
-
   using CallbackFunction = std::function<void(Element *const)>;
   void onChange(CallbackFunction &&a_callback) { m_callback = a_callback; }
 

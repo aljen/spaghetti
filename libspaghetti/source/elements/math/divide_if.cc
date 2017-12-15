@@ -39,7 +39,6 @@ DivideIf::DivideIf()
 
 bool DivideIf::calculate()
 {
-  if (!allInputsConnected()) return false;
 
   bool const enabled = std::get<bool>(*m_inputs[0].value);
 

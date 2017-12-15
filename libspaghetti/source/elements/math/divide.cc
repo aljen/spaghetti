@@ -38,8 +38,6 @@ Divide::Divide()
 
 bool Divide::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   float const A{ std::get<float>(*m_inputs[0].value) };
   float b{ std::get<float>(*m_inputs[1].value) };
   if (b == 0.0f) b = 1.0f;

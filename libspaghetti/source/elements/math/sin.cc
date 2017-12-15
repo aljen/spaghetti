@@ -38,8 +38,6 @@ Sin::Sin()
 
 bool Sin::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   float const ANGLE{ std::get<float>(*m_inputs[0].value) };
   float const SIN{ std::sin(ANGLE) };
 

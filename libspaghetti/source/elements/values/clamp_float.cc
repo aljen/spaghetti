@@ -41,7 +41,6 @@ ClampFloat::ClampFloat()
 
 bool ClampFloat::calculate()
 {
-  if (!allInputsConnected()) return false;
 
   float const MINIMUM{ std::get<float>(*m_inputs[0].value) };
   float const MAXIMUM{ std::get<float>(*m_inputs[1].value) };

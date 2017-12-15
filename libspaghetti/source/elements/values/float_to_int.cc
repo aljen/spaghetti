@@ -37,8 +37,6 @@ Float2Int::Float2Int()
 
 bool Float2Int::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   float const input{ std::get<float>(*m_inputs[0].value) };
   m_outputs[0].value = static_cast<int32_t>(input);
 

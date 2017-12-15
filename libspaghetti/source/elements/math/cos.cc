@@ -38,8 +38,6 @@ Cos::Cos()
 
 bool Cos::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   float const ANGLE{ std::get<float>(*m_inputs[0].value) };
   float const COS{ std::cos(ANGLE) };
 

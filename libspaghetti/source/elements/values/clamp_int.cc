@@ -41,7 +41,6 @@ ClampInt::ClampInt()
 
 bool ClampInt::calculate()
 {
-  if (!allInputsConnected()) return false;
 
   int32_t const MINIMUM{ std::get<int32_t>(*m_inputs[0].value) };
   int32_t const MAXIMUM{ std::get<int32_t>(*m_inputs[1].value) };

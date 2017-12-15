@@ -38,8 +38,6 @@ Degree2Radian::Degree2Radian()
 
 bool Degree2Radian::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   float const input{ std::get<float>(*m_inputs[0].value) };
   m_outputs[0].value = input * spaghetti::DEG2RAD;
 

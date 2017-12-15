@@ -38,8 +38,6 @@ Subtract::Subtract()
 
 bool Subtract::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   float ret{ std::get<float>(*m_inputs[0].value) };
   size_t const SIZE{ m_inputs.size() };
   for (size_t i = 1; i < SIZE; ++i) ret -= std::get<float>(*m_inputs[i].value);

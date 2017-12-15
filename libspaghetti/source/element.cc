@@ -215,14 +215,6 @@ bool Element::connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t
   return m_package->connect(a_sourceId, a_outputId, m_id, a_inputId);
 }
 
-bool Element::allInputsConnected() const
-{
-  for (size_t i = 0; i < m_inputs.size(); ++i)
-    if (!m_inputs[i].value) return false;
-
-  return true;
-}
-
 void Element::setMinInputs(uint8_t const a_min)
 {
   if (a_min > m_maxInputs) return;

@@ -40,8 +40,6 @@ MultiplexerInt::MultiplexerInt()
 
 bool MultiplexerInt::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   int32_t const SELECT =
       std::clamp<int32_t>(std::get<int32_t>(*m_inputs[0].value), 0, static_cast<int32_t>(m_inputs.size()) - 2);
   int32_t const VALUE = std::get<int32_t>(*m_inputs[static_cast<size_t>(SELECT) + 1].value);

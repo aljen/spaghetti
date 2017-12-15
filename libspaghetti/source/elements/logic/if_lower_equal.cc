@@ -39,8 +39,6 @@ IfLowerEqual::IfLowerEqual()
 
 bool IfLowerEqual::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
 
   float const A{ std::get<float>(*m_inputs[0].value) };

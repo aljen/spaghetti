@@ -40,7 +40,6 @@ DemultiplexerInt::DemultiplexerInt()
 
 bool DemultiplexerInt::calculate()
 {
-  if (!allInputsConnected()) return false;
 
   int32_t const SELECT =
       std::clamp<int32_t>(std::get<int32_t>(*m_inputs[0].value), 0, static_cast<int32_t>(m_outputs.size()) - 1);

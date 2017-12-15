@@ -40,7 +40,6 @@ IfEqual::IfEqual()
 
 bool IfEqual::calculate()
 {
-  if (!allInputsConnected()) return false;
 
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
 

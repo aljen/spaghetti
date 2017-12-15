@@ -38,7 +38,6 @@ MaxInt::MaxInt()
 
 bool MaxInt::calculate()
 {
-  if (!allInputsConnected()) return false;
 
   int32_t const A{ std::get<int32_t>(*m_inputs[0].value) };
   int32_t const B{ std::get<int32_t>(*m_inputs[1].value) };

@@ -38,8 +38,6 @@ Abs::Abs()
 
 bool Abs::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   float const VALUE{ std::get<float>(*m_inputs[0].value) };
   float const ABS{ std::abs(VALUE) };
 

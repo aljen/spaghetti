@@ -39,7 +39,6 @@ AddIf::AddIf()
 
 bool AddIf::calculate()
 {
-  if (!allInputsConnected()) return false;
 
   bool const enabled = std::get<bool>(*m_inputs[0].value);
 

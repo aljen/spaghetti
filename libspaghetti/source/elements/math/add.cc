@@ -38,8 +38,6 @@ Add::Add()
 
 bool Add::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   float sum{};
   for (auto &&input : m_inputs) sum += std::get<float>(*input.value);
 

@@ -60,8 +60,6 @@ void Blinker::update(duration_t const &a_delta)
 
 bool Blinker::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   bool const enabled = std::get<bool>(*m_inputs[0].value);
   duration_t const highRate = duration_t{ std::get<int>(*m_inputs[1].value) };
   duration_t const lowRate = duration_t{ std::get<int>(*m_inputs[2].value) };

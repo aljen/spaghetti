@@ -38,7 +38,6 @@ MaxFloat::MaxFloat()
 
 bool MaxFloat::calculate()
 {
-  if (!allInputsConnected()) return false;
 
   float const A{ std::get<float>(*m_inputs[0].value) };
   float const B{ std::get<float>(*m_inputs[1].value) };

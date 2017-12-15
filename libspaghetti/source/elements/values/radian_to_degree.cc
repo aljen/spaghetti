@@ -38,8 +38,6 @@ Radian2Degree::Radian2Degree()
 
 bool Radian2Degree::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   float const input{ std::get<float>(*m_inputs[0].value) };
   m_outputs[0].value = input * spaghetti::RAD2DEG;
 
