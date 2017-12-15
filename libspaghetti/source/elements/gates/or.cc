@@ -37,7 +37,7 @@ Or::Or()
   addOutput(ValueType::eBool, "State");
 }
 
-bool Or::calculate()
+void Or::calculate()
 {
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
 
@@ -49,8 +49,6 @@ bool Or::calculate()
   }
 
   if (somethingSet != currentState) m_outputs[0].value = somethingSet;
-
-  return somethingSet != currentState;
 }
 
 } // namespace spaghetti::elements::gates

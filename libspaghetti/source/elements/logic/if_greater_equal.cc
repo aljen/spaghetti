@@ -38,7 +38,7 @@ IfGreaterEqual::IfGreaterEqual()
   addOutput(ValueType::eBool, "A >= B");
 }
 
-bool IfGreaterEqual::calculate()
+void IfGreaterEqual::calculate()
 {
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
 
@@ -49,8 +49,6 @@ bool IfGreaterEqual::calculate()
 
   bool const changed{ state != currentState };
   if (changed) m_outputs[0].value = state;
-
-  return changed;
 }
 
 } // namespace spaghetti::elements::logic

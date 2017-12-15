@@ -45,12 +45,11 @@ RandomBool::RandomBool()
   addOutput(ValueType::eBool, "Value");
 }
 
-bool RandomBool::calculate()
+void RandomBool::calculate()
 {
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
   bool const newState{ g_distrib(g_generator) };
   if (newState != currentState) m_outputs[0].value = newState;
-  return newState != currentState;
 }
 
 } // namespace spaghetti::elements::values

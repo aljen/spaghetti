@@ -36,12 +36,11 @@ Float2Int::Float2Int()
   addOutput(ValueType::eInt, "Int");
 }
 
-bool Float2Int::calculate()
+void Float2Int::calculate()
 {
   float const input{ std::get<float>(*m_inputs[0].value) };
   m_outputs[0].value = static_cast<int32_t>(input);
 
-  return true;
 }
 
 } // namespace spaghetti::elements::values

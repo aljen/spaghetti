@@ -87,7 +87,7 @@ class SPAGHETTI_API Element {
   virtual void serialize(Json &a_json);
   virtual void deserialize(Json const &a_json);
 
-  virtual bool calculate() { return false; }
+  virtual void calculate() {}
   virtual void reset() {}
 
   virtual bool isUpdatable() const { return false; }

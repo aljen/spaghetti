@@ -31,12 +31,8 @@ Clock::Clock()
   setMaxInputs(0);
   setMinOutputs(1);
   setMaxOutputs(1);
-  addOutput(ValueType::eBool, "State");
-}
 
-bool Clock::calculate()
-{
-  return false;
+  addOutput(ValueType::eBool, "State");
 }
 
 void Clock::update(duration_t const &a_delta)

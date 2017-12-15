@@ -38,8 +38,6 @@ class FloatInfo final : public Element {
 
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
-
-  bool calculate() override;
 };
 
 } // namespace spaghetti::elements::ui

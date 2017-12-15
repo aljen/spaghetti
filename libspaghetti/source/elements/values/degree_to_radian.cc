@@ -37,12 +37,11 @@ Degree2Radian::Degree2Radian()
   addOutput(ValueType::eFloat, "Radian");
 }
 
-bool Degree2Radian::calculate()
+void Degree2Radian::calculate()
 {
   float const input{ std::get<float>(*m_inputs[0].value) };
   m_outputs[0].value = input * spaghetti::DEG2RAD;
 
-  return true;
 }
 
 } // namespace spaghetti::elements::values

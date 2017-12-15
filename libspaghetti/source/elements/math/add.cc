@@ -37,14 +37,12 @@ Add::Add()
   addOutput(ValueType::eFloat, "Value");
 }
 
-bool Add::calculate()
+void Add::calculate()
 {
   float sum{};
   for (auto &&input : m_inputs) sum += std::get<float>(*input.value);
 
   m_outputs[0].value = sum;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

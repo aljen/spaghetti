@@ -37,12 +37,11 @@ Radian2Degree::Radian2Degree()
   addOutput(ValueType::eFloat, "Degree");
 }
 
-bool Radian2Degree::calculate()
+void Radian2Degree::calculate()
 {
   float const input{ std::get<float>(*m_inputs[0].value) };
   m_outputs[0].value = input * spaghetti::RAD2DEG;
 
-  return true;
 }
 
 } // namespace spaghetti::elements::values

@@ -325,7 +325,7 @@ void Package::dispatch(size_t a_id)
     Element *const element{ get(ID) };
     spaghetti::log::trace("Recalculating id: {}({}) because id: {}({}) changed. (callbacks: {})", ID, element->name(),
                           a_id, source->name(), m_dependencies[a_id].size());
-    if (element->calculate()) elementChanged(ID);
+    element->calculate();
   }
 }
 

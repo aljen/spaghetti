@@ -42,7 +42,7 @@ class Blinker final : public Element {
   bool isUpdatable() const override { return true; }
   void update(duration_t const &a_delta) override;
 
-  bool calculate() override;
+  void calculate() override;
 
  private:
   bool m_enabled{};

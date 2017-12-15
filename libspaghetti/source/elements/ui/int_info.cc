@@ -36,9 +36,4 @@ IntInfo::IntInfo()
 
 IntInfo::~IntInfo() {}
 
-bool IntInfo::calculate()
-{
-  return true;
-}
-
 } // namespace spaghetti::elements::ui

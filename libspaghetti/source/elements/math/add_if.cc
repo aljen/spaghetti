@@ -38,7 +38,7 @@ AddIf::AddIf()
   addOutput(ValueType::eFloat, "Value");
 }
 
-bool AddIf::calculate()
+void AddIf::calculate()
 {
 
   bool const enabled = std::get<bool>(*m_inputs[0].value);
@@ -50,7 +50,7 @@ bool AddIf::calculate()
 
   m_enabled = enabled;
 
-  if (!m_enabled) return false;
+  if (!m_enabled) return;
 
   float sum{};
 
@@ -58,8 +58,6 @@ bool AddIf::calculate()
   for (size_t i = 1; i < SIZE; ++i) sum += std::get<float>(*m_inputs[i].value);
 
   m_outputs[0].value = sum;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

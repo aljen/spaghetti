@@ -39,7 +39,7 @@ IfEqual::IfEqual()
   addOutput(ValueType::eBool, "A == B");
 }
 
-bool IfEqual::calculate()
+void IfEqual::calculate()
 {
 
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
@@ -51,8 +51,6 @@ bool IfEqual::calculate()
 
   bool const changed{ state != currentState };
   if (changed) m_outputs[0].value = state;
-
-  return changed;
 }
 
 } // namespace spaghetti::elements::logic

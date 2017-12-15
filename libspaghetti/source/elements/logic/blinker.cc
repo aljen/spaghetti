@@ -54,7 +54,7 @@ void Blinker::update(duration_t const &a_delta)
   }
 }
 
-bool Blinker::calculate()
+void Blinker::calculate()
 {
   bool const enabled = std::get<bool>(*m_inputs[0].value);
   duration_t const highRate = duration_t{ std::get<int>(*m_inputs[1].value) };
@@ -74,8 +74,6 @@ bool Blinker::calculate()
     m_state = false;
     m_outputs[0].value = m_state;
   }
-
-  return changed;
 }
 
 } // namespace spaghetti::elements::logic

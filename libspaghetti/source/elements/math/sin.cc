@@ -37,14 +37,12 @@ Sin::Sin()
   addOutput(ValueType::eFloat, "sin(angle)");
 }
 
-bool Sin::calculate()
+void Sin::calculate()
 {
   float const ANGLE{ std::get<float>(*m_inputs[0].value) };
   float const SIN{ std::sin(ANGLE) };
 
   m_outputs[0].value = SIN;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

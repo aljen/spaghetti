@@ -37,7 +37,7 @@ Nand::Nand()
   addOutput(ValueType::eBool, "State");
 }
 
-bool Nand::calculate()
+void Nand::calculate()
 {
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
 
@@ -53,8 +53,6 @@ bool Nand::calculate()
   allSets = !allSets;
 
   if (allSets != currentState) m_outputs[0].value = allSets;
-
-  return allSets != currentState;
 }
 
 } // namespace elements::gates

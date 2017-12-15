@@ -37,7 +37,7 @@ Nor::Nor()
   addOutput(ValueType::eBool, "State");
 }
 
-bool Nor::calculate()
+void Nor::calculate()
 {
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
 
@@ -51,8 +51,6 @@ bool Nor::calculate()
   somethingSet = !somethingSet;
 
   if (somethingSet != currentState) m_outputs[0].value = somethingSet;
-
-  return somethingSet != currentState;
 }
 
 } // namespace spaghetti::elements::gates

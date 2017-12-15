@@ -37,15 +37,13 @@ Subtract::Subtract()
   addOutput(ValueType::eFloat, "Value");
 }
 
-bool Subtract::calculate()
+void Subtract::calculate()
 {
   float ret{ std::get<float>(*m_inputs[0].value) };
   size_t const SIZE{ m_inputs.size() };
   for (size_t i = 1; i < SIZE; ++i) ret -= std::get<float>(*m_inputs[i].value);
 
   m_outputs[0].value = ret;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

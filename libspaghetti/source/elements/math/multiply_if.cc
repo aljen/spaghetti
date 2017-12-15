@@ -38,26 +38,24 @@ MultiplyIf::MultiplyIf()
   addOutput(ValueType::eFloat, "A * B");
 }
 
-bool MultiplyIf::calculate()
+void MultiplyIf::calculate()
 {
 
   bool const enabled = std::get<bool>(*m_inputs[0].value);
 
   if (enabled != m_enabled && !enabled) {
     m_outputs[0].value = 0.0f;
-    return true;
+    return;
   }
 
   m_enabled = enabled;
 
-  if (!m_enabled) return false;
+  if (!m_enabled) return;
 
   float const A = std::get<float>(*m_inputs[1].value);
   float const B = std::get<float>(*m_inputs[2].value);
 
   m_outputs[0].value = A * B;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

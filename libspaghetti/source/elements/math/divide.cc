@@ -37,15 +37,13 @@ Divide::Divide()
   addOutput(ValueType::eFloat, "A / B");
 }
 
-bool Divide::calculate()
+void Divide::calculate()
 {
   float const A{ std::get<float>(*m_inputs[0].value) };
   float b{ std::get<float>(*m_inputs[1].value) };
   if (b == 0.0f) b = 1.0f;
 
   m_outputs[0].value = A / b;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

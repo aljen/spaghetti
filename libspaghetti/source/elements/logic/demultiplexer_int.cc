@@ -39,7 +39,7 @@ DemultiplexerInt::DemultiplexerInt()
   addOutput(ValueType::eInt, "#2");
 }
 
-bool DemultiplexerInt::calculate()
+void DemultiplexerInt::calculate()
 {
 
   int32_t const SELECT =
@@ -47,8 +47,6 @@ bool DemultiplexerInt::calculate()
   int32_t const VALUE = std::get<int32_t>(*m_inputs[1].value);
 
   m_outputs[static_cast<size_t>(SELECT)].value = VALUE;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::logic

@@ -38,27 +38,25 @@ SubtractIf::SubtractIf()
   addOutput(ValueType::eFloat, "Value");
 }
 
-bool SubtractIf::calculate()
+void SubtractIf::calculate()
 {
 
   bool const enabled = std::get<bool>(*m_inputs[0].value);
 
   if (enabled != m_enabled && !enabled) {
     m_outputs[0].value = 0.0f;
-    return true;
+    return;
   }
 
   m_enabled = enabled;
 
-  if (!m_enabled) return false;
+  if (!m_enabled) return;
 
   float ret{ std::get<float>(*m_inputs[1].value) };
   size_t const SIZE{ m_inputs.size() };
   for (size_t i = 2; i < SIZE; ++i) ret -= std::get<float>(*m_inputs[i].value);
 
   m_outputs[0].value = ret;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

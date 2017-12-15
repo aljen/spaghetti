@@ -38,27 +38,26 @@ DivideIf::DivideIf()
   addOutput(ValueType::eFloat, "A / B");
 }
 
-bool DivideIf::calculate()
+void DivideIf::calculate()
 {
 
   bool const enabled = std::get<bool>(*m_inputs[0].value);
 
   if (enabled != m_enabled && !enabled) {
     m_outputs[0].value = 0.0f;
-    return true;
+    return;
   }
 
   m_enabled = enabled;
 
-  if (!m_enabled) return false;
 
   float const A = std::get<float>(*m_inputs[1].value);
   float b = std::get<float>(*m_inputs[2].value);
   if (b == 0.0f) b = 1.0f;
+  if (!m_enabled) return;
 
   m_outputs[0].value = A / b;
 
-  return true;
 }
 
 } // namespace spaghetti::elements::math

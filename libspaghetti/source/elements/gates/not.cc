@@ -37,11 +37,9 @@ Not::Not()
   addOutput(ValueType::eBool, "State");
 }
 
-bool Not::calculate()
+void Not::calculate()
 {
   m_outputs[0].value = !std::get<bool>(*m_inputs[0].value);
-
-  return true;
 }
 
 } // namespace spaghetti::elements::gates

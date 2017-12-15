@@ -37,7 +37,7 @@ And::And()
   addOutput(ValueType::eBool, "State");
 }
 
-bool And::calculate()
+void And::calculate()
 {
   bool const currentState{ std::get<bool>(m_outputs[0].value) };
 
@@ -51,8 +51,6 @@ bool And::calculate()
   }
 
   if (allSets != currentState) m_outputs[0].value = allSets;
-
-  return allSets != currentState;
 }
 
 } // namespace spaghetti::elements::gates

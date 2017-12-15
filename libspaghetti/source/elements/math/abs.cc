@@ -37,14 +37,12 @@ Abs::Abs()
   addOutput(ValueType::eFloat, "abs(value)");
 }
 
-bool Abs::calculate()
+void Abs::calculate()
 {
   float const VALUE{ std::get<float>(*m_inputs[0].value) };
   float const ABS{ std::abs(VALUE) };
 
   m_outputs[0].value = ABS;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

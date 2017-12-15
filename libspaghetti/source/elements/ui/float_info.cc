@@ -36,9 +36,4 @@ FloatInfo::FloatInfo()
 
 FloatInfo::~FloatInfo() {}
 
-bool FloatInfo::calculate()
-{
-  return true;
-}
-
 } // namespace spaghetti::elements::ui
