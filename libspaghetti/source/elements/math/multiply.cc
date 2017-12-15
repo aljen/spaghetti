@@ -39,8 +39,8 @@ Multiply::Multiply()
 
 void Multiply::calculate()
 {
-  float const A{ std::get<float>(*m_inputs[0].value) };
-  float const B{ std::get<float>(*m_inputs[1].value) };
+  float const A{ std::get<float>(m_inputs[0].value) };
+  float const B{ std::get<float>(m_inputs[1].value) };
 
   m_outputs[0].value = A * B;
 }

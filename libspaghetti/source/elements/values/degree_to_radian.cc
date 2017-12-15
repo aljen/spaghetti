@@ -39,9 +39,9 @@ Degree2Radian::Degree2Radian()
 
 void Degree2Radian::calculate()
 {
-  float const input{ std::get<float>(*m_inputs[0].value) };
-  m_outputs[0].value = input * spaghetti::DEG2RAD;
+  float const DEGREE{ std::get<float>(m_inputs[0].value) };
 
+  m_outputs[0].value = DEGREE * spaghetti::DEG2RAD;
 }
 
 } // namespace spaghetti::elements::values

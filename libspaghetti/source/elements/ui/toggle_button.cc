@@ -38,18 +38,12 @@ void ToggleButton::toggle()
 {
   m_currentValue = !m_currentValue;
   m_outputs[0].value = m_currentValue;
-
-  m_package->elementChanged(id());
 }
 
 void ToggleButton::set(bool a_state)
 {
-  if (a_state == m_currentValue) return;
-
   m_currentValue = a_state;
-  m_outputs[0].value = a_state;
-
-  m_package->elementChanged(id());
+  m_outputs[0].value = m_currentValue;
 }
 
 } // namespace spaghetti::elements::ui

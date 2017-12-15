@@ -149,9 +149,14 @@ bool Element::addInput(Element::ValueType const a_type, std::string const a_name
 {
   if (m_inputs.size() + 1 > m_maxInputs) return false;
 
-  Input input{};
+  IOSocket input{};
   input.name = a_name;
   input.type = a_type;
+  switch (a_type) {
+    case ValueType::eBool: input.value = false; break;
+    case ValueType::eInt: input.value = 0; break;
+    case ValueType::eFloat: input.value = 0.0f; break;
+  }
   m_inputs.emplace_back(input);
 
   return true;
@@ -179,7 +184,7 @@ bool Element::addOutput(Element::ValueType const a_type, std::string const a_nam
 {
   if (m_outputs.size() + 1 > m_maxOutputs) return false;
 
-  Output output{};
+  IOSocket output{};
   output.name = a_name;
   output.type = a_type;
   switch (a_type) {

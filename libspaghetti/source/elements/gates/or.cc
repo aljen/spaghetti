@@ -39,16 +39,14 @@ Or::Or()
 
 void Or::calculate()
 {
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-
   bool somethingSet{ false };
   for (auto &input : m_inputs) {
-    bool const v{ std::get<bool>(*input.value) };
-    somethingSet |= v;
-    if (v) break;
+    bool const VALUE{ std::get<bool>(input.value) };
+    somethingSet |= VALUE;
+    if (VALUE) break;
   }
 
-  if (somethingSet != currentState) m_outputs[0].value = somethingSet;
+  m_outputs[0].value = somethingSet;
 }
 
 } // namespace spaghetti::elements::gates

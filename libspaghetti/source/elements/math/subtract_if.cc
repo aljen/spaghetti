@@ -40,21 +40,20 @@ SubtractIf::SubtractIf()
 
 void SubtractIf::calculate()
 {
+  bool const ENABLED{ std::get<bool>(m_inputs[0].value) };
 
-  bool const enabled = std::get<bool>(*m_inputs[0].value);
-
-  if (enabled != m_enabled && !enabled) {
+  if (ENABLED != m_enabled && !ENABLED) {
     m_outputs[0].value = 0.0f;
     return;
   }
 
-  m_enabled = enabled;
+  m_enabled = ENABLED;
 
   if (!m_enabled) return;
 
-  float ret{ std::get<float>(*m_inputs[1].value) };
+  float ret{ std::get<float>(m_inputs[1].value) };
   size_t const SIZE{ m_inputs.size() };
-  for (size_t i = 2; i < SIZE; ++i) ret -= std::get<float>(*m_inputs[i].value);
+  for (size_t i = 2; i < SIZE; ++i) ret -= std::get<float>(m_inputs[i].value);
 
   m_outputs[0].value = ret;
 }

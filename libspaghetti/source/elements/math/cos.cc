@@ -39,7 +39,7 @@ Cos::Cos()
 
 void Cos::calculate()
 {
-  float const ANGLE{ std::get<float>(*m_inputs[0].value) };
+  float const ANGLE{ std::get<float>(m_inputs[0].value) };
   float const COS{ std::cos(ANGLE) };
 
   m_outputs[0].value = COS;

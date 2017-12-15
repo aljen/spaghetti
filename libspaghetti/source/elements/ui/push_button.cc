@@ -42,10 +42,8 @@ void PushButton::toggle()
 
 void PushButton::set(bool a_state)
 {
-  if (a_state == m_currentValue) return;
-
   m_currentValue = a_state;
-  m_outputs[0].value = a_state;
+  m_outputs[0].value = m_currentValue;
 }
 
 } // namespace spaghetti::elements::ui

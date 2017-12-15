@@ -40,7 +40,7 @@ Add::Add()
 void Add::calculate()
 {
   float sum{};
-  for (auto &&input : m_inputs) sum += std::get<float>(*input.value);
+  for (auto &&input : m_inputs) sum += std::get<float>(input.value);
 
   m_outputs[0].value = sum;
 }

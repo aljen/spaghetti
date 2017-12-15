@@ -59,8 +59,8 @@ class SPAGHETTI_API Element {
     double x{}, y{};
   };
 
-  struct Input {
-    Value *value{};
+  struct IOSocket {
+    Value value{};
     ValueType type{};
 
     size_t id{};
@@ -68,15 +68,7 @@ class SPAGHETTI_API Element {
     std::string name{};
   };
 
-  struct Output {
-    Value value{};
-    ValueType type{};
-
-    std::string name{};
-  };
-
-  using Inputs = std::vector<Input>;
-  using Outputs = std::vector<Output>;
+  using IOSockets = std::vector<IOSocket>;
 
   Element() = default;
   virtual ~Element() = default;
@@ -109,8 +101,10 @@ class SPAGHETTI_API Element {
   void iconify(bool const a_iconify) { m_isIconified = a_iconify; }
   bool isIconified() const { return m_isIconified; }
 
-  Inputs const &inputs() const { return m_inputs; }
-  Outputs const &outputs() const { return m_outputs; }
+  IOSockets &inputs() { return m_inputs; }
+  IOSockets const &inputs() const { return m_inputs; }
+  IOSockets &outputs() { return m_outputs; }
+  IOSockets const &outputs() const { return m_outputs; }
 
   bool addInput(ValueType const a_type, std::string const a_name);
   void setInputName(uint8_t a_input, std::string const a_name);
@@ -146,8 +140,8 @@ class SPAGHETTI_API Element {
   void setMaxOutputs(uint8_t const a_max);
 
  protected:
-  Inputs m_inputs{};
-  Outputs m_outputs{};
+  IOSockets m_inputs{};
+  IOSockets m_outputs{};
 
   friend class Package;
   Package *m_package{};

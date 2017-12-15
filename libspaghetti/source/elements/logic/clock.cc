@@ -39,8 +39,8 @@ void Clock::update(duration_t const &a_delta)
 {
   m_time += a_delta;
   if (m_time >= m_duration) {
-    bool const value = !std::get<bool>(m_outputs[0].value);
-    m_outputs[0].value = value;
+    bool const VALUE = !std::get<bool>(m_outputs[0].value);
+    m_outputs[0].value = VALUE;
     reset();
   }
 }

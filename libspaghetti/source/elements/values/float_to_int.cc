@@ -38,9 +38,9 @@ Float2Int::Float2Int()
 
 void Float2Int::calculate()
 {
-  float const input{ std::get<float>(*m_inputs[0].value) };
-  m_outputs[0].value = static_cast<int32_t>(input);
+  float const FLOAT{ std::get<float>(m_inputs[0].value) };
 
+  m_outputs[0].value = static_cast<int32_t>(FLOAT);
 }
 
 } // namespace spaghetti::elements::values

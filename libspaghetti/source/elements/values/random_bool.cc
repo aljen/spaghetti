@@ -27,7 +27,7 @@
 namespace {
 std::random_device g_random{};
 std::mt19937 g_generator{ g_random() };
-std::bernoulli_distribution g_distrib(0.47);
+std::bernoulli_distribution g_distrib(0.5);
 } // namespace
 
 namespace spaghetti::elements::values {
@@ -47,9 +47,9 @@ RandomBool::RandomBool()
 
 void RandomBool::calculate()
 {
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-  bool const newState{ g_distrib(g_generator) };
-  if (newState != currentState) m_outputs[0].value = newState;
+  bool const VALUE{ g_distrib(g_generator) };
+
+  m_outputs[0].value = VALUE;
 }
 
 } // namespace spaghetti::elements::values

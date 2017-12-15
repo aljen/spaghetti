@@ -40,20 +40,19 @@ MultiplyIf::MultiplyIf()
 
 void MultiplyIf::calculate()
 {
+  bool const ENABLED{ std::get<bool>(m_inputs[0].value) };
 
-  bool const enabled = std::get<bool>(*m_inputs[0].value);
-
-  if (enabled != m_enabled && !enabled) {
+  if (ENABLED != m_enabled && !ENABLED) {
     m_outputs[0].value = 0.0f;
     return;
   }
 
-  m_enabled = enabled;
+  m_enabled = ENABLED;
 
   if (!m_enabled) return;
 
-  float const A = std::get<float>(*m_inputs[1].value);
-  float const B = std::get<float>(*m_inputs[2].value);
+  float const A{ std::get<float>(m_inputs[1].value) };
+  float const B{ std::get<float>(m_inputs[2].value) };
 
   m_outputs[0].value = A * B;
 }

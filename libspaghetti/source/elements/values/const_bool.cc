@@ -46,8 +46,8 @@ void ConstBool::deserialize(const Json &a_json)
 {
   Element::deserialize(a_json);
 
-  auto const &properties = a_json["properties"];
-  m_currentValue = properties["value"].get<bool>();
+  auto const &PROPERTIES = a_json["properties"];
+  m_currentValue = PROPERTIES["value"].get<bool>();
 
   m_outputs[0].value = m_currentValue;
 }
@@ -60,10 +60,8 @@ void ConstBool::toggle()
 
 void ConstBool::set(bool a_state)
 {
-  if (a_state == m_currentValue) return;
-
   m_currentValue = a_state;
-  m_outputs[0].value = a_state;
+  m_outputs[0].value = m_currentValue;
 }
 
 } // namespace spaghetti::elements::values

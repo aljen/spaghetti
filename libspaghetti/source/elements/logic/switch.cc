@@ -43,9 +43,6 @@ void Switch::toggle()
 
 void Switch::set(bool a_state)
 {
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-  if (a_state == currentState) return;
-
   m_outputs[0].value = a_state;
 }
 

@@ -46,18 +46,16 @@ void ConstInt::deserialize(const Json &a_json)
 {
   Element::deserialize(a_json);
 
-  auto const &properties = a_json["properties"];
-  m_currentValue = properties["value"].get<int32_t>();
+  auto const &PROPERTIES = a_json["properties"];
+  m_currentValue = PROPERTIES["value"].get<int32_t>();
 
   m_outputs[0].value = m_currentValue;
 }
 
 void ConstInt::set(int32_t a_value)
 {
-  if (a_value == m_currentValue) return;
-
   m_currentValue = a_value;
-  m_outputs[0].value = a_value;
+  m_outputs[0].value = m_currentValue;
 }
 
 } // namespace spaghetti::elements::values

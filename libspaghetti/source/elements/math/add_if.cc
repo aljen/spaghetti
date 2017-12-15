@@ -40,22 +40,21 @@ AddIf::AddIf()
 
 void AddIf::calculate()
 {
+  bool const ENABLED{ std::get<bool>(m_inputs[0].value) };
 
-  bool const enabled = std::get<bool>(*m_inputs[0].value);
-
-  if (enabled != m_enabled && !enabled) {
+  if (ENABLED != m_enabled && !ENABLED) {
     m_outputs[0].value = 0.0f;
-    return true;
+    return;
   }
 
-  m_enabled = enabled;
+  m_enabled = ENABLED;
 
   if (!m_enabled) return;
 
   float sum{};
 
   size_t const SIZE{ m_inputs.size() };
-  for (size_t i = 1; i < SIZE; ++i) sum += std::get<float>(*m_inputs[i].value);
+  for (size_t i = 1; i < SIZE; ++i) sum += std::get<float>(m_inputs[i].value);
 
   m_outputs[0].value = sum;
 }

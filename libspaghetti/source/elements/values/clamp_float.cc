@@ -42,10 +42,10 @@ ClampFloat::ClampFloat()
 
 void ClampFloat::calculate()
 {
+  float const MINIMUM{ std::get<float>(m_inputs[0].value) };
+  float const MAXIMUM{ std::get<float>(m_inputs[1].value) };
+  float const VALUE{ std::get<float>(m_inputs[2].value) };
 
-  float const MINIMUM{ std::get<float>(*m_inputs[0].value) };
-  float const MAXIMUM{ std::get<float>(*m_inputs[1].value) };
-  float const VALUE{ std::get<float>(*m_inputs[2].value) };
   m_outputs[0].value = std::clamp(VALUE, MINIMUM, MAXIMUM);
 }
 

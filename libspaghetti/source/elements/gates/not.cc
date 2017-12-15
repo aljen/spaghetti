@@ -39,7 +39,7 @@ Not::Not()
 
 void Not::calculate()
 {
-  m_outputs[0].value = !std::get<bool>(*m_inputs[0].value);
+  m_outputs[0].value = !std::get<bool>(m_inputs[0].value);
 }
 
 } // namespace spaghetti::elements::gates

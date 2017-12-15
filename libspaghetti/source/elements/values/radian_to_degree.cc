@@ -39,9 +39,9 @@ Radian2Degree::Radian2Degree()
 
 void Radian2Degree::calculate()
 {
-  float const input{ std::get<float>(*m_inputs[0].value) };
-  m_outputs[0].value = input * spaghetti::RAD2DEG;
+  float const RADIAN{ std::get<float>(m_inputs[0].value) };
 
+  m_outputs[0].value = RADIAN * spaghetti::RAD2DEG;
 }
 
 } // namespace spaghetti::elements::values

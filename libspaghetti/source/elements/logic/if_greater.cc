@@ -40,15 +40,10 @@ IfGreater::IfGreater()
 
 void IfGreater::calculate()
 {
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
+  float const A{ std::get<float>(m_inputs[0].value) };
+  float const B{ std::get<float>(m_inputs[1].value) };
 
-  float const A{ std::get<float>(*m_inputs[0].value) };
-  float const B{ std::get<float>(*m_inputs[1].value) };
-
-  bool const state{ A > B };
-
-  bool const changed{ state != currentState };
-  if (changed) m_outputs[0].value = state;
+  m_outputs[0].value = A > B;
 }
 
 } // namespace spaghetti::elements::logic

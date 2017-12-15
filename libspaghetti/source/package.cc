@@ -194,12 +194,10 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
     assert(target->m_inputs[a_inputId].type == source->m_outputs[a_outputId].type);
     target->m_inputs[a_inputId].id = a_sourceId;
     target->m_inputs[a_inputId].slot = a_outputId;
-    target->m_inputs[a_inputId].value = &source->m_outputs[a_outputId].value;
   } else if (a_sourceId == 0) {
     spaghetti::log::trace("Package connect, package input to element input");
     target->m_inputs[a_inputId].id = a_sourceId;
     target->m_inputs[a_inputId].slot = a_outputId;
-    target->m_inputs[a_inputId].value = source->m_inputs[a_outputId].value;
   } else if (a_targetId == 0) {
     spaghetti::log::trace("Package connect, element output to package output");
   }
@@ -225,7 +223,6 @@ bool Package::disconnect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetI
 
   target->m_inputs[a_inputId].id = 0;
   target->m_inputs[a_inputId].slot = 0;
-  target->m_inputs[a_inputId].value = nullptr;
 
   auto it = std::remove_if(std::begin(m_connections), std::end(m_connections), [=](Connection &a_connection) {
     return a_connection.from_id == a_sourceId && a_connection.from_socket == a_outputId &&

@@ -39,9 +39,9 @@ MaxInt::MaxInt()
 
 void MaxInt::calculate()
 {
+  int32_t const A{ std::get<int32_t>(m_inputs[0].value) };
+  int32_t const B{ std::get<int32_t>(m_inputs[1].value) };
 
-  int32_t const A{ std::get<int32_t>(*m_inputs[0].value) };
-  int32_t const B{ std::get<int32_t>(*m_inputs[1].value) };
   m_outputs[0].value = std::max(A, B);
 }
 

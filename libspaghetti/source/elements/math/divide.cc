@@ -39,11 +39,11 @@ Divide::Divide()
 
 void Divide::calculate()
 {
-  float const A{ std::get<float>(*m_inputs[0].value) };
-  float b{ std::get<float>(*m_inputs[1].value) };
-  if (b == 0.0f) b = 1.0f;
+  float const A{ std::get<float>(m_inputs[0].value) };
+  float const B{ std::get<float>(m_inputs[1].value) };
+  float const VALUE{ B == 0.0f ? 0.0f : A / B };
 
-  m_outputs[0].value = A / b;
+  m_outputs[0].value = VALUE;
 }
 
 } // namespace spaghetti::elements::math

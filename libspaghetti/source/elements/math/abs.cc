@@ -39,7 +39,7 @@ Abs::Abs()
 
 void Abs::calculate()
 {
-  float const VALUE{ std::get<float>(*m_inputs[0].value) };
+  float const VALUE{ std::get<float>(m_inputs[0].value) };
   float const ABS{ std::abs(VALUE) };
 
   m_outputs[0].value = ABS;

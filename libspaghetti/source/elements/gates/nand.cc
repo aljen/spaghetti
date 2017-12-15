@@ -39,20 +39,16 @@ Nand::Nand()
 
 void Nand::calculate()
 {
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-
   bool allSets{ true };
   for (auto &input : m_inputs) {
-    bool const v{ std::get<bool>(*input.value) };
-    if (!v) {
+    bool const VALUE{ std::get<bool>(input.value) };
+    if (!VALUE) {
       allSets = false;
       break;
     }
   }
 
-  allSets = !allSets;
-
-  if (allSets != currentState) m_outputs[0].value = allSets;
+  m_outputs[0].value = !allSets;
 }
 
 } // namespace elements::gates

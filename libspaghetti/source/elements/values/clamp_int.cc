@@ -42,10 +42,10 @@ ClampInt::ClampInt()
 
 void ClampInt::calculate()
 {
+  int32_t const MINIMUM{ std::get<int32_t>(m_inputs[0].value) };
+  int32_t const MAXIMUM{ std::get<int32_t>(m_inputs[1].value) };
+  int32_t const VALUE{ std::get<int32_t>(m_inputs[2].value) };
 
-  int32_t const MINIMUM{ std::get<int32_t>(*m_inputs[0].value) };
-  int32_t const MAXIMUM{ std::get<int32_t>(*m_inputs[1].value) };
-  int32_t const VALUE{ std::get<int32_t>(*m_inputs[2].value) };
   m_outputs[0].value = std::clamp(VALUE, MINIMUM, MAXIMUM);
 }
 
