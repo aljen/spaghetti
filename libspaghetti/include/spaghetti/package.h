@@ -134,13 +134,13 @@ class SPAGHETTI_API Package final : public Element {
   bool m_quit{};
 };
 
-inline void Package::setInputsPosition(const double a_x, const double a_y)
+inline void Package::setInputsPosition(double const a_x, double const a_y)
 {
   m_inputsPosition.x = a_x;
   m_inputsPosition.y = a_y;
 }
 
-inline void Package::setOutputsPosition(const double a_x, const double a_y)
+inline void Package::setOutputsPosition(double const a_x, double const a_y)
 {
   m_outputsPosition.x = a_x;
   m_outputsPosition.y = a_y;
