@@ -125,7 +125,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
 
   void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType);
   void removeSocket(SocketType const a_type);
-  void setOutputs(Element *const a_element);
+  void updateOutputs();
 
  protected:
   QGraphicsItem *m_centralWidget{};

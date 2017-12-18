@@ -149,6 +149,8 @@ void Node::advance(int a_phase)
 {
   if (!a_phase) return;
 
+  updateOutputs();
+
   refreshCentralWidget();
 
   update();
@@ -195,7 +197,7 @@ void Node::setElement(Element *const a_element)
 
   if (m_type == Type::eElement) {
     setName(QString::fromStdString(m_element->name()));
-    setOutputs(m_element);
+    updateOutputs();
   }
 
   elementSet();
@@ -689,14 +691,16 @@ void Node::removeSocket(const Node::SocketType a_type)
   }
 }
 
-void Node::setOutputs(Element *const a_element)
+void Node::updateOutputs()
 {
-  assert(a_element == m_element);
-  auto const &changedOutputs = a_element->outputs();
-  for (size_t i = 0; i < changedOutputs.size(); ++i) {
-    switch (changedOutputs[i].type) {
+  if (!m_element || m_type != Type::eElement) return;
+
+  auto const &OUTPUTS = m_element->outputs();
+  size_t const SIZE{ OUTPUTS.size() };
+  for (size_t i = 0; i < SIZE; ++i) {
+    switch (OUTPUTS[i].type) {
       case ValueType::eBool: {
-        bool const signal{ std::get<bool>(changedOutputs[i].value) };
+        bool const signal{ std::get<bool>(OUTPUTS[i].value) };
         m_outputs[static_cast<int>(i)]->setSignal(signal);
         break;
       }
