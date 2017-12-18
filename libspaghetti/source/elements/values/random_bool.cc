@@ -47,9 +47,13 @@ RandomBool::RandomBool()
 
 void RandomBool::calculate()
 {
-  bool const VALUE{ g_distrib(g_generator) };
+  bool const STATE{ std::get<bool>(m_inputs[0].value) };
 
-  m_outputs[0].value = VALUE;
+  if (STATE != m_state) {
+    bool const VALUE{ g_distrib(g_generator) };
+    m_outputs[0].value = VALUE;
+    m_state = STATE;
+  }
 }
 
 } // namespace spaghetti::elements::values
