@@ -161,7 +161,7 @@ Element *Package::add(string::hash_t a_hash)
   return element;
 }
 
-void Package::remove(size_t a_id)
+void Package::remove(size_t const a_id)
 {
   assert(a_id > 0);
   assert(a_id < m_elements.size());

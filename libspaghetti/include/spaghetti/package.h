@@ -85,7 +85,7 @@ class SPAGHETTI_API Package final : public Element {
   Element *add(string::hash_t a_hash);
 
   void remove(Element *const a_element) { remove(a_element->id()); }
-  void remove(size_t a_id);
+  void remove(size_t const a_id);
 
   Element *get(size_t a_id) const;
 
