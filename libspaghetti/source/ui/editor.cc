@@ -209,20 +209,25 @@ void Editor::openPackage()
   foreach (PackageView *temp, this->findChildren<PackageView *>())
     temp->setUpdatesEnabled(false);
 
-  QString const filename{ QFileDialog::getOpenFileName(this, "Open .package", PACKAGES_DIR, "*.package") };
+  QString const FILENAME{ QFileDialog::getOpenFileName(this, "Open .package", PACKAGES_DIR, "*.package") };
 
   foreach (PackageView *temp, this->findChildren<PackageView *>())
     temp->setUpdatesEnabled(true);
 
-  if (filename.isEmpty()) return;
+  if (FILENAME.isEmpty()) return;
 
+  openPackageFile(FILENAME);
+}
+
+void Editor::openPackageFile(QString const a_filename)
+{
   newPackage();
 
-  auto *const packageView = packageViewForIndex(m_packageViewIndex);
-  packageView->setFilename(filename);
+  auto const packageView = packageViewForIndex(m_packageViewIndex);
+  packageView->setFilename(a_filename);
 
-  QDir const packagesDir{ PACKAGES_DIR };
-  m_ui->tabWidget->setTabText(m_packageViewIndex, packagesDir.relativeFilePath(filename));
+  QDir const PACKAGES{ PACKAGES_DIR };
+  m_ui->tabWidget->setTabText(m_packageViewIndex, PACKAGES.relativeFilePath(a_filename));
 
   packageView->open();
   packageView->setSelectedNode(nullptr);

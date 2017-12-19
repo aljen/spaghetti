@@ -65,6 +65,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
 
   void newPackage();
   void openPackage();
+  void openPackageFile(QString const a_filename);
   void savePackage();
   void closePackage();
   void closeAllPackages();
