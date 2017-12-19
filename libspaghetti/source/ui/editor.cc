@@ -202,6 +202,9 @@ void Editor::newPackage()
   m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
   packageView->setSelectedNode(nullptr);
   packageView->showProperties();
+
+  connect(packageView, &PackageView::requestOpenFile,
+          [this](QString const a_filename) { openPackageFile(a_filename); });
 }
 
 void Editor::openPackage()
