@@ -85,6 +85,9 @@ class PackageView final : public QGraphicsView {
 
   void setVisible(bool a_visible) override;
 
+ signals:
+  void requestOpenFile(QString const a_filename);
+
  private:
   void updateGrid(qreal const a_scale);
 

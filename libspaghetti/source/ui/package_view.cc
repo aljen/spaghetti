@@ -167,10 +167,12 @@ void PackageView::save()
 
 void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
 {
-  if (a_event->mimeData()->hasText()) {
-    auto const pathString = a_event->mimeData()->text();
-    auto const name = a_event->mimeData()->data("metadata/name");
-    auto const icon = a_event->mimeData()->data("metadata/icon");
+  auto const mimeData = a_event->mimeData();
+
+  if (mimeData->hasFormat("metadata/name") && mimeData->hasFormat("metadata/icon")) {
+    auto const pathString = mimeData->text();
+    auto const name = mimeData->data("metadata/name");
+    auto const icon = mimeData->data("metadata/icon");
     auto const stringData = pathString.toLatin1();
     auto const path = stringData.data();
 
@@ -188,7 +190,6 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
     m_dragNode->setPos(dropPosition);
     m_scene->addItem(m_dragNode);
     m_dragNode->calculateBoundingRect();
-
     a_event->accept();
   } else
     QGraphicsView::dragEnterEvent(a_event);
@@ -216,7 +217,14 @@ void PackageView::dragMoveEvent(QDragMoveEvent *a_event)
 
 void PackageView::dropEvent(QDropEvent *a_event)
 {
-  if (a_event->mimeData()->hasText()) {
+  auto const mimeData = a_event->mimeData();
+
+  if (mimeData->hasFormat("text/uri-list")) {
+    QString const FILENAME{ mimeData->text().trimmed() };
+    QString const STRIPPED{ FILENAME.right(FILENAME.size() - static_cast<int>(strlen("file://"))) };
+    emit requestOpenFile(STRIPPED);
+    a_event->accept();
+  } else if (mimeData->hasFormat("metadata/name") && mimeData->hasFormat("metadata/icon")) {
     auto const pathString = a_event->mimeData()->text();
     auto const stringData = pathString.toLatin1();
     char const *const path{ stringData.data() };
