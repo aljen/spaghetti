@@ -40,10 +40,8 @@ class Clock final : public Element {
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
 
-  bool calculate() override;
   void reset() override { m_time = duration_t{ 0.0 }; }
   void update(duration_t const &a_delta) override;
-  bool isUpdatable() const override { return true; }
 
   void setDuration(duration_t a_duration) { m_duration = a_duration; }
 

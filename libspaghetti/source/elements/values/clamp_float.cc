@@ -23,7 +23,6 @@
 #include <algorithm>
 
 #include "elements/values/clamp_float.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::values {
 
@@ -33,22 +32,21 @@ ClampFloat::ClampFloat()
   setMaxInputs(3);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "Minimum");
   addInput(ValueType::eFloat, "Maximum");
   addInput(ValueType::eFloat, "Value");
+
   addOutput(ValueType::eFloat, "clamp(v, min, max)");
 }
 
-bool ClampFloat::calculate()
+void ClampFloat::calculate()
 {
-  if (!allInputsConnected()) return false;
+  float const MINIMUM{ std::get<float>(m_inputs[0].value) };
+  float const MAXIMUM{ std::get<float>(m_inputs[1].value) };
+  float const VALUE{ std::get<float>(m_inputs[2].value) };
 
-  float const MINIMUM{ std::get<float>(*m_inputs[0].value) };
-  float const MAXIMUM{ std::get<float>(*m_inputs[1].value) };
-  float const VALUE{ std::get<float>(*m_inputs[2].value) };
   m_outputs[0].value = std::clamp(VALUE, MINIMUM, MAXIMUM);
-
-  return true;
 }
 
 } // namespace spaghetti::elements::values

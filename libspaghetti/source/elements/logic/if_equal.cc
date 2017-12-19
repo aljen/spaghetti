@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/logic/if_equal.h"
-#include "spaghetti/package.h"
 #include "spaghetti/utils.h"
 
 namespace spaghetti::elements::logic {
@@ -33,26 +32,19 @@ IfEqual::IfEqual()
   setMaxInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "A");
   addInput(ValueType::eFloat, "B");
+
   addOutput(ValueType::eBool, "A == B");
 }
 
-bool IfEqual::calculate()
+void IfEqual::calculate()
 {
-  if (!allInputsConnected()) return false;
+  float const A{ std::get<float>(m_inputs[0].value) };
+  float const B{ std::get<float>(m_inputs[1].value) };
 
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-
-  float const A{ std::get<float>(*m_inputs[0].value) };
-  float const B{ std::get<float>(*m_inputs[1].value) };
-
-  bool const state{ spaghetti::nearly_equal(A, B) };
-
-  bool const changed{ state != currentState };
-  if (changed) m_outputs[0].value = state;
-
-  return changed;
+  m_outputs[0].value = spaghetti::nearly_equal(A, B);
 }
 
 } // namespace spaghetti::elements::logic

@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/divide.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 
@@ -31,22 +30,20 @@ Divide::Divide()
   setMinInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "A");
   addInput(ValueType::eFloat, "B");
+
   addOutput(ValueType::eFloat, "A / B");
 }
 
-bool Divide::calculate()
+void Divide::calculate()
 {
-  if (!allInputsConnected()) return false;
+  float const A{ std::get<float>(m_inputs[0].value) };
+  float const B{ std::get<float>(m_inputs[1].value) };
+  float const VALUE{ B == 0.0f ? 0.0f : A / B };
 
-  float const A{ std::get<float>(*m_inputs[0].value) };
-  float b{ std::get<float>(*m_inputs[1].value) };
-  if (b == 0.0f) b = 1.0f;
-
-  m_outputs[0].value = A / b;
-
-  return true;
+  m_outputs[0].value = VALUE;
 }
 
 } // namespace spaghetti::elements::math

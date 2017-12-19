@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/cos.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 
@@ -32,20 +31,18 @@ Cos::Cos()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "Angle (Rad)");
+
   addOutput(ValueType::eFloat, "cos(angle)");
 }
 
-bool Cos::calculate()
+void Cos::calculate()
 {
-  if (!allInputsConnected()) return false;
-
-  float const ANGLE{ std::get<float>(*m_inputs[0].value) };
+  float const ANGLE{ std::get<float>(m_inputs[0].value) };
   float const COS{ std::cos(ANGLE) };
 
   m_outputs[0].value = COS;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

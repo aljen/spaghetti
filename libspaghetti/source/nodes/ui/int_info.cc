@@ -47,8 +47,8 @@ IntInfo::IntInfo()
 
 void IntInfo::refreshCentralWidget()
 {
-  if (!m_element || !m_element->inputs()[0].value) return;
-  int32_t const value{ std::get<int32_t>(*m_element->inputs()[0].value) };
+  if (!m_element) return;
+  int32_t const value{ std::get<int32_t>(m_element->inputs()[0].value) };
   m_info->setText(QString::number(value));
 
   calculateBoundingRect();

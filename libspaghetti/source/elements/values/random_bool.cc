@@ -23,12 +23,11 @@
 #include <random>
 
 #include "elements/values/random_bool.h"
-#include "spaghetti/package.h"
 
 namespace {
 std::random_device g_random{};
 std::mt19937 g_generator{ g_random() };
-std::bernoulli_distribution g_distrib(0.47);
+std::bernoulli_distribution g_distrib(0.5);
 } // namespace
 
 namespace spaghetti::elements::values {
@@ -40,16 +39,21 @@ RandomBool::RandomBool()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eBool, "Trigger");
+
   addOutput(ValueType::eBool, "Value");
 }
 
-bool RandomBool::calculate()
+void RandomBool::calculate()
 {
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-  bool const newState{ g_distrib(g_generator) };
-  if (newState != currentState) m_outputs[0].value = newState;
-  return newState != currentState;
+  bool const STATE{ std::get<bool>(m_inputs[0].value) };
+
+  if (STATE != m_state) {
+    bool const VALUE{ g_distrib(g_generator) };
+    m_outputs[0].value = VALUE;
+    m_state = STATE;
+  }
 }
 
 } // namespace spaghetti::elements::values

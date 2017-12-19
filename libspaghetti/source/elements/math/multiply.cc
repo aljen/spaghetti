@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/multiply.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 
@@ -31,21 +30,19 @@ Multiply::Multiply()
   setMinInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "A");
   addInput(ValueType::eFloat, "B");
+
   addOutput(ValueType::eFloat, "A * B");
 }
 
-bool Multiply::calculate()
+void Multiply::calculate()
 {
-  if (!allInputsConnected()) return false;
-
-  float const A{ std::get<float>(*m_inputs[0].value) };
-  float const B{ std::get<float>(*m_inputs[1].value) };
+  float const A{ std::get<float>(m_inputs[0].value) };
+  float const B{ std::get<float>(m_inputs[1].value) };
 
   m_outputs[0].value = A * B;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

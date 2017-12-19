@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/add.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 
@@ -31,21 +30,19 @@ Add::Add()
   setMinInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "#1");
   addInput(ValueType::eFloat, "#2");
+
   addOutput(ValueType::eFloat, "Value");
 }
 
-bool Add::calculate()
+void Add::calculate()
 {
-  if (!allInputsConnected()) return false;
-
   float sum{};
-  for (auto &&input : m_inputs) sum += std::get<float>(*input.value);
+  for (auto &&input : m_inputs) sum += std::get<float>(input.value);
 
   m_outputs[0].value = sum;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

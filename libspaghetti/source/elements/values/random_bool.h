@@ -38,7 +38,10 @@ class RandomBool final : public Element {
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
 
-  bool calculate() override;
+  void calculate() override;
+
+ private:
+  bool m_state{};
 };
 
 } // namespace spaghetti::elements::values

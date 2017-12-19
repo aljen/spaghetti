@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/add_if.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 
@@ -31,35 +30,33 @@ AddIf::AddIf()
   setMinInputs(3);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eBool, "Enabled");
   addInput(ValueType::eFloat, "#1");
   addInput(ValueType::eFloat, "#2");
+
   addOutput(ValueType::eFloat, "Value");
 }
 
-bool AddIf::calculate()
+void AddIf::calculate()
 {
-  if (!allInputsConnected()) return false;
+  bool const ENABLED{ std::get<bool>(m_inputs[0].value) };
 
-  bool const enabled = std::get<bool>(*m_inputs[0].value);
-
-  if (enabled != m_enabled && !enabled) {
+  if (ENABLED != m_enabled && !ENABLED) {
     m_outputs[0].value = 0.0f;
-    return true;
+    return;
   }
 
-  m_enabled = enabled;
+  m_enabled = ENABLED;
 
-  if (!m_enabled) return false;
+  if (!m_enabled) return;
 
   float sum{};
 
   size_t const SIZE{ m_inputs.size() };
-  for (size_t i = 1; i < SIZE; ++i) sum += std::get<float>(*m_inputs[i].value);
+  for (size_t i = 1; i < SIZE; ++i) sum += std::get<float>(m_inputs[i].value);
 
   m_outputs[0].value = sum;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

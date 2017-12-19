@@ -20,10 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <iostream>
-
 #include "elements/logic/blinker.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::logic {
 
@@ -41,47 +38,40 @@ Blinker::Blinker()
   addOutput(ValueType::eBool, "State");
 }
 
-Blinker::~Blinker() {}
-
 void Blinker::update(duration_t const &a_delta)
 {
   if (m_enabled) {
     m_time += a_delta;
 
-    auto const rate = m_state ? m_highRate : m_lowRate;
-    if (m_time >= rate) {
+    auto const RATE = m_state ? m_highRate : m_lowRate;
+    if (m_time >= RATE) {
       m_time = duration_t{};
       m_state = !m_state;
       m_outputs[0].value = m_state;
-      m_package->elementChanged(id());
     }
   }
 }
 
-bool Blinker::calculate()
+void Blinker::calculate()
 {
-  if (!allInputsConnected()) return false;
-
-  bool const enabled = std::get<bool>(*m_inputs[0].value);
-  duration_t const highRate = duration_t{ std::get<int>(*m_inputs[1].value) };
-  duration_t const lowRate = duration_t{ std::get<int>(*m_inputs[2].value) };
+  bool const ENABLED = std::get<bool>(m_inputs[0].value);
+  duration_t const HIGH_RATE = duration_t{ std::get<int>(m_inputs[1].value) };
+  duration_t const LOW_RATE = duration_t{ std::get<int>(m_inputs[2].value) };
 
   bool changed{};
-  changed |= enabled != m_enabled;
-  changed |= highRate != m_highRate;
-  changed |= lowRate != m_lowRate;
+  changed |= ENABLED != m_enabled;
+  changed |= HIGH_RATE != m_highRate;
+  changed |= LOW_RATE != m_lowRate;
 
-  m_enabled = enabled;
-  m_highRate = highRate;
-  m_lowRate = lowRate;
+  m_enabled = ENABLED;
+  m_highRate = HIGH_RATE;
+  m_lowRate = LOW_RATE;
 
   if (changed) {
     m_time = duration_t{};
     m_state = false;
     m_outputs[0].value = m_state;
   }
-
-  return changed;
 }
 
 } // namespace spaghetti::elements::logic

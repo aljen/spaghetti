@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/multiply_if.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 
@@ -31,33 +30,31 @@ MultiplyIf::MultiplyIf()
   setMinInputs(3);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eBool, "Enabled");
   addInput(ValueType::eFloat, "A");
   addInput(ValueType::eFloat, "B");
+
   addOutput(ValueType::eFloat, "A * B");
 }
 
-bool MultiplyIf::calculate()
+void MultiplyIf::calculate()
 {
-  if (!allInputsConnected()) return false;
+  bool const ENABLED{ std::get<bool>(m_inputs[0].value) };
 
-  bool const enabled = std::get<bool>(*m_inputs[0].value);
-
-  if (enabled != m_enabled && !enabled) {
+  if (ENABLED != m_enabled && !ENABLED) {
     m_outputs[0].value = 0.0f;
-    return true;
+    return;
   }
 
-  m_enabled = enabled;
+  m_enabled = ENABLED;
 
-  if (!m_enabled) return false;
+  if (!m_enabled) return;
 
-  float const A = std::get<float>(*m_inputs[1].value);
-  float const B = std::get<float>(*m_inputs[2].value);
+  float const A{ std::get<float>(m_inputs[1].value) };
+  float const B{ std::get<float>(m_inputs[2].value) };
 
   m_outputs[0].value = A * B;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

@@ -40,8 +40,6 @@ class Example final : public spaghetti::Element {
 
   char const *type() const noexcept override { return TYPE; }
   spaghetti::string::hash_t hash() const noexcept override { return HASH; }
-
-  bool calculate() override { return false; }
 };
 
 extern "C" SPAGHETTI_API void register_plugin(spaghetti::Registry &a_registry)

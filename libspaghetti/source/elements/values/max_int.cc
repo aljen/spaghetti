@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/values/max_int.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::values {
 
@@ -31,20 +30,19 @@ MaxInt::MaxInt()
   setMaxInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eInt, "A");
   addInput(ValueType::eInt, "B");
+
   addOutput(ValueType::eInt, "max(A, B)");
 }
 
-bool MaxInt::calculate()
+void MaxInt::calculate()
 {
-  if (!allInputsConnected()) return false;
+  int32_t const A{ std::get<int32_t>(m_inputs[0].value) };
+  int32_t const B{ std::get<int32_t>(m_inputs[1].value) };
 
-  int32_t const A{ std::get<int32_t>(*m_inputs[0].value) };
-  int32_t const B{ std::get<int32_t>(*m_inputs[1].value) };
   m_outputs[0].value = std::max(A, B);
-
-  return true;
 }
 
 } // namespace spaghetti::elements::values

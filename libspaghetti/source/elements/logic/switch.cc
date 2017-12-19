@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/logic/switch.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::logic {
 
@@ -31,25 +30,20 @@ Switch::Switch()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eBool, "#1");
+
   addOutput(ValueType::eBool, "#1");
 }
 
 void Switch::toggle()
 {
   m_outputs[0].value = !std::get<bool>(m_outputs[0].value);
-
-  m_package->elementChanged(id());
 }
 
 void Switch::set(bool a_state)
 {
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-  if (a_state == currentState) return;
-
   m_outputs[0].value = a_state;
-
-  m_package->elementChanged(id());
 }
 
 } // namespace spaghetti::elements::logic

@@ -23,7 +23,6 @@
 #include <algorithm>
 
 #include "elements/values/clamp_int.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::values {
 
@@ -33,22 +32,21 @@ ClampInt::ClampInt()
   setMaxInputs(3);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eInt, "Minimum");
   addInput(ValueType::eInt, "Maximum");
   addInput(ValueType::eInt, "Value");
+
   addOutput(ValueType::eInt, "clamp(v, min, max)");
 }
 
-bool ClampInt::calculate()
+void ClampInt::calculate()
 {
-  if (!allInputsConnected()) return false;
+  int32_t const MINIMUM{ std::get<int32_t>(m_inputs[0].value) };
+  int32_t const MAXIMUM{ std::get<int32_t>(m_inputs[1].value) };
+  int32_t const VALUE{ std::get<int32_t>(m_inputs[2].value) };
 
-  int32_t const MINIMUM{ std::get<int32_t>(*m_inputs[0].value) };
-  int32_t const MAXIMUM{ std::get<int32_t>(*m_inputs[1].value) };
-  int32_t const VALUE{ std::get<int32_t>(*m_inputs[2].value) };
   m_outputs[0].value = std::clamp(VALUE, MINIMUM, MAXIMUM);
-
-  return true;
 }
 
 } // namespace spaghetti::elements::values

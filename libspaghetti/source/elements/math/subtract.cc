@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/subtract.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 
@@ -31,22 +30,20 @@ Subtract::Subtract()
   setMinInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "#1");
   addInput(ValueType::eFloat, "#2");
+
   addOutput(ValueType::eFloat, "Value");
 }
 
-bool Subtract::calculate()
+void Subtract::calculate()
 {
-  if (!allInputsConnected()) return false;
-
-  float ret{ std::get<float>(*m_inputs[0].value) };
+  float ret{ std::get<float>(m_inputs[0].value) };
   size_t const SIZE{ m_inputs.size() };
-  for (size_t i = 1; i < SIZE; ++i) ret -= std::get<float>(*m_inputs[i].value);
+  for (size_t i = 1; i < SIZE; ++i) ret -= std::get<float>(m_inputs[i].value);
 
   m_outputs[0].value = ret;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

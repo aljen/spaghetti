@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/values/degree_to_radian.h"
-#include "spaghetti/package.h"
 #include "spaghetti/utils.h"
 
 namespace spaghetti::elements::values {
@@ -32,18 +31,17 @@ Degree2Radian::Degree2Radian()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "Degree");
+
   addOutput(ValueType::eFloat, "Radian");
 }
 
-bool Degree2Radian::calculate()
+void Degree2Radian::calculate()
 {
-  if (!allInputsConnected()) return false;
+  float const DEGREE{ std::get<float>(m_inputs[0].value) };
 
-  float const input{ std::get<float>(*m_inputs[0].value) };
-  m_outputs[0].value = input * spaghetti::DEG2RAD;
-
-  return true;
+  m_outputs[0].value = DEGREE * spaghetti::DEG2RAD;
 }
 
 } // namespace spaghetti::elements::values

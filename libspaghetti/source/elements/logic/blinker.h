@@ -34,15 +34,13 @@ class Blinker final : public Element {
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   Blinker();
-  ~Blinker() override;
 
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
 
-  bool isUpdatable() const override { return true; }
   void update(duration_t const &a_delta) override;
 
-  bool calculate() override;
+  void calculate() override;
 
  private:
   bool m_enabled{};

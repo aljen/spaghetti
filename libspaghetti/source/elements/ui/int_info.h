@@ -34,12 +34,9 @@ class IntInfo final : public Element {
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
   IntInfo();
-  ~IntInfo() override;
 
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
-
-  bool calculate() override;
 };
 
 } // namespace spaghetti::elements::ui

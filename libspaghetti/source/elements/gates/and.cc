@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/gates/and.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::gates {
 
@@ -31,29 +30,25 @@ And::And()
   setMinInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eBool, "#1");
   addInput(ValueType::eBool, "#2");
+
   addOutput(ValueType::eBool, "State");
 }
 
-bool And::calculate()
+void And::calculate()
 {
-  if (!allInputsConnected()) return false;
-
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-
   bool allSets{ true };
   for (auto &input : m_inputs) {
-    bool const v{ std::get<bool>(*input.value) };
-    if (!v) {
+    bool const VALUE{ std::get<bool>(input.value) };
+    if (!VALUE) {
       allSets = false;
       break;
     }
   }
 
-  if (allSets != currentState) m_outputs[0].value = allSets;
-
-  return allSets != currentState;
+  m_outputs[0].value = allSets;
 }
 
 } // namespace spaghetti::elements::gates

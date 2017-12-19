@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/subtract_if.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 
@@ -31,34 +30,32 @@ SubtractIf::SubtractIf()
   setMinInputs(3);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eBool, "Enabled");
   addInput(ValueType::eFloat, "#1");
   addInput(ValueType::eFloat, "#2");
+
   addOutput(ValueType::eFloat, "Value");
 }
 
-bool SubtractIf::calculate()
+void SubtractIf::calculate()
 {
-  if (!allInputsConnected()) return false;
+  bool const ENABLED{ std::get<bool>(m_inputs[0].value) };
 
-  bool const enabled = std::get<bool>(*m_inputs[0].value);
-
-  if (enabled != m_enabled && !enabled) {
+  if (ENABLED != m_enabled && !ENABLED) {
     m_outputs[0].value = 0.0f;
-    return true;
+    return;
   }
 
-  m_enabled = enabled;
+  m_enabled = ENABLED;
 
-  if (!m_enabled) return false;
+  if (!m_enabled) return;
 
-  float ret{ std::get<float>(*m_inputs[1].value) };
+  float ret{ std::get<float>(m_inputs[1].value) };
   size_t const SIZE{ m_inputs.size() };
-  for (size_t i = 2; i < SIZE; ++i) ret -= std::get<float>(*m_inputs[i].value);
+  for (size_t i = 2; i < SIZE; ++i) ret -= std::get<float>(m_inputs[i].value);
 
   m_outputs[0].value = ret;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

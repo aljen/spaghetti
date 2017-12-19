@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/gates/or.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::gates {
 
@@ -31,27 +30,23 @@ Or::Or()
   setMinInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eBool, "#1");
   addInput(ValueType::eBool, "#2");
+
   addOutput(ValueType::eBool, "State");
 }
 
-bool Or::calculate()
+void Or::calculate()
 {
-  if (!allInputsConnected()) return false;
-
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-
   bool somethingSet{ false };
   for (auto &input : m_inputs) {
-    bool const v{ std::get<bool>(*input.value) };
-    somethingSet |= v;
-    if (v) break;
+    bool const VALUE{ std::get<bool>(input.value) };
+    somethingSet |= VALUE;
+    if (VALUE) break;
   }
 
-  if (somethingSet != currentState) m_outputs[0].value = somethingSet;
-
-  return somethingSet != currentState;
+  m_outputs[0].value = somethingSet;
 }
 
 } // namespace spaghetti::elements::gates

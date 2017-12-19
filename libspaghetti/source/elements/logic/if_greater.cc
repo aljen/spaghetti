@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/logic/if_greater.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::logic {
 
@@ -32,26 +31,19 @@ IfGreater::IfGreater()
   setMaxInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "A");
   addInput(ValueType::eFloat, "B");
+
   addOutput(ValueType::eBool, "A > B");
 }
 
-bool IfGreater::calculate()
+void IfGreater::calculate()
 {
-  if (!allInputsConnected()) return false;
+  float const A{ std::get<float>(m_inputs[0].value) };
+  float const B{ std::get<float>(m_inputs[1].value) };
 
-  bool const currentState{ std::get<bool>(m_outputs[0].value) };
-
-  float const A{ std::get<float>(*m_inputs[0].value) };
-  float const B{ std::get<float>(*m_inputs[1].value) };
-
-  bool const state{ A > B };
-
-  bool const changed{ state != currentState };
-  if (changed) m_outputs[0].value = state;
-
-  return changed;
+  m_outputs[0].value = A > B;
 }
 
 } // namespace spaghetti::elements::logic

@@ -24,7 +24,6 @@
 #ifndef SPAGHETTI_PACKAGE_H
 #define SPAGHETTI_PACKAGE_H
 
-#include <concurrentqueue.h>
 // clang-format off
 #ifdef _MSC_VER
 # include <unordered_map>
@@ -86,7 +85,7 @@ class SPAGHETTI_API Package final : public Element {
   Element *add(string::hash_t a_hash);
 
   void remove(Element *const a_element) { remove(a_element->id()); }
-  void remove(size_t a_id);
+  void remove(size_t const a_id);
 
   Element *get(size_t a_id) const;
 
@@ -94,38 +93,23 @@ class SPAGHETTI_API Package final : public Element {
   bool disconnect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, uint8_t a_inputId);
 
   void dispatchThreadFunction();
-  void updatesThreadFunction();
 
   void startDispatchThread();
   void quitDispatchThread();
 
-  void elementChanged(size_t a_id);
-
-  void setInputsPosition(double const a_x, double const a_y)
-  {
-    m_inputsPosition.x = a_x;
-    m_inputsPosition.y = a_y;
-  }
+  void setInputsPosition(double const a_x, double const a_y);
   void setInputsPosition(Vec2 const a_position) { m_inputsPosition = a_position; }
   Vec2 const &inputsPosition() const { return m_inputsPosition; }
 
-  void setOutputsPosition(double const a_x, double const a_y)
-  {
-    m_outputsPosition.x = a_x;
-    m_outputsPosition.y = a_y;
-  }
+  void setOutputsPosition(double const a_x, double const a_y);
   void setOutputsPosition(Vec2 const a_position) { m_outputsPosition = a_position; }
   Vec2 const &outputsPosition() const { return m_outputsPosition; }
 
-  Elements const &elements() const { return m_data; }
+  Elements const &elements() const { return m_elements; }
   Connections const &connections() const { return m_connections; }
 
   void open(std::string const &a_filename);
   void save(std::string const &a_filename);
-
- private:
-  bool tryDispatch();
-  void dispatch(size_t a_id);
 
  private:
   std::string m_packageDescription{ "A package" };
@@ -133,16 +117,10 @@ class SPAGHETTI_API Package final : public Element {
   std::string m_packageIcon{ "icons/unknown.png" };
   Vec2 m_inputsPosition{};
   Vec2 m_outputsPosition{};
-  Elements m_data{};
+  Elements m_elements{};
   Connections m_connections{};
 
   std::vector<size_t> m_free{};
-
-  std::vector<Element *> m_updatables{};
-
-  moodycamel::ConcurrentQueue<size_t> m_queue{};
-  moodycamel::ConcurrentQueue<Element *> m_addUpdatableQueue{};
-  moodycamel::ConcurrentQueue<Element *> m_removeUpdatableQueue{};
 
 #if PACKAGE_MAP == PACKAGE_SPP_MAP
   using Callbacks = spp::sparse_hash_map<size_t, std::vector<size_t>>;
@@ -152,10 +130,21 @@ class SPAGHETTI_API Package final : public Element {
 
   Callbacks m_dependencies{};
   std::thread m_dispatchThread{};
-  std::thread m_updatesThread{};
 
   bool m_quit{};
 };
+
+inline void Package::setInputsPosition(double const a_x, double const a_y)
+{
+  m_inputsPosition.x = a_x;
+  m_inputsPosition.y = a_y;
+}
+
+inline void Package::setOutputsPosition(double const a_x, double const a_y)
+{
+  m_outputsPosition.x = a_x;
+  m_outputsPosition.y = a_y;
+}
 
 } // namespace spaghetti
 

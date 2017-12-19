@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/values/min_float.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::values {
 
@@ -31,20 +30,19 @@ MinFloat::MinFloat()
   setMaxInputs(2);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "A");
   addInput(ValueType::eFloat, "B");
+
   addOutput(ValueType::eFloat, "min(A, B)");
 }
 
-bool MinFloat::calculate()
+void MinFloat::calculate()
 {
-  if (!allInputsConnected()) return false;
+  float const A{ std::get<float>(m_inputs[0].value) };
+  float const B{ std::get<float>(m_inputs[1].value) };
 
-  float const A{ std::get<float>(*m_inputs[0].value) };
-  float const B{ std::get<float>(*m_inputs[1].value) };
   m_outputs[0].value = std::min(A, B);
-
-  return true;
 }
 
 } // namespace spaghetti::elements::values

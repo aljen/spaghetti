@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/gates/not.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::gates {
 
@@ -32,17 +31,15 @@ Not::Not()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eBool, "#1");
+
   addOutput(ValueType::eBool, "State");
 }
 
-bool Not::calculate()
+void Not::calculate()
 {
-  if (!allInputsConnected()) return false;
-
-  m_outputs[0].value = !std::get<bool>(*m_inputs[0].value);
-
-  return true;
+  m_outputs[0].value = !std::get<bool>(m_inputs[0].value);
 }
 
 } // namespace spaghetti::elements::gates

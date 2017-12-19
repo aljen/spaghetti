@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/math/sin.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::math {
 
@@ -32,20 +31,18 @@ Sin::Sin()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eFloat, "Angle (Rad)");
+
   addOutput(ValueType::eFloat, "sin(angle)");
 }
 
-bool Sin::calculate()
+void Sin::calculate()
 {
-  if (!allInputsConnected()) return false;
-
-  float const ANGLE{ std::get<float>(*m_inputs[0].value) };
+  float const ANGLE{ std::get<float>(m_inputs[0].value) };
   float const SIN{ std::sin(ANGLE) };
 
   m_outputs[0].value = SIN;
-
-  return true;
 }
 
 } // namespace spaghetti::elements::math

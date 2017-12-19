@@ -59,8 +59,8 @@ class SPAGHETTI_API Element {
     double x{}, y{};
   };
 
-  struct Input {
-    Value *value{};
+  struct IOSocket {
+    Value value{};
     ValueType type{};
 
     size_t id{};
@@ -68,15 +68,7 @@ class SPAGHETTI_API Element {
     std::string name{};
   };
 
-  struct Output {
-    Value value{};
-    ValueType type{};
-
-    std::string name{};
-  };
-
-  using Inputs = std::vector<Input>;
-  using Outputs = std::vector<Output>;
+  using IOSockets = std::vector<IOSocket>;
 
   Element() = default;
   virtual ~Element() = default;
@@ -87,10 +79,9 @@ class SPAGHETTI_API Element {
   virtual void serialize(Json &a_json);
   virtual void deserialize(Json const &a_json);
 
-  virtual bool calculate() { return false; }
+  virtual void calculate() {}
   virtual void reset() {}
 
-  virtual bool isUpdatable() const { return false; }
   virtual void update(duration_t const &a_delta) { (void)a_delta; }
 
   size_t id() const noexcept { return m_id; }
@@ -110,8 +101,10 @@ class SPAGHETTI_API Element {
   void iconify(bool const a_iconify) { m_isIconified = a_iconify; }
   bool isIconified() const { return m_isIconified; }
 
-  Inputs const &inputs() const { return m_inputs; }
-  Outputs const &outputs() const { return m_outputs; }
+  IOSockets &inputs() { return m_inputs; }
+  IOSockets const &inputs() const { return m_inputs; }
+  IOSockets &outputs() { return m_outputs; }
+  IOSockets const &outputs() const { return m_outputs; }
 
   bool addInput(ValueType const a_type, std::string const a_name);
   void setInputName(uint8_t a_input, std::string const a_name);
@@ -124,11 +117,6 @@ class SPAGHETTI_API Element {
   void clearOutputs();
 
   bool connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t const a_inputId);
-
-  bool allInputsConnected() const;
-
-  using CallbackFunction = std::function<void(Element *const)>;
-  void onChange(CallbackFunction &&a_callback) { m_callback = a_callback; }
 
   uint8_t minInputs() const { return m_minInputs; }
   uint8_t maxInputs() const { return m_maxInputs; }
@@ -149,8 +137,8 @@ class SPAGHETTI_API Element {
   void setMaxOutputs(uint8_t const a_max);
 
  protected:
-  Inputs m_inputs{};
-  Outputs m_outputs{};
+  IOSockets m_inputs{};
+  IOSockets m_outputs{};
 
   friend class Package;
   Package *m_package{};
@@ -159,7 +147,6 @@ class SPAGHETTI_API Element {
   size_t m_id{};
   std::string m_name{};
   Vec2 m_position{};
-  CallbackFunction m_callback{};
   bool m_isIconified{};
   uint8_t m_minInputs{};
   uint8_t m_maxInputs{ std::numeric_limits<uint8_t>::max() };

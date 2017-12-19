@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/values/const_float.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::values {
 
@@ -31,6 +30,7 @@ ConstFloat::ConstFloat()
   setMaxInputs(0);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addOutput(ValueType::eFloat, "Value");
 }
 
@@ -46,20 +46,16 @@ void ConstFloat::deserialize(const Json &a_json)
 {
   Element::deserialize(a_json);
 
-  auto const &properties = a_json["properties"];
-  m_currentValue = properties["value"].get<float>();
+  auto const &PROPERTIES = a_json["properties"];
+  m_currentValue = PROPERTIES["value"].get<float>();
 
   m_outputs[0].value = m_currentValue;
 }
 
 void ConstFloat::set(float a_value)
 {
-  if (a_value == m_currentValue) return;
-
   m_currentValue = a_value;
-  m_outputs[0].value = a_value;
-
-  m_package->elementChanged(id());
+  m_outputs[0].value = m_currentValue;
 }
 
 } // namespace spaghetti::elements::values

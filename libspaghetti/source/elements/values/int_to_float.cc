@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include "elements/values/int_to_float.h"
-#include "spaghetti/package.h"
 
 namespace spaghetti::elements::values {
 
@@ -31,18 +30,17 @@ Int2Float::Int2Float()
   setMaxInputs(1);
   setMinOutputs(1);
   setMaxOutputs(1);
+
   addInput(ValueType::eInt, "Int");
+
   addOutput(ValueType::eFloat, "Float");
 }
 
-bool Int2Float::calculate()
+void Int2Float::calculate()
 {
-  if (!allInputsConnected()) return false;
+  int32_t const INT{ std::get<int32_t>(m_inputs[0].value) };
 
-  int32_t const input{ std::get<int32_t>(*m_inputs[0].value) };
-  m_outputs[0].value = static_cast<float>(input);
-
-  return true;
+  m_outputs[0].value = static_cast<float>(INT);
 }
 
 } // namespace spaghetti::elements::values
