@@ -105,8 +105,22 @@ void Editor::tabCloseRequested(int const a_index)
   PackageView *const packageView{ reinterpret_cast<PackageView *>(widget) };
 
   if (packageView->canClose()) {
+    QString const FILENAME = packageView->filename();
+    if (!FILENAME.isEmpty())
+      m_openFiles.remove(FILENAME);
     tab->removeTab(a_index);
     delete packageView;
+  }
+
+  int const SIZE{ tab->count() };
+
+  for (int i = 0; i < SIZE; ++i) {
+    QWidget *const tempWidget{ tab->widget(i) };
+    PackageView *const tempPackageView{ reinterpret_cast<PackageView *>(tempWidget) };
+    QString const FILENAME = tempPackageView->filename();
+    if (FILENAME.isEmpty()) continue;
+
+    m_openFiles[FILENAME] = i;
   }
 }
 
@@ -202,6 +216,9 @@ void Editor::newPackage()
   m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
   packageView->setSelectedNode(nullptr);
   packageView->showProperties();
+
+  connect(packageView, &PackageView::requestOpenFile,
+          [this](QString const a_filename) { openPackageFile(a_filename); });
 }
 
 void Editor::openPackage()
@@ -209,24 +226,39 @@ void Editor::openPackage()
   foreach (PackageView *temp, this->findChildren<PackageView *>())
     temp->setUpdatesEnabled(false);
 
-  QString const filename{ QFileDialog::getOpenFileName(this, "Open .package", PACKAGES_DIR, "*.package") };
+  QString const FILENAME{ QFileDialog::getOpenFileName(this, "Open .package", PACKAGES_DIR, "*.package") };
 
   foreach (PackageView *temp, this->findChildren<PackageView *>())
     temp->setUpdatesEnabled(true);
 
-  if (filename.isEmpty()) return;
+  if (FILENAME.isEmpty()) return;
+
+  openPackageFile(FILENAME);
+}
+
+void Editor::openPackageFile(QString const a_filename)
+{
+  auto const FOUND = m_openFiles.constFind(a_filename);
+
+  if (FOUND != m_openFiles.constEnd()) {
+    m_packageViewIndex = FOUND.value();
+    m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
+    return;
+  }
 
   newPackage();
 
-  auto *const packageView = packageViewForIndex(m_packageViewIndex);
-  packageView->setFilename(filename);
+  auto const packageView = packageViewForIndex(m_packageViewIndex);
+  packageView->setFilename(a_filename);
 
-  QDir const packagesDir{ PACKAGES_DIR };
-  m_ui->tabWidget->setTabText(m_packageViewIndex, packagesDir.relativeFilePath(filename));
+  QDir const PACKAGES{ PACKAGES_DIR };
+  m_ui->tabWidget->setTabText(m_packageViewIndex, PACKAGES.relativeFilePath(a_filename));
 
   packageView->open();
   packageView->setSelectedNode(nullptr);
   packageView->showProperties();
+
+  m_openFiles[a_filename] = m_packageViewIndex;
 }
 
 void Editor::savePackage()
