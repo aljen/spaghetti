@@ -145,13 +145,15 @@ void Element::setName(const std::string a_name)
   nameChanged(oldName, m_name);
 }
 
-bool Element::addInput(Element::ValueType const a_type, std::string const a_name)
+bool Element::addInput(Element::ValueType const a_type, std::string const a_name, uint8_t const a_flags)
 {
   if (m_inputs.size() + 1 > m_maxInputs) return false;
 
   IOSocket input{};
   input.name = a_name;
   input.type = a_type;
+  input.flags = a_flags;
+
   switch (a_type) {
     case ValueType::eBool: input.value = false; break;
     case ValueType::eInt: input.value = 0; break;
@@ -180,13 +182,15 @@ void Element::clearInputs()
   m_inputs.clear();
 }
 
-bool Element::addOutput(Element::ValueType const a_type, std::string const a_name)
+bool Element::addOutput(Element::ValueType const a_type, std::string const a_name, uint8_t const a_flags)
 {
   if (m_outputs.size() + 1 > m_maxOutputs) return false;
 
   IOSocket output{};
   output.name = a_name;
   output.type = a_type;
+  output.flags = a_flags;
+
   switch (a_type) {
     case ValueType::eBool: output.value = false; break;
     case ValueType::eInt: output.value = 0; break;
