@@ -31,11 +31,11 @@ SubtractIf::SubtractIf()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eBool, "Enabled");
-  addInput(ValueType::eFloat, "#1");
-  addInput(ValueType::eFloat, "#2");
+  addInput(ValueType::eBool, "Enabled", IOSocket::eCanHoldBool);
+  addInput(ValueType::eFloat, "#1", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
+  addInput(ValueType::eFloat, "#2", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 
-  addOutput(ValueType::eFloat, "Value");
+  addOutput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat);
 }
 
 void SubtractIf::calculate()

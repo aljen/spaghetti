@@ -31,9 +31,9 @@ Switch::Switch()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eBool, "#1");
+  addInput(ValueType::eBool, "#1", IOSocket::eCanHoldBool);
 
-  addOutput(ValueType::eBool, "#1");
+  addOutput(ValueType::eBool, "#1", IOSocket::eCanHoldBool);
 }
 
 void Switch::toggle()

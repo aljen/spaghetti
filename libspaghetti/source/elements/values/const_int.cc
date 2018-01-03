@@ -31,7 +31,7 @@ ConstInt::ConstInt()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addOutput(ValueType::eInt, "Value");
+  addOutput(ValueType::eInt, "Value", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
 }
 
 void ConstInt::serialize(Json &a_json)

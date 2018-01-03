@@ -40,9 +40,9 @@ RandomBool::RandomBool()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eBool, "Trigger");
+  addInput(ValueType::eBool, "Trigger", IOSocket::eCanHoldBool);
 
-  addOutput(ValueType::eBool, "Value");
+  addOutput(ValueType::eBool, "Value", IOSocket::eCanHoldBool);
 }
 
 void RandomBool::calculate()

@@ -32,9 +32,9 @@ Radian2Degree::Radian2Degree()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eFloat, "Radian");
+  addInput(ValueType::eFloat, "Radian", IOSocket::eCanHoldFloat);
 
-  addOutput(ValueType::eFloat, "Degree");
+  addOutput(ValueType::eFloat, "Degree", IOSocket::eCanHoldFloat);
 }
 
 void Radian2Degree::calculate()

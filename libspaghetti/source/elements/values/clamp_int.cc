@@ -33,11 +33,11 @@ ClampInt::ClampInt()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eInt, "Minimum");
-  addInput(ValueType::eInt, "Maximum");
-  addInput(ValueType::eInt, "Value");
+  addInput(ValueType::eInt, "Minimum", IOSocket::eCanHoldInt);
+  addInput(ValueType::eInt, "Maximum", IOSocket::eCanHoldInt);
+  addInput(ValueType::eInt, "Value", IOSocket::eCanHoldInt);
 
-  addOutput(ValueType::eInt, "clamp(v, min, max)");
+  addOutput(ValueType::eInt, "clamp(v, min, max)", IOSocket::eCanHoldInt);
 }
 
 void ClampInt::calculate()

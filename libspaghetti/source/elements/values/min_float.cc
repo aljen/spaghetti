@@ -31,10 +31,10 @@ MinFloat::MinFloat()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eFloat, "A");
-  addInput(ValueType::eFloat, "B");
+  addInput(ValueType::eFloat, "A", IOSocket::eCanHoldFloat);
+  addInput(ValueType::eFloat, "B", IOSocket::eCanHoldFloat);
 
-  addOutput(ValueType::eFloat, "min(A, B)");
+  addOutput(ValueType::eFloat, "min(A, B)", IOSocket::eCanHoldFloat);
 }
 
 void MinFloat::calculate()

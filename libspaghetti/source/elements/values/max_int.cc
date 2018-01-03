@@ -31,10 +31,10 @@ MaxInt::MaxInt()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eInt, "A");
-  addInput(ValueType::eInt, "B");
+  addInput(ValueType::eInt, "A", IOSocket::eCanHoldInt);
+  addInput(ValueType::eInt, "B", IOSocket::eCanHoldInt);
 
-  addOutput(ValueType::eInt, "max(A, B)");
+  addOutput(ValueType::eInt, "max(A, B)", IOSocket::eCanHoldInt);
 }
 
 void MaxInt::calculate()

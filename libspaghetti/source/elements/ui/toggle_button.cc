@@ -31,7 +31,7 @@ ToggleButton::ToggleButton()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addOutput(ValueType::eBool, "State");
+  addOutput(ValueType::eBool, "State", IOSocket::eCanHoldBool | IOSocket::eCanChangeName);
 }
 
 void ToggleButton::toggle()

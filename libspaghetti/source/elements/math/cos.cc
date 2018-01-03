@@ -32,9 +32,9 @@ Cos::Cos()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eFloat, "Angle (Rad)");
+  addInput(ValueType::eFloat, "Angle (Rad)", IOSocket::eCanHoldFloat);
 
-  addOutput(ValueType::eFloat, "cos(angle)");
+  addOutput(ValueType::eFloat, "cos(angle)", IOSocket::eCanHoldFloat);
 }
 
 void Cos::calculate()

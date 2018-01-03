@@ -31,11 +31,11 @@ Blinker::Blinker()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eBool, "Enabled");
-  addInput(ValueType::eInt, "High rate");
-  addInput(ValueType::eInt, "Low rate");
+  addInput(ValueType::eBool, "Enabled", IOSocket::eCanHoldBool);
+  addInput(ValueType::eInt, "High rate", IOSocket::eCanHoldInt);
+  addInput(ValueType::eInt, "Low rate", IOSocket::eCanHoldInt);
 
-  addOutput(ValueType::eBool, "State");
+  addOutput(ValueType::eBool, "State", IOSocket::eCanHoldBool);
 }
 
 void Blinker::update(duration_t const &a_delta)

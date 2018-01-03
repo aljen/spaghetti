@@ -31,11 +31,11 @@ MultiplyIf::MultiplyIf()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eBool, "Enabled");
-  addInput(ValueType::eFloat, "A");
-  addInput(ValueType::eFloat, "B");
+  addInput(ValueType::eBool, "Enabled", IOSocket::eCanHoldBool);
+  addInput(ValueType::eFloat, "#1", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
+  addInput(ValueType::eFloat, "#2", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 
-  addOutput(ValueType::eFloat, "A * B");
+  addOutput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat);
 }
 
 void MultiplyIf::calculate()

@@ -31,7 +31,7 @@ ConstFloat::ConstFloat()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addOutput(ValueType::eFloat, "Value");
+  addOutput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 }
 
 void ConstFloat::serialize(Json &a_json)

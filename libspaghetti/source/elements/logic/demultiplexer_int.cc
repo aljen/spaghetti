@@ -32,11 +32,11 @@ DemultiplexerInt::DemultiplexerInt()
   setMaxInputs(2);
   setMinOutputs(2);
 
-  addInput(ValueType::eInt, "Select");
-  addInput(ValueType::eInt, "Value");
+  addInput(ValueType::eInt, "Select", IOSocket::eCanHoldInt);
+  addInput(ValueType::eInt, "Value", IOSocket::eCanHoldInt);
 
-  addOutput(ValueType::eInt, "#1");
-  addOutput(ValueType::eInt, "#2");
+  addOutput(ValueType::eInt, "#1", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
+  addOutput(ValueType::eInt, "#2", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
 }
 
 void DemultiplexerInt::calculate()

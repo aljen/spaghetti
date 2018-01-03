@@ -31,7 +31,7 @@ IntInfo::IntInfo()
   setMinOutputs(0);
   setMaxOutputs(0);
 
-  addInput(ValueType::eInt, "Int");
+  addInput(ValueType::eInt, "Int", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
 }
 
 } // namespace spaghetti::elements::ui

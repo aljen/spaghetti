@@ -32,9 +32,9 @@ Abs::Abs()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eFloat, "Value");
+  addInput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat);
 
-  addOutput(ValueType::eFloat, "abs(value)");
+  addOutput(ValueType::eFloat, "abs(value)", IOSocket::eCanHoldFloat);
 }
 
 void Abs::calculate()

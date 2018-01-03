@@ -32,9 +32,9 @@ Sin::Sin()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eFloat, "Angle (Rad)");
+  addInput(ValueType::eFloat, "Angle (Rad)", IOSocket::eCanHoldFloat);
 
-  addOutput(ValueType::eFloat, "sin(angle)");
+  addOutput(ValueType::eFloat, "sin(angle)", IOSocket::eCanHoldFloat);
 }
 
 void Sin::calculate()
