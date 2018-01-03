@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2017 Artur Wyszyński, aljen at hitomi dot pl
+// Copyright (c) 2017-2018 Artur Wyszyński, aljen at hitomi dot pl
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -67,9 +67,11 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   void openPackage();
   void openPackageFile(QString const a_filename);
   void savePackage();
+  void saveAsPackage();
   void closePackage();
   void closeAllPackages();
 
+  void savePackageView(bool const a_saveAs);
   void closePackageView(int const a_index);
 
   void deleteElement();
