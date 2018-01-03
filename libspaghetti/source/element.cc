@@ -57,6 +57,7 @@ void Element::serialize(Element::Json &a_json)
     socket["socket"] = i;
     socket["type"] = getSocketType(m_inputs[i].type);
     socket["name"] = m_inputs[i].name;
+    socket["flags"] = m_inputs[i].flags;
     jsonInputs.push_back(socket);
   }
 
@@ -67,6 +68,7 @@ void Element::serialize(Element::Json &a_json)
     socket["socket"] = i;
     socket["type"] = getSocketType(m_outputs[i].type);
     socket["name"] = m_outputs[i].name;
+    socket["flags"] = m_outputs[i].flags;
     jsonOutputs.push_back(socket);
   }
 
@@ -115,6 +117,7 @@ void Element::deserialize(Json const &a_json)
     auto const socketId = a_socket["socket"].get<uint8_t>();
     auto const socketStringType = a_socket["type"].get<std::string>();
     auto const socketName = a_socket["name"].get<std::string>();
+    auto const socketFlags = a_socket["flags"].get<uint8_t>();
 
     assert(a_socketCount == socketId);
 
@@ -129,7 +132,7 @@ void Element::deserialize(Json const &a_json)
       return ValueType::eBool;
     }(socketStringType);
 
-    a_input ? addInput(socketType, socketName) : addOutput(socketType, socketName);
+    a_input ? addInput(socketType, socketName, socketFlags) : addOutput(socketType, socketName, socketFlags);
     a_socketCount++;
   };
 
