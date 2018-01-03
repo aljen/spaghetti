@@ -40,10 +40,11 @@ Package::Package()
 {
   m_elements.push_back(this);
 
-  addInput(ValueType::eBool, "#1");
-  addInput(ValueType::eBool, "#2");
-  addInput(ValueType::eBool, "#3");
-  addOutput(ValueType::eBool, "#1");
+  addInput(ValueType::eBool, "#1", IOSocket::eDefaultFlags);
+  addInput(ValueType::eBool, "#2", IOSocket::eDefaultFlags);
+  addInput(ValueType::eBool, "#3", IOSocket::eDefaultFlags);
+
+  addOutput(ValueType::eBool, "#1", IOSocket::eDefaultFlags);
 }
 
 Package::~Package()
