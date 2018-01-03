@@ -60,11 +60,20 @@ class SPAGHETTI_API Element {
   };
 
   struct IOSocket {
+    enum Flags {
+      eCanHoldBool = 1 << 0,
+      eCanHoldInt = 1 << 1,
+      eCanHoldFloat = 1 << 2,
+      eCanChangeName = 1 << 3,
+      eCanHoldAllValues = eCanHoldBool | eCanHoldInt | eCanHoldFloat,
+      eDefaultFlags = eCanHoldAllValues | eCanChangeName
+    };
     Value value{};
     ValueType type{};
 
     size_t id{};
     uint8_t slot{};
+    uint8_t flags{};
     std::string name{};
   };
 
