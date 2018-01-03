@@ -24,6 +24,8 @@
 #ifndef SPAGHETTI_PACKAGE_H
 #define SPAGHETTI_PACKAGE_H
 
+#include <atomic>
+
 // clang-format off
 #ifdef _MSC_VER
 # include <unordered_map>
@@ -96,6 +98,8 @@ class SPAGHETTI_API Package final : public Element {
 
   void startDispatchThread();
   void quitDispatchThread();
+  void pauseDispatchThread();
+  void resumeDispatchThread();
 
   void setInputsPosition(double const a_x, double const a_y);
   void setInputsPosition(Vec2 const a_position) { m_inputsPosition = a_position; }
@@ -130,8 +134,8 @@ class SPAGHETTI_API Package final : public Element {
 
   Callbacks m_dependencies{};
   std::thread m_dispatchThread{};
-
-  bool m_quit{};
+  std::atomic_bool m_dispatchThreadStarted{};
+  std::atomic_bool m_quit{};
 };
 
 inline void Package::setInputsPosition(double const a_x, double const a_y)

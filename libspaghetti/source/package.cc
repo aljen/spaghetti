@@ -22,8 +22,8 @@
 
 #include <fstream>
 #include <iostream>
-#include <string_view>
 #include <mutex>
+#include <string_view>
 
 #include "spaghetti/package.h"
 
@@ -249,6 +249,8 @@ void Package::dispatchThreadFunction()
   auto last = clock_t::now();
 
   while (!m_quit) {
+    spaghetti::log::debug("Dispatching..");
+
     auto const now = clock_t::now();
     auto const delta = now - last;
     for (auto &&connection : m_connections) {
@@ -265,16 +267,16 @@ void Package::dispatchThreadFunction()
       element->calculate();
     }
 
-//    for (auto &&element : m_elements) {
-//      auto &elementInputs = element->inputs();
-//      for (auto &&input : elementInputs) {
-//        switch (input.type) {
-//          case ValueType::eBool: input.value = false; break;
-//          case ValueType::eFloat: input.value = 0.0f; break;
-//          case ValueType::eInt: input.value = 0; break;
-//        }
-//      }
-//    }
+    //    for (auto &&element : m_elements) {
+    //      auto &elementInputs = element->inputs();
+    //      for (auto &&input : elementInputs) {
+    //        switch (input.type) {
+    //          case ValueType::eBool: input.value = false; break;
+    //          case ValueType::eFloat: input.value = 0.0f; break;
+    //          case ValueType::eInt: input.value = 0; break;
+    //        }
+    //      }
+    //    }
 
     last = now;
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -283,21 +285,41 @@ void Package::dispatchThreadFunction()
 
 void Package::startDispatchThread()
 {
+  if (m_dispatchThreadStarted) return;
+
+  spaghetti::log::debug("Starting dispatch thread..");
   m_dispatchThread = std::thread(&Package::dispatchThreadFunction, this);
+  m_dispatchThreadStarted = true;
 }
 
 void Package::quitDispatchThread()
 {
+  if (!m_dispatchThreadStarted) return;
+
+  spaghetti::log::debug("Quitting dispatch thread..");
   m_quit = true;
   if (m_dispatchThread.joinable()) {
     spaghetti::log::debug("Waiting for dispatch thread join..");
     m_dispatchThread.join();
     spaghetti::log::debug("After dispatch thread join..");
   }
+  m_dispatchThreadStarted = false;
+}
+
+void Package::pauseDispatchThread()
+{
+  spaghetti::log::debug("Pausing dispatch thread..");
+}
+
+void Package::resumeDispatchThread()
+{
+  spaghetti::log::debug("Resuming dispatch thread..");
 }
 
 void Package::open(std::string const &a_filename)
 {
+  pauseDispatchThread();
+
   std::ifstream file{ a_filename };
   if (!file.is_open()) return;
 
@@ -305,15 +327,21 @@ void Package::open(std::string const &a_filename)
   file >> json;
 
   deserialize(json);
+
+  resumeDispatchThread();
 }
 
 void Package::save(std::string const &a_filename)
 {
+  pauseDispatchThread();
+
   Json json{};
   serialize(json);
 
   std::ofstream file{ a_filename };
   file << json.dump(2);
+
+  resumeDispatchThread();
 }
 
 } // namespace spaghetti
