@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2017 Artur Wyszyński, aljen at hitomi dot pl
+// Copyright (c) 2017-2018 Artur Wyszyński, aljen at hitomi dot pl
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -338,7 +338,7 @@ void Editor::about()
       this, "About Spaghetti",
       QString("<a href='https://github.com/aljen/spaghetti'>Spaghetti</a> version: %1<br>"
               "<br>"
-              "Copyright © 2017 <b>Artur Wyszyński</b><br>"
+              "Copyright © 2017-2018 <b>Artur Wyszyński</b><br>"
               "<br>"
               "Build date: <b>%2, %3</b><br>"
               "Git branch: <b>%4</b><br>"
