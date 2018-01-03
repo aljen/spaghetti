@@ -318,8 +318,8 @@ void Node::paintIcon(QPainter *const a_painter)
 void Node::showProperties()
 {
   showCommonProperties();
-  showInputsProperties();
-  showOutputsProperties();
+  showIOProperties(IOSocketsType::eInputs);
+  showIOProperties(IOSocketsType::eOutputs);
 }
 
 void Node::showCommonProperties()
@@ -375,127 +375,68 @@ QString valueType2QString(Element::ValueType a_type)
   return "Unknown";
 }
 
-void Node::showInputsProperties(int a_allowedTypes)
+void Node::showIOProperties(IOSocketsType const a_type)
 {
-  (void)a_allowedTypes;
+  bool const INPUTS{ a_type == IOSocketsType::eInputs };
+  auto &ios = INPUTS ? m_element->inputs() : m_element->outputs();
 
-  auto &inputs = m_element->inputs();
-  int const INPUTS_SIZE = static_cast<int>(inputs.size());
-
-  uint8_t const MIN_INPUTS_SIZE = m_element->minInputs();
-  uint8_t const MAX_INPUTS_SIZE = m_element->maxInputs();
-  bool const ADDING_DISABLED = MIN_INPUTS_SIZE == MAX_INPUTS_SIZE;
-  //  qDebug() << "ADDING_DISABLED:" << ADDING_DISABLED;
+  int const IOS_SIZE{ static_cast<int>(ios.size()) };
+  uint8_t const MIN_IOS_SIZE{ INPUTS ? m_element->minInputs() : m_element->minOutputs() };
+  uint8_t const MAX_IOS_SIZE{ INPUTS ? m_element->maxInputs() : m_element->maxOutputs() };
+  bool const ADDING_DISABLED{ MIN_IOS_SIZE == MAX_IOS_SIZE };
 
   QTableWidgetItem *item{};
   int row = m_properties->rowCount();
 
-  if (m_inputs.size()) propertiesInsertTitle("Inputs");
+  propertiesInsertTitle(INPUTS ? "Inputs" : "Outputs");
 
-  if (!ADDING_DISABLED) {
+  row = m_properties->rowCount();
+  m_properties->insertRow(row);
+  item = new QTableWidgetItem{ "Count" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(row, 0, item);
+
+  QSpinBox *const count = new QSpinBox;
+  count->setRange(MIN_IOS_SIZE, MAX_IOS_SIZE);
+  count->setValue(static_cast<int>(ios.size()));
+  m_properties->setCellWidget(row, 1, count);
+  QObject::connect(count, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [INPUTS, this](int a_value) {
+    auto const SIZE = INPUTS ? m_element->inputs().size() : m_element->outputs().size();
+    if (static_cast<int>(SIZE) < a_value)
+      INPUTS ? addInput() : addOutput();
+    else
+      INPUTS ? removeInput() : removeOutput();
+  });
+  count->setDisabled(ADDING_DISABLED);
+
+  for (int i = 0; i < IOS_SIZE; ++i) {
     row = m_properties->rowCount();
     m_properties->insertRow(row);
-    item = new QTableWidgetItem{ "Count" };
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    m_properties->setItem(row, 0, item);
 
-    QSpinBox *const count = new QSpinBox{};
-    count->setRange(MIN_INPUTS_SIZE, MAX_INPUTS_SIZE);
-    count->setValue(static_cast<int>(inputs.size()));
-    m_properties->setCellWidget(row, 1, count);
-    QObject::connect(count, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
-      auto const size = m_element->inputs().size();
-      if (static_cast<int>(size) < a_value)
-        addInput(ValueType::eBool);
-      else
-        removeInput();
-    });
-  }
+    auto const &io = ios[static_cast<size_t>(i)];
 
-  std::bitset<3> const allowedTypes(static_cast<uint64_t>(a_allowedTypes));
-
-  for (int i = 0; i < INPUTS_SIZE; ++i) {
-    //    qDebug() << "MIN:" << MIN_INPUTS_SIZE << "MAX:" << MAX_INPUTS_SIZE << "INDEX:" << i;
-
-    row = m_properties->rowCount();
-    m_properties->insertRow(row);
-    QLineEdit *const inputName = new QLineEdit{ QString::fromStdString(inputs[static_cast<size_t>(i)].name) };
-    m_properties->setCellWidget(row, 0, inputName);
-
-    QString const inputType = valueType2QString(inputs[static_cast<size_t>(i)].type);
-
-    if (allowedTypes.count() <= 1) {
-      item = new QTableWidgetItem{ inputType };
-      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-      m_properties->setItem(row, 1, item);
+    if (io.flags & Element::IOSocket::eCanChangeName) {
+      QLineEdit *const ioName{ new QLineEdit{ QString::fromStdString(io.name) } };
+      m_properties->setCellWidget(row, 0, ioName);
     } else {
-      QComboBox *const comboBox{ new QComboBox };
-      if (a_allowedTypes & eBoolType)
-        comboBox->addItem(valueType2QString(ValueType::eBool), static_cast<int>(ValueType::eBool));
-      if (a_allowedTypes & eIntType)
-        comboBox->addItem(valueType2QString(ValueType::eInt), static_cast<int>(ValueType::eInt));
-      if (a_allowedTypes & eFloatType)
-        comboBox->addItem(valueType2QString(ValueType::eFloat), static_cast<int>(ValueType::eFloat));
-      m_properties->setCellWidget(row, 1, comboBox);
-      QObject::connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
-                       [i, comboBox, this](int a_index) {
-                         ValueType const valueType = static_cast<ValueType>(comboBox->itemData(a_index).toInt());
-                         setInputType(static_cast<uint8_t>(i), valueType);
-                       });
+      item = new QTableWidgetItem{ QString::fromStdString(io.name) };
+      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+      m_properties->setItem(row, 0, item);
     }
-  }
-}
 
-void Node::showOutputsProperties(int a_allowedTypes)
-{
-  (void)a_allowedTypes;
-
-  auto &outputs = m_element->outputs();
-  int const OUTPUTS_SIZE = static_cast<int>(outputs.size());
-
-  uint8_t const MIN_OUTPUTS_SIZE = m_element->minOutputs();
-  uint8_t const MAX_OUTPUTS_SIZE = m_element->maxOutputs();
-  bool const ADDING_DISABLED = MIN_OUTPUTS_SIZE == MAX_OUTPUTS_SIZE;
-  //  qDebug() << "ADDING_DISABLED:" << ADDING_DISABLED;
-
-  QTableWidgetItem *item{};
-  int row = m_properties->rowCount();
-
-  if (OUTPUTS_SIZE) propertiesInsertTitle("Outputs");
-
-  if (!ADDING_DISABLED) {
-    row = m_properties->rowCount();
-    m_properties->insertRow(row);
-    item = new QTableWidgetItem{ "Count" };
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    m_properties->setItem(row, 0, item);
-
-    QSpinBox *const count = new QSpinBox{};
-    count->setRange(MIN_OUTPUTS_SIZE, MAX_OUTPUTS_SIZE);
-    count->setValue(static_cast<int>(OUTPUTS_SIZE));
-    m_properties->setCellWidget(row, 1, count);
-    QObject::connect(count, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
-      auto const size = m_element->outputs().size();
-      if (static_cast<int>(size) < a_value)
-        addOutput(ValueType::eBool);
-      else
-        removeOutput();
-    });
-  }
-
-  for (int i = 0; i < OUTPUTS_SIZE; ++i) {
-    //    qDebug() << "MIN:" << MIN_OUTPUTS_SIZE << "MAX:" << MAX_OUTPUTS_SIZE << "INDEX:" << i;
-
-    row = m_properties->rowCount();
-    m_properties->insertRow(row);
-    QLineEdit *const outputName = new QLineEdit{ QString::fromStdString(outputs[static_cast<size_t>(i)].name) };
-    m_properties->setCellWidget(row, 0, outputName);
-
-    QString const outputType = valueType2QString(outputs[static_cast<size_t>(i)].type);
-
-    item = new QTableWidgetItem{ outputType };
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    m_properties->setItem(row, 1, item);
+    QComboBox *const comboBox{ new QComboBox };
+    if (io.flags & Element::IOSocket::eCanHoldBool)
+      comboBox->addItem(valueType2QString(ValueType::eBool), static_cast<int>(ValueType::eBool));
+    if (io.flags & Element::IOSocket::eCanHoldInt)
+      comboBox->addItem(valueType2QString(ValueType::eInt), static_cast<int>(ValueType::eInt));
+    if (io.flags & Element::IOSocket::eCanHoldFloat)
+      comboBox->addItem(valueType2QString(ValueType::eFloat), static_cast<int>(ValueType::eFloat));
+    m_properties->setCellWidget(row, 1, comboBox);
+    QObject::connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
+                     [i, comboBox, this](int a_index) {
+                       ValueType const valueType = static_cast<ValueType>(comboBox->itemData(a_index).toInt());
+                       setInputType(static_cast<uint8_t>(i), valueType);
+                     });
   }
 }
 
@@ -579,13 +520,15 @@ void Node::calculateBoundingRect()
   m_boundingRect = QRectF{ 0.0, 0.0, width, height };
 }
 
-void Node::addInput(ValueType const a_type)
+void Node::addInput()
 {
   uint8_t const size = static_cast<uint8_t>(m_element->inputs().size());
   QString const inputName = QString("#%1").arg(size);
 
-  m_element->addInput(a_type, inputName.toStdString());
-  addSocket(SocketType::eInput, size, inputName, a_type);
+  // TODO(aljen): Fix proper flags
+  ValueType const type{};
+  m_element->addInput(type, inputName.toStdString(), Element::IOSocket::eDefaultFlags);
+  addSocket(SocketType::eInput, size, inputName, type);
 
   calculateBoundingRect();
   m_packageView->showProperties();
@@ -613,13 +556,15 @@ void Node::setInputType(uint8_t a_socketId, const Node::ValueType a_type)
   (void)a_type;
 }
 
-void Node::addOutput(ValueType const a_type)
+void Node::addOutput()
 {
   uint8_t const size = static_cast<uint8_t>(m_element->outputs().size());
   QString const name = QString("#%1").arg(size);
 
-  m_element->addOutput(a_type, name.toStdString());
-  addSocket(SocketType::eOutput, size, name, a_type);
+  // TODO(aljen): Fix proper flags
+  ValueType const type{};
+  m_element->addOutput(type, name.toStdString(), Element::IOSocket::eDefaultFlags);
+  addSocket(SocketType::eOutput, size, name, type);
 
   calculateBoundingRect();
   m_packageView->showProperties();
