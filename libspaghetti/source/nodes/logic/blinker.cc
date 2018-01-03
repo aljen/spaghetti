@@ -30,7 +30,7 @@ namespace spaghetti::nodes::logic {
 void Blinker::showProperties()
 {
   showCommonProperties();
-  showOutputsProperties();
+  showIOProperties(IOSocketsType::eOutputs);
 
   propertiesInsertTitle("Blinker");
 }

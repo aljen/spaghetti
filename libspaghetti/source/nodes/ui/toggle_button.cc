@@ -93,7 +93,7 @@ void ToggleButton::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_
 void ToggleButton::showProperties()
 {
   showCommonProperties();
-  showOutputsProperties();
+  showIOProperties(IOSocketsType::eOutputs);
 
   propertiesInsertTitle("Toggle Button");
 

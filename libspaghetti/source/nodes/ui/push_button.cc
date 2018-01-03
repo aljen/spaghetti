@@ -86,7 +86,7 @@ void PushButton::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_op
 void PushButton::showProperties()
 {
   showCommonProperties();
-  showOutputsProperties();
+  showIOProperties(IOSocketsType::eOutputs);
 
   propertiesInsertTitle("Push Button");
 

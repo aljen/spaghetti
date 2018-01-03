@@ -31,8 +31,7 @@ namespace spaghetti::nodes::logic {
 void Clock::showProperties()
 {
   showCommonProperties();
-  showInputsProperties();
-  showOutputsProperties();
+  showIOProperties(IOSocketsType::eOutputs);
 
   propertiesInsertTitle("Clock");
 

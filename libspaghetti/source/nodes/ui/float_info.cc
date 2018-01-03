@@ -57,8 +57,8 @@ void FloatInfo::refreshCentralWidget()
 void FloatInfo::showProperties()
 {
   showCommonProperties();
-  showInputsProperties();
-  showOutputsProperties();
+  showIOProperties(IOSocketsType::eInputs);
+  showIOProperties(IOSocketsType::eOutputs);
 }
 
 } // namespace spaghetti::nodes::ui
