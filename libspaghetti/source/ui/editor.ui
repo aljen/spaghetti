@@ -54,6 +54,7 @@
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
     <addaction name="actionClose"/>
     <addaction name="actionCloseAll"/>
@@ -78,7 +79,7 @@
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>View</string>
+     <string>&amp;View</string>
     </property>
     <addaction name="actionShowLibrary"/>
     <addaction name="actionShowProperties"/>
@@ -90,7 +91,7 @@
   </widget>
   <widget class="QDockWidget" name="library">
    <property name="windowTitle">
-    <string>Library</string>
+    <string>&amp;Library</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
@@ -111,7 +112,7 @@
   </widget>
   <widget class="QDockWidget" name="properties">
    <property name="windowTitle">
-    <string>Properties</string>
+    <string>P&amp;roperties</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
@@ -162,27 +163,27 @@
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
   <action name="actionAboutQt">
    <property name="text">
-    <string>About Qt</string>
+    <string>About &amp;Qt</string>
    </property>
   </action>
   <action name="actionBuildCommit">
    <property name="text">
-    <string>Build commit on GitHub</string>
+    <string>&amp;Build commit on GitHub</string>
    </property>
   </action>
   <action name="actionRecentChanges">
    <property name="text">
-    <string>Recent changes on GitHub…</string>
+    <string>&amp;Recent changes on GitHub…</string>
    </property>
   </action>
   <action name="actionClose">
    <property name="text">
-    <string>Close</string>
+    <string>&amp;Close</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
@@ -190,7 +191,7 @@
   </action>
   <action name="actionCloseAll">
    <property name="text">
-    <string>Close all</string>
+    <string>C&amp;lose all</string>
    </property>
   </action>
   <action name="actionShowLibrary">
@@ -201,7 +202,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Library</string>
+    <string>&amp;Show Library</string>
    </property>
   </action>
   <action name="actionShowProperties">
@@ -212,15 +213,20 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Properties</string>
+    <string>Show &amp;Properties</string>
    </property>
   </action>
   <action name="actionDeleteElement">
    <property name="text">
-    <string>Delete element</string>
+    <string>&amp;Delete element</string>
    </property>
    <property name="shortcut">
     <string>Del</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>Save as</string>
    </property>
   </action>
  </widget>

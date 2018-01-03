@@ -70,6 +70,7 @@ Editor::Editor(QWidget *const a_parent)
   connect(m_ui->actionNew, &QAction::triggered, this, &Editor::newPackage);
   connect(m_ui->actionOpen, &QAction::triggered, this, &Editor::openPackage);
   connect(m_ui->actionSave, &QAction::triggered, this, &Editor::savePackage);
+  connect(m_ui->actionSaveAs, &QAction::triggered, this, &Editor::saveAsPackage);
   connect(m_ui->actionClose, &QAction::triggered, this, &Editor::closePackage);
   connect(m_ui->actionCloseAll, &QAction::triggered, this, &Editor::closeAllPackages);
 
@@ -263,11 +264,31 @@ void Editor::openPackageFile(QString const a_filename)
 
 void Editor::savePackage()
 {
+  savePackageView(false);
+}
+
+void Editor::saveAsPackage()
+{
+  savePackageView(true);
+}
+
+void Editor::closePackage()
+{
+  closePackageView(m_packageViewIndex);
+}
+
+void Editor::closeAllPackages()
+{
+  while (int count = openPackageViews()) closePackageView(count - 1);
+}
+
+void Editor::savePackageView(bool const a_saveAs)
+{
   assert(m_packageViewIndex >= 0);
 
-  auto *const packageView = packageViewForIndex(m_packageViewIndex);
+  auto const packageView = packageViewForIndex(m_packageViewIndex);
 
-  if (packageView->filename().isEmpty()) {
+  if (a_saveAs || packageView->filename().isEmpty()) {
     foreach (PackageView *temp, this->findChildren<PackageView *>())
       temp->setUpdatesEnabled(false);
 
@@ -285,16 +306,6 @@ void Editor::savePackage()
   }
 
   packageView->save();
-}
-
-void Editor::closePackage()
-{
-  closePackageView(m_packageViewIndex);
-}
-
-void Editor::closeAllPackages()
-{
-  while (int count = openPackageViews()) closePackageView(count - 1);
 }
 
 void Editor::closePackageView(int const a_index)
