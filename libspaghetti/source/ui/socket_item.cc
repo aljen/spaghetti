@@ -359,6 +359,12 @@ void SocketItem::disconnectAllOutputs()
 void SocketItem::setValueType(ValueType const a_type)
 {
   m_valueType = a_type;
+
+  switch (m_valueType) {
+    case ValueType::eBool: setColors(get_color(Color::eBoolSignalOff), get_color(Color::eBoolSignalOn)); break;
+    case ValueType::eFloat: setColors(get_color(Color::eFloatSignalOn), get_color(Color::eFloatSignalOff)); break;
+    case ValueType::eInt: setColors(get_color(Color::eIntegerSignalOn), get_color(Color::eIntegerSignalOn)); break;
+  }
 }
 
 void SocketItem::removeLink(LinkItem *const a_linkItem)

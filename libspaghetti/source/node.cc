@@ -598,16 +598,6 @@ void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const 
   socket->setElementId(m_element->id());
   socket->setSocketId(a_id);
 
-  switch (a_valueType) {
-    case ValueType::eBool: socket->setColors(get_color(Color::eBoolSignalOff), get_color(Color::eBoolSignalOn)); break;
-    case ValueType::eFloat:
-      socket->setColors(get_color(Color::eFloatSignalOn), get_color(Color::eFloatSignalOff));
-      break;
-    case ValueType::eInt:
-      socket->setColors(get_color(Color::eIntegerSignalOn), get_color(Color::eIntegerSignalOn));
-      break;
-  }
-
   socket->setName(a_name);
   socket->setValueType(a_valueType);
 
