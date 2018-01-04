@@ -24,6 +24,8 @@
 #ifndef SPAGHETTI_PACKAGE_H
 #define SPAGHETTI_PACKAGE_H
 
+#include <atomic>
+
 // clang-format off
 #ifdef _MSC_VER
 # include <unordered_map>
@@ -82,20 +84,22 @@ class SPAGHETTI_API Package final : public Element {
   void deserialize(Json const &a_json) override;
 
   Element *add(char const *const a_name) { return add(string::hash(a_name)); }
-  Element *add(string::hash_t a_hash);
+  Element *add(string::hash_t const a_hash);
 
   void remove(Element *const a_element) { remove(a_element->id()); }
   void remove(size_t const a_id);
 
-  Element *get(size_t a_id) const;
+  Element *get(size_t const a_id) const;
 
-  bool connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, uint8_t a_inputId);
-  bool disconnect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, uint8_t a_inputId);
+  bool connect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId, uint8_t const a_inputId);
+  bool disconnect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId, uint8_t const a_inputId);
 
   void dispatchThreadFunction();
 
   void startDispatchThread();
   void quitDispatchThread();
+  void pauseDispatchThread();
+  void resumeDispatchThread();
 
   void setInputsPosition(double const a_x, double const a_y);
   void setInputsPosition(Vec2 const a_position) { m_inputsPosition = a_position; }
@@ -130,8 +134,8 @@ class SPAGHETTI_API Package final : public Element {
 
   Callbacks m_dependencies{};
   std::thread m_dispatchThread{};
-
-  bool m_quit{};
+  std::atomic_bool m_dispatchThreadStarted{};
+  std::atomic_bool m_quit{};
 };
 
 inline void Package::setInputsPosition(double const a_x, double const a_y)

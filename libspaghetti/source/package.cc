@@ -22,8 +22,8 @@
 
 #include <fstream>
 #include <iostream>
-#include <string_view>
 #include <mutex>
+#include <string_view>
 
 #include "spaghetti/package.h"
 
@@ -40,10 +40,11 @@ Package::Package()
 {
   m_elements.push_back(this);
 
-  addInput(ValueType::eBool, "#1");
-  addInput(ValueType::eBool, "#2");
-  addInput(ValueType::eBool, "#3");
-  addOutput(ValueType::eBool, "#1");
+  addInput(ValueType::eBool, "#1", IOSocket::eDefaultFlags);
+  addInput(ValueType::eBool, "#2", IOSocket::eDefaultFlags);
+  addInput(ValueType::eBool, "#3", IOSocket::eDefaultFlags);
+
+  addOutput(ValueType::eBool, "#1", IOSocket::eDefaultFlags);
 }
 
 Package::~Package()
@@ -81,13 +82,13 @@ void Package::serialize(Element::Json &a_json)
   jsonPackage["elements"] = jsonElements;
 
   auto jsonConnections = Json::array();
-  for (auto const &connection : m_connections) {
+  for (auto const &CONNECTION : m_connections) {
     Json jsonConnection{}, jsonConnect{}, jsonTo{};
 
-    jsonConnect["id"] = connection.from_id;
-    jsonConnect["socket"] = connection.from_socket;
-    jsonTo["id"] = connection.to_id;
-    jsonTo["socket"] = connection.to_socket;
+    jsonConnect["id"] = CONNECTION.from_id;
+    jsonConnect["socket"] = CONNECTION.from_socket;
+    jsonTo["id"] = CONNECTION.to_id;
+    jsonTo["socket"] = CONNECTION.to_socket;
 
     jsonConnection["connect"] = jsonConnect;
     jsonConnection["to"] = jsonTo;
@@ -100,46 +101,46 @@ void Package::deserialize(Json const &a_json)
 {
   Element::deserialize(a_json);
 
-  auto const &jsonNode = a_json["node"];
-  auto const jsonInputsPosition = jsonNode["inputs_position"];
-  auto const jsonInputsPositionX = jsonInputsPosition["x"].get<double>();
-  auto const jsonInputsPositionY = jsonInputsPosition["y"].get<double>();
-  auto const jsonOutputsPosition = jsonNode["outputs_position"];
-  auto const jsonOutputsPositionX = jsonOutputsPosition["x"].get<double>();
-  auto const jsonOutputsPositionY = jsonOutputsPosition["y"].get<double>();
+  auto const &NODE = a_json["node"];
+  auto const INPUTS_POSITION = NODE["inputs_position"];
+  auto const INPUTS_POSITION_X = INPUTS_POSITION["x"].get<double>();
+  auto const INPUTS_POSITION_Y = INPUTS_POSITION["y"].get<double>();
+  auto const OUTPUTS_POSITION = NODE["outputs_position"];
+  auto const OUTPUTS_POSITION_X = OUTPUTS_POSITION["x"].get<double>();
+  auto const OUTPUTS_POSITION_Y = OUTPUTS_POSITION["y"].get<double>();
 
-  auto const &jsonPackage = a_json["package"];
-  auto const &jsonElements = jsonPackage["elements"];
-  auto const &jsonConnections = jsonPackage["connections"];
-  auto const &jsonDescription = jsonPackage["description"].get<std::string>();
-  auto const &jsonIcon = jsonPackage["icon"].get<std::string>();
-  auto const &jsonPath = jsonPackage["path"].get<std::string>();
+  auto const &PACKAGE = a_json["package"];
+  auto const &ELEMENTS = PACKAGE["elements"];
+  auto const &CONNECTIONS = PACKAGE["connections"];
+  auto const &DESCRIPTION = PACKAGE["description"].get<std::string>();
+  auto const &ICON = PACKAGE["icon"].get<std::string>();
+  auto const &PATH = PACKAGE["path"].get<std::string>();
 
-  setPackageDescription(jsonDescription);
-  setPackageIcon(jsonIcon);
-  setPackagePath(jsonPath);
-  setInputsPosition(jsonInputsPositionX, jsonInputsPositionY);
-  setOutputsPosition(jsonOutputsPositionX, jsonOutputsPositionY);
+  setPackageDescription(DESCRIPTION);
+  setPackageIcon(ICON);
+  setPackagePath(PATH);
+  setInputsPosition(INPUTS_POSITION_X, INPUTS_POSITION_Y);
+  setOutputsPosition(OUTPUTS_POSITION_X, OUTPUTS_POSITION_Y);
 
-  for (auto const &temp : jsonElements) {
-    auto const &elementGroup = temp["element"];
-    auto const elementType = elementGroup["type"].get<std::string>();
-    auto const element = add(elementType.c_str());
-    element->deserialize(temp);
+  for (auto const &TEMP : ELEMENTS) {
+    auto const &ELEMENT_GROUP = TEMP["element"];
+    auto const ELEMENT_TYPE = ELEMENT_GROUP["type"].get<std::string>();
+    auto const element = add(ELEMENT_TYPE.c_str());
+    element->deserialize(TEMP);
   }
 
-  for (auto const &connection : jsonConnections) {
-    auto const &from = connection["connect"];
-    auto const &to = connection["to"];
-    auto const &fromId = from["id"].get<size_t>();
-    auto const &fromSocket = from["socket"].get<uint8_t>();
-    auto const &toId = to["id"].get<size_t>();
-    auto const &toSocket = to["socket"].get<uint8_t>();
-    connect(fromId, fromSocket, toId, toSocket);
+  for (auto const &CONNECTION : CONNECTIONS) {
+    auto const &FROM = CONNECTION["connect"];
+    auto const &TO = CONNECTION["to"];
+    auto const &FROM_ID = FROM["id"].get<size_t>();
+    auto const &FROM_SOCKET = FROM["socket"].get<uint8_t>();
+    auto const &TO_ID = TO["id"].get<size_t>();
+    auto const &TO_SOCKET = TO["socket"].get<uint8_t>();
+    connect(FROM_ID, FROM_SOCKET, TO_ID, TO_SOCKET);
   }
 }
 
-Element *Package::add(string::hash_t a_hash)
+Element *Package::add(string::hash_t const a_hash)
 {
   spaghetti::Registry &registry{ spaghetti::Registry::get() };
 
@@ -179,14 +180,15 @@ void Package::remove(size_t const a_id)
   m_free.emplace_back(a_id);
 }
 
-Element *Package::get(size_t a_id) const
+Element *Package::get(size_t const a_id) const
 {
   assert(a_id < m_elements.size());
   assert(std::find(std::begin(m_free), std::end(m_free), a_id) == std::end(m_free));
   return m_elements[a_id];
 }
 
-bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, uint8_t a_inputId)
+bool Package::connect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId,
+                      uint8_t const a_inputId)
 {
   Element *const source{ get(a_sourceId) };
   Element *const target{ get(a_targetId) };
@@ -215,21 +217,23 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   m_connections.emplace_back(Connection{ a_sourceId, a_outputId, a_targetId, a_inputId });
 
   auto &dependencies = m_dependencies[a_sourceId];
-  auto const it = std::find(std::begin(dependencies), std::end(dependencies), a_targetId);
-  if (it == std::end(dependencies)) dependencies.push_back(a_targetId);
+  auto const IT = std::find(std::begin(dependencies), std::end(dependencies), a_targetId);
+  if (IT == std::end(dependencies)) dependencies.push_back(a_targetId);
 
   return true;
 }
 
-bool Package::disconnect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, uint8_t a_inputId)
+bool Package::disconnect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId, uint8_t const a_inputId)
 {
   Element *const target{ get(a_targetId) };
 
   spaghetti::log::trace("Disconnecting source: {}@{} from target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
                         a_targetId, static_cast<int>(a_inputId));
 
-  target->m_inputs[a_inputId].id = 0;
-  target->m_inputs[a_inputId].slot = 0;
+  auto &targetInput = target->m_inputs[a_inputId];
+  targetInput.id = 0;
+  targetInput.slot = 0;
+  resetIOSocketValue(targetInput);
 
   auto it = std::remove_if(std::begin(m_connections), std::end(m_connections), [=](Connection &a_connection) {
     return a_connection.from_id == a_sourceId && a_connection.from_socket == a_outputId &&
@@ -249,55 +253,77 @@ void Package::dispatchThreadFunction()
   auto last = clock_t::now();
 
   while (!m_quit) {
-    auto const now = clock_t::now();
-    auto const delta = now - last;
+    //    spaghetti::log::debug("Dispatching..");
+
+    auto const NOW = clock_t::now();
+    auto const DELTA = NOW - last;
     for (auto &&connection : m_connections) {
       Element *const source{ get(connection.from_id) };
       Element *const target{ get(connection.to_id) };
 
-      auto const &sourceOutputs = source->outputs();
+      auto const &SOURCE_OUTPUTS = source->outputs();
       auto &targetInputs = target->inputs();
-      targetInputs[connection.to_socket].value = sourceOutputs[connection.from_socket].value;
+      targetInputs[connection.to_socket].value = SOURCE_OUTPUTS[connection.from_socket].value;
     }
 
     for (auto &&element : m_elements) {
-      element->update(delta);
+      element->update(DELTA);
       element->calculate();
     }
 
-//    for (auto &&element : m_elements) {
-//      auto &elementInputs = element->inputs();
-//      for (auto &&input : elementInputs) {
-//        switch (input.type) {
-//          case ValueType::eBool: input.value = false; break;
-//          case ValueType::eFloat: input.value = 0.0f; break;
-//          case ValueType::eInt: input.value = 0; break;
-//        }
-//      }
-//    }
+    //    for (auto &&element : m_elements) {
+    //      auto &elementInputs = element->inputs();
+    //      for (auto &&input : elementInputs) {
+    //        switch (input.type) {
+    //          case ValueType::eBool: input.value = false; break;
+    //          case ValueType::eFloat: input.value = 0.0f; break;
+    //          case ValueType::eInt: input.value = 0; break;
+    //        }
+    //      }
+    //    }
 
-    last = now;
+    last = NOW;
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 }
 
 void Package::startDispatchThread()
 {
+  if (m_dispatchThreadStarted) return;
+
+  spaghetti::log::debug("Starting dispatch thread..");
   m_dispatchThread = std::thread(&Package::dispatchThreadFunction, this);
+  m_dispatchThreadStarted = true;
 }
 
 void Package::quitDispatchThread()
 {
+  if (!m_dispatchThreadStarted) return;
+
+  spaghetti::log::debug("Quitting dispatch thread..");
   m_quit = true;
   if (m_dispatchThread.joinable()) {
     spaghetti::log::debug("Waiting for dispatch thread join..");
     m_dispatchThread.join();
     spaghetti::log::debug("After dispatch thread join..");
   }
+  m_dispatchThreadStarted = false;
+}
+
+void Package::pauseDispatchThread()
+{
+  spaghetti::log::debug("Pausing dispatch thread..");
+}
+
+void Package::resumeDispatchThread()
+{
+  spaghetti::log::debug("Resuming dispatch thread..");
 }
 
 void Package::open(std::string const &a_filename)
 {
+  pauseDispatchThread();
+
   std::ifstream file{ a_filename };
   if (!file.is_open()) return;
 
@@ -305,15 +331,21 @@ void Package::open(std::string const &a_filename)
   file >> json;
 
   deserialize(json);
+
+  resumeDispatchThread();
 }
 
 void Package::save(std::string const &a_filename)
 {
+  pauseDispatchThread();
+
   Json json{};
   serialize(json);
 
   std::ofstream file{ a_filename };
   file << json.dump(2);
+
+  resumeDispatchThread();
 }
 
 } // namespace spaghetti

@@ -31,7 +31,7 @@ ConstBool::ConstBool()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addOutput(ValueType::eBool, "Value");
+  addOutput(ValueType::eBool, "Value", IOSocket::eCanHoldBool | IOSocket::eCanChangeName);
 }
 
 void ConstBool::serialize(Json &a_json)

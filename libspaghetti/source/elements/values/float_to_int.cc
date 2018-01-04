@@ -31,9 +31,9 @@ Float2Int::Float2Int()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eFloat, "Float");
+  addInput(ValueType::eFloat, "Float", IOSocket::eCanHoldFloat);
 
-  addOutput(ValueType::eInt, "Int");
+  addOutput(ValueType::eInt, "Int", IOSocket::eCanHoldInt);
 }
 
 void Float2Int::calculate()

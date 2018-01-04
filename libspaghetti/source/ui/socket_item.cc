@@ -66,7 +66,7 @@ QRectF SocketItem::boundingRect() const
                  static_cast<qreal>(SIZE) };
 }
 
-void SocketItem::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_option, QWidget *a_widget)
+void SocketItem::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget)
 {
   Q_UNUSED(a_option);
   Q_UNUSED(a_widget);
@@ -261,7 +261,7 @@ void SocketItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *a_event)
   setCursor(Qt::OpenHandCursor);
 }
 
-QVariant SocketItem::itemChange(QGraphicsItem::GraphicsItemChange a_change, const QVariant &a_value)
+QVariant SocketItem::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant const &a_value)
 {
   if (a_change == QGraphicsItem::ItemScenePositionHasChanged) {
     for (LinkItem *const link : m_links) link->trackNodes();
@@ -354,6 +354,17 @@ void SocketItem::disconnectAllOutputs()
 {
   auto links = m_links;
   for (auto &link : links) disconnect(link->to());
+}
+
+void SocketItem::setValueType(ValueType const a_type)
+{
+  m_valueType = a_type;
+
+  switch (m_valueType) {
+    case ValueType::eBool: setColors(get_color(Color::eBoolSignalOff), get_color(Color::eBoolSignalOn)); break;
+    case ValueType::eFloat: setColors(get_color(Color::eFloatSignalOn), get_color(Color::eFloatSignalOff)); break;
+    case ValueType::eInt: setColors(get_color(Color::eIntegerSignalOn), get_color(Color::eIntegerSignalOn)); break;
+  }
 }
 
 void SocketItem::removeLink(LinkItem *const a_linkItem)

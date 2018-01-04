@@ -31,18 +31,25 @@ Multiply::Multiply()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eFloat, "A");
-  addInput(ValueType::eFloat, "B");
+  addInput(ValueType::eFloat, "#1", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
+  addInput(ValueType::eFloat, "#2", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 
-  addOutput(ValueType::eFloat, "A * B");
+  addOutput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat);
+
+  setDefaultNewInputFlags(IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 }
 
 void Multiply::calculate()
 {
-  float const A{ std::get<float>(m_inputs[0].value) };
-  float const B{ std::get<float>(m_inputs[1].value) };
+  float output{ std::get<float>(m_inputs[0].value) };
 
-  m_outputs[0].value = A * B;
+  size_t const SIZE{ m_inputs.size() };
+  for (size_t i = 1; i < SIZE; ++i) {
+    float const VALUE{ std::get<float>(m_inputs[i].value) };
+    output *= VALUE;
+  }
+
+  m_outputs[0].value = output;
 }
 
 } // namespace spaghetti::elements::math

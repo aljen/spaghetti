@@ -11,6 +11,8 @@ void init()
   if (!g_loggerFile) g_loggerFile = spdlog::basic_logger_mt("file", "spaghetti.log");
 
   spdlog::set_pattern("[%Y.%m.%d %H:%M:%S.%e] [%n] [%L] %v");
+
+  g_loggerConsole->set_level(spdlog::level::debug);
 }
 
 Loggers get()

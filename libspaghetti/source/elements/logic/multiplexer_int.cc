@@ -32,11 +32,13 @@ MultiplexerInt::MultiplexerInt()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eInt, "Select");
-  addInput(ValueType::eInt, "#1");
-  addInput(ValueType::eInt, "#2");
+  addInput(ValueType::eInt, "Select", IOSocket::eCanHoldInt);
+  addInput(ValueType::eInt, "#1", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
+  addInput(ValueType::eInt, "#2", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
 
-  addOutput(ValueType::eInt, "Value");
+  addOutput(ValueType::eInt, "Value", IOSocket::eCanHoldInt);
+
+  setDefaultNewInputFlags(IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
 }
 
 void MultiplexerInt::calculate()

@@ -33,11 +33,11 @@ ClampFloat::ClampFloat()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eFloat, "Minimum");
-  addInput(ValueType::eFloat, "Maximum");
-  addInput(ValueType::eFloat, "Value");
+  addInput(ValueType::eFloat, "Minimum", IOSocket::eCanHoldFloat);
+  addInput(ValueType::eFloat, "Maximum", IOSocket::eCanHoldFloat);
+  addInput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat);
 
-  addOutput(ValueType::eFloat, "clamp(v, min, max)");
+  addOutput(ValueType::eFloat, "clamp(v, min, max)", IOSocket::eCanHoldFloat);
 }
 
 void ClampFloat::calculate()

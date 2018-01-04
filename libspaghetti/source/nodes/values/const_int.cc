@@ -57,7 +57,7 @@ void ConstInt::refreshCentralWidget()
 void ConstInt::showProperties()
 {
   showCommonProperties();
-  showOutputsProperties();
+  showIOProperties(IOSocketsType::eOutputs);
 
   propertiesInsertTitle("Const Int");
 

@@ -31,11 +31,13 @@ MultiplyIf::MultiplyIf()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eBool, "Enabled");
-  addInput(ValueType::eFloat, "A");
-  addInput(ValueType::eFloat, "B");
+  addInput(ValueType::eBool, "Enabled", IOSocket::eCanHoldBool);
+  addInput(ValueType::eFloat, "#1", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
+  addInput(ValueType::eFloat, "#2", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 
-  addOutput(ValueType::eFloat, "A * B");
+  addOutput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat);
+
+  setDefaultNewInputFlags(IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 }
 
 void MultiplyIf::calculate()
@@ -51,10 +53,15 @@ void MultiplyIf::calculate()
 
   if (!m_enabled) return;
 
-  float const A{ std::get<float>(m_inputs[1].value) };
-  float const B{ std::get<float>(m_inputs[2].value) };
+  float output{ std::get<float>(m_inputs[1].value) };
 
-  m_outputs[0].value = A * B;
+  size_t const SIZE{ m_inputs.size() };
+  for (size_t i = 2; i < SIZE; ++i) {
+    float const VALUE{ std::get<float>(m_inputs[i].value) };
+    output *= VALUE;
+  }
+
+  m_outputs[0].value = output;
 }
 
 } // namespace spaghetti::elements::math

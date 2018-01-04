@@ -69,7 +69,7 @@ class SocketItem final : public QGraphicsItem {
 
   QVariant itemChange(GraphicsItemChange a_change, QVariant const &a_value) override;
 
-  void setHover(bool a_hover) { m_isHover = a_hover; }
+  void setHover(bool const a_hover) { m_isHover = a_hover; }
 
   QString name() const { return m_name; }
   void setName(QString a_name) { m_name = a_name; }
@@ -95,7 +95,7 @@ class SocketItem final : public QGraphicsItem {
   void disconnectAllInputs();
   void disconnectAllOutputs();
 
-  void setValueType(ValueType const a_type) { m_valueType = a_type; }
+  void setValueType(ValueType const a_type);
   ValueType valueType() const { return m_valueType; }
 
  private:

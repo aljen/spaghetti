@@ -188,7 +188,7 @@ void Editor::showEvent(QShowEvent *a_event)
 
   if (s_firstTime) {
     s_firstTime = false;
-    auto *const tab = m_ui->tabWidget;
+    auto const tab = m_ui->tabWidget;
     auto const index = tab->currentIndex();
     auto packageView = qobject_cast<PackageView *const>(tab->widget(index));
     packageView->center();
@@ -199,7 +199,7 @@ void Editor::showEvent(QShowEvent *a_event)
 
 PackageView *Editor::packageViewForIndex(int const a_index) const
 {
-  auto *const tabWidget = m_ui->tabWidget;
+  auto const tabWidget = m_ui->tabWidget;
   auto const index = a_index == -1 ? tabWidget->currentIndex() : a_index;
   auto packageView = qobject_cast<PackageView *const>(tabWidget->widget(index));
   return packageView;
@@ -212,7 +212,7 @@ int Editor::openPackageViews() const
 
 void Editor::newPackage()
 {
-  auto *const packageView = new PackageView{ m_ui->propertiesTable };
+  auto const packageView = new PackageView{ m_ui->propertiesTable };
   m_packageViewIndex = m_ui->tabWidget->addTab(packageView, "New package");
   m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
   packageView->setSelectedNode(nullptr);
@@ -310,14 +310,14 @@ void Editor::savePackageView(bool const a_saveAs)
 
 void Editor::closePackageView(int const a_index)
 {
-  auto *const packageView = packageViewForIndex(a_index);
+  auto const packageView = packageViewForIndex(a_index);
   if (packageView->canClose()) m_ui->tabWidget->removeTab(a_index);
   delete packageView;
 }
 
 void Editor::deleteElement()
 {
-  auto *const packageView = packageViewForIndex(m_packageViewIndex);
+  auto const packageView = packageViewForIndex(m_packageViewIndex);
   packageView->deleteElement();
 }
 

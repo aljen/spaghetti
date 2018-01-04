@@ -31,11 +31,13 @@ DivideIf::DivideIf()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eBool, "Enabled");
-  addInput(ValueType::eFloat, "A");
-  addInput(ValueType::eFloat, "B");
+  addInput(ValueType::eBool, "Enabled", IOSocket::eCanHoldBool);
+  addInput(ValueType::eFloat, "#1", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
+  addInput(ValueType::eFloat, "#2", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 
-  addOutput(ValueType::eFloat, "A / B");
+  addOutput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat);
+
+  setDefaultNewInputFlags(IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 }
 
 void DivideIf::calculate()
@@ -51,11 +53,23 @@ void DivideIf::calculate()
 
   if (!m_enabled) return;
 
-  float const A{ std::get<float>(m_inputs[1].value) };
-  float const B{ std::get<float>(m_inputs[2].value) };
-  float const VALUE{ B == 0.0f ? 0.0f : A / B };
+  float output{ std::get<float>(m_inputs[1].value) };
+  if (output == 0.0f) {
+    m_outputs[0].value = 0.0f;
+    return;
+  }
 
-  m_outputs[0].value = VALUE;
+  size_t const SIZE{ m_inputs.size() };
+  for (size_t i = 2; i < SIZE; ++i) {
+    float const VALUE{ std::get<float>(m_inputs[i].value) };
+    if (VALUE == 0.0f) {
+      output = 0.0f;
+      break;
+    }
+    output /= VALUE;
+  }
+
+  m_outputs[0].value = output;
 }
 
 } // namespace spaghetti::elements::math

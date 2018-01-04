@@ -44,13 +44,6 @@ class SPAGHETTI_API Node : public QGraphicsItem {
  public:
   using Sockets = QVector<SocketItem *>;
 
-  enum AllowedValueType {
-    eBoolType = 1 << 0,
-    eIntType = 1 << 1,
-    eFloatType = 1 << 2,
-    eAnyType = eBoolType | eIntType | eFloatType
-  };
-
   explicit Node(QGraphicsItem *const a_parent = nullptr);
   ~Node() override;
 
@@ -62,6 +55,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   void advance(int a_phase) override;
 
   enum class Type { eElement, eInputs, eOutputs };
+  enum class IOSocketsType { eInputs, eOutputs };
   using SocketType = SocketItem::Type;
   using ValueType = Element::ValueType;
 
@@ -103,8 +97,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   virtual void elementSet() {}
 
   void showCommonProperties();
-  void showInputsProperties(int a_allowedTypes = eAnyType);
-  void showOutputsProperties(int a_allowedTypes = eAnyType);
+  void showIOProperties(IOSocketsType const a_type);
 
   void calculateBoundingRect();
 
@@ -113,18 +106,17 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   void propertiesInsertTitle(QString a_title);
 
  private:
-  void addInput(ValueType const a_type);
+  void addInput();
   void removeInput();
-  void setInputName(uint8_t a_socketId, QString const a_name);
-  void setInputType(uint8_t a_socketId, ValueType const a_type);
+  void setInputName(uint8_t const a_socketId, QString const a_name);
 
-  void addOutput(ValueType const a_type);
+  void addOutput();
   void removeOutput();
-  void setOutputName(uint8_t a_socketId, QString const a_name);
-  void setOutputType(uint8_t a_socketId, ValueType const a_type);
+  void setOutputName(uint8_t const a_socketId, QString const a_name);
 
   void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType);
   void removeSocket(SocketType const a_type);
+  void setSocketType(IOSocketsType const a_socketType, uint8_t const a_socketId, ValueType const a_type);
   void updateOutputs();
 
  protected:

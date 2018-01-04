@@ -31,7 +31,7 @@ namespace spaghetti::nodes::values {
 void ConstBool::showProperties()
 {
   showCommonProperties();
-  showOutputsProperties();
+  showIOProperties(IOSocketsType::eOutputs);
 
   propertiesInsertTitle("Const Bool");
 

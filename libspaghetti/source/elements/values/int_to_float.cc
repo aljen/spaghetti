@@ -31,9 +31,9 @@ Int2Float::Int2Float()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eInt, "Int");
+  addInput(ValueType::eInt, "Int", IOSocket::eCanHoldInt);
 
-  addOutput(ValueType::eFloat, "Float");
+  addOutput(ValueType::eFloat, "Float", IOSocket::eCanHoldFloat);
 }
 
 void Int2Float::calculate()

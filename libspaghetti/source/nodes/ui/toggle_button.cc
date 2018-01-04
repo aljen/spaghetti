@@ -82,7 +82,7 @@ ToggleButton::ToggleButton()
   setCentralWidget(widget);
 }
 
-void ToggleButton::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_option, QWidget *a_widget)
+void ToggleButton::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget)
 {
   (void)a_option;
   (void)a_widget;
@@ -93,7 +93,7 @@ void ToggleButton::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_
 void ToggleButton::showProperties()
 {
   showCommonProperties();
-  showOutputsProperties();
+  showIOProperties(IOSocketsType::eOutputs);
 
   propertiesInsertTitle("Toggle Button");
 

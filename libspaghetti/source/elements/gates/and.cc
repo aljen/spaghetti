@@ -31,10 +31,12 @@ And::And()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eBool, "#1");
-  addInput(ValueType::eBool, "#2");
+  addInput(ValueType::eBool, "#1", IOSocket::eCanHoldBool | IOSocket::eCanChangeName);
+  addInput(ValueType::eBool, "#2", IOSocket::eCanHoldBool | IOSocket::eCanChangeName);
 
-  addOutput(ValueType::eBool, "State");
+  addOutput(ValueType::eBool, "State", IOSocket::eCanHoldBool | IOSocket::eCanChangeName);
+
+  setDefaultNewInputFlags(IOSocket::eCanHoldBool | IOSocket::eCanChangeName);
 }
 
 void And::calculate()

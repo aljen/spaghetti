@@ -59,7 +59,7 @@ void ConstFloat::refreshCentralWidget()
 void ConstFloat::showProperties()
 {
   showCommonProperties();
-  showOutputsProperties();
+  showIOProperties(IOSocketsType::eOutputs);
 
   propertiesInsertTitle("Const Float");
 

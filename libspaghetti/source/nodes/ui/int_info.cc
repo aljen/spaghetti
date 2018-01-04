@@ -57,8 +57,8 @@ void IntInfo::refreshCentralWidget()
 void IntInfo::showProperties()
 {
   showCommonProperties();
-  showInputsProperties();
-  showOutputsProperties();
+  showIOProperties(IOSocketsType::eInputs);
+  showIOProperties(IOSocketsType::eOutputs);
 }
 
 } // namespace spaghetti::nodes::ui

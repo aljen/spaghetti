@@ -32,10 +32,10 @@ IfGreaterEqual::IfGreaterEqual()
   setMinOutputs(1);
   setMaxOutputs(1);
 
-  addInput(ValueType::eFloat, "A");
-  addInput(ValueType::eFloat, "B");
+  addInput(ValueType::eFloat, "A", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
+  addInput(ValueType::eFloat, "B", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 
-  addOutput(ValueType::eBool, "A >= B");
+  addOutput(ValueType::eBool, "A >= B", IOSocket::eCanHoldBool | IOSocket::eCanChangeName);
 }
 
 void IfGreaterEqual::calculate()

@@ -31,7 +31,7 @@ FloatInfo::FloatInfo()
   setMinOutputs(0);
   setMaxOutputs(0);
 
-  addInput(ValueType::eFloat, "Float");
+  addInput(ValueType::eFloat, "Float", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 }
 
 } // namespace spaghetti::elements::ui
