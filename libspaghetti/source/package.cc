@@ -22,7 +22,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <mutex>
 #include <string_view>
 
 #include "spaghetti/package.h"
@@ -30,8 +29,6 @@
 #include "elements/logic/clock.h"
 #include "spaghetti/logger.h"
 #include "spaghetti/registry.h"
-
-static std::mutex s_addRemovelock{};
 
 namespace spaghetti {
 
@@ -144,7 +141,6 @@ Element *Package::add(string::hash_t const a_hash)
 {
   spaghetti::Registry &registry{ spaghetti::Registry::get() };
 
-  std::lock_guard<std::mutex> lock{ s_addRemovelock };
 
   Element *const element{ registry.createElement(a_hash) };
   assert(element);
@@ -169,7 +165,6 @@ Element *Package::add(string::hash_t const a_hash)
 
 void Package::remove(size_t const a_id)
 {
-  std::lock_guard<std::mutex> lock{ s_addRemovelock };
 
   assert(a_id > 0);
   assert(a_id < m_elements.size());
