@@ -442,6 +442,8 @@ void Node::showIOProperties(IOSocketsType const a_type)
       comboBox->addItem(valueType2QString(ValueType::eInt), static_cast<int>(ValueType::eInt));
     if (io.flags & Element::IOSocket::eCanHoldFloat)
       comboBox->addItem(valueType2QString(ValueType::eFloat), static_cast<int>(ValueType::eFloat));
+    int const INDEX{ comboBox->findData(static_cast<int>(io.type)) };
+    comboBox->setCurrentIndex(INDEX);
     m_properties->setCellWidget(row, 1, comboBox);
     QObject::connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
                      [i, comboBox, this](int a_index) {
