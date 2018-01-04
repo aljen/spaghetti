@@ -129,8 +129,10 @@ class SPAGHETTI_API Element {
 
   uint8_t minInputs() const { return m_minInputs; }
   uint8_t maxInputs() const { return m_maxInputs; }
+  uint8_t defaultNewInputFlags() const { return m_defaultNewInputFlags; }
   uint8_t minOutputs() const { return m_minOutputs; }
   uint8_t maxOutputs() const { return m_maxOutputs; }
+  uint8_t defaultNewOutputFlags() const { return m_defaultNewOutputFlags; }
 
   Package *package() const { return m_package; }
 
@@ -143,9 +145,11 @@ class SPAGHETTI_API Element {
 
   void setMinInputs(uint8_t const a_min);
   void setMaxInputs(uint8_t const a_max);
+  void setDefaultNewInputFlags(uint8_t const a_flags) { m_defaultNewInputFlags = a_flags; }
 
   void setMinOutputs(uint8_t const a_min);
   void setMaxOutputs(uint8_t const a_max);
+  void setDefaultNewOutputFlags(uint8_t const a_flags) { m_defaultNewOutputFlags = a_flags; }
 
  protected:
   IOSockets m_inputs{};
@@ -163,6 +167,8 @@ class SPAGHETTI_API Element {
   uint8_t m_maxInputs{ std::numeric_limits<uint8_t>::max() };
   uint8_t m_minOutputs{};
   uint8_t m_maxOutputs{ std::numeric_limits<uint8_t>::max() };
+  uint8_t m_defaultNewInputFlags{};
+  uint8_t m_defaultNewOutputFlags{};
 };
 
 inline void Element::nameChanged(std::string const a_from, std::string const a_to)
