@@ -542,7 +542,7 @@ void Node::removeInput()
   m_packageView->showProperties();
 }
 
-void Node::setInputName(uint8_t a_socketId, QString const a_name)
+void Node::setInputName(uint8_t const a_socketId, QString const a_name)
 {
   m_element->setInputName(a_socketId, a_name.toStdString());
   m_inputs[a_socketId]->setName(a_name);
@@ -578,7 +578,7 @@ void Node::removeOutput()
   m_packageView->showProperties();
 }
 
-void Node::setOutputName(uint8_t a_socketId, QString const a_name)
+void Node::setOutputName(uint8_t const a_socketId, QString const a_name)
 {
   m_element->setOutputName(a_socketId, a_name.toStdString());
   m_outputs[a_socketId]->setName(a_name);

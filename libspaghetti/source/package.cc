@@ -140,7 +140,7 @@ void Package::deserialize(Json const &a_json)
   }
 }
 
-Element *Package::add(string::hash_t a_hash)
+Element *Package::add(string::hash_t const a_hash)
 {
   spaghetti::Registry &registry{ spaghetti::Registry::get() };
 
@@ -180,14 +180,15 @@ void Package::remove(size_t const a_id)
   m_free.emplace_back(a_id);
 }
 
-Element *Package::get(size_t a_id) const
+Element *Package::get(size_t const a_id) const
 {
   assert(a_id < m_elements.size());
   assert(std::find(std::begin(m_free), std::end(m_free), a_id) == std::end(m_free));
   return m_elements[a_id];
 }
 
-bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, uint8_t a_inputId)
+bool Package::connect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId,
+                      uint8_t const a_inputId)
 {
   Element *const source{ get(a_sourceId) };
   Element *const target{ get(a_targetId) };
@@ -222,7 +223,8 @@ bool Package::connect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, 
   return true;
 }
 
-bool Package::disconnect(size_t a_sourceId, uint8_t a_outputId, size_t a_targetId, uint8_t a_inputId)
+bool Package::disconnect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId,
+                         uint8_t const a_inputId)
 {
   Element *const target{ get(a_targetId) };
 

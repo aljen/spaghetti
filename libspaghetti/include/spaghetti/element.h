@@ -116,12 +116,12 @@ class SPAGHETTI_API Element {
   IOSockets const &outputs() const { return m_outputs; }
 
   bool addInput(ValueType const a_type, std::string const a_name, uint8_t const a_flags = IOSocket::eDefaultFlags);
-  void setInputName(uint8_t a_input, std::string const a_name);
+  void setInputName(uint8_t const a_input, std::string const a_name);
   void removeInput();
   void clearInputs();
 
   bool addOutput(ValueType const a_type, std::string const a_name, uint8_t const a_flags = IOSocket::eDefaultFlags);
-  void setOutputName(uint8_t a_output, std::string const a_name);
+  void setOutputName(uint8_t const a_output, std::string const a_name);
   void removeOutput();
   void clearOutputs();
 

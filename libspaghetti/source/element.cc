@@ -167,7 +167,7 @@ bool Element::addInput(Element::ValueType const a_type, std::string const a_name
   return true;
 }
 
-void Element::setInputName(uint8_t a_input, std::string const a_name)
+void Element::setInputName(uint8_t const a_input, std::string const a_name)
 {
   auto const oldName = m_inputs[a_input].name;
   m_inputs[a_input].name = a_name;
@@ -204,7 +204,7 @@ bool Element::addOutput(Element::ValueType const a_type, std::string const a_nam
   return true;
 }
 
-void Element::setOutputName(uint8_t a_output, std::string const a_name)
+void Element::setOutputName(uint8_t const a_output, std::string const a_name)
 {
   auto const oldName = m_outputs[a_output].name;
   m_outputs[a_output].name = a_name;
