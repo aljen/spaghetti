@@ -53,10 +53,15 @@ void MultiplyIf::calculate()
 
   if (!m_enabled) return;
 
-  float const A{ std::get<float>(m_inputs[1].value) };
-  float const B{ std::get<float>(m_inputs[2].value) };
+  float output{ std::get<float>(m_inputs[1].value) };
 
-  m_outputs[0].value = A * B;
+  size_t const SIZE{ m_inputs.size() };
+  for (size_t i = 2; i < SIZE; ++i) {
+    float const VALUE{ std::get<float>(m_inputs[i].value) };
+    output *= VALUE;
+  }
+
+  m_outputs[0].value = output;
 }
 
 } // namespace spaghetti::elements::math

@@ -41,10 +41,15 @@ Multiply::Multiply()
 
 void Multiply::calculate()
 {
-  float const A{ std::get<float>(m_inputs[0].value) };
-  float const B{ std::get<float>(m_inputs[1].value) };
+  float output{ std::get<float>(m_inputs[0].value) };
 
-  m_outputs[0].value = A * B;
+  size_t const SIZE{ m_inputs.size() };
+  for (size_t i = 1; i < SIZE; ++i) {
+    float const VALUE{ std::get<float>(m_inputs[i].value) };
+    output *= VALUE;
+  }
+
+  m_outputs[0].value = output;
 }
 
 } // namespace spaghetti::elements::math
