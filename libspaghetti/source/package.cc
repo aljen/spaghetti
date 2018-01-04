@@ -252,7 +252,7 @@ void Package::dispatchThreadFunction()
   auto last = clock_t::now();
 
   while (!m_quit) {
-    spaghetti::log::debug("Dispatching..");
+    //    spaghetti::log::debug("Dispatching..");
 
     auto const now = clock_t::now();
     auto const delta = now - last;
