@@ -230,8 +230,10 @@ bool Package::disconnect(size_t const a_sourceId, uint8_t const a_outputId, size
   spaghetti::log::trace("Disconnecting source: {}@{} from target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
                         a_targetId, static_cast<int>(a_inputId));
 
-  target->m_inputs[a_inputId].id = 0;
-  target->m_inputs[a_inputId].slot = 0;
+  auto &targetInput = target->m_inputs[a_inputId];
+  targetInput.id = 0;
+  targetInput.slot = 0;
+  resetIOSocketValue(targetInput);
 
   auto it = std::remove_if(std::begin(m_connections), std::end(m_connections), [=](Connection &a_connection) {
     return a_connection.from_id == a_sourceId && a_connection.from_socket == a_outputId &&
