@@ -89,7 +89,6 @@ Node::Node(QGraphicsItem *const a_parent)
 Node::~Node()
 {
   for (auto &input : m_inputs) input->disconnectAll();
-
   for (auto &output : m_outputs) output->disconnectAll();
 
   if (m_element) {
