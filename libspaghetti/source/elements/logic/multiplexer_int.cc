@@ -37,6 +37,8 @@ MultiplexerInt::MultiplexerInt()
   addInput(ValueType::eInt, "#2", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
 
   addOutput(ValueType::eInt, "Value", IOSocket::eCanHoldInt);
+
+  setDefaultNewInputFlags(IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
 }
 
 void MultiplexerInt::calculate()

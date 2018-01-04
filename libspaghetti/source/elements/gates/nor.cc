@@ -35,6 +35,8 @@ Nor::Nor()
   addInput(ValueType::eBool, "#2", IOSocket::eCanHoldBool | IOSocket::eCanChangeName);
 
   addOutput(ValueType::eBool, "State", IOSocket::eCanHoldBool | IOSocket::eCanChangeName);
+
+  setDefaultNewInputFlags(IOSocket::eCanHoldBool | IOSocket::eCanChangeName);
 }
 
 void Nor::calculate()

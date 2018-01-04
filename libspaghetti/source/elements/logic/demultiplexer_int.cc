@@ -37,6 +37,8 @@ DemultiplexerInt::DemultiplexerInt()
 
   addOutput(ValueType::eInt, "#1", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
   addOutput(ValueType::eInt, "#2", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
+
+  setDefaultNewOutputFlags(IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
 }
 
 void DemultiplexerInt::calculate()

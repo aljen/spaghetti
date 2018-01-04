@@ -35,6 +35,8 @@ Add::Add()
   addInput(ValueType::eFloat, "#2", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 
   addOutput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat);
+
+  setDefaultNewInputFlags(IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 }
 
 void Add::calculate()
