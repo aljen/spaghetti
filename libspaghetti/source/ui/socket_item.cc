@@ -356,6 +356,11 @@ void SocketItem::disconnectAllOutputs()
   for (auto &link : links) disconnect(link->to());
 }
 
+void SocketItem::setValueType(ValueType const a_type)
+{
+  m_valueType = a_type;
+}
+
 void SocketItem::removeLink(LinkItem *const a_linkItem)
 {
   auto const it = std::remove(std::begin(m_links), std::end(m_links), a_linkItem);

@@ -95,7 +95,7 @@ class SocketItem final : public QGraphicsItem {
   void disconnectAllInputs();
   void disconnectAllOutputs();
 
-  void setValueType(ValueType const a_type) { m_valueType = a_type; }
+  void setValueType(ValueType const a_type);
   ValueType valueType() const { return m_valueType; }
 
  private:
