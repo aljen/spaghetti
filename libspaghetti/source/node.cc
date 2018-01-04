@@ -44,6 +44,17 @@ constexpr int32_t const SOCKET_SIZE = SocketItem::SIZE;
 qreal const ROUNDED_SOCKET_SIZE = std::round(static_cast<qreal>(SOCKET_SIZE) / 10.0) * 10.0;
 qreal const ROUNDED_SOCKET_SIZE_2 = ROUNDED_SOCKET_SIZE / 2.0;
 
+bool value_type_allowed(uint8_t const a_flags, Element::ValueType const a_type)
+{
+  switch (a_type) {
+    case Element::ValueType::eBool: return a_flags & Element::IOSocket::eCanHoldBool;
+    case Element::ValueType::eInt: return a_flags & Element::IOSocket::eCanHoldInt;
+    case Element::ValueType::eFloat: return a_flags & Element::IOSocket::eCanHoldFloat;
+  }
+
+  return false;
+}
+
 Node::Node(QGraphicsItem *const a_parent)
   : QGraphicsItem{ a_parent }
 {
