@@ -84,44 +84,44 @@ void Element::serialize(Element::Json &a_json)
 
 void Element::deserialize(Json const &a_json)
 {
-  auto const &jsonElement = a_json["element"];
-  auto const jsonId = jsonElement["id"].get<size_t>();
-  auto const jsonName = jsonElement["name"].get<std::string>();
-  auto const jsonMinInputs = jsonElement["min_inputs"].get<uint8_t>();
-  auto const jsonMaxInputs = jsonElement["max_inputs"].get<uint8_t>();
-  auto const jsonMinOutputs = jsonElement["min_outputs"].get<uint8_t>();
-  auto const jsonMaxOutputs = jsonElement["max_outputs"].get<uint8_t>();
+  auto const &ELEMENT = a_json["element"];
+  auto const ID = ELEMENT["id"].get<size_t>();
+  auto const NAME = ELEMENT["name"].get<std::string>();
+  auto const MIN_INPUTS = ELEMENT["min_inputs"].get<uint8_t>();
+  auto const MAX_INPUTS = ELEMENT["max_inputs"].get<uint8_t>();
+  auto const MIN_OUTPUTS = ELEMENT["min_outputs"].get<uint8_t>();
+  auto const MAX_OUTPUTS = ELEMENT["max_outputs"].get<uint8_t>();
 
-  auto const &jsonIo = jsonElement["io"];
-  auto const &jsonInputs = jsonIo["inputs"];
-  auto const &jsonOutputs = jsonIo["outputs"];
+  auto const &IO = ELEMENT["io"];
+  auto const &INPUTS = IO["inputs"];
+  auto const &OUTPUTS = IO["outputs"];
 
-  auto const &jsonNode = a_json["node"];
-  auto const jsonIconify = jsonNode["iconify"].get<bool>();
-  auto const &jsonPosition = jsonNode["position"];
-  auto const jsonPositionX = jsonPosition["x"].get<double>();
-  auto const jsonPositionY = jsonPosition["y"].get<double>();
+  auto const &NODE = a_json["node"];
+  auto const ICONIFY = NODE["iconify"].get<bool>();
+  auto const &POSITION = NODE["position"];
+  auto const POSITION_X = POSITION["x"].get<double>();
+  auto const POSITION_Y = POSITION["y"].get<double>();
 
-  assert(id() == jsonId);
-  setName(jsonName);
-  setPosition(jsonPositionX, jsonPositionY);
+  assert(id() == ID);
+  setName(NAME);
+  setPosition(POSITION_X, POSITION_Y);
   clearInputs();
   clearOutputs();
-  setMinInputs(jsonMinInputs);
-  setMaxInputs(jsonMaxInputs);
-  setMinOutputs(jsonMinOutputs);
-  setMaxOutputs(jsonMaxOutputs);
-  iconify(jsonIconify);
+  setMinInputs(MIN_INPUTS);
+  setMaxInputs(MAX_INPUTS);
+  setMinOutputs(MIN_OUTPUTS);
+  setMaxOutputs(MAX_OUTPUTS);
+  iconify(ICONIFY);
 
   auto add_socket = [&](Json const &a_socket, bool const a_input, uint8_t &a_socketCount) {
-    auto const socketId = a_socket["socket"].get<uint8_t>();
-    auto const socketStringType = a_socket["type"].get<std::string>();
-    auto const socketName = a_socket["name"].get<std::string>();
-    auto const socketFlags = a_socket["flags"].get<uint8_t>();
+    auto const SOCKET_ID = a_socket["socket"].get<uint8_t>();
+    auto const SOCKET_STRING_TYPE = a_socket["type"].get<std::string>();
+    auto const SOCKET_NAME = a_socket["name"].get<std::string>();
+    auto const SOCKET_FLAGS = a_socket["flags"].get<uint8_t>();
 
-    assert(a_socketCount == socketId);
+    assert(a_socketCount == SOCKET_ID);
 
-    ValueType const socketType = [](std::string_view const a_type) {
+    ValueType const SOCKET_TYPE = [](std::string_view const a_type) {
       if (a_type == "bool")
         return ValueType::eBool;
       else if (a_type == "int")
@@ -130,22 +130,22 @@ void Element::deserialize(Json const &a_json)
         return ValueType::eFloat;
       assert(false && "Wrong socket type");
       return ValueType::eBool;
-    }(socketStringType);
+    }(SOCKET_STRING_TYPE);
 
-    a_input ? addInput(socketType, socketName, socketFlags) : addOutput(socketType, socketName, socketFlags);
+    a_input ? addInput(SOCKET_TYPE, SOCKET_NAME, SOCKET_FLAGS) : addOutput(SOCKET_TYPE, SOCKET_NAME, SOCKET_FLAGS);
     a_socketCount++;
   };
 
   uint8_t inputsCount{}, outputsCount{};
-  for (auto &&socket : jsonInputs) add_socket(socket, true, inputsCount);
-  for (auto &&socket : jsonOutputs) add_socket(socket, false, outputsCount);
+  for (auto &&socket : INPUTS) add_socket(socket, true, inputsCount);
+  for (auto &&socket : OUTPUTS) add_socket(socket, false, outputsCount);
 }
 
 void Element::setName(const std::string a_name)
 {
-  auto const oldName = m_name;
+  auto const OLD_NAME = m_name;
   m_name = a_name;
-  nameChanged(oldName, m_name);
+  nameChanged(OLD_NAME, m_name);
 }
 
 bool Element::addInput(Element::ValueType const a_type, std::string const a_name, uint8_t const a_flags)
@@ -169,10 +169,10 @@ bool Element::addInput(Element::ValueType const a_type, std::string const a_name
 
 void Element::setInputName(uint8_t const a_input, std::string const a_name)
 {
-  auto const oldName = m_inputs[a_input].name;
+  auto const OLD_NAME = m_inputs[a_input].name;
   m_inputs[a_input].name = a_name;
 
-  inputNameChanged(a_input, oldName, m_inputs[a_input].name);
+  inputNameChanged(a_input, OLD_NAME, m_inputs[a_input].name);
 }
 
 void Element::removeInput()
@@ -206,10 +206,10 @@ bool Element::addOutput(Element::ValueType const a_type, std::string const a_nam
 
 void Element::setOutputName(uint8_t const a_output, std::string const a_name)
 {
-  auto const oldName = m_outputs[a_output].name;
+  auto const OLD_NAME = m_outputs[a_output].name;
   m_outputs[a_output].name = a_name;
 
-  outputNameChanged(a_output, oldName, m_outputs[a_output].name);
+  outputNameChanged(a_output, OLD_NAME, m_outputs[a_output].name);
 }
 
 void Element::removeOutput()

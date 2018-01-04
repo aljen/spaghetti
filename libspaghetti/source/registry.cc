@@ -131,15 +131,15 @@ void Registry::registerInternalElements()
 
 void Registry::loadPlugins()
 {
-  fs::path const pluginsDir{ "../plugins" };
+  fs::path const PLUGINS_DIR{ "../plugins" };
 
-  if (!fs::is_directory(pluginsDir)) return;
+  if (!fs::is_directory(PLUGINS_DIR)) return;
 
-  for (auto const &entry : fs::directory_iterator(pluginsDir)) {
-    if (!fs::is_regular_file(entry)) continue;
+  for (auto const &ENTRY : fs::directory_iterator(PLUGINS_DIR)) {
+    if (!fs::is_regular_file(ENTRY)) continue;
 
     std::error_code error{};
-    auto plugin = std::make_shared<SharedLibrary>(entry, error);
+    auto plugin = std::make_shared<SharedLibrary>(ENTRY, error);
 
     if (error.value() != 0 || !plugin->has("register_plugin")) continue;
 
@@ -152,28 +152,28 @@ void Registry::loadPlugins()
 
 Element *Registry::createElement(string::hash_t const a_hash)
 {
-  auto const &metaInfo = metaInfoFor(a_hash);
-  assert(metaInfo.cloneElement);
-  return metaInfo.cloneElement();
+  auto const &META_INFO = metaInfoFor(a_hash);
+  assert(META_INFO.cloneElement);
+  return META_INFO.cloneElement();
 }
 
 Node *Registry::createNode(string::hash_t const a_hash)
 {
-  auto const &metaInfo = metaInfoFor(a_hash);
-  assert(metaInfo.cloneNode);
-  return metaInfo.cloneNode();
+  auto const &META_INFO = metaInfoFor(a_hash);
+  assert(META_INFO.cloneNode);
+  return META_INFO.cloneNode();
 }
 
 std::string Registry::elementName(string::hash_t const a_hash)
 {
-  auto const &metaInfo = metaInfoFor(a_hash);
-  return metaInfo.name;
+  auto const &META_INFO = metaInfoFor(a_hash);
+  return META_INFO.name;
 }
 
 std::string Registry::elementIcon(string::hash_t const a_hash)
 {
-  auto const &metaInfo = metaInfoFor(a_hash);
-  return metaInfo.icon;
+  auto const &META_INFO = metaInfoFor(a_hash);
+  return META_INFO.icon;
 }
 
 void Registry::addElement(MetaInfo &a_metaInfo)
@@ -184,31 +184,31 @@ void Registry::addElement(MetaInfo &a_metaInfo)
 
 bool Registry::hasElement(string::hash_t const a_hash) const
 {
-  auto const &metaInfos = m_pimpl->metaInfos;
-  auto const it = std::find_if(std::begin(metaInfos), std::end(metaInfos),
+  auto const &META_INFOS = m_pimpl->metaInfos;
+  auto const IT = std::find_if(std::begin(META_INFOS), std::end(META_INFOS),
                                [a_hash](auto const &a_metaInfo) { return a_metaInfo.hash == a_hash; });
-  return it != std::end(metaInfos);
+  return IT != std::end(META_INFOS);
 }
 
 size_t Registry::size() const
 {
-  auto const &metaInfos = m_pimpl->metaInfos;
-  return metaInfos.size();
+  auto const &META_INFOS = m_pimpl->metaInfos;
+  return META_INFOS.size();
 }
 
 Registry::MetaInfo const &Registry::metaInfoFor(string::hash_t const a_hash) const
 {
   auto &metaInfos = m_pimpl->metaInfos;
   assert(hasElement(a_hash));
-  auto const it = std::find_if(std::begin(metaInfos), std::end(metaInfos),
+  auto const IT = std::find_if(std::begin(metaInfos), std::end(metaInfos),
                                [a_hash](auto const &a_metaInfo) { return a_metaInfo.hash == a_hash; });
-  return *it;
+  return *IT;
 }
 
 Registry::MetaInfo const &Registry::metaInfoAt(size_t const a_index) const
 {
-  auto const &metaInfos = m_pimpl->metaInfos;
-  return metaInfos[a_index];
+  auto const &META_INFOS = m_pimpl->metaInfos;
+  return META_INFOS[a_index];
 }
 
 } // namespace spaghetti

@@ -65,11 +65,8 @@ Node::Node(QGraphicsItem *const a_parent)
   setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
 
   QGraphicsDropShadowEffect *const effect{ new QGraphicsDropShadowEffect };
-  //  effect->setColor(QColor(103, 117, 126, 255));
   QColor color(58, 66, 71, 255); // DARK GREY
   effect->setColor(color);
-  //  effect->setOffset(0.0, 0.0);
-  //  effect->setBlurRadius(64.0);
   effect->setBlurRadius(15.0);
   effect->setColor(QColor("#99121212"));
   setGraphicsEffect(effect);
@@ -120,24 +117,24 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
       break;
     }
     case ItemPositionChange: {
-      QPointF const position{ a_value.toPointF() };
-      qreal const x{ std::round(position.x() / 10.0) * 10.0 };
-      qreal const y{ std::round(position.y() / 10.0) * 10.0 };
-      return QPointF{ x, y };
+      QPointF const POSITION{ a_value.toPointF() };
+      qreal const X{ std::round(POSITION.x() / 10.0) * 10.0 };
+      qreal const Y{ std::round(POSITION.y() / 10.0) * 10.0 };
+      return QPointF{ X, Y };
     }
     case ItemPositionHasChanged: {
       if (m_element) {
-        QPointF const position{ a_value.toPointF() };
+        QPointF const POSITION{ a_value.toPointF() };
         switch (m_type) {
-          case Type::eElement: m_element->setPosition(position.x(), position.y()); break;
+          case Type::eElement: m_element->setPosition(POSITION.x(), POSITION.y()); break;
           case Type::eInputs: {
             auto const package = reinterpret_cast<Package *const>(m_element);
-            package->setInputsPosition(position.x(), position.y());
+            package->setInputsPosition(POSITION.x(), POSITION.y());
             break;
           }
           case Type::eOutputs: {
             auto const package = reinterpret_cast<Package *const>(m_element);
-            package->setOutputsPosition(position.x(), position.y());
+            package->setOutputsPosition(POSITION.x(), POSITION.y());
             break;
           }
         }
@@ -174,30 +171,30 @@ void Node::setElement(Element *const a_element)
 
   m_element = a_element;
 
-  auto const &inputs = m_element->inputs();
-  auto const &outputs = m_element->outputs();
+  auto const &INPUTS = m_element->inputs();
+  auto const &OUTPUTS = m_element->outputs();
 
   switch (m_type) {
     case Type::eElement:
-      for (size_t i = 0; i < inputs.size(); ++i) {
-        QString const name = QString::fromStdString(inputs[i].name);
-        addSocket(SocketType::eInput, static_cast<uint8_t>(i), name, inputs[i].type);
+      for (size_t i = 0; i < INPUTS.size(); ++i) {
+        QString const NAME{ QString::fromStdString(INPUTS[i].name) };
+        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, INPUTS[i].type);
       }
-      for (size_t i = 0; i < outputs.size(); ++i) {
-        QString const name = QString::fromStdString(outputs[i].name);
-        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), name, outputs[i].type);
+      for (size_t i = 0; i < OUTPUTS.size(); ++i) {
+        QString const NAME{ QString::fromStdString(OUTPUTS[i].name) };
+        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type);
       }
       break;
     case Type::eInputs:
-      for (size_t i = 0; i < inputs.size(); ++i) {
-        QString const name = QString::fromStdString(inputs[i].name);
-        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), name, inputs[i].type);
+      for (size_t i = 0; i < INPUTS.size(); ++i) {
+        QString const NAME{ QString::fromStdString(INPUTS[i].name) };
+        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, INPUTS[i].type);
       }
       break;
     case Type::eOutputs:
-      for (size_t i = 0; i < outputs.size(); ++i) {
-        QString const name = QString::fromStdString(outputs[i].name);
-        addSocket(SocketType::eInput, static_cast<uint8_t>(i), name, outputs[i].type);
+      for (size_t i = 0; i < OUTPUTS.size(); ++i) {
+        QString const NAME{ QString::fromStdString(OUTPUTS[i].name) };
+        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type);
       }
       break;
   }
@@ -219,8 +216,6 @@ void Node::setElement(Element *const a_element)
 
 void Node::setName(QString a_name)
 {
-  QString const from{ m_name };
-
   m_name = a_name;
 
   if (m_element) {
@@ -341,9 +336,9 @@ void Node::showCommonProperties()
   propertiesInsertTitle("Element");
 
   QTableWidgetItem *item{};
-  int const id{ static_cast<int>(m_element->id()) };
-  QString const type{ QString::fromLocal8Bit(m_element->type()) };
-  QString const name{ QString::fromStdString(m_element->name()) };
+  int const ID{ static_cast<int>(m_element->id()) };
+  QString const TYPE{ QString::fromLocal8Bit(m_element->type()) };
+  QString const NAME{ QString::fromStdString(m_element->name()) };
 
   int row = m_properties->rowCount();
   m_properties->insertRow(row);
@@ -351,9 +346,9 @@ void Node::showCommonProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(row, 0, item);
 
-  item = new QTableWidgetItem{ id };
+  item = new QTableWidgetItem{ ID };
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-  item->setData(Qt::DisplayRole, id);
+  item->setData(Qt::DisplayRole, ID);
   m_properties->setItem(row, 1, item);
 
   row = m_properties->rowCount();
@@ -362,7 +357,7 @@ void Node::showCommonProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(row, 0, item);
 
-  item = new QTableWidgetItem{ type };
+  item = new QTableWidgetItem{ TYPE };
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(row, 1, item);
 
@@ -372,7 +367,7 @@ void Node::showCommonProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(row, 0, item);
 
-  QLineEdit *nameEdit = new QLineEdit{ name };
+  QLineEdit *nameEdit = new QLineEdit{ NAME };
   m_properties->setCellWidget(row, 1, nameEdit);
   QObject::connect(nameEdit, &QLineEdit::textChanged, [this](QString const &a_text) { setName(a_text); });
 }
@@ -425,25 +420,25 @@ void Node::showIOProperties(IOSocketsType const a_type)
     row = m_properties->rowCount();
     m_properties->insertRow(row);
 
-    auto const &io = ios[static_cast<size_t>(i)];
+    auto const &IO = ios[static_cast<size_t>(i)];
 
-    if (io.flags & Element::IOSocket::eCanChangeName) {
-      QLineEdit *const ioName{ new QLineEdit{ QString::fromStdString(io.name) } };
+    if (IO.flags & Element::IOSocket::eCanChangeName) {
+      QLineEdit *const ioName{ new QLineEdit{ QString::fromStdString(IO.name) } };
       m_properties->setCellWidget(row, 0, ioName);
     } else {
-      item = new QTableWidgetItem{ QString::fromStdString(io.name) };
+      item = new QTableWidgetItem{ QString::fromStdString(IO.name) };
       item->setFlags(item->flags() & ~Qt::ItemIsEditable);
       m_properties->setItem(row, 0, item);
     }
 
     QComboBox *const comboBox{ new QComboBox };
-    if (io.flags & Element::IOSocket::eCanHoldBool)
+    if (IO.flags & Element::IOSocket::eCanHoldBool)
       comboBox->addItem(valueType2QString(ValueType::eBool), static_cast<int>(ValueType::eBool));
-    if (io.flags & Element::IOSocket::eCanHoldInt)
+    if (IO.flags & Element::IOSocket::eCanHoldInt)
       comboBox->addItem(valueType2QString(ValueType::eInt), static_cast<int>(ValueType::eInt));
-    if (io.flags & Element::IOSocket::eCanHoldFloat)
+    if (IO.flags & Element::IOSocket::eCanHoldFloat)
       comboBox->addItem(valueType2QString(ValueType::eFloat), static_cast<int>(ValueType::eFloat));
-    int const INDEX{ comboBox->findData(static_cast<int>(io.type)) };
+    int const INDEX{ comboBox->findData(static_cast<int>(IO.type)) };
     comboBox->setCurrentIndex(INDEX);
     m_properties->setCellWidget(row, 1, comboBox);
     QObject::connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
@@ -536,13 +531,13 @@ void Node::calculateBoundingRect()
 
 void Node::addInput()
 {
-  uint8_t const size = static_cast<uint8_t>(m_element->inputs().size());
-  QString const inputName = QString("#%1").arg(size);
+  uint8_t const SIZE{ static_cast<uint8_t>(m_element->inputs().size()) };
+  QString const INPUT_NAME{ QString("#%1").arg(SIZE) };
 
   // TODO(aljen): Fix proper flags
-  ValueType const type{};
-  m_element->addInput(type, inputName.toStdString(), Element::IOSocket::eDefaultFlags);
-  addSocket(SocketType::eInput, size, inputName, type);
+  ValueType const TYPE{};
+  m_element->addInput(TYPE, INPUT_NAME.toStdString(), Element::IOSocket::eDefaultFlags);
+  addSocket(SocketType::eInput, SIZE, INPUT_NAME, TYPE);
 
   calculateBoundingRect();
   m_packageView->showProperties();
@@ -566,13 +561,13 @@ void Node::setInputName(uint8_t const a_socketId, QString const a_name)
 
 void Node::addOutput()
 {
-  uint8_t const size = static_cast<uint8_t>(m_element->outputs().size());
-  QString const name = QString("#%1").arg(size);
+  uint8_t const SIZE{ static_cast<uint8_t>(m_element->outputs().size()) };
+  QString const NAME{ QString("#%1").arg(SIZE) };
 
   // TODO(aljen): Fix proper flags
-  ValueType const type{};
-  m_element->addOutput(type, name.toStdString(), Element::IOSocket::eDefaultFlags);
-  addSocket(SocketType::eOutput, size, name, type);
+  ValueType const TYPE{};
+  m_element->addOutput(TYPE, NAME.toStdString(), Element::IOSocket::eDefaultFlags);
+  addSocket(SocketType::eOutput, SIZE, NAME, TYPE);
 
   calculateBoundingRect();
   m_packageView->showProperties();
@@ -596,7 +591,7 @@ void Node::setOutputName(uint8_t const a_socketId, QString const a_name)
 
 void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType)
 {
-  auto *const socket{ new SocketItem{ this, a_type } };
+  auto const socket{ new SocketItem{ this, a_type } };
   socket->setElementId(m_element->id());
   socket->setSocketId(a_id);
 
@@ -659,8 +654,8 @@ void Node::updateOutputs()
   for (size_t i = 0; i < SIZE; ++i) {
     switch (OUTPUTS[i].type) {
       case ValueType::eBool: {
-        bool const signal{ std::get<bool>(OUTPUTS[i].value) };
-        m_outputs[static_cast<int>(i)]->setSignal(signal);
+        bool const SIGNAL{ std::get<bool>(OUTPUTS[i].value) };
+        m_outputs[static_cast<int>(i)]->setSignal(SIGNAL);
         break;
       }
       default: break;
