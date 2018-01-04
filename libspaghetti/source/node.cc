@@ -56,6 +56,18 @@ bool value_type_allowed(uint8_t const a_flags, Element::ValueType const a_type)
   return false;
 }
 
+Element::ValueType first_available_type_for_flags(uint8_t const a_flags)
+{
+  if (a_flags & Element::IOSocket::eCanHoldBool)
+    return Element::ValueType::eBool;
+  if (a_flags & Element::IOSocket::eCanHoldInt)
+    return Element::ValueType::eInt;
+  if (a_flags & Element::IOSocket::eCanHoldFloat)
+    return Element::ValueType::eFloat;
+
+  assert(false);
+}
+
 Node::Node(QGraphicsItem *const a_parent)
   : QGraphicsItem{ a_parent }
 {
