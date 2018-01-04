@@ -134,6 +134,8 @@ class SPAGHETTI_API Element {
 
   Package *package() const { return m_package; }
 
+  void resetIOSocketValue(IOSocket &a_io);
+
  protected:
   virtual void nameChanged(std::string const a_from, std::string const a_to);
   virtual void inputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to);

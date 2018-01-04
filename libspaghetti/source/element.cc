@@ -157,11 +157,7 @@ bool Element::addInput(Element::ValueType const a_type, std::string const a_name
   input.type = a_type;
   input.flags = a_flags;
 
-  switch (a_type) {
-    case ValueType::eBool: input.value = false; break;
-    case ValueType::eInt: input.value = 0; break;
-    case ValueType::eFloat: input.value = 0.0f; break;
-  }
+  resetIOSocketValue(input);
   m_inputs.emplace_back(input);
 
   return true;
@@ -194,11 +190,7 @@ bool Element::addOutput(Element::ValueType const a_type, std::string const a_nam
   output.type = a_type;
   output.flags = a_flags;
 
-  switch (a_type) {
-    case ValueType::eBool: output.value = false; break;
-    case ValueType::eInt: output.value = 0; break;
-    case ValueType::eFloat: output.value = 0.0f; break;
-  }
+  resetIOSocketValue(output);
   m_outputs.emplace_back(output);
 
   return true;
@@ -225,6 +217,15 @@ void Element::clearOutputs()
 bool Element::connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t const a_inputId)
 {
   return m_package->connect(a_sourceId, a_outputId, m_id, a_inputId);
+}
+
+void Element::resetIOSocketValue(IOSocket &a_io)
+{
+  switch (a_io.type) {
+    case ValueType::eBool: a_io.value = false; break;
+    case ValueType::eInt: a_io.value = 0; break;
+    case ValueType::eFloat: a_io.value = 0.0f; break;
+  }
 }
 
 void Element::setMinInputs(uint8_t const a_min)
