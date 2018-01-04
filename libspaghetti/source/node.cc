@@ -34,6 +34,7 @@
 #include <QTableWidget>
 #include <QTreeWidget>
 
+#include "spaghetti/logger.h"
 #include "spaghetti/package.h"
 #include "ui/colors.h"
 #include "ui/package_view.h"
@@ -446,7 +447,9 @@ void Node::showIOProperties(IOSocketsType const a_type)
     comboBox->setCurrentIndex(INDEX);
     m_properties->setCellWidget(row, 1, comboBox);
     QObject::connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
-                     [i, comboBox, this](int a_index) {
+                     [a_type, i, comboBox, this](int a_index) {
+                       ValueType const VALUE_TYPE{ static_cast<ValueType>(comboBox->itemData(a_index).toInt()) };
+                       setSocketType(a_type, static_cast<uint8_t>(i), VALUE_TYPE);
                      });
   }
 }
@@ -623,6 +626,28 @@ void Node::removeSocket(const Node::SocketType a_type)
       m_outputs.pop_back();
       break;
   }
+}
+
+void Node::setSocketType(IOSocketsType const a_socketType, uint8_t const a_socketId, ValueType const a_type)
+{
+  assert(m_element);
+
+  bool const INPUTS{ a_socketType == IOSocketsType::eInputs };
+  auto &io = INPUTS ? m_element->inputs()[a_socketId] : m_element->outputs()[a_socketId];
+
+  if (!value_type_allowed(io.flags, a_type)) {
+    spaghetti::log::error("Changing io's {}@{} type to {} is not allowed.", m_element->id(), io.id,
+                          valueType2QString(a_type).toStdString());
+    return;
+  }
+
+  if (io.type == a_type) return;
+
+  auto &socket = INPUTS ? m_inputs[a_socketId] : m_outputs[a_socketId];
+  socket->disconnectAll();
+
+  io.type = a_type;
+  socket->setValueType(a_type);
 }
 
 void Node::updateOutputs()
