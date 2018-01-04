@@ -546,9 +546,8 @@ void Node::addInput()
   uint8_t const SIZE{ static_cast<uint8_t>(m_element->inputs().size()) };
   QString const INPUT_NAME{ QString("#%1").arg(SIZE) };
 
-  // TODO(aljen): Fix proper flags
-  ValueType const TYPE{};
-  m_element->addInput(TYPE, INPUT_NAME.toStdString(), Element::IOSocket::eDefaultFlags);
+  ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewInputFlags()) };
+  m_element->addInput(TYPE, INPUT_NAME.toStdString(), m_element->defaultNewInputFlags());
   addSocket(SocketType::eInput, SIZE, INPUT_NAME, TYPE);
 
   calculateBoundingRect();
@@ -576,9 +575,8 @@ void Node::addOutput()
   uint8_t const SIZE{ static_cast<uint8_t>(m_element->outputs().size()) };
   QString const NAME{ QString("#%1").arg(SIZE) };
 
-  // TODO(aljen): Fix proper flags
-  ValueType const TYPE{};
-  m_element->addOutput(TYPE, NAME.toStdString(), Element::IOSocket::eDefaultFlags);
+  ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewOutputFlags()) };
+  m_element->addOutput(TYPE, NAME.toStdString(), m_element->defaultNewOutputFlags());
   addSocket(SocketType::eOutput, SIZE, NAME, TYPE);
 
   calculateBoundingRect();
