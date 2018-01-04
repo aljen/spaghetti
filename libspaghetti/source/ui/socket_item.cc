@@ -66,7 +66,7 @@ QRectF SocketItem::boundingRect() const
                  static_cast<qreal>(SIZE) };
 }
 
-void SocketItem::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_option, QWidget *a_widget)
+void SocketItem::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget)
 {
   Q_UNUSED(a_option);
   Q_UNUSED(a_widget);
@@ -261,7 +261,7 @@ void SocketItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *a_event)
   setCursor(Qt::OpenHandCursor);
 }
 
-QVariant SocketItem::itemChange(QGraphicsItem::GraphicsItemChange a_change, const QVariant &a_value)
+QVariant SocketItem::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant const &a_value)
 {
   if (a_change == QGraphicsItem::ItemScenePositionHasChanged) {
     for (LinkItem *const link : m_links) link->trackNodes();

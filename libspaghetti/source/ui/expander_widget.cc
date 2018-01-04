@@ -39,12 +39,12 @@ ExpanderWidget::ExpanderWidget(QWidget *const a_parent)
   connect(this, &ExpanderWidget::itemPressed, this, &ExpanderWidget::onItemPressed);
 }
 
-int ExpanderWidget::addItem(QWidget *const a_widget, const QIcon &a_iconSet, const QString &a_text)
+int ExpanderWidget::addItem(QWidget *const a_widget, QIcon const &a_iconSet, QString const &a_text)
 {
   return insertItem(-1, a_widget, a_iconSet, a_text);
 }
 
-int ExpanderWidget::addItem(QWidget *const a_widget, const QString &a_text)
+int ExpanderWidget::addItem(QWidget *const a_widget, QString const &a_text)
 {
   return addItem(a_widget, {}, a_text);
 }
@@ -137,7 +137,7 @@ void ExpanderWidget::setItemText(int const a_index, QString const &a_text)
   m_widgets[a_index].text = a_text;
 }
 
-void ExpanderWidget::onItemPressed(QTreeWidgetItem *const a_item, const int a_column)
+void ExpanderWidget::onItemPressed(QTreeWidgetItem *const a_item, int const a_column)
 {
   (void)a_column;
 
