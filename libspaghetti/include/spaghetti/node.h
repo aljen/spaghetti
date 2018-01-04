@@ -108,12 +108,10 @@ class SPAGHETTI_API Node : public QGraphicsItem {
  private:
   void addInput();
   void removeInput();
-  void setInputType(uint8_t a_socketId, ValueType const a_type);
   void setInputName(uint8_t const a_socketId, QString const a_name);
 
   void addOutput();
   void removeOutput();
-  void setOutputType(uint8_t a_socketId, ValueType const a_type);
   void setOutputName(uint8_t const a_socketId, QString const a_name);
 
   void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType);

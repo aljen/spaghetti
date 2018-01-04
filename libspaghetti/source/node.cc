@@ -447,8 +447,6 @@ void Node::showIOProperties(IOSocketsType const a_type)
     m_properties->setCellWidget(row, 1, comboBox);
     QObject::connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
                      [i, comboBox, this](int a_index) {
-                       ValueType const valueType = static_cast<ValueType>(comboBox->itemData(a_index).toInt());
-                       setInputType(static_cast<uint8_t>(i), valueType);
                      });
   }
 }
@@ -563,12 +561,6 @@ void Node::setInputName(uint8_t const a_socketId, QString const a_name)
   m_packageView->showProperties();
 }
 
-void Node::setInputType(uint8_t a_socketId, const Node::ValueType a_type)
-{
-  (void)a_socketId;
-  (void)a_type;
-}
-
 void Node::addOutput()
 {
   uint8_t const size = static_cast<uint8_t>(m_element->outputs().size());
@@ -597,12 +589,6 @@ void Node::setOutputName(uint8_t const a_socketId, QString const a_name)
   m_outputs[a_socketId]->setName(a_name);
   calculateBoundingRect();
   m_packageView->showProperties();
-}
-
-void Node::setOutputType(uint8_t a_socketId, const Node::ValueType a_type)
-{
-  (void)a_socketId;
-  (void)a_type;
 }
 
 void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType)
