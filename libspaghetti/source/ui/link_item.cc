@@ -67,15 +67,15 @@ void LinkItem::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_opti
 
   QPen pen{ (m_isHover ? hover : notActive) };
   pen.setStyle((m_to ? Qt::SolidLine : Qt::DashDotLine));
-  pen.setWidth(3);
+  pen.setWidth(2);
 
   if (m_valueType != ValueType::eBool) {
     QPen dash = pen;
     QColor hover2 = signalColor;
-    hover2.setAlpha(112);
+    hover2.setAlpha(64);
     dash.setColor(hover2);
-    dash.setStyle(Qt::DashLine);
-    dash.setWidth(9);
+    dash.setStyle(Qt::DotLine);
+    dash.setWidth(5);
     dash.setDashOffset(m_dashOffset);
     a_painter->setPen(dash);
     a_painter->drawPath(m_path);
