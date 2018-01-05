@@ -313,6 +313,12 @@ void Package::quitDispatchThread()
   if (!m_dispatchThreadStarted) return;
 
   spaghetti::log::trace("Quitting dispatch thread..");
+
+  if (m_pause) {
+    spaghetti::log::trace("Dispatch thread paused, waiting..");
+    while (m_pause) std::this_thread::yield();
+  }
+
   m_quit = true;
   if (m_dispatchThread.joinable()) {
     spaghetti::log::trace("Waiting for dispatch thread join..");
