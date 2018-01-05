@@ -102,7 +102,7 @@ void LinkItem::advance(int a_phase)
 {
   if (!a_phase) return;
 
-  if (m_valueType != ValueType::eBool) m_dashOffset -= 0.6;
+  if (m_valueType != ValueType::eBool) m_dashOffset -= 0.1;
 
   update();
 }
