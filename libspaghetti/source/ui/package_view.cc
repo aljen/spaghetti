@@ -400,18 +400,6 @@ void PackageView::setSelectedNode(Node *const a_node)
     m_selectedNode = a_node;
 }
 
-void PackageView::setVisible(bool a_visible)
-{
-  QGraphicsView::setVisible(a_visible);
-  //  qDebug() << m_filename << "visible:" << a_visible;
-
-  //  if (a_visible) {
-  //    if (!m_timer.isActive()) m_timer.start();
-  //  } else {
-  //    m_timer.stop();
-  //  }
-}
-
 void PackageView::updateGrid(qreal const a_scale)
 {
   GridDensity const newDensity{ (a_scale >= 0.85 ? GridDensity::eLarge : GridDensity::eSmall) };
