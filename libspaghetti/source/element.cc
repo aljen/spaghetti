@@ -87,7 +87,6 @@ void Element::serialize(Element::Json &a_json)
 void Element::deserialize(Json const &a_json)
 {
   auto const &ELEMENT = a_json["element"];
-  auto const ID = ELEMENT["id"].get<size_t>();
   auto const NAME = ELEMENT["name"].get<std::string>();
   auto const MIN_INPUTS = ELEMENT["min_inputs"].get<uint8_t>();
   auto const MAX_INPUTS = ELEMENT["max_inputs"].get<uint8_t>();
@@ -106,7 +105,6 @@ void Element::deserialize(Json const &a_json)
   auto const POSITION_X = POSITION["x"].get<double>();
   auto const POSITION_Y = POSITION["y"].get<double>();
 
-  assert(id() == ID);
   setName(NAME);
   setPosition(POSITION_X, POSITION_Y);
   clearInputs();
