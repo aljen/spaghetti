@@ -119,19 +119,25 @@ void Package::deserialize(Json const &a_json)
   setInputsPosition(INPUTS_POSITION_X, INPUTS_POSITION_Y);
   setOutputsPosition(OUTPUTS_POSITION_X, OUTPUTS_POSITION_Y);
 
+  std::map<size_t, size_t> remappedIds{};
+
   for (auto const &TEMP : ELEMENTS) {
     auto const &ELEMENT_GROUP = TEMP["element"];
     auto const ELEMENT_TYPE = ELEMENT_GROUP["type"].get<std::string>();
     auto const element = add(ELEMENT_TYPE.c_str());
+    auto const ELEMENT_ID = ELEMENT_GROUP["id"].get<size_t>();
+    auto const ADDED_ID = element->id();
     element->deserialize(TEMP);
+
+    remappedIds[ELEMENT_ID] = ADDED_ID;
   }
 
   for (auto const &CONNECTION : CONNECTIONS) {
     auto const &FROM = CONNECTION["connect"];
     auto const &TO = CONNECTION["to"];
-    auto const &FROM_ID = FROM["id"].get<size_t>();
+    auto const &FROM_ID = remappedIds[FROM["id"].get<size_t>()];
     auto const &FROM_SOCKET = FROM["socket"].get<uint8_t>();
-    auto const &TO_ID = TO["id"].get<size_t>();
+    auto const &TO_ID = remappedIds[TO["id"].get<size_t>()];
     auto const &TO_SOCKET = TO["socket"].get<uint8_t>();
     connect(FROM_ID, FROM_SOCKET, TO_ID, TO_SOCKET);
   }
