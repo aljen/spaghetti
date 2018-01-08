@@ -22,7 +22,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <mutex>
 #include <string_view>
 
 #include "spaghetti/package.h"
@@ -30,8 +29,6 @@
 #include "elements/logic/clock.h"
 #include "spaghetti/logger.h"
 #include "spaghetti/registry.h"
-
-static std::mutex s_addRemovelock{};
 
 namespace spaghetti {
 
@@ -142,9 +139,11 @@ void Package::deserialize(Json const &a_json)
 
 Element *Package::add(string::hash_t const a_hash)
 {
-  spaghetti::Registry &registry{ spaghetti::Registry::get() };
+  pauseDispatchThread();
 
-  std::lock_guard<std::mutex> lock{ s_addRemovelock };
+  spaghetti::log::debug("Adding element..");
+
+  spaghetti::Registry &registry{ spaghetti::Registry::get() };
 
   Element *const element{ registry.createElement(a_hash) };
   assert(element);
@@ -164,12 +163,16 @@ Element *Package::add(string::hash_t const a_hash)
   element->m_id = index;
   element->reset();
 
+  resumeDispatchThread();
+
   return element;
 }
 
 void Package::remove(size_t const a_id)
 {
-  std::lock_guard<std::mutex> lock{ s_addRemovelock };
+  pauseDispatchThread();
+
+  spaghetti::log::debug("Removing element {}..", a_id);
 
   assert(a_id > 0);
   assert(a_id < m_elements.size());
@@ -178,6 +181,8 @@ void Package::remove(size_t const a_id)
   delete m_elements[a_id];
   m_elements[a_id] = nullptr;
   m_free.emplace_back(a_id);
+
+  resumeDispatchThread();
 }
 
 Element *Package::get(size_t const a_id) const
@@ -190,10 +195,12 @@ Element *Package::get(size_t const a_id) const
 bool Package::connect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId,
                       uint8_t const a_inputId)
 {
+  pauseDispatchThread();
+
   Element *const source{ get(a_sourceId) };
   Element *const target{ get(a_targetId) };
 
-  spaghetti::log::trace("Connecting source: {}@{} to target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
+  spaghetti::log::debug("Connecting source: {}@{} to target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
                         a_targetId, static_cast<int>(a_inputId));
 
   if (a_sourceId != 0 && a_targetId != 0) {
@@ -220,14 +227,19 @@ bool Package::connect(size_t const a_sourceId, uint8_t const a_outputId, size_t 
   auto const IT = std::find(std::begin(dependencies), std::end(dependencies), a_targetId);
   if (IT == std::end(dependencies)) dependencies.push_back(a_targetId);
 
+  resumeDispatchThread();
+
   return true;
 }
 
-bool Package::disconnect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId, uint8_t const a_inputId)
+bool Package::disconnect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId,
+                         uint8_t const a_inputId)
 {
+  pauseDispatchThread();
+
   Element *const target{ get(a_targetId) };
 
-  spaghetti::log::trace("Disconnecting source: {}@{} from target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
+  spaghetti::log::debug("Disconnecting source: {}@{} from target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
                         a_targetId, static_cast<int>(a_inputId));
 
   auto &targetInput = target->m_inputs[a_inputId];
@@ -244,6 +256,8 @@ bool Package::disconnect(size_t const a_sourceId, uint8_t const a_outputId, size
   auto &dependencies = m_dependencies[a_sourceId];
   dependencies.erase(std::find(std::begin(dependencies), std::end(dependencies), a_targetId), std::end(dependencies));
 
+  resumeDispatchThread();
+
   return true;
 }
 
@@ -253,8 +267,6 @@ void Package::dispatchThreadFunction()
   auto last = clock_t::now();
 
   while (!m_quit) {
-    //    spaghetti::log::debug("Dispatching..");
-
     auto const NOW = clock_t::now();
     auto const DELTA = NOW - last;
     for (auto &&connection : m_connections) {
@@ -267,23 +279,23 @@ void Package::dispatchThreadFunction()
     }
 
     for (auto &&element : m_elements) {
+      if (!element) continue;
+
       element->update(DELTA);
       element->calculate();
     }
 
-    //    for (auto &&element : m_elements) {
-    //      auto &elementInputs = element->inputs();
-    //      for (auto &&input : elementInputs) {
-    //        switch (input.type) {
-    //          case ValueType::eBool: input.value = false; break;
-    //          case ValueType::eFloat: input.value = 0.0f; break;
-    //          case ValueType::eInt: input.value = 0; break;
-    //        }
-    //      }
-    //    }
-
     last = NOW;
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+    if (m_pause) {
+      spaghetti::log::trace("Pause requested..");
+      m_paused = true;
+      spaghetti::log::trace("Pausing..");
+      while (m_pause) std::this_thread::yield();
+      m_paused = false;
+      spaghetti::log::trace("Pause stopped..");
+    }
   }
 }
 
@@ -291,7 +303,7 @@ void Package::startDispatchThread()
 {
   if (m_dispatchThreadStarted) return;
 
-  spaghetti::log::debug("Starting dispatch thread..");
+  spaghetti::log::trace("Starting dispatch thread..");
   m_dispatchThread = std::thread(&Package::dispatchThreadFunction, this);
   m_dispatchThreadStarted = true;
 }
@@ -300,28 +312,53 @@ void Package::quitDispatchThread()
 {
   if (!m_dispatchThreadStarted) return;
 
-  spaghetti::log::debug("Quitting dispatch thread..");
+  spaghetti::log::trace("Quitting dispatch thread..");
+
+  if (m_pause) {
+    spaghetti::log::trace("Dispatch thread paused, waiting..");
+    while (m_pause) std::this_thread::yield();
+  }
+
   m_quit = true;
   if (m_dispatchThread.joinable()) {
-    spaghetti::log::debug("Waiting for dispatch thread join..");
+    spaghetti::log::trace("Waiting for dispatch thread join..");
     m_dispatchThread.join();
-    spaghetti::log::debug("After dispatch thread join..");
+    spaghetti::log::trace("After dispatch thread join..");
   }
   m_dispatchThreadStarted = false;
 }
 
 void Package::pauseDispatchThread()
 {
-  spaghetti::log::debug("Pausing dispatch thread..");
+  m_pauseCount++;
+
+  spaghetti::log::trace("Trying to pause dispatch thread ({})..", m_pauseCount.load());
+
+  if (m_pauseCount > 1) return;
+
+  m_pause = true;
+
+  spaghetti::log::trace("Pausing dispatch thread ({})..", m_pauseCount.load());
+  while (!m_paused) std::this_thread::yield();
 }
 
 void Package::resumeDispatchThread()
 {
-  spaghetti::log::debug("Resuming dispatch thread..");
+  m_pauseCount--;
+
+  spaghetti::log::trace("Trying to resume dispatch thread ({})..", m_pauseCount.load());
+
+  if (m_pauseCount > 0) return;
+
+  spaghetti::log::trace("Resuming dispatch thread ({})..", m_pauseCount.load());
+
+  m_pause = false;
 }
 
 void Package::open(std::string const &a_filename)
 {
+  spaghetti::log::debug("Opening package {}", a_filename);
+
   pauseDispatchThread();
 
   std::ifstream file{ a_filename };
@@ -337,6 +374,8 @@ void Package::open(std::string const &a_filename)
 
 void Package::save(std::string const &a_filename)
 {
+  spaghetti::log::debug("Saving package {}", a_filename);
+
   pauseDispatchThread();
 
   Json json{};

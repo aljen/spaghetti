@@ -39,6 +39,8 @@ void Element::serialize(Element::Json &a_json)
   jsonElement["max_inputs"] = m_maxInputs;
   jsonElement["min_outputs"] = m_minOutputs;
   jsonElement["max_outputs"] = m_maxOutputs;
+  jsonElement["default_new_input_flags"] = m_defaultNewInputFlags;
+  jsonElement["default_new_output_flags"] = m_defaultNewOutputFlags;
 
   auto getSocketType = [](ValueType const a_type) {
     switch (a_type) {
@@ -91,6 +93,8 @@ void Element::deserialize(Json const &a_json)
   auto const MAX_INPUTS = ELEMENT["max_inputs"].get<uint8_t>();
   auto const MIN_OUTPUTS = ELEMENT["min_outputs"].get<uint8_t>();
   auto const MAX_OUTPUTS = ELEMENT["max_outputs"].get<uint8_t>();
+  auto const DEFAULT_NEW_INPUT_FLAGS = ELEMENT["default_new_input_flags"].get<uint8_t>();
+  auto const DEFAULT_NEW_OUTPUT_FLAGS = ELEMENT["default_new_output_flags"].get<uint8_t>();
 
   auto const &IO = ELEMENT["io"];
   auto const &INPUTS = IO["inputs"];
@@ -111,6 +115,8 @@ void Element::deserialize(Json const &a_json)
   setMaxInputs(MAX_INPUTS);
   setMinOutputs(MIN_OUTPUTS);
   setMaxOutputs(MAX_OUTPUTS);
+  setDefaultNewInputFlags(DEFAULT_NEW_INPUT_FLAGS);
+  setDefaultNewOutputFlags(DEFAULT_NEW_OUTPUT_FLAGS);
   iconify(ICONIFY);
 
   auto add_socket = [&](Json const &a_socket, bool const a_input, uint8_t &a_socketCount) {

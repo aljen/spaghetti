@@ -35,6 +35,22 @@ Clock::Clock()
   addOutput(ValueType::eBool, "State", IOSocket::eCanHoldBool);
 }
 
+void Clock::serialize(Json &a_json)
+{
+  Element::serialize(a_json);
+
+  auto &properties = a_json["properties"];
+  properties["duration"] = m_duration.count();
+}
+
+void Clock::deserialize(const Json &a_json)
+{
+  Element::deserialize(a_json);
+
+  auto const &PROPERTIES = a_json["properties"];
+  m_duration = duration_t{ PROPERTIES["duration"].get<double>() };
+}
+
 void Clock::update(duration_t const &a_delta)
 {
   m_time += a_delta;

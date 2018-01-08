@@ -83,8 +83,6 @@ class PackageView final : public QGraphicsView {
 
   void setSelectedNode(Node *const a_node);
 
-  void setVisible(bool a_visible) override;
-
  signals:
   void requestOpenFile(QString const a_filename);
 
