@@ -104,6 +104,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
  protected:
   void setCentralWidget(QGraphicsItem *a_centralWidget);
   void propertiesInsertTitle(QString a_title);
+  void changeIOName(IOSocketsType const a_type, int const a_id, QString const a_name);
 
  private:
   void addInput();

@@ -58,12 +58,9 @@ bool value_type_allowed(uint8_t const a_flags, Element::ValueType const a_type)
 
 Element::ValueType first_available_type_for_flags(uint8_t const a_flags)
 {
-  if (a_flags & Element::IOSocket::eCanHoldBool)
-    return Element::ValueType::eBool;
-  if (a_flags & Element::IOSocket::eCanHoldInt)
-    return Element::ValueType::eInt;
-  if (a_flags & Element::IOSocket::eCanHoldFloat)
-    return Element::ValueType::eFloat;
+  if (a_flags & Element::IOSocket::eCanHoldBool) return Element::ValueType::eBool;
+  if (a_flags & Element::IOSocket::eCanHoldInt) return Element::ValueType::eInt;
+  if (a_flags & Element::IOSocket::eCanHoldFloat) return Element::ValueType::eFloat;
 
   assert(false);
 }
@@ -435,6 +432,8 @@ void Node::showIOProperties(IOSocketsType const a_type)
 
     if (IO.flags & Element::IOSocket::eCanChangeName) {
       QLineEdit *const ioName{ new QLineEdit{ QString::fromStdString(IO.name) } };
+      QObject::connect(ioName, &QLineEdit::editingFinished,
+                       [a_type, i, ioName, this]() { changeIOName(a_type, i, ioName->text()); });
       m_properties->setCellWidget(row, 0, ioName);
     } else {
       item = new QTableWidgetItem{ QString::fromStdString(IO.name) };
@@ -479,6 +478,14 @@ void Node::propertiesInsertTitle(QString a_title)
   item->setTextColor(Qt::black);
   m_properties->setItem(ROW, 0, item);
   m_properties->setSpan(ROW, 0, 1, 2);
+}
+
+void Node::changeIOName(IOSocketsType const a_type, int const a_id, QString const a_name)
+{
+  auto &ios = a_type == IOSocketsType::eInputs ? m_inputs : m_outputs;
+  auto &io = ios[a_id];
+  io->setName(a_name);
+  calculateBoundingRect();
 }
 
 template<typename Container, class Comparator>
