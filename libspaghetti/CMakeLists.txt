@@ -234,7 +234,7 @@ endif ()
 
 install(TARGETS Spaghetti
   COMPONENT SDK
-  EXPORT Spaghetti
+  EXPORT SpaghettiConfig
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -242,10 +242,10 @@ install(TARGETS Spaghetti
 install(FILES ${LIBSPAGHETTI_PUBLIC_HEADERS}
   COMPONENT SDK
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
-install(EXPORT Spaghetti
+install(EXPORT SpaghettiConfig
   COMPONENT SDK
   DESTINATION share/Spaghetti/cmake)
-export(TARGETS Spaghetti FILE Spaghetti.cmake)
+export(TARGETS Spaghetti FILE SpaghettiConfig.cmake)
 
 # Copy vendor headers to libspaghetti/include
 message (STATUS "Synchronizing vendor headers...")
