@@ -26,7 +26,7 @@
 
 #include <spaghetti/api.h>
 
-#include <spdlog/spdlog.h>
+#include <spaghetti/vendor/spdlog/spdlog.h>
 
 namespace spaghetti::log {
 

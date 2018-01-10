@@ -1,5 +1,4 @@
 set(VENDOR_FREE_STANDING_HEADERS
-  concurrentqueue.h
   json.hpp
   )
 set(VENDOR_SPDLOG_HEADERS

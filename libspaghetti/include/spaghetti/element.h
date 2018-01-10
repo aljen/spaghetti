@@ -39,7 +39,7 @@
 #include <variant>
 #include <vector>
 
-#include <json.hpp>
+#include <spaghetti/vendor/json.hpp>
 
 #include <spaghetti/api.h>
 #include <spaghetti/strings.h>
