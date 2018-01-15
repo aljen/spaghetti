@@ -136,7 +136,8 @@ void Registry::loadPlugins()
   if (!fs::is_directory(PLUGINS_DIR)) return;
 
   for (auto const &ENTRY : fs::directory_iterator(PLUGINS_DIR)) {
-    if (!fs::is_regular_file(ENTRY)) continue;
+    spaghetti::log::info("Loading {}..", ENTRY.path().string());
+    if (!(fs::is_regular_file(ENTRY) || fs::is_symlink(ENTRY))) continue;
 
     std::error_code error{};
     auto plugin = std::make_shared<SharedLibrary>(ENTRY, error);
