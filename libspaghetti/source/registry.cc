@@ -129,26 +129,54 @@ void Registry::registerInternalElements()
   registerElement<values::ClampInt>("Clamp value (Int)", ":/unknown.png");
 }
 
+static std::string get_application_path()
+{
+#ifndef MAX_PATH
+#define MAX_PATH 4098
+#endif
+  std::string name{};
+  name.resize(MAX_PATH);
+#if defined(_WIN64) || defined(_WIN32)
+  GetModuleFileNameA(0, const_cast<LPSTR>(name.c_str()), MAX_PATH);
+#elif defined(__linux__)
+  readlink("/proc/self/exe", &name[0], MAX_PATH);
+#endif
+  name.resize(strlen(name.data()));
+
+  return name;
+}
+
 void Registry::loadPlugins()
 {
-  fs::path const PLUGINS_DIR{ "../plugins" };
+  fs::path const APP_PATH{ fs::path{ get_application_path() }.parent_path() };
+  fs::path const LIB_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../lib" }) };
+  fs::path const SYSTEM_PLUGINS_DIR{ LIB_PATH / "spaghetti" };
+  fs::path const HOME_DIR{ getenv("HOME") };
+  fs::path const USER_PLUGINS_DIR{ fs::absolute(HOME_DIR / ".config/spaghetti/plugins") };
 
-  if (!fs::is_directory(PLUGINS_DIR)) return;
+  fs::create_directories(USER_PLUGINS_DIR);
 
-  for (auto const &ENTRY : fs::directory_iterator(PLUGINS_DIR)) {
-    spaghetti::log::info("Loading {}..", ENTRY.path().string());
-    if (!(fs::is_regular_file(ENTRY) || fs::is_symlink(ENTRY))) continue;
+  auto loadFrom = [this](fs::path const &a_path) {
+    spaghetti::log::info("Loading plugins from {}", a_path.string());
+    if (!fs::is_directory(a_path)) return;
+    for (auto const &ENTRY : fs::directory_iterator(a_path)) {
+      spaghetti::log::info("Loading {}..", ENTRY.path().string());
+      if (!(fs::is_regular_file(ENTRY) || fs::is_symlink(ENTRY))) continue;
 
-    std::error_code error{};
-    auto plugin = std::make_shared<SharedLibrary>(ENTRY, error);
+      std::error_code error{};
+      auto plugin = std::make_shared<SharedLibrary>(ENTRY, error);
 
-    if (error.value() != 0 || !plugin->has("register_plugin")) continue;
+      if (error.value() != 0 || !plugin->has("register_plugin")) continue;
 
-    auto registerPlugin = plugin->get<void(Registry &)>("register_plugin");
-    registerPlugin(*this);
+      auto registerPlugin = plugin->get<void(Registry &)>("register_plugin");
+      registerPlugin(*this);
 
-    m_pimpl->plugins.emplace_back(std::move(plugin));
-  }
+      m_pimpl->plugins.emplace_back(std::move(plugin));
+    }
+  };
+
+  loadFrom(USER_PLUGINS_DIR);
+  loadFrom(SYSTEM_PLUGINS_DIR);
 }
 
 Element *Registry::createElement(string::hash_t const a_hash)
