@@ -22,11 +22,13 @@
 
 #include "shared_library.h"
 
-#if defined(_WIN32)
-#include <Windows.h>
+// clang-format off
+#if defined(_WIN64) || defined(_WIN32)
+# include <Windows.h>
 #elif defined(__unix__)
-#include <dlfcn.h>
+# include <dlfcn.h>
 #endif
+// clang-format on
 #include "spaghetti/logger.h"
 
 namespace spaghetti {
@@ -42,14 +44,28 @@ SharedLibrary::SharedLibrary(fs::path a_file, std::error_code &a_errorCode)
     return;
   }
 
+#if defined(_WIN64) || defined(_WIN32)
+  if (a_file.extension() != ".dll") {
+#else
   if (a_file.extension() != ".so") {
-    log::error("{} is not shared library!", m_filename);
+#endif
+    log::debug("{} is not shared library!", m_filename);
     a_errorCode = std::error_code(EINVAL, std::system_category());
     return;
   }
 
-#if defined(_WIN32)
-  a_errorCode = std::error_code(EINVAL, std::system_category());
+#if defined(_WIN64) || defined(_WIN32)
+  m_handle = LoadLibrary(a_file.c_str());
+  if (m_handle == nullptr) {
+    auto const ERROR_CODE = GetLastError();
+    LPSTR buffer{};
+    size_t const SIZE{ FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+      NULL, ERROR_CODE, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&buffer), 0, nullptr) };
+    std::string const MESSAGE(buffer, SIZE);
+    LocalFree(buffer);
+    log::error("LoadLibrary error: {}", MESSAGE);
+    a_errorCode = std::error_code(ERROR_CODE, std::system_category());
+  }
 #elif defined(__unix__)
   m_handle = dlopen(a_file.c_str(), RTLD_NOW);
   if (m_handle == nullptr) {
@@ -65,7 +81,8 @@ SharedLibrary::SharedLibrary(fs::path a_file, std::error_code &a_errorCode)
 SharedLibrary::~SharedLibrary()
 {
   log::info("[shared_library]: Closing {}", m_filename);
-#if defined(_WIN32)
+#if defined(_WIN64) || defined(_WIN32)
+  if (m_handle) FreeLibrary(static_cast<HMODULE>(m_handle));
 #elif defined(__unix__)
   if (m_handle) dlclose(m_handle);
 #endif
@@ -77,8 +94,8 @@ bool SharedLibrary::has(std::string_view a_signature) const
 
   if (m_handle == nullptr) return false;
 
-#if defined(_WIN32)
-  return false;
+#if defined(_WIN64) || defined(_WIN32)
+  return GetProcAddress(static_cast<HMODULE>(m_handle), a_signature.data()) != nullptr;
 #elif defined(__unix__)
   return dlsym(m_handle, a_signature.data()) != nullptr;
 #endif
@@ -88,8 +105,8 @@ void *SharedLibrary::getSymbol(std::string_view a_signature)
 {
   log::info("[shared_library]: Getting symbol {} from {}", a_signature.data(), m_filename);
 
-#if defined(_WIN32)
-  return nullptr;
+#if defined(_WIN64) || defined(_WIN32)
+  return GetProcAddress(static_cast<HMODULE>(m_handle), a_signature.data());
 #elif defined(__unix__)
   return dlsym(m_handle, a_signature.data());
 #endif
