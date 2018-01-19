@@ -59,8 +59,9 @@ SharedLibrary::SharedLibrary(fs::path a_file, std::error_code &a_errorCode)
   if (m_handle == nullptr) {
     auto const ERROR_CODE = GetLastError();
     LPSTR buffer{};
-    size_t const SIZE{ FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-      NULL, ERROR_CODE, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&buffer), 0, nullptr) };
+    size_t const SIZE{ FormatMessageA(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, ERROR_CODE,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&buffer), 0, nullptr) };
     std::string const MESSAGE(buffer, SIZE);
     LocalFree(buffer);
     log::error("LoadLibrary error: {}", MESSAGE);
