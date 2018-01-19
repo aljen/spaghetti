@@ -153,14 +153,6 @@ void Registry::registerInternalElements()
 
 void Registry::loadPlugins()
 {
-  fs::path const APP_PATH{ fs::path{ get_application_path() }.parent_path() };
-  fs::path const LIB_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../lib" }) };
-  fs::path const SYSTEM_PLUGINS_DIR{ LIB_PATH / "spaghetti" };
-  fs::path const HOME_DIR{ getenv("HOME") };
-  fs::path const USER_PLUGINS_DIR{ fs::absolute(HOME_DIR / ".config/spaghetti/plugins") };
-
-  fs::create_directories(USER_PLUGINS_DIR);
-
   auto loadFrom = [this](fs::path const &a_path) {
     spaghetti::log::info("Loading plugins from {}", a_path.string());
     if (!fs::is_directory(a_path)) return;
@@ -180,8 +172,8 @@ void Registry::loadPlugins()
     }
   };
 
-  loadFrom(USER_PLUGINS_DIR);
-  loadFrom(SYSTEM_PLUGINS_DIR);
+  loadFrom(m_pimpl->user_plugins_path);
+  loadFrom(m_pimpl->system_plugins_path);
 }
 
 Element *Registry::createElement(string::hash_t const a_hash)
