@@ -45,6 +45,11 @@ constexpr int32_t const SOCKET_SIZE = SocketItem::SIZE;
 qreal const ROUNDED_SOCKET_SIZE = std::round(static_cast<qreal>(SOCKET_SIZE) / 10.0) * 10.0;
 qreal const ROUNDED_SOCKET_SIZE_2 = ROUNDED_SOCKET_SIZE / 2.0;
 
+// clang-format off
+#ifdef _MSC_VER
+# pragma warning(disable:4715)
+#endif
+// clang-format on
 bool value_type_allowed(uint8_t const a_flags, Element::ValueType const a_type)
 {
   switch (a_type) {
@@ -53,7 +58,7 @@ bool value_type_allowed(uint8_t const a_flags, Element::ValueType const a_type)
     case Element::ValueType::eFloat: return a_flags & Element::IOSocket::eCanHoldFloat;
   }
 
-  return false;
+  assert(false);
 }
 
 Element::ValueType first_available_type_for_flags(uint8_t const a_flags)
@@ -64,6 +69,11 @@ Element::ValueType first_available_type_for_flags(uint8_t const a_flags)
 
   assert(false);
 }
+// clang-format off
+#ifdef _MSC_VER
+# pragma warning(default:4715)
+#endif
+// clang-format on
 
 Node::Node(QGraphicsItem *const a_parent)
   : QGraphicsItem{ a_parent }
