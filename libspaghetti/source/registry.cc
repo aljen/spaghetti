@@ -22,6 +22,15 @@
 
 #include "spaghetti/registry.h"
 
+// clang-format off
+#if defined(_WIN64) || defined(_WIN32)
+# define WIN32_LEAN_AND_MEAN
+# include <Windows.h>
+# include <ShlObj.h>
+# include <sstream>
+#endif
+// clang-format on
+
 #include <vector>
 
 #include "filesystem.h"
@@ -83,6 +92,39 @@ Registry::Registry()
 
   log::info("Spaghetti version: {}, git: {}@{}, build date: {}, {}", version::STRING, version::BRANCH,
             version::COMMIT_SHORT_HASH, __DATE__, __TIME__);
+  fs::path const APP_PATH{ fs::path{ get_application_path() }.parent_path() };
+#if defined(_WIN64) || defined(_WIN32)
+  wchar_t *appDataPath{};
+  HRESULT result = SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_DEFAULT, nullptr, &appDataPath);
+  std::wstringstream ss{};
+  ss << appDataPath;
+  CoTaskMemFree(static_cast<void *>(appDataPath));
+  fs::path const APP_DATA_PATH{ ss.str() };
+
+  fs::path const SYSTEM_PLUGINS_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../Plugins" }) };
+  fs::path const SYSTEM_PACKAGES_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../Packages" }) };
+
+  fs::path const USER_PLUGINS_PATH{ fs::absolute(APP_DATA_PATH / "Spaghetti/Plugins") };
+  fs::path const USER_PACKAGES_PATH{ fs::absolute(APP_DATA_PATH / "Spaghetti/Packages") };
+#else
+  fs::path const HOME_PATH{ getenv("HOME") };
+
+  fs::path const LIB_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../lib" }) };
+  fs::path const SYSTEM_PLUGINS_PATH{ LIB_PATH / "spaghetti" };
+  fs::path const SYSTEM_PACKAGES_PATH{ "" };
+
+  fs::path const USER_PLUGINS_PATH{ fs::absolute(HOME_PATH / ".config/spaghetti/plugins") };
+  fs::path const USER_PACKAGES_PATH{ fs::absolute(HOME_PATH / ".config/spaghetti/packages") };
+#endif
+
+  fs::create_directories(USER_PLUGINS_PATH);
+  fs::create_directories(USER_PACKAGES_PATH);
+
+  m_pimpl->app_path = APP_PATH;
+  m_pimpl->system_plugins_path = SYSTEM_PLUGINS_PATH;
+  m_pimpl->user_plugins_path = USER_PLUGINS_PATH;
+  m_pimpl->system_packages_path = SYSTEM_PACKAGES_PATH;
+  m_pimpl->user_packages_path = USER_PACKAGES_PATH;
 }
 
 void Registry::registerInternalElements()
