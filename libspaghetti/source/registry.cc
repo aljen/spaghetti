@@ -37,6 +37,23 @@ inline void init_resources()
   Q_INIT_RESOURCE(icons);
 }
 
+static std::string get_application_path()
+{
+#ifndef MAX_PATH
+#define MAX_PATH 4098
+#endif
+  std::string name{};
+  name.resize(MAX_PATH);
+#if defined(_WIN64) || defined(_WIN32)
+  GetModuleFileNameA(0, const_cast<LPSTR>(name.c_str()), MAX_PATH);
+#elif defined(__linux__)
+  readlink("/proc/self/exe", &name[0], MAX_PATH);
+#endif
+  name.resize(strlen(name.data()));
+
+  return name;
+}
+
 namespace spaghetti {
 
 struct Registry::PIMPL {
@@ -127,23 +144,6 @@ void Registry::registerInternalElements()
 
   registerElement<values::ClampFloat>("Clamp value (Float)", ":/unknown.png");
   registerElement<values::ClampInt>("Clamp value (Int)", ":/unknown.png");
-}
-
-static std::string get_application_path()
-{
-#ifndef MAX_PATH
-#define MAX_PATH 4098
-#endif
-  std::string name{};
-  name.resize(MAX_PATH);
-#if defined(_WIN64) || defined(_WIN32)
-  GetModuleFileNameA(0, const_cast<LPSTR>(name.c_str()), MAX_PATH);
-#elif defined(__linux__)
-  readlink("/proc/self/exe", &name[0], MAX_PATH);
-#endif
-  name.resize(strlen(name.data()));
-
-  return name;
 }
 
 void Registry::loadPlugins()
