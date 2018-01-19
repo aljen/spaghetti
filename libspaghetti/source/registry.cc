@@ -61,6 +61,11 @@ struct Registry::PIMPL {
   using MetaInfos = std::vector<MetaInfo>;
   MetaInfos metaInfos{};
   Plugins plugins{};
+  fs::path app_path{};
+  fs::path system_plugins_path{};
+  fs::path user_plugins_path{};
+  fs::path system_packages_path{};
+  fs::path user_packages_path{};
 };
 
 Registry &Registry::get()
