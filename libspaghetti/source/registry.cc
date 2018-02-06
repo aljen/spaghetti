@@ -282,4 +282,29 @@ Registry::MetaInfo const &Registry::metaInfoAt(size_t const a_index) const
   return META_INFOS[a_index];
 }
 
+std::string Registry::appPath() const
+{
+  return m_pimpl->app_path.string();
+}
+
+std::string Registry::systemPluginsPath() const
+{
+  return m_pimpl->system_plugins_path.string();
+}
+
+std::string Registry::userPluginsPath() const
+{
+  return m_pimpl->user_plugins_path.string();
+}
+
+std::string Registry::systemPackagesPath() const
+{
+  return m_pimpl->system_packages_path.string();
+}
+
+std::string Registry::userPackagesPath() const
+{
+  return m_pimpl->user_packages_path.string();
+}
+
 } // namespace spaghetti

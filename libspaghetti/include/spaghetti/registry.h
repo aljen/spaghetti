@@ -96,6 +96,12 @@ class SPAGHETTI_API Registry final {
   MetaInfo const &metaInfoFor(string::hash_t const a_hash) const;
   MetaInfo const &metaInfoAt(size_t const a_index) const;
 
+  std::string appPath() const;
+  std::string systemPluginsPath() const;
+  std::string userPluginsPath() const;
+  std::string systemPackagesPath() const;
+  std::string userPackagesPath() const;
+
  private:
   Registry();
 
