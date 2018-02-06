@@ -196,23 +196,23 @@ void Node::setElement(Element *const a_element)
     case Type::eElement:
       for (size_t i = 0; i < INPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(INPUTS[i].name) };
-        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, INPUTS[i].type);
+        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, INPUTS[i].type, false);
       }
       for (size_t i = 0; i < OUTPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(OUTPUTS[i].name) };
-        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type);
+        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type, false);
       }
       break;
     case Type::eInputs:
       for (size_t i = 0; i < INPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(INPUTS[i].name) };
-        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, INPUTS[i].type);
+        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, INPUTS[i].type, true);
       }
       break;
     case Type::eOutputs:
       for (size_t i = 0; i < OUTPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(OUTPUTS[i].name) };
-        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type);
+        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type, true);
       }
       break;
   }
@@ -494,7 +494,7 @@ void Node::changeIOName(IOSocketsType const a_type, int const a_id, QString cons
 {
   auto &ios = a_type == IOSocketsType::eInputs ? m_inputs : m_outputs;
   auto &io = ios[a_id];
-  io->setName(a_name);
+  io->setName(a_name, false);
   calculateBoundingRect();
 }
 
@@ -564,7 +564,7 @@ void Node::addInput()
 
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewInputFlags()) };
   m_element->addInput(TYPE, INPUT_NAME.toStdString(), m_element->defaultNewInputFlags());
-  addSocket(SocketType::eInput, SIZE, INPUT_NAME, TYPE);
+  addSocket(SocketType::eInput, SIZE, INPUT_NAME, TYPE, false);
 
   calculateBoundingRect();
   m_packageView->showProperties();
@@ -581,7 +581,7 @@ void Node::removeInput()
 void Node::setInputName(uint8_t const a_socketId, QString const a_name)
 {
   m_element->setInputName(a_socketId, a_name.toStdString());
-  m_inputs[a_socketId]->setName(a_name);
+  m_inputs[a_socketId]->setName(a_name, false);
   calculateBoundingRect();
   m_packageView->showProperties();
 }
@@ -593,7 +593,7 @@ void Node::addOutput()
 
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewOutputFlags()) };
   m_element->addOutput(TYPE, NAME.toStdString(), m_element->defaultNewOutputFlags());
-  addSocket(SocketType::eOutput, SIZE, NAME, TYPE);
+  addSocket(SocketType::eOutput, SIZE, NAME, TYPE, false);
 
   calculateBoundingRect();
   m_packageView->showProperties();
@@ -610,18 +610,19 @@ void Node::removeOutput()
 void Node::setOutputName(uint8_t const a_socketId, QString const a_name)
 {
   m_element->setOutputName(a_socketId, a_name.toStdString());
-  m_outputs[a_socketId]->setName(a_name);
+  m_outputs[a_socketId]->setName(a_name, false);
   calculateBoundingRect();
   m_packageView->showProperties();
 }
 
-void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType)
+void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType, bool const a_swapped)
 {
   auto const socket{ new SocketItem{ this, a_type } };
   socket->setElementId(m_element->id());
+  qDebug() << "Adding socket id:" << a_id;
   socket->setSocketId(a_id);
 
-  socket->setName(a_name);
+  socket->setName(a_name, a_swapped);
   socket->setValueType(a_valueType);
 
   if (m_mode == Mode::eIconified)
