@@ -218,6 +218,14 @@ void Element::clearOutputs()
   m_outputs.clear();
 }
 
+void Element::setIOValueType(bool const a_input, uint8_t const a_id, ValueType const a_type)
+{
+  auto &io = a_input ? m_inputs[a_id] : m_outputs[a_id];
+  auto const OLD_TYPE = io.type;
+  io.type = a_type;
+  resetIOSocketValue(io);
+}
+
 bool Element::connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t const a_inputId)
 {
   return m_package->connect(a_sourceId, a_outputId, m_id, a_inputId);

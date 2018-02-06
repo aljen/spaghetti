@@ -668,7 +668,8 @@ void Node::setSocketType(IOSocketsType const a_socketType, uint8_t const a_socke
   auto &socket = INPUTS ? m_inputs[a_socketId] : m_outputs[a_socketId];
   socket->disconnectAll();
 
-  io.type = a_type;
+  m_element->setIOValueType(INPUTS, a_socketId, a_type);
+
   socket->setValueType(a_type);
 }
 
