@@ -74,6 +74,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/math/add_if.cc
   source/elements/math/add_if.h
   source/elements/math/all.h
+  source/elements/math/bcd.cc
+  source/elements/math/bcd.h
   source/elements/math/cos.cc
   source/elements/math/cos.h
   source/elements/math/divide.cc

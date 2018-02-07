@@ -21,20 +21,26 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
+#ifndef ELEMENTS_MATH_BCD_H
+#define ELEMENTS_MATH_BCD_H
 
-#include "elements/math/abs.h"
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
-#include "elements/math/bcd.h"
-#include "elements/math/cos.h"
-#include "elements/math/divide.h"
-#include "elements/math/divide_if.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
-#include "elements/math/sin.h"
-#include "elements/math/subtract.h"
-#include "elements/math/subtract_if.h"
+#include "spaghetti/element.h"
 
-#endif // ELEMENTS_MATH_ALL_H
+namespace spaghetti::elements::math {
+
+class BCD final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "math/bcd" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  BCD();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  void calculate() override;
+};
+
+} // namespace spaghetti::elements::math
+
+#endif // ELEMENTS_MATH_BCD_H

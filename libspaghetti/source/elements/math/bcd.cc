@@ -20,21 +20,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
-
-#include "elements/math/abs.h"
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
 #include "elements/math/bcd.h"
-#include "elements/math/cos.h"
-#include "elements/math/divide.h"
-#include "elements/math/divide_if.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
-#include "elements/math/sin.h"
-#include "elements/math/subtract.h"
-#include "elements/math/subtract_if.h"
 
-#endif // ELEMENTS_MATH_ALL_H
+namespace spaghetti::elements::math {
+
+BCD::BCD()
+  : Element{}
+{
+  setMinInputs(1);
+  setMaxInputs(1);
+  setMinOutputs(4);
+  setMaxOutputs(4);
+
+  addInput(ValueType::eInt, "Number", IOSocket::eCanHoldInt);
+
+  addOutput(ValueType::eBool, "A", IOSocket::eCanHoldBool);
+  addOutput(ValueType::eBool, "B", IOSocket::eCanHoldBool);
+  addOutput(ValueType::eBool, "C", IOSocket::eCanHoldBool);
+  addOutput(ValueType::eBool, "D", IOSocket::eCanHoldBool);
+}
+
+void BCD::calculate()
+{
+  int32_t const VALUE{ std::get<int32_t>(m_inputs[0].value) };
+
+  m_outputs[0].value = static_cast<bool>(VALUE & (1 << 0));
+  m_outputs[1].value = static_cast<bool>(VALUE & (1 << 1));
+  m_outputs[2].value = static_cast<bool>(VALUE & (1 << 2));
+  m_outputs[3].value = static_cast<bool>(VALUE & (1 << 3));
+}
+
+} // namespace spaghetti::elements::math
