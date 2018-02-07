@@ -619,7 +619,6 @@ void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const 
 {
   auto const socket{ new SocketItem{ this, a_type } };
   socket->setElementId(m_element->id());
-  qDebug() << "Adding socket id:" << a_id;
   socket->setSocketId(a_id);
 
   socket->setName(a_name, a_swapped);
