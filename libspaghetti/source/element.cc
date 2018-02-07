@@ -149,7 +149,8 @@ void Element::setName(const std::string a_name)
 {
   auto const OLD_NAME = m_name;
   m_name = a_name;
-  nameChanged(OLD_NAME, m_name);
+
+  onEvent(NameChanged{ OLD_NAME, a_name });
 }
 
 bool Element::addInput(Element::ValueType const a_type, std::string const a_name, uint8_t const a_flags)
@@ -164,6 +165,8 @@ bool Element::addInput(Element::ValueType const a_type, std::string const a_name
   resetIOSocketValue(input);
   m_inputs.emplace_back(input);
 
+  onEvent(InputAdded{});
+
   return true;
 }
 
@@ -172,12 +175,14 @@ void Element::setInputName(uint8_t const a_input, std::string const a_name)
   auto const OLD_NAME = m_inputs[a_input].name;
   m_inputs[a_input].name = a_name;
 
-  inputNameChanged(a_input, OLD_NAME, m_inputs[a_input].name);
+  onEvent(IONameChanged{ true, a_input, OLD_NAME, a_name });
 }
 
 void Element::removeInput()
 {
   m_inputs.pop_back();
+
+  onEvent(InputRemoved{});
 }
 
 void Element::clearInputs()
@@ -197,6 +202,8 @@ bool Element::addOutput(Element::ValueType const a_type, std::string const a_nam
   resetIOSocketValue(output);
   m_outputs.emplace_back(output);
 
+  onEvent(OutputAdded{});
+
   return true;
 }
 
@@ -205,17 +212,29 @@ void Element::setOutputName(uint8_t const a_output, std::string const a_name)
   auto const OLD_NAME = m_outputs[a_output].name;
   m_outputs[a_output].name = a_name;
 
-  outputNameChanged(a_output, OLD_NAME, m_outputs[a_output].name);
+  onEvent(IONameChanged{ false, a_output, OLD_NAME, a_name });
 }
 
 void Element::removeOutput()
 {
   m_outputs.pop_back();
+
+  onEvent(OutputRemoved{});
 }
 
 void Element::clearOutputs()
 {
   m_outputs.clear();
+}
+
+void Element::setIOValueType(bool const a_input, uint8_t const a_id, ValueType const a_type)
+{
+  auto &io = a_input ? m_inputs[a_id] : m_outputs[a_id];
+  auto const OLD_TYPE = io.type;
+  io.type = a_type;
+  resetIOSocketValue(io);
+
+  onEvent(IOTypeChanged{ a_input, a_id, OLD_TYPE, a_type });
 }
 
 bool Element::connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t const a_inputId)

@@ -22,6 +22,15 @@
 
 #include "spaghetti/registry.h"
 
+// clang-format off
+#if defined(_WIN64) || defined(_WIN32)
+# define WIN32_LEAN_AND_MEAN
+# include <Windows.h>
+# include <ShlObj.h>
+# include <sstream>
+#endif
+// clang-format on
+
 #include <vector>
 
 #include "filesystem.h"
@@ -37,6 +46,23 @@ inline void init_resources()
   Q_INIT_RESOURCE(icons);
 }
 
+static std::string get_application_path()
+{
+#ifndef MAX_PATH
+#define MAX_PATH 4098
+#endif
+  std::string name{};
+  name.resize(MAX_PATH);
+#if defined(_WIN64) || defined(_WIN32)
+  GetModuleFileNameA(0, const_cast<LPSTR>(name.c_str()), MAX_PATH);
+#elif defined(__linux__)
+  readlink("/proc/self/exe", &name[0], MAX_PATH);
+#endif
+  name.resize(strlen(name.data()));
+
+  return name;
+}
+
 namespace spaghetti {
 
 struct Registry::PIMPL {
@@ -44,6 +70,11 @@ struct Registry::PIMPL {
   using MetaInfos = std::vector<MetaInfo>;
   MetaInfos metaInfos{};
   Plugins plugins{};
+  fs::path app_path{};
+  fs::path system_plugins_path{};
+  fs::path user_plugins_path{};
+  fs::path system_packages_path{};
+  fs::path user_packages_path{};
 };
 
 Registry &Registry::get()
@@ -61,6 +92,39 @@ Registry::Registry()
 
   log::info("Spaghetti version: {}, git: {}@{}, build date: {}, {}", version::STRING, version::BRANCH,
             version::COMMIT_SHORT_HASH, __DATE__, __TIME__);
+  fs::path const APP_PATH{ fs::path{ get_application_path() }.parent_path() };
+#if defined(_WIN64) || defined(_WIN32)
+  wchar_t *appDataPath{};
+  HRESULT result = SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_DEFAULT, nullptr, &appDataPath);
+  std::wstringstream ss{};
+  ss << appDataPath;
+  CoTaskMemFree(static_cast<void *>(appDataPath));
+  fs::path const APP_DATA_PATH{ ss.str() };
+
+  fs::path const SYSTEM_PLUGINS_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../Plugins" }) };
+  fs::path const SYSTEM_PACKAGES_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../Packages" }) };
+
+  fs::path const USER_PLUGINS_PATH{ fs::absolute(APP_DATA_PATH / "Spaghetti/Plugins") };
+  fs::path const USER_PACKAGES_PATH{ fs::absolute(APP_DATA_PATH / "Spaghetti/Packages") };
+#else
+  fs::path const HOME_PATH{ getenv("HOME") };
+
+  fs::path const LIB_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../lib" }) };
+  fs::path const SYSTEM_PLUGINS_PATH{ LIB_PATH / "spaghetti" };
+  fs::path const SYSTEM_PACKAGES_PATH{ "" };
+
+  fs::path const USER_PLUGINS_PATH{ fs::absolute(HOME_PATH / ".config/spaghetti/plugins") };
+  fs::path const USER_PACKAGES_PATH{ fs::absolute(HOME_PATH / ".config/spaghetti/packages") };
+#endif
+
+  fs::create_directories(USER_PLUGINS_PATH);
+  fs::create_directories(USER_PACKAGES_PATH);
+
+  m_pimpl->app_path = APP_PATH;
+  m_pimpl->system_plugins_path = SYSTEM_PLUGINS_PATH;
+  m_pimpl->user_plugins_path = USER_PLUGINS_PATH;
+  m_pimpl->system_packages_path = SYSTEM_PACKAGES_PATH;
+  m_pimpl->user_packages_path = USER_PACKAGES_PATH;
 }
 
 void Registry::registerInternalElements()
@@ -129,33 +193,8 @@ void Registry::registerInternalElements()
   registerElement<values::ClampInt>("Clamp value (Int)", ":/unknown.png");
 }
 
-static std::string get_application_path()
-{
-#ifndef MAX_PATH
-#define MAX_PATH 4098
-#endif
-  std::string name{};
-  name.resize(MAX_PATH);
-#if defined(_WIN64) || defined(_WIN32)
-  GetModuleFileNameA(0, const_cast<LPSTR>(name.c_str()), MAX_PATH);
-#elif defined(__linux__)
-  readlink("/proc/self/exe", &name[0], MAX_PATH);
-#endif
-  name.resize(strlen(name.data()));
-
-  return name;
-}
-
 void Registry::loadPlugins()
 {
-  fs::path const APP_PATH{ fs::path{ get_application_path() }.parent_path() };
-  fs::path const LIB_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../lib" }) };
-  fs::path const SYSTEM_PLUGINS_DIR{ LIB_PATH / "spaghetti" };
-  fs::path const HOME_DIR{ getenv("HOME") };
-  fs::path const USER_PLUGINS_DIR{ fs::absolute(HOME_DIR / ".config/spaghetti/plugins") };
-
-  fs::create_directories(USER_PLUGINS_DIR);
-
   auto loadFrom = [this](fs::path const &a_path) {
     spaghetti::log::info("Loading plugins from {}", a_path.string());
     if (!fs::is_directory(a_path)) return;
@@ -175,8 +214,11 @@ void Registry::loadPlugins()
     }
   };
 
-  loadFrom(USER_PLUGINS_DIR);
-  loadFrom(SYSTEM_PLUGINS_DIR);
+  auto const ADDITIONAL_PLUGINS_PATH = getenv("SPAGHETTI_ADDITIONAL_PLUGINS_PATH");
+  if (ADDITIONAL_PLUGINS_PATH) loadFrom(fs::path{ ADDITIONAL_PLUGINS_PATH });
+
+  loadFrom(m_pimpl->user_plugins_path);
+  loadFrom(m_pimpl->system_plugins_path);
 }
 
 Element *Registry::createElement(string::hash_t const a_hash)
@@ -238,6 +280,31 @@ Registry::MetaInfo const &Registry::metaInfoAt(size_t const a_index) const
 {
   auto const &META_INFOS = m_pimpl->metaInfos;
   return META_INFOS[a_index];
+}
+
+std::string Registry::appPath() const
+{
+  return m_pimpl->app_path.string();
+}
+
+std::string Registry::systemPluginsPath() const
+{
+  return m_pimpl->system_plugins_path.string();
+}
+
+std::string Registry::userPluginsPath() const
+{
+  return m_pimpl->user_plugins_path.string();
+}
+
+std::string Registry::systemPackagesPath() const
+{
+  return m_pimpl->system_packages_path.string();
+}
+
+std::string Registry::userPackagesPath() const
+{
+  return m_pimpl->user_packages_path.string();
 }
 
 } // namespace spaghetti

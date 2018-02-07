@@ -45,6 +45,11 @@ constexpr int32_t const SOCKET_SIZE = SocketItem::SIZE;
 qreal const ROUNDED_SOCKET_SIZE = std::round(static_cast<qreal>(SOCKET_SIZE) / 10.0) * 10.0;
 qreal const ROUNDED_SOCKET_SIZE_2 = ROUNDED_SOCKET_SIZE / 2.0;
 
+// clang-format off
+#ifdef _MSC_VER
+# pragma warning(disable:4715)
+#endif
+// clang-format on
 bool value_type_allowed(uint8_t const a_flags, Element::ValueType const a_type)
 {
   switch (a_type) {
@@ -53,7 +58,7 @@ bool value_type_allowed(uint8_t const a_flags, Element::ValueType const a_type)
     case Element::ValueType::eFloat: return a_flags & Element::IOSocket::eCanHoldFloat;
   }
 
-  return false;
+  assert(false);
 }
 
 Element::ValueType first_available_type_for_flags(uint8_t const a_flags)
@@ -64,6 +69,11 @@ Element::ValueType first_available_type_for_flags(uint8_t const a_flags)
 
   assert(false);
 }
+// clang-format off
+#ifdef _MSC_VER
+# pragma warning(default:4715)
+#endif
+// clang-format on
 
 Node::Node(QGraphicsItem *const a_parent)
   : QGraphicsItem{ a_parent }
@@ -186,23 +196,23 @@ void Node::setElement(Element *const a_element)
     case Type::eElement:
       for (size_t i = 0; i < INPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(INPUTS[i].name) };
-        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, INPUTS[i].type);
+        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, INPUTS[i].type, false);
       }
       for (size_t i = 0; i < OUTPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(OUTPUTS[i].name) };
-        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type);
+        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type, false);
       }
       break;
     case Type::eInputs:
       for (size_t i = 0; i < INPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(INPUTS[i].name) };
-        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, INPUTS[i].type);
+        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, INPUTS[i].type, true);
       }
       break;
     case Type::eOutputs:
       for (size_t i = 0; i < OUTPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(OUTPUTS[i].name) };
-        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type);
+        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type, true);
       }
       break;
   }
@@ -484,7 +494,7 @@ void Node::changeIOName(IOSocketsType const a_type, int const a_id, QString cons
 {
   auto &ios = a_type == IOSocketsType::eInputs ? m_inputs : m_outputs;
   auto &io = ios[a_id];
-  io->setName(a_name);
+  io->setName(a_name, false);
   calculateBoundingRect();
 }
 
@@ -554,7 +564,7 @@ void Node::addInput()
 
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewInputFlags()) };
   m_element->addInput(TYPE, INPUT_NAME.toStdString(), m_element->defaultNewInputFlags());
-  addSocket(SocketType::eInput, SIZE, INPUT_NAME, TYPE);
+  addSocket(SocketType::eInput, SIZE, INPUT_NAME, TYPE, false);
 
   calculateBoundingRect();
   m_packageView->showProperties();
@@ -571,7 +581,7 @@ void Node::removeInput()
 void Node::setInputName(uint8_t const a_socketId, QString const a_name)
 {
   m_element->setInputName(a_socketId, a_name.toStdString());
-  m_inputs[a_socketId]->setName(a_name);
+  m_inputs[a_socketId]->setName(a_name, false);
   calculateBoundingRect();
   m_packageView->showProperties();
 }
@@ -583,7 +593,7 @@ void Node::addOutput()
 
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewOutputFlags()) };
   m_element->addOutput(TYPE, NAME.toStdString(), m_element->defaultNewOutputFlags());
-  addSocket(SocketType::eOutput, SIZE, NAME, TYPE);
+  addSocket(SocketType::eOutput, SIZE, NAME, TYPE, false);
 
   calculateBoundingRect();
   m_packageView->showProperties();
@@ -600,18 +610,19 @@ void Node::removeOutput()
 void Node::setOutputName(uint8_t const a_socketId, QString const a_name)
 {
   m_element->setOutputName(a_socketId, a_name.toStdString());
-  m_outputs[a_socketId]->setName(a_name);
+  m_outputs[a_socketId]->setName(a_name, false);
   calculateBoundingRect();
   m_packageView->showProperties();
 }
 
-void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType)
+void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType, bool const a_swapped)
 {
   auto const socket{ new SocketItem{ this, a_type } };
   socket->setElementId(m_element->id());
+  qDebug() << "Adding socket id:" << a_id;
   socket->setSocketId(a_id);
 
-  socket->setName(a_name);
+  socket->setName(a_name, a_swapped);
   socket->setValueType(a_valueType);
 
   if (m_mode == Mode::eIconified)
@@ -657,7 +668,8 @@ void Node::setSocketType(IOSocketsType const a_socketType, uint8_t const a_socke
   auto &socket = INPUTS ? m_inputs[a_socketId] : m_outputs[a_socketId];
   socket->disconnectAll();
 
-  io.type = a_type;
+  m_element->setIOValueType(INPUTS, a_socketId, a_type);
+
   socket->setValueType(a_type);
 }
 

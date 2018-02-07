@@ -125,6 +125,8 @@ class SPAGHETTI_API Element {
   void removeOutput();
   void clearOutputs();
 
+  void setIOValueType(bool const a_input, uint8_t const a_id, ValueType const a_type);
+
   bool connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t const a_inputId);
 
   uint8_t minInputs() const { return m_minInputs; }
@@ -139,9 +141,34 @@ class SPAGHETTI_API Element {
   void resetIOSocketValue(IOSocket &a_io);
 
  protected:
-  virtual void nameChanged(std::string const a_from, std::string const a_to);
-  virtual void inputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to);
-  virtual void outputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to);
+  struct NameChanged {
+    std::string from;
+    std::string to;
+  };
+  struct IONameChanged {
+    bool input;
+    uint8_t id;
+    std::string from;
+    std::string to;
+  };
+  struct IOTypeChanged {
+    bool input;
+    uint8_t id;
+    ValueType from;
+    ValueType to;
+  };
+  struct InputAdded {
+  };
+  struct InputRemoved {
+  };
+  struct OutputAdded {
+  };
+  struct OutputRemoved {
+  };
+  using Event =
+      std::variant<NameChanged, IONameChanged, IOTypeChanged, InputAdded, InputRemoved, OutputAdded, OutputRemoved>;
+
+  virtual void onEvent(Event const &a_event) { (void)a_event; }
 
   void setMinInputs(uint8_t const a_min);
   void setMaxInputs(uint8_t const a_max);
@@ -170,26 +197,6 @@ class SPAGHETTI_API Element {
   uint8_t m_defaultNewInputFlags{};
   uint8_t m_defaultNewOutputFlags{};
 };
-
-inline void Element::nameChanged(std::string const a_from, std::string const a_to)
-{
-  (void)a_from;
-  (void)a_to;
-}
-
-inline void Element::inputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to)
-{
-  (void)a_id;
-  (void)a_from;
-  (void)a_to;
-}
-
-inline void Element::outputNameChanged(uint8_t const a_id, std::string const a_from, std::string const a_to)
-{
-  (void)a_id;
-  (void)a_from;
-  (void)a_to;
-}
 
 } // namespace spaghetti
 

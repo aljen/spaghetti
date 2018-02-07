@@ -269,6 +269,26 @@ QVariant SocketItem::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVar
   return QGraphicsItem::itemChange(a_change, a_value);
 }
 
+void SocketItem::setName(QString a_name, bool const a_swapped)
+{
+  m_name = a_name;
+
+  auto const element = m_node->element();
+  assert(element);
+
+  if (m_type == Type::eInput) {
+    if (!a_swapped)
+      element->setInputName(m_socketId, a_name.toStdString());
+    else
+      element->setOutputName(m_socketId, a_name.toStdString());
+  } else if (m_type == Type::eOutput) {
+    if (!a_swapped)
+      element->setOutputName(m_socketId, a_name.toStdString());
+    else
+      element->setInputName(m_socketId, a_name.toStdString());
+  }
+}
+
 int SocketItem::nameWidth() const
 {
   QFontMetrics const metrics{ m_font };
