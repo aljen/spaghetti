@@ -100,6 +100,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/ui/push_button.h
   source/elements/ui/toggle_button.cc
   source/elements/ui/toggle_button.h
+  source/elements/ui/seven_segment_display.cc
+  source/elements/ui/seven_segment_display.h
 
   source/elements/values/all.h
   source/elements/values/clamp_float.cc
@@ -157,6 +159,8 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/ui/push_button.h
   source/nodes/ui/toggle_button.cc
   source/nodes/ui/toggle_button.h
+  source/nodes/ui/seven_segment_display.cc
+  source/nodes/ui/seven_segment_display.h
 
   source/nodes/values/all.h
   source/nodes/values/const_bool.cc

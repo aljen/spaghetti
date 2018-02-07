@@ -20,14 +20,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_UI_ALL_H
-#define ELEMENTS_UI_ALL_H
-
-#include "elements/ui/float_info.h"
-#include "elements/ui/int_info.h"
-#include "elements/ui/push_button.h"
-#include "elements/ui/toggle_button.h"
 #include "elements/ui/seven_segment_display.h"
 
-#endif // ELEMENTS_UI_ALL_H
+namespace spaghetti::elements::ui {
+
+SevenSegmentDisplay::SevenSegmentDisplay()
+{
+  setMinInputs(8);
+  setMaxInputs(8);
+  setMinOutputs(0);
+  setMaxOutputs(0);
+
+  addInput(ValueType::eBool, "A", IOSocket::eCanHoldBool);
+  addInput(ValueType::eBool, "B", IOSocket::eCanHoldBool);
+  addInput(ValueType::eBool, "C", IOSocket::eCanHoldBool);
+  addInput(ValueType::eBool, "D", IOSocket::eCanHoldBool);
+  addInput(ValueType::eBool, "E", IOSocket::eCanHoldBool);
+  addInput(ValueType::eBool, "F", IOSocket::eCanHoldBool);
+  addInput(ValueType::eBool, "G", IOSocket::eCanHoldBool);
+  addInput(ValueType::eBool, "DP", IOSocket::eCanHoldBool);
+}
+
+} // namespace spaghetti::elements::ui
