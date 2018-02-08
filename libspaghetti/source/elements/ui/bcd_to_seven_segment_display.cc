@@ -20,7 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <iostream>
 #include "elements/ui/bcd_to_seven_segment_display.h"
 
 namespace spaghetti::elements::ui {
@@ -57,103 +56,103 @@ void BCDToSevenSegmentDisplay::calculate()
 
   switch (VALUE) {
     case 0:
-      m_outputs[0].value = true;    // A
-      m_outputs[1].value = true;    // B
-      m_outputs[2].value = true;    // C
-      m_outputs[3].value = true;    // D
-      m_outputs[4].value = true;    // E
-      m_outputs[5].value = true;    // F
-      m_outputs[6].value = false;   // G
+      m_outputs[0].value = true;  // A
+      m_outputs[1].value = true;  // B
+      m_outputs[2].value = true;  // C
+      m_outputs[3].value = true;  // D
+      m_outputs[4].value = true;  // E
+      m_outputs[5].value = true;  // F
+      m_outputs[6].value = false; // G
       break;
     case 1:
-      m_outputs[0].value = false;   // A
-      m_outputs[1].value = true;    // B
-      m_outputs[2].value = true;    // C
-      m_outputs[3].value = false;   // D
-      m_outputs[4].value = false;   // E
-      m_outputs[5].value = false;   // F
-      m_outputs[6].value = false;   // G
+      m_outputs[0].value = false; // A
+      m_outputs[1].value = true;  // B
+      m_outputs[2].value = true;  // C
+      m_outputs[3].value = false; // D
+      m_outputs[4].value = false; // E
+      m_outputs[5].value = false; // F
+      m_outputs[6].value = false; // G
       break;
     case 2:
-      m_outputs[0].value = true;    // A
-      m_outputs[1].value = true;    // B
-      m_outputs[2].value = false;   // C
-      m_outputs[3].value = true;    // D
-      m_outputs[4].value = true;    // E
-      m_outputs[5].value = false;   // F
-      m_outputs[6].value = true;    // G
+      m_outputs[0].value = true;  // A
+      m_outputs[1].value = true;  // B
+      m_outputs[2].value = false; // C
+      m_outputs[3].value = true;  // D
+      m_outputs[4].value = true;  // E
+      m_outputs[5].value = false; // F
+      m_outputs[6].value = true;  // G
       break;
     case 3:
-      m_outputs[0].value = true;    // A
-      m_outputs[1].value = true;    // B
-      m_outputs[2].value = true;    // C
-      m_outputs[3].value = true;    // D
-      m_outputs[4].value = false;   // E
-      m_outputs[5].value = false;   // F
-      m_outputs[6].value = true;    // G
+      m_outputs[0].value = true;  // A
+      m_outputs[1].value = true;  // B
+      m_outputs[2].value = true;  // C
+      m_outputs[3].value = true;  // D
+      m_outputs[4].value = false; // E
+      m_outputs[5].value = false; // F
+      m_outputs[6].value = true;  // G
       break;
     case 4:
-      m_outputs[0].value = false;   // A
-      m_outputs[1].value = true;    // B
-      m_outputs[2].value = true;    // C
-      m_outputs[3].value = false;   // D
-      m_outputs[4].value = false;   // E
-      m_outputs[5].value = true;    // F
-      m_outputs[6].value = true;    // G
+      m_outputs[0].value = false; // A
+      m_outputs[1].value = true;  // B
+      m_outputs[2].value = true;  // C
+      m_outputs[3].value = false; // D
+      m_outputs[4].value = false; // E
+      m_outputs[5].value = true;  // F
+      m_outputs[6].value = true;  // G
       break;
     case 5:
-      m_outputs[0].value = true;    // A
-      m_outputs[1].value = false;   // B
-      m_outputs[2].value = true;    // C
-      m_outputs[3].value = true;    // D
-      m_outputs[4].value = false;   // E
-      m_outputs[5].value = true;    // F
-      m_outputs[6].value = true;    // G
+      m_outputs[0].value = true;  // A
+      m_outputs[1].value = false; // B
+      m_outputs[2].value = true;  // C
+      m_outputs[3].value = true;  // D
+      m_outputs[4].value = false; // E
+      m_outputs[5].value = true;  // F
+      m_outputs[6].value = true;  // G
       break;
     case 6:
-      m_outputs[0].value = true;    // A
-      m_outputs[1].value = false;   // B
-      m_outputs[2].value = true;    // C
-      m_outputs[3].value = true;    // D
-      m_outputs[4].value = true;    // E
-      m_outputs[5].value = true;    // F
-      m_outputs[6].value = true;    // G
+      m_outputs[0].value = true;  // A
+      m_outputs[1].value = false; // B
+      m_outputs[2].value = true;  // C
+      m_outputs[3].value = true;  // D
+      m_outputs[4].value = true;  // E
+      m_outputs[5].value = true;  // F
+      m_outputs[6].value = true;  // G
       break;
     case 7:
-      m_outputs[0].value = true;    // A
-      m_outputs[1].value = true;    // B
-      m_outputs[2].value = true;    // C
-      m_outputs[3].value = false;   // D
-      m_outputs[4].value = false;   // E
-      m_outputs[5].value = false;   // F
-      m_outputs[6].value = false;   // G
+      m_outputs[0].value = true;  // A
+      m_outputs[1].value = true;  // B
+      m_outputs[2].value = true;  // C
+      m_outputs[3].value = false; // D
+      m_outputs[4].value = false; // E
+      m_outputs[5].value = false; // F
+      m_outputs[6].value = false; // G
       break;
     case 8:
-      m_outputs[0].value = true;    // A
-      m_outputs[1].value = true;    // B
-      m_outputs[2].value = true;    // C
-      m_outputs[3].value = true;    // D
-      m_outputs[4].value = true;    // E
-      m_outputs[5].value = true;    // F
-      m_outputs[6].value = true;    // G
+      m_outputs[0].value = true; // A
+      m_outputs[1].value = true; // B
+      m_outputs[2].value = true; // C
+      m_outputs[3].value = true; // D
+      m_outputs[4].value = true; // E
+      m_outputs[5].value = true; // F
+      m_outputs[6].value = true; // G
       break;
     case 9:
-      m_outputs[0].value = true;    // A
-      m_outputs[1].value = true;    // B
-      m_outputs[2].value = true;    // C
-      m_outputs[3].value = true;    // D
-      m_outputs[4].value = false;   // E
-      m_outputs[5].value = true;    // F
-      m_outputs[6].value = true;    // G
+      m_outputs[0].value = true;  // A
+      m_outputs[1].value = true;  // B
+      m_outputs[2].value = true;  // C
+      m_outputs[3].value = true;  // D
+      m_outputs[4].value = false; // E
+      m_outputs[5].value = true;  // F
+      m_outputs[6].value = true;  // G
       break;
     default:
-      m_outputs[0].value = false;   // A
-      m_outputs[1].value = false;   // B
-      m_outputs[2].value = false;   // C
-      m_outputs[3].value = false;   // D
-      m_outputs[4].value = false;   // E
-      m_outputs[5].value = false;   // F
-      m_outputs[6].value = false;   // G
+      m_outputs[0].value = false; // A
+      m_outputs[1].value = false; // B
+      m_outputs[2].value = false; // C
+      m_outputs[3].value = false; // D
+      m_outputs[4].value = false; // E
+      m_outputs[5].value = false; // F
+      m_outputs[6].value = false; // G
       break;
   }
 }
