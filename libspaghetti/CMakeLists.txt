@@ -99,6 +99,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/math/subtract_if.h
 
   source/elements/ui/all.h
+  source/elements/ui/bcd_to_seven_segment_display.cc
+  source/elements/ui/bcd_to_seven_segment_display.h
   source/elements/ui/float_info.cc
   source/elements/ui/float_info.h
   source/elements/ui/int_info.cc
