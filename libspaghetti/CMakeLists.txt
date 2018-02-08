@@ -17,7 +17,6 @@ configure_file(source/filesystem.h.in include/filesystem.h)
 configure_file(include/spaghetti/version.h.in include/spaghetti/version.h)
 
 set(LIBSPAGHETTI_PUBLIC_HEADERS
-  ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
   include/spaghetti/api.h
   include/spaghetti/editor.h
   include/spaghetti/element.h
@@ -29,6 +28,12 @@ set(LIBSPAGHETTI_PUBLIC_HEADERS
   include/spaghetti/strings.h
   include/spaghetti/utils.h
   )
+
+set(LIBSPAGHETTI_GENERATED_SOURCES
+  ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
+  ${CMAKE_CURRENT_BINARY_DIR}/include/filesystem.h
+  )
+
 set(LIBSPAGHETTI_SOURCES
   ${LIBSPAGHETTI_PUBLIC_HEADERS}
   include/spaghetti/version.h.in
@@ -139,13 +144,6 @@ set(LIBSPAGHETTI_SOURCES
 
   source/icons/icons.qrc
 
-  source/nodes/ui/float_info.cc
-  source/nodes/ui/float_info.h
-  source/nodes/ui/push_button.cc
-  source/nodes/ui/push_button.h
-  source/nodes/ui/toggle_button.cc
-  source/nodes/ui/toggle_button.h
-
   source/nodes/logic/all.h
   source/nodes/logic/blinker.cc
   source/nodes/logic/blinker.h
@@ -196,10 +194,17 @@ set(LIBSPAGHETTI_SOURCES
   source/shared_library.cc
   source/shared_library.h
   source/filesystem.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/include/filesystem.h
   )
 
-add_library(Spaghetti SHARED ${LIBSPAGHETTI_SOURCES})
+set(LIBSPAGHETTI_ALL_SOURCES
+  ${LIBSPAGHETTI_GENERATED_SOURCES}
+  ${LIBSPAGHETTI_SOURCES}
+)
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${LIBSPAGHETTI_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${LIBSPAGHETTI_GENERATED_SOURCES})
+
+add_library(Spaghetti SHARED ${LIBSPAGHETTI_ALL_SOURCES})
 target_compile_features(Spaghetti PUBLIC cxx_std_17)
 target_compile_definitions(Spaghetti
   PUBLIC SPAGHETTI_SHARED
@@ -246,6 +251,9 @@ install(TARGETS Spaghetti
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   )
 install(FILES ${LIBSPAGHETTI_PUBLIC_HEADERS}
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
   COMPONENT SDK
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
 install(EXPORT SpaghettiConfig
