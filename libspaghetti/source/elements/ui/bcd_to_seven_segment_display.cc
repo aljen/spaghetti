@@ -55,106 +55,30 @@ void BCDToSevenSegmentDisplay::calculate()
   int32_t const VALUE{ (D << 3) | (C << 2) | (B << 1) | A };
 
   switch (VALUE) {
-    case 0:
-      m_outputs[0].value = true;  // A
-      m_outputs[1].value = true;  // B
-      m_outputs[2].value = true;  // C
-      m_outputs[3].value = true;  // D
-      m_outputs[4].value = true;  // E
-      m_outputs[5].value = true;  // F
-      m_outputs[6].value = false; // G
-      break;
-    case 1:
-      m_outputs[0].value = false; // A
-      m_outputs[1].value = true;  // B
-      m_outputs[2].value = true;  // C
-      m_outputs[3].value = false; // D
-      m_outputs[4].value = false; // E
-      m_outputs[5].value = false; // F
-      m_outputs[6].value = false; // G
-      break;
-    case 2:
-      m_outputs[0].value = true;  // A
-      m_outputs[1].value = true;  // B
-      m_outputs[2].value = false; // C
-      m_outputs[3].value = true;  // D
-      m_outputs[4].value = true;  // E
-      m_outputs[5].value = false; // F
-      m_outputs[6].value = true;  // G
-      break;
-    case 3:
-      m_outputs[0].value = true;  // A
-      m_outputs[1].value = true;  // B
-      m_outputs[2].value = true;  // C
-      m_outputs[3].value = true;  // D
-      m_outputs[4].value = false; // E
-      m_outputs[5].value = false; // F
-      m_outputs[6].value = true;  // G
-      break;
-    case 4:
-      m_outputs[0].value = false; // A
-      m_outputs[1].value = true;  // B
-      m_outputs[2].value = true;  // C
-      m_outputs[3].value = false; // D
-      m_outputs[4].value = false; // E
-      m_outputs[5].value = true;  // F
-      m_outputs[6].value = true;  // G
-      break;
-    case 5:
-      m_outputs[0].value = true;  // A
-      m_outputs[1].value = false; // B
-      m_outputs[2].value = true;  // C
-      m_outputs[3].value = true;  // D
-      m_outputs[4].value = false; // E
-      m_outputs[5].value = true;  // F
-      m_outputs[6].value = true;  // G
-      break;
-    case 6:
-      m_outputs[0].value = true;  // A
-      m_outputs[1].value = false; // B
-      m_outputs[2].value = true;  // C
-      m_outputs[3].value = true;  // D
-      m_outputs[4].value = true;  // E
-      m_outputs[5].value = true;  // F
-      m_outputs[6].value = true;  // G
-      break;
-    case 7:
-      m_outputs[0].value = true;  // A
-      m_outputs[1].value = true;  // B
-      m_outputs[2].value = true;  // C
-      m_outputs[3].value = false; // D
-      m_outputs[4].value = false; // E
-      m_outputs[5].value = false; // F
-      m_outputs[6].value = false; // G
-      break;
-    case 8:
-      m_outputs[0].value = true; // A
-      m_outputs[1].value = true; // B
-      m_outputs[2].value = true; // C
-      m_outputs[3].value = true; // D
-      m_outputs[4].value = true; // E
-      m_outputs[5].value = true; // F
-      m_outputs[6].value = true; // G
-      break;
-    case 9:
-      m_outputs[0].value = true;  // A
-      m_outputs[1].value = true;  // B
-      m_outputs[2].value = true;  // C
-      m_outputs[3].value = true;  // D
-      m_outputs[4].value = false; // E
-      m_outputs[5].value = true;  // F
-      m_outputs[6].value = true;  // G
-      break;
-    default:
-      m_outputs[0].value = false; // A
-      m_outputs[1].value = false; // B
-      m_outputs[2].value = false; // C
-      m_outputs[3].value = false; // D
-      m_outputs[4].value = false; // E
-      m_outputs[5].value = false; // F
-      m_outputs[6].value = false; // G
-      break;
+    case 0: setOutputs(true, true, true, true, true, true, false); break;
+    case 1: setOutputs(false, true, true, false, false, false, false); break;
+    case 2: setOutputs(true, true, false, true, true, false, true); break;
+    case 3: setOutputs(true, true, true, true, false, false, true); break;
+    case 4: setOutputs(false, true, true, false, false, true, true); break;
+    case 5: setOutputs(true, false, true, true, false, true, true); break;
+    case 6: setOutputs(true, false, true, true, true, true, true); break;
+    case 7: setOutputs(true, true, true, false, false, false, false); break;
+    case 8: setOutputs(true, true, true, true, true, true, true); break;
+    case 9: setOutputs(true, true, true, true, false, true, true); break;
+    default: setOutputs(false, false, false, false, false, false, false); break;
   }
+}
+
+void BCDToSevenSegmentDisplay::setOutputs(bool const a_A, bool const a_B, bool const a_C, bool const a_D,
+                                          bool const a_E, bool const a_F, bool const a_G)
+{
+  m_outputs[0].value = a_A;
+  m_outputs[1].value = a_B;
+  m_outputs[2].value = a_C;
+  m_outputs[3].value = a_D;
+  m_outputs[4].value = a_E;
+  m_outputs[5].value = a_F;
+  m_outputs[6].value = a_G;
 }
 
 } // namespace spaghetti::elements::ui

@@ -39,6 +39,10 @@ class BCDToSevenSegmentDisplay final : public Element {
   string::hash_t hash() const noexcept override { return HASH; }
 
   void calculate() override;
+
+ private:
+  void setOutputs(bool const a_A, bool const a_B, bool const a_C, bool const a_D, bool const a_E, bool const a_F,
+                  bool const a_G);
 };
 
 } // namespace spaghetti::elements::ui
