@@ -43,7 +43,7 @@ class SevenSegmentDisplayWidget : public QGraphicsItem {
     (void)a_widget;
 
     QBrush const ON{ Qt::black };
-    QBrush const OFF{ Qt::darkGray };
+    QBrush const OFF{ QColor(90, 90, 90, 255) };
 
     a_painter->translate(10.0, 10.0);
     a_painter->setPen(Qt::NoPen);
