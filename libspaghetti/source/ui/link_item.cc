@@ -24,8 +24,6 @@
 
 #include <cmath>
 
-#include <QDebug>
-#include <QGraphicsDropShadowEffect>
 #include <QStyleOptionGraphicsItem>
 
 #include "colors.h"
@@ -33,20 +31,9 @@
 
 namespace spaghetti {
 
-#define HAVE_SHADOWS_AND_KILL_MY_PERFORMANCE 0
-
 LinkItem::LinkItem(QGraphicsItem *a_parent)
   : QGraphicsPathItem{ a_parent }
-#if HAVE_SHADOWS_AND_KILL_MY_PERFORMANCE
-  , m_effect{ new QGraphicsDropShadowEffect }
-#endif
 {
-#if HAVE_SHADOWS_AND_KILL_MY_PERFORMANCE
-  m_effect->setBlurRadius(15);
-  m_effect->setColor(QColor("#99050505"));
-  setGraphicsEffect(m_effect);
-#endif
-
   setFlags(ItemSendsGeometryChanges | ItemIsFocusable | ItemIsSelectable);
   setZValue(-1);
   setAcceptHoverEvents(true);

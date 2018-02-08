@@ -73,8 +73,6 @@ class LinkItem final : public QGraphicsPathItem {
   void trackNodes();
 
  private:
-  QGraphicsDropShadowEffect *m_effect{};
-
   ValueType m_valueType{};
 
   SocketItem *m_from{};

@@ -28,7 +28,6 @@
 
 #include <QComboBox>
 #include <QDebug>
-#include <QGraphicsDropShadowEffect>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QTableWidget>
@@ -82,13 +81,6 @@ Node::Node(QGraphicsItem *const a_parent)
   m_nameFont.setPointSize(8);
 
   setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
-
-  QGraphicsDropShadowEffect *const effect{ new QGraphicsDropShadowEffect };
-  QColor color(58, 66, 71, 255); // DARK GREY
-  effect->setColor(color);
-  effect->setBlurRadius(15.0);
-  effect->setColor(QColor("#99121212"));
-  setGraphicsEffect(effect);
 
   iconify();
 }
