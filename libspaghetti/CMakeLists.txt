@@ -144,6 +144,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/values/radian_to_degree.h
   source/elements/values/random_bool.cc
   source/elements/values/random_bool.h
+  source/elements/values/scale_int.cc
+  source/elements/values/scale_int.h
 
   source/elements/all.h
 
@@ -174,6 +176,8 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/values/const_float.h
   source/nodes/values/const_int.cc
   source/nodes/values/const_int.h
+  source/nodes/values/scale_int.cc
+  source/nodes/values/scale_int.h
 
   source/nodes/all.h
 

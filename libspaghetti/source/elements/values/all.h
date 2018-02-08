@@ -38,5 +38,6 @@
 #include "elements/values/min_int.h"
 #include "elements/values/radian_to_degree.h"
 #include "elements/values/random_bool.h"
+#include "elements/values/scale_int.h"
 
 #endif // ELEMENTS_VALUES_ALL_H
