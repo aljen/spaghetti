@@ -4,6 +4,9 @@ project(libSpaghetti VERSION ${Spaghetti_VERSION} LANGUAGES C CXX)
 
 find_package(Threads REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
+if (SPAGHETTI_USE_OPENGL)
+  find_package(Qt5 REQUIRED COMPONENTS OpenGL)
+endif ()
 
 if (HAVE_CXX_FILESYSTEM)
   set(SPAGHETTI_FILESYSTEM_IMPLEMENTATION SPAGHETTI_FS_STD_FILESYSTEM)
@@ -17,7 +20,6 @@ configure_file(source/filesystem.h.in include/filesystem.h)
 configure_file(include/spaghetti/version.h.in include/spaghetti/version.h)
 
 set(LIBSPAGHETTI_PUBLIC_HEADERS
-  ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
   include/spaghetti/api.h
   include/spaghetti/editor.h
   include/spaghetti/element.h
@@ -29,6 +31,12 @@ set(LIBSPAGHETTI_PUBLIC_HEADERS
   include/spaghetti/strings.h
   include/spaghetti/utils.h
   )
+
+set(LIBSPAGHETTI_GENERATED_SOURCES
+  ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
+  ${CMAKE_CURRENT_BINARY_DIR}/include/filesystem.h
+  )
+
 set(LIBSPAGHETTI_SOURCES
   ${LIBSPAGHETTI_PUBLIC_HEADERS}
   include/spaghetti/version.h.in
@@ -74,6 +82,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/math/add_if.cc
   source/elements/math/add_if.h
   source/elements/math/all.h
+  source/elements/math/bcd.cc
+  source/elements/math/bcd.h
   source/elements/math/cos.cc
   source/elements/math/cos.h
   source/elements/math/divide.cc
@@ -92,6 +102,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/math/subtract_if.h
 
   source/elements/ui/all.h
+  source/elements/ui/bcd_to_seven_segment_display.cc
+  source/elements/ui/bcd_to_seven_segment_display.h
   source/elements/ui/float_info.cc
   source/elements/ui/float_info.h
   source/elements/ui/int_info.cc
@@ -100,6 +112,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/ui/push_button.h
   source/elements/ui/toggle_button.cc
   source/elements/ui/toggle_button.h
+  source/elements/ui/seven_segment_display.cc
+  source/elements/ui/seven_segment_display.h
 
   source/elements/values/all.h
   source/elements/values/clamp_float.cc
@@ -135,13 +149,6 @@ set(LIBSPAGHETTI_SOURCES
 
   source/icons/icons.qrc
 
-  source/nodes/ui/float_info.cc
-  source/nodes/ui/float_info.h
-  source/nodes/ui/push_button.cc
-  source/nodes/ui/push_button.h
-  source/nodes/ui/toggle_button.cc
-  source/nodes/ui/toggle_button.h
-
   source/nodes/logic/all.h
   source/nodes/logic/blinker.cc
   source/nodes/logic/blinker.h
@@ -157,6 +164,8 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/ui/push_button.h
   source/nodes/ui/toggle_button.cc
   source/nodes/ui/toggle_button.h
+  source/nodes/ui/seven_segment_display.cc
+  source/nodes/ui/seven_segment_display.h
 
   source/nodes/values/all.h
   source/nodes/values/const_bool.cc
@@ -190,10 +199,17 @@ set(LIBSPAGHETTI_SOURCES
   source/shared_library.cc
   source/shared_library.h
   source/filesystem.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/include/filesystem.h
   )
 
-add_library(Spaghetti SHARED ${LIBSPAGHETTI_SOURCES})
+set(LIBSPAGHETTI_ALL_SOURCES
+  ${LIBSPAGHETTI_GENERATED_SOURCES}
+  ${LIBSPAGHETTI_SOURCES}
+)
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${LIBSPAGHETTI_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${LIBSPAGHETTI_GENERATED_SOURCES})
+
+add_library(Spaghetti SHARED ${LIBSPAGHETTI_ALL_SOURCES})
 target_compile_features(Spaghetti PUBLIC cxx_std_17)
 target_compile_definitions(Spaghetti
   PUBLIC SPAGHETTI_SHARED
@@ -227,6 +243,10 @@ target_link_libraries(Spaghetti
   PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
   PRIVATE ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
 )
+if (SPAGHETTI_USE_OPENGL)
+  target_compile_definitions(Spaghetti PRIVATE SPAGHETTI_USE_OPENGL)
+  target_link_libraries(Spaghetti PUBLIC Qt5::OpenGL)
+endif ()
 
 if (CLANG)
   target_link_libraries(Spaghetti PUBLIC -stdlib=libc++)
@@ -240,6 +260,9 @@ install(TARGETS Spaghetti
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   )
 install(FILES ${LIBSPAGHETTI_PUBLIC_HEADERS}
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
   COMPONENT SDK
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
 install(EXPORT SpaghettiConfig

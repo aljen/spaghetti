@@ -21,14 +21,24 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_UI_ALL_H
-#define ELEMENTS_UI_ALL_H
+#ifndef ELEMENTS_UI_SEVEN_SEGMENT_DISPLAY_H
+#define ELEMENTS_UI_SEVEN_SEGMENT_DISPLAY_H
 
-#include "elements/ui/bcd_to_seven_segment_display.h"
-#include "elements/ui/float_info.h"
-#include "elements/ui/int_info.h"
-#include "elements/ui/push_button.h"
-#include "elements/ui/seven_segment_display.h"
-#include "elements/ui/toggle_button.h"
+#include "spaghetti/element.h"
 
-#endif // ELEMENTS_UI_ALL_H
+namespace spaghetti::elements::ui {
+
+class SevenSegmentDisplay final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "ui/seven_segment_display" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  SevenSegmentDisplay();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+};
+
+} // namespace spaghetti::elements::ui
+
+#endif // ELEMENTS_UI_SEVEN_SEGMENT_DISPLAY_H

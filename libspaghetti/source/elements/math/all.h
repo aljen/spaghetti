@@ -27,6 +27,7 @@
 #include "elements/math/abs.h"
 #include "elements/math/add.h"
 #include "elements/math/add_if.h"
+#include "elements/math/bcd.h"
 #include "elements/math/cos.h"
 #include "elements/math/divide.h"
 #include "elements/math/divide_if.h"

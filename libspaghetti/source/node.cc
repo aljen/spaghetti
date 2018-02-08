@@ -28,7 +28,6 @@
 
 #include <QComboBox>
 #include <QDebug>
-#include <QGraphicsDropShadowEffect>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QTableWidget>
@@ -82,13 +81,6 @@ Node::Node(QGraphicsItem *const a_parent)
   m_nameFont.setPointSize(8);
 
   setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
-
-  QGraphicsDropShadowEffect *const effect{ new QGraphicsDropShadowEffect };
-  QColor color(58, 66, 71, 255); // DARK GREY
-  effect->setColor(color);
-  effect->setBlurRadius(15.0);
-  effect->setColor(QColor("#99121212"));
-  setGraphicsEffect(effect);
 
   iconify();
 }
@@ -615,11 +607,11 @@ void Node::setOutputName(uint8_t const a_socketId, QString const a_name)
   m_packageView->showProperties();
 }
 
-void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType, bool const a_swapped)
+void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType,
+                     bool const a_swapped)
 {
   auto const socket{ new SocketItem{ this, a_type } };
   socket->setElementId(m_element->id());
-  qDebug() << "Adding socket id:" << a_id;
   socket->setSocketId(a_id);
 
   socket->setName(a_name, a_swapped);

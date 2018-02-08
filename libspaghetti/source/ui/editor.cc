@@ -107,8 +107,7 @@ void Editor::tabCloseRequested(int const a_index)
 
   if (packageView->canClose()) {
     QString const FILENAME = packageView->filename();
-    if (!FILENAME.isEmpty())
-      m_openFiles.remove(FILENAME);
+    if (!FILENAME.isEmpty()) m_openFiles.remove(FILENAME);
     tab->removeTab(a_index);
     delete packageView;
   }

@@ -24,8 +24,6 @@
 
 #include <cmath>
 
-#include <QDebug>
-#include <QGraphicsDropShadowEffect>
 #include <QStyleOptionGraphicsItem>
 
 #include "colors.h"
@@ -35,12 +33,7 @@ namespace spaghetti {
 
 LinkItem::LinkItem(QGraphicsItem *a_parent)
   : QGraphicsPathItem{ a_parent }
-  , m_effect{ new QGraphicsDropShadowEffect }
 {
-  m_effect->setBlurRadius(15);
-  m_effect->setColor(QColor("#99050505"));
-  setGraphicsEffect(m_effect);
-
   setFlags(ItemSendsGeometryChanges | ItemIsFocusable | ItemIsSelectable);
   setZValue(-1);
   setAcceptHoverEvents(true);

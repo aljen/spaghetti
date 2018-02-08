@@ -155,6 +155,7 @@ void Registry::registerInternalElements()
   registerElement<logic::Switch>("Switch (Int)", ":/logic/switch.png");
 
   registerElement<math::Abs>("Abs (Float)", ":/unknown.png");
+  registerElement<math::BCD>("BCD", ":/unknown.png");
 
   registerElement<math::Add>("Add (Float)", ":/unknown.png");
   registerElement<math::AddIf>("Add If (Float)", ":/unknown.png");
@@ -168,11 +169,15 @@ void Registry::registerInternalElements()
   registerElement<math::Cos>("Cos (Rad)", ":/unknown.png");
   registerElement<math::Sin>("Sin (Rad)", ":/unknown.png");
 
+  registerElement<ui::BCDToSevenSegmentDisplay>("BCD -> 7SS", ":/unknown.png");
+
   registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Info (Float)", ":/values/const_float.png");
   registerElement<ui::IntInfo, nodes::ui::IntInfo>("Info (Int)", ":/values/const_int.png");
 
   registerElement<ui::PushButton, nodes::ui::PushButton>("Push Button (Bool)", ":/ui/push_button.png");
   registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button (Bool)", ":/ui/toggle_button.png");
+
+  registerElement<ui::SevenSegmentDisplay, nodes::ui::SevenSegmentDisplay>("7 Segment Display", ":/unknown.png");
 
   registerElement<values::ConstBool, nodes::values::ConstBool>("Const value (Bool)", ":/values/const_bool.png");
   registerElement<values::ConstFloat, nodes::values::ConstFloat>("Const value (Float)", ":/values/const_float.png");
