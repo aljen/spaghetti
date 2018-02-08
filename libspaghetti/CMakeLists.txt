@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 project(libSpaghetti VERSION ${Spaghetti_VERSION} LANGUAGES C CXX)
 
 find_package(Threads REQUIRED)
-find_package(Qt5 REQUIRED COMPONENTS Widgets OpenGL)
+find_package(Qt5 REQUIRED COMPONENTS Widgets)
 if (SPAGHETTI_USE_OPENGL)
   find_package(Qt5 REQUIRED COMPONENTS OpenGL)
 endif ()
