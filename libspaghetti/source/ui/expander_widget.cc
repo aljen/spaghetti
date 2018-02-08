@@ -141,6 +141,5 @@ void ExpanderWidget::onItemPressed(QTreeWidgetItem *const a_item, int const a_co
 {
   (void)a_column;
 
-  if (a_item && a_item->parent() == nullptr)
-    setItemExpanded(a_item, !isItemExpanded(a_item));
+  if (a_item && a_item->parent() == nullptr) setItemExpanded(a_item, !isItemExpanded(a_item));
 }

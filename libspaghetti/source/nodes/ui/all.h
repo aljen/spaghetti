@@ -27,7 +27,7 @@
 #include "nodes/ui/float_info.h"
 #include "nodes/ui/int_info.h"
 #include "nodes/ui/push_button.h"
-#include "nodes/ui/toggle_button.h"
 #include "nodes/ui/seven_segment_display.h"
+#include "nodes/ui/toggle_button.h"
 
 #endif // NODES_UI_ALL_H

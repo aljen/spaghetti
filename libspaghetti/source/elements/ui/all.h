@@ -28,7 +28,7 @@
 #include "elements/ui/float_info.h"
 #include "elements/ui/int_info.h"
 #include "elements/ui/push_button.h"
-#include "elements/ui/toggle_button.h"
 #include "elements/ui/seven_segment_display.h"
+#include "elements/ui/toggle_button.h"
 
 #endif // ELEMENTS_UI_ALL_H

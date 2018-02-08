@@ -53,4 +53,4 @@ void Nand::calculate()
   m_outputs[0].value = !allSets;
 }
 
-} // namespace elements::gates
+} // namespace spaghetti::elements::gates

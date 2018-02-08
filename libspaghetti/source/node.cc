@@ -607,7 +607,8 @@ void Node::setOutputName(uint8_t const a_socketId, QString const a_name)
   m_packageView->showProperties();
 }
 
-void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType, bool const a_swapped)
+void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType,
+                     bool const a_swapped)
 {
   auto const socket{ new SocketItem{ this, a_type } };
   socket->setElementId(m_element->id());

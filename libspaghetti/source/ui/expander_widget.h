@@ -23,8 +23,8 @@
 #ifndef UI_EXPANDER_WIDGET_H
 #define UI_EXPANDER_WIDGET_H
 
-#include <QTreeWidget>
 #include <QIcon>
+#include <QTreeWidget>
 
 class ExpanderWidget : public QTreeWidget {
   Q_OBJECT
