@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 project(libSpaghetti VERSION ${Spaghetti_VERSION} LANGUAGES C CXX)
 
 find_package(Threads REQUIRED)
-find_package(Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt5 REQUIRED COMPONENTS Widgets OpenGL)
 
 if (HAVE_CXX_FILESYSTEM)
   set(SPAGHETTI_FILESYSTEM_IMPLEMENTATION SPAGHETTI_FS_STD_FILESYSTEM)
@@ -237,7 +237,7 @@ target_include_directories(Spaghetti SYSTEM PUBLIC
 ##  $<INSTALL_INTERFACE:vendor/spdlog/include>
   )
 target_link_libraries(Spaghetti
-  PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
+  PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::OpenGL
   PRIVATE ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
 )
 

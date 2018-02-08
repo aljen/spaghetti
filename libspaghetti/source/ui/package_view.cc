@@ -31,6 +31,7 @@
 #include <QMimeData>
 #include <QTableWidget>
 #include <QTimeLine>
+#include <QGLWidget>
 
 #include "spaghetti/node.h"
 #include "spaghetti/package.h"
@@ -50,6 +51,10 @@ PackageView::PackageView(QTableWidget *const a_properties, Package *const a_pack
   , m_packageNode{ Registry::get().createNode("logic/package") }
   , m_standalone{ !a_package }
 {
+  QGLFormat format{ QGL::DoubleBuffer | QGL::SampleBuffers | QGL::DirectRendering };
+  format.setProfile(QGLFormat::CoreProfile);
+  setViewport(new QGLWidget{ QGLFormat{ format } });
+  setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
   setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing |
                  QPainter::SmoothPixmapTransform);
   setDragMode(QGraphicsView::ScrollHandDrag);
@@ -57,7 +62,6 @@ PackageView::PackageView(QTableWidget *const a_properties, Package *const a_pack
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
   setResizeAnchor(QGraphicsView::NoAnchor);
   setTransformationAnchor(QGraphicsView::AnchorViewCenter);
-  setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   setOptimizationFlags(QGraphicsView::DontSavePainterState | QGraphicsView::DontAdjustForAntialiasing);
 
   setObjectName("PackageView");
