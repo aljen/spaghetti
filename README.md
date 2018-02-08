@@ -4,6 +4,7 @@
 [![MIT License][license-badge]](LICENSE)
 
 ![spaghetti.gif](docs/spaghetti.gif)
+![spaghetti2.gif](docs/spaghetti2.gif)
 
 ## License
 
