@@ -31,7 +31,12 @@
 #include <QMimeData>
 #include <QTableWidget>
 #include <QTimeLine>
-#include <QGLWidget>
+
+// clang-format off
+#ifdef SPAGHETTI_USE_OPENGL
+# include <QGLWidget>
+#endif
+// clang-format on
 
 #include "spaghetti/node.h"
 #include "spaghetti/package.h"
@@ -51,9 +56,11 @@ PackageView::PackageView(QTableWidget *const a_properties, Package *const a_pack
   , m_packageNode{ Registry::get().createNode("logic/package") }
   , m_standalone{ !a_package }
 {
+#ifdef SPAGHETTI_USE_OPENGL
   QGLFormat format{ QGL::DoubleBuffer | QGL::SampleBuffers | QGL::DirectRendering };
   format.setProfile(QGLFormat::CoreProfile);
   setViewport(new QGLWidget{ QGLFormat{ format } });
+#endif
   setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
   setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing |
                  QPainter::SmoothPixmapTransform);

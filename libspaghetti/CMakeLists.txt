@@ -4,6 +4,9 @@ project(libSpaghetti VERSION ${Spaghetti_VERSION} LANGUAGES C CXX)
 
 find_package(Threads REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Widgets OpenGL)
+if (SPAGHETTI_USE_OPENGL)
+  find_package(Qt5 REQUIRED COMPONENTS OpenGL)
+endif ()
 
 if (HAVE_CXX_FILESYSTEM)
   set(SPAGHETTI_FILESYSTEM_IMPLEMENTATION SPAGHETTI_FS_STD_FILESYSTEM)
@@ -240,6 +243,10 @@ target_link_libraries(Spaghetti
   PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::OpenGL
   PRIVATE ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
 )
+if (SPAGHETTI_USE_OPENGL)
+  target_compile_definitions(Spaghetti PRIVATE SPAGHETTI_USE_OPENGL)
+  target_link_libraries(Spaghetti PUBLIC Qt5::OpenGL)
+endif ()
 
 if (CLANG)
   target_link_libraries(Spaghetti PUBLIC -stdlib=libc++)
