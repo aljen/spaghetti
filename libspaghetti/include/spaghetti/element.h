@@ -55,9 +55,13 @@ class SPAGHETTI_API Element {
   using Json = nlohmann::json;
   using Value = std::variant<bool, int32_t, float>;
   enum class ValueType { eBool, eInt, eFloat };
+  template<typename T>
   struct Vec2 {
-    double x{}, y{};
+    T x{}, y{};
   };
+  using vec2 = Vec2<int32_t>;
+  using vec2f = Vec2<float>;
+  using vec2d = Vec2<double>;
 
   struct IOSocket {
     enum Flags {
@@ -104,8 +108,8 @@ class SPAGHETTI_API Element {
     m_position.x = a_x;
     m_position.y = a_y;
   }
-  void setPosition(Vec2 const a_position) { m_position = a_position; }
-  Vec2 const &position() const { return m_position; }
+  void setPosition(vec2d const a_position) { m_position = a_position; }
+  vec2d const &position() const { return m_position; }
 
   void iconify(bool const a_iconify) { m_isIconified = a_iconify; }
   bool isIconified() const { return m_isIconified; }
@@ -188,7 +192,7 @@ class SPAGHETTI_API Element {
  private:
   size_t m_id{};
   std::string m_name{};
-  Vec2 m_position{};
+  vec2d m_position{};
   bool m_isIconified{};
   uint8_t m_minInputs{};
   uint8_t m_maxInputs{ std::numeric_limits<uint8_t>::max() };
