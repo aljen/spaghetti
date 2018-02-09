@@ -4,7 +4,7 @@ namespace spaghetti::nodes::values {
 
 void ScaleWidgetEditor::updateCurrentValue() {}
 
-void ScaleWidgetEditor::setHoveredItem(Point *const a_item)
+void ScaleWidgetEditor::setHoveredItem(CharacteristicCurvePoint *const a_item)
 {
   (void)a_item;
 }

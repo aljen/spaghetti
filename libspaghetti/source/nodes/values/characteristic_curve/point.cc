@@ -10,7 +10,7 @@ using namespace QtCharts;
 
 namespace spaghetti::nodes::values {
 
-Point::Point(ScaleWidgetEditor *const a_editor, QChart *const a_chart)
+CharacteristicCurvePoint::CharacteristicCurvePoint(ScaleWidgetEditor *const a_editor, QChart *const a_chart)
   : QGraphicsItem{ a_chart }
   , m_editor{ a_editor }
   , m_chart{ a_chart }
@@ -21,17 +21,17 @@ Point::Point(ScaleWidgetEditor *const a_editor, QChart *const a_chart)
   setZValue(100.0);
 }
 
-Point::Point(QChart *const a_chart)
-  : Point{ nullptr, a_chart }
+CharacteristicCurvePoint::CharacteristicCurvePoint(QChart *const a_chart)
+  : CharacteristicCurvePoint{ nullptr, a_chart }
 {
 }
 
-Point::Point(ScaleWidgetEditor *const a_editor)
-  : Point{ a_editor, a_editor->chart() }
+CharacteristicCurvePoint::CharacteristicCurvePoint(ScaleWidgetEditor *const a_editor)
+  : CharacteristicCurvePoint{ a_editor, a_editor->chart() }
 {
 }
 
-void Point::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget)
+void CharacteristicCurvePoint::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget)
 {
   (void)a_option;
   (void)a_widget;
@@ -42,7 +42,7 @@ void Point::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option,
   a_painter->drawEllipse({ 0.0, 0.0 }, POINT_RADIUS, POINT_RADIUS);
 }
 
-QVariant Point::itemChange(GraphicsItemChange a_change, QVariant const &a_value)
+QVariant CharacteristicCurvePoint::itemChange(GraphicsItemChange a_change, QVariant const &a_value)
 {
   if (m_index >= 0) {
     switch (a_change) {
@@ -94,7 +94,7 @@ QVariant Point::itemChange(GraphicsItemChange a_change, QVariant const &a_value)
   return QGraphicsItem::itemChange(a_change, a_value);
 }
 
-void Point::hoverEnterEvent(QGraphicsSceneHoverEvent *a_event)
+void CharacteristicCurvePoint::hoverEnterEvent(QGraphicsSceneHoverEvent *a_event)
 {
   (void)a_event;
 
@@ -109,7 +109,7 @@ void Point::hoverEnterEvent(QGraphicsSceneHoverEvent *a_event)
   }
 }
 
-void Point::hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event)
+void CharacteristicCurvePoint::hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event)
 {
   (void)a_event;
 
@@ -120,7 +120,7 @@ void Point::hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event)
   }
 }
 
-void Point::setType(const Point::Type a_type)
+void CharacteristicCurvePoint::setType(const CharacteristicCurvePoint::Type a_type)
 {
   m_type = a_type;
 
@@ -137,7 +137,7 @@ void Point::setType(const Point::Type a_type)
   update();
 }
 
-void Point::setIndex(int const a_index)
+void CharacteristicCurvePoint::setIndex(int const a_index)
 {
   m_index = a_index;
 }

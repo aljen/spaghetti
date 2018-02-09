@@ -44,7 +44,7 @@ CharacteristicCurveIntInt::CharacteristicCurveIntInt()
   , m_xAxis{ new QValueAxis }
   , m_yAxis{ new QValueAxis }
   , m_lastPoint{ -1.0, -1.0 }
-  , m_current{ new Point{ m_widget } }
+  , m_current{ new CharacteristicCurvePoint{ m_widget } }
 {
   setCentralWidget(m_widget);
 
@@ -62,7 +62,7 @@ CharacteristicCurveIntInt::CharacteristicCurveIntInt()
   m_xAxis->setLabelsFont(labelsFont);
   m_yAxis->setLabelsFont(labelsFont);
 
-  m_current->setType(Point::Type::eCurrent);
+  m_current->setType(CharacteristicCurvePoint::Type::eCurrent);
 }
 
 void CharacteristicCurveIntInt::refreshCentralWidget()

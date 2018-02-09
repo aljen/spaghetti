@@ -34,7 +34,7 @@ class QValueAxis;
 
 namespace spaghetti::nodes::values {
 
-class Point;
+class CharacteristicCurvePoint;
 
 class CharacteristicCurveIntInt : public Node {
  public:
@@ -55,7 +55,7 @@ class CharacteristicCurveIntInt : public Node {
   QtCharts::QValueAxis *m_xAxis{};
   QtCharts::QValueAxis *m_yAxis{};
   QPointF m_lastPoint{};
-  Point *m_current{};
+  CharacteristicCurvePoint *m_current{};
 };
 
 } // namespace spaghetti::nodes::values

@@ -33,12 +33,12 @@ class QValueAxis;
 
 namespace spaghetti::nodes::values {
 
-class Point;
+class CharacteristicCurvePoint;
 
 class ScaleWidgetEditor : public QtCharts::QChartView {
  public:
   void updateCurrentValue();
-  void setHoveredItem(Point *const a_item);
+  void setHoveredItem(CharacteristicCurvePoint *const a_item);
 };
 
 } // namespace spaghetti::nodes::values

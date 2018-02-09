@@ -37,12 +37,12 @@ class ScaleWidgetEditor;
 
 constexpr qreal const POINT_RADIUS = 6.0;
 
-class Point : public QGraphicsItem {
+class CharacteristicCurvePoint : public QGraphicsItem {
  public:
   enum class Type { eNormal, eCurrent, eToAdd, eToRemove };
 
-  explicit Point(QtCharts::QChart *const a_chart);
-  explicit Point(ScaleWidgetEditor *const a_editor);
+  explicit CharacteristicCurvePoint(QtCharts::QChart *const a_chart);
+  explicit CharacteristicCurvePoint(ScaleWidgetEditor *const a_editor);
 
   QRectF boundingRect() const override { return m_boundingRect; }
   void paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget) override;
@@ -56,7 +56,7 @@ class Point : public QGraphicsItem {
   void setIndex(int const a_index);
 
  private:
-  explicit Point(ScaleWidgetEditor *const a_editor, QtCharts::QChart *const a_chart);
+  explicit CharacteristicCurvePoint(ScaleWidgetEditor *const a_editor, QtCharts::QChart *const a_chart);
 
  private:
   QColor m_color{};
