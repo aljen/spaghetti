@@ -25,8 +25,8 @@
 // clang-format off
 #if defined(_WIN64) || defined(_WIN32)
 # define WIN32_LEAN_AND_MEAN
-# include <Windows.h>
-# include <ShlObj.h>
+# include <windows.h>
+# include <shlobj.h>
 # include <sstream>
 #endif
 // clang-format on

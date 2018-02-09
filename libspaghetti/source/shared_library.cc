@@ -24,7 +24,7 @@
 
 // clang-format off
 #if defined(_WIN64) || defined(_WIN32)
-# include <Windows.h>
+# include <windows.h>
 #elif defined(__unix__)
 # include <dlfcn.h>
 #endif
@@ -107,7 +107,7 @@ void *SharedLibrary::getSymbol(std::string_view a_signature)
   log::info("[shared_library]: Getting symbol {} from {}", a_signature.data(), m_filename);
 
 #if defined(_WIN64) || defined(_WIN32)
-  return GetProcAddress(static_cast<HMODULE>(m_handle), a_signature.data());
+  return reinterpret_cast<void*>(GetProcAddress(static_cast<HMODULE>(m_handle), a_signature.data()));
 #elif defined(__unix__)
   return dlsym(m_handle, a_signature.data());
 #endif
