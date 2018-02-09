@@ -61,7 +61,7 @@ PackageView::PackageView(QTableWidget *const a_properties, Package *const a_pack
   format.setProfile(QGLFormat::CoreProfile);
   setViewport(new QGLWidget{ QGLFormat{ format } });
 #endif
-  setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+  setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing |
                  QPainter::SmoothPixmapTransform);
   setDragMode(QGraphicsView::ScrollHandDrag);
