@@ -38,6 +38,8 @@ ScaleInt::ScaleInt()
   addInput(ValueType::eInt, "Value", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
 
   addOutput(ValueType::eInt, "Scaled", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
+
+  setIconifyingHidesCentralWidget(true);
 }
 
 void ScaleInt::serialize(Json &a_json)
