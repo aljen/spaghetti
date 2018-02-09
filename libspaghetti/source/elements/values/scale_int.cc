@@ -22,9 +22,9 @@
 
 #include <algorithm>
 
+#include "elements/values/scale_int.h"
 #include "spaghetti/logger.h"
 #include "spaghetti/utils.h"
-#include "elements/values/scale_int.h"
 
 namespace spaghetti::elements::values {
 
