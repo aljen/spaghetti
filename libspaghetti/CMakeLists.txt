@@ -171,14 +171,14 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/ui/seven_segment_display.h
 
   source/nodes/values/all.h
+  source/nodes/values/characteristic_curve_int_int.cc
+  source/nodes/values/characteristic_curve_int_int.h
   source/nodes/values/const_bool.cc
   source/nodes/values/const_bool.h
   source/nodes/values/const_float.cc
   source/nodes/values/const_float.h
   source/nodes/values/const_int.cc
   source/nodes/values/const_int.h
-  source/nodes/values/scale_int.cc
-  source/nodes/values/scale_int.h
   source/nodes/values/scale_widget.cc
   source/nodes/values/scale_widget.h
   source/nodes/values/scale_widget.ui
