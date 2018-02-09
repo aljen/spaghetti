@@ -40,6 +40,17 @@ ScaleInt::ScaleInt()
   addOutput(ValueType::eInt, "Scaled", IOSocket::eCanHoldInt | IOSocket::eCanChangeName);
 
   setIconifyingHidesCentralWidget(true);
+
+  m_series.clear();
+
+  m_series.push_back({ 0, 100 });
+
+  for (size_t i = 1; i < 100; i += 1) {
+    float ii = static_cast<float>(i) / 150.f;
+    m_series.push_back(vec2{ static_cast<int32_t>(i), static_cast<int32_t>((std::sin(ii * 10.f) * 50.f) + 100.f) });
+  }
+
+  m_series.push_back({ 100, m_series[m_series.size() - 1].y });
 }
 
 void ScaleInt::serialize(Json &a_json)
