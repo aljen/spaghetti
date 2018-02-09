@@ -32,6 +32,7 @@
 
 #include "elements/values/scale_int.h"
 #include "nodes/values/scale_widget_point.h"
+#include "spaghetti/package.h"
 
 using namespace QtCharts;
 
@@ -68,7 +69,7 @@ void ScaleInt::refreshCentralWidget()
 {
   if (!m_element) return;
 
-  updateCurrentValue();
+  updateCurrentValue(false);
   calculateBoundingRect();
 }
 
@@ -223,19 +224,19 @@ void ScaleInt::synchronizeFromElement()
 
   m_series->clear();
 
-  auto element = static_cast<elements::values::ScaleInt *>(m_element);
   auto &series = element->series();
-
   for (auto &point : series) m_series->append(static_cast<qreal>(point.x), static_cast<qreal>(point.y));
+
+  updateCurrentValue(true);
 }
 
-void ScaleInt::updateCurrentValue()
+void ScaleInt::updateCurrentValue(bool const a_force)
 {
   auto element = static_cast<elements::values::ScaleInt *>(m_element);
   auto const POINT = element->value();
   QPointF const position{ static_cast<qreal>(POINT.x), static_cast<qreal>(POINT.y) };
 
-  if (position != m_lastPoint) {
+  if (a_force || position != m_lastPoint) {
     m_current->setPos(m_widget->mapToPosition(position));
     calculateBoundingRect();
     m_lastPoint = position;
@@ -243,3 +244,4 @@ void ScaleInt::updateCurrentValue()
 }
 
 } // namespace spaghetti::nodes::values
+

@@ -46,8 +46,8 @@ class ScaleInt : public Node {
   void elementSet() override;
 
  private:
-  void updateCurrentValue();
   void synchronizeFromElement();
+  void updateCurrentValue(bool const a_force);
 
  private:
   QtCharts::QChart *m_widget{};
