@@ -116,6 +116,9 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/ui/seven_segment_display.h
 
   source/elements/values/all.h
+  source/elements/values/characteristic_curve.h
+  source/elements/values/characteristic_curve_int_int.cc
+  source/elements/values/characteristic_curve_int_int.h
   source/elements/values/clamp_float.cc
   source/elements/values/clamp_float.h
   source/elements/values/clamp_int.cc
@@ -144,8 +147,6 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/values/radian_to_degree.h
   source/elements/values/random_bool.cc
   source/elements/values/random_bool.h
-  source/elements/values/scale_int.cc
-  source/elements/values/scale_int.h
 
   source/elements/all.h
 
