@@ -107,7 +107,7 @@ void Node::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, 
   (void)a_widget;
 
   paintBorder(a_painter);
-  if (!m_centralWidget) paintIcon(a_painter);
+  if (!m_centralWidget || !m_centralWidget->isVisible()) paintIcon(a_painter);
 }
 
 QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant const &a_value)
@@ -255,7 +255,11 @@ void Node::hideName()
 
 void Node::iconify()
 {
-  if (m_element) m_element->iconify(true);
+  if (m_element) {
+    m_element->iconify(true);
+    if (m_element->iconifyingHidesCentralWidget() && m_centralWidget) m_centralWidget->hide();
+  }
+
   m_mode = Mode::eIconified;
 
   for (auto &&input : m_inputs) input->hideName();
@@ -266,7 +270,11 @@ void Node::iconify()
 
 void Node::expand()
 {
-  if (m_element) m_element->iconify(false);
+  if (m_element) {
+    m_element->iconify(false);
+    if (m_element->iconifyingHidesCentralWidget() && m_centralWidget) m_centralWidget->show();
+  }
+
   m_mode = Mode::eExpanded;
 
   for (auto &&input : m_inputs) input->showName();
@@ -503,7 +511,8 @@ void Node::calculateBoundingRect()
   auto const INPUTS_COUNT = m_inputs.count();
   auto const OUTPUTS_COUNT = m_outputs.count();
   auto const SOCKETS_COUNT = std::max(INPUTS_COUNT, OUTPUTS_COUNT);
-  auto const CENTRAL_SIZE = m_centralWidget ? m_centralWidget->boundingRect().size() : m_icon.size() / 2;
+  auto const CENTRAL_SIZE =
+      (m_centralWidget && m_centralWidget->isVisible()) ? m_centralWidget->boundingRect().size() : m_icon.size() / 2;
   auto const SOCKETS_HEIGHT = SOCKETS_COUNT * ROUNDED_SOCKET_SIZE;
 
   auto maxNameWidth = [](auto &&a_a, auto &&a_b) { return a_a->nameWidth() < a_b->nameWidth(); };

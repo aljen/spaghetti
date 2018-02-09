@@ -114,6 +114,9 @@ class SPAGHETTI_API Element {
   void iconify(bool const a_iconify) { m_isIconified = a_iconify; }
   bool isIconified() const { return m_isIconified; }
 
+  void setIconifyingHidesCentralWidget(bool const a_hide) { m_iconifyingHidesCentralWidget = a_hide; }
+  bool iconifyingHidesCentralWidget() const { return m_iconifyingHidesCentralWidget; }
+
   IOSockets &inputs() { return m_inputs; }
   IOSockets const &inputs() const { return m_inputs; }
   IOSockets &outputs() { return m_outputs; }
@@ -194,6 +197,7 @@ class SPAGHETTI_API Element {
   std::string m_name{};
   vec2d m_position{};
   bool m_isIconified{};
+  bool m_iconifyingHidesCentralWidget{};
   uint8_t m_minInputs{};
   uint8_t m_maxInputs{ std::numeric_limits<uint8_t>::max() };
   uint8_t m_minOutputs{};
