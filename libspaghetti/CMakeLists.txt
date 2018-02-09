@@ -171,6 +171,8 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/ui/seven_segment_display.h
 
   source/nodes/values/all.h
+  source/nodes/values/characteristic_curve/point.cc
+  source/nodes/values/characteristic_curve/point.h
   source/nodes/values/characteristic_curve_int_int.cc
   source/nodes/values/characteristic_curve_int_int.h
   source/nodes/values/const_bool.cc
@@ -184,8 +186,6 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/values/scale_widget.ui
   source/nodes/values/scale_widget_editor.cc
   source/nodes/values/scale_widget_editor.h
-  source/nodes/values/scale_widget_point.cc
-  source/nodes/values/scale_widget_point.h
 
   source/nodes/all.h
 

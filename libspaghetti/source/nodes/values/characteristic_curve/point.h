@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_VALUES_SCALE_WIDGET_POINT_H
-#define NODES_VALUES_SCALE_WIDGET_POINT_H
+#ifndef NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H
+#define NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H
 
 #include <QGraphicsItem>
 
@@ -70,4 +70,4 @@ class Point : public QGraphicsItem {
 
 } // namespace spaghetti::nodes::values
 
-#endif // NODES_VALUES_SCALE_WIDGET_POINT_H
+#endif // NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H

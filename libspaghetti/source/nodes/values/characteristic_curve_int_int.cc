@@ -31,7 +31,7 @@
 #include <QtCharts/QValueAxis>
 
 #include "elements/values/characteristic_curve_int_int.h"
-#include "nodes/values/scale_widget_point.h"
+#include "nodes/values/characteristic_curve/point.h"
 #include "spaghetti/package.h"
 
 using namespace QtCharts;

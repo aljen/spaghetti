@@ -1,4 +1,4 @@
-#include "nodes/values/scale_widget_point.h"
+#include "nodes/values/characteristic_curve/point.h"
 
 #include <QtCharts/QChart>
 #include <QtCharts/QLineSeries>
