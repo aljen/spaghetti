@@ -21,43 +21,24 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_VALUES_SCALE_INT_H
-#define NODES_VALUES_SCALE_INT_H
+#ifndef NODES_VALUES_SCALE_WIDGET_H
+#define NODES_VALUES_SCALE_WIDGET_H
 
-#include "spaghetti/node.h"
+#include <QWidget>
 
-namespace QtCharts {
-class QChart;
-class QLineSeries;
-class QValueAxis;
-} // namespace QtCharts
+namespace Ui {
+class ScaleWidget;
+}
 
-namespace spaghetti::nodes::values {
+class ScaleWidget : public QWidget {
+  Q_OBJECT
 
-class Point;
-
-class ScaleInt : public Node {
  public:
-  ScaleInt();
+  explicit ScaleWidget(QWidget *const a_parent = nullptr);
+  ~ScaleWidget();
 
  private:
-  void refreshCentralWidget() override;
-  void showProperties() override;
-  void elementSet() override;
-
- private:
-  void synchronizeSeriesFromElement();
-  void updateCurrentValue();
-
- private:
-  QtCharts::QChart *m_widget{};
-  QtCharts::QLineSeries *m_series{};
-  QtCharts::QValueAxis *m_xAxis{};
-  QtCharts::QValueAxis *m_yAxis{};
-  QPointF m_lastPoint{};
-  Point *m_current{};
+  Ui::ScaleWidget *const m_ui{};
 };
 
-} // namespace spaghetti::nodes::values
-
-#endif // NODES_VALUES_SCALE_INT_H
+#endif // NODES_VALUES_SCALE_WIDGET_H

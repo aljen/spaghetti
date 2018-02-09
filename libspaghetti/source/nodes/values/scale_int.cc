@@ -21,51 +21,54 @@
 // SOFTWARE.
 
 #include "nodes/values/scale_int.h"
-#include "elements/values/scale_int.h"
 
 #include <QDebug>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QTableWidget>
+#include <QtCharts/QChart>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QValueAxis>
+
+#include "elements/values/scale_int.h"
+#include "nodes/values/scale_widget_point.h"
+
+using namespace QtCharts;
 
 namespace spaghetti::nodes::values {
 
-class ScaleIntWidget : public QGraphicsItem {
- public:
-  ScaleIntWidget()
-    : QGraphicsItem{}
-  {
-  }
-
-  QRectF boundingRect() const override { return m_boundingRect; }
-
-  void paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget) override
-  {
-    (void)a_painter;
-    (void)a_option;
-    (void)a_widget;
-  }
-
- private:
-  QRectF m_boundingRect{ 0, 0, 194, 222 };
-};
-
 ScaleInt::ScaleInt()
+  : m_widget{ new QChart }
+  , m_series{ new QLineSeries }
+  , m_xAxis{ new QValueAxis }
+  , m_yAxis{ new QValueAxis }
+  , m_lastPoint{ -1.0, -1.0 }
+  , m_current{ new Point{ m_widget } }
 {
-  auto const widget = new ScaleIntWidget;
-  setCentralWidget(widget);
+  setCentralWidget(m_widget);
 
-  m_widget = widget;
+  m_widget->legend()->hide();
+  m_widget->setTheme(QChart::ChartThemeDark);
+  m_widget->addAxis(m_xAxis, Qt::AlignBottom);
+  m_widget->addAxis(m_yAxis, Qt::AlignLeft);
+  m_widget->addSeries(m_series);
+
+  m_series->attachAxis(m_xAxis);
+  m_series->attachAxis(m_yAxis);
+
+  QFont labelsFont{};
+  labelsFont.setPixelSize(10);
+  m_xAxis->setLabelsFont(labelsFont);
+  m_yAxis->setLabelsFont(labelsFont);
+
+  m_current->setType(Point::Type::eCurrent);
 }
 
 void ScaleInt::refreshCentralWidget()
 {
   if (!m_element) return;
 
-  //  auto const &inputs = m_element->inputs();
-
-  //  bool const VALUE{ std::get<bool>(inputs[0].value) };
-
+  updateCurrentValue();
   calculateBoundingRect();
 }
 
@@ -177,6 +180,49 @@ void ScaleInt::showProperties()
   m_properties->setCellWidget(currentIndex, 0, editSeries);
 
   QObject::connect(editSeries, &QPushButton::clicked, [this] { qDebug() << "EDIT SERIES"; });
+}
+
+void ScaleInt::elementSet()
+{
+  auto const element = static_cast<elements::values::ScaleInt *>(m_element);
+
+  synchronizeSeriesFromElement();
+
+  m_xAxis->setMin(static_cast<qreal>(element->xMin()));
+  m_xAxis->setMax(static_cast<qreal>(element->xMax()));
+  m_yAxis->setMin(static_cast<qreal>(element->yMin()));
+  m_yAxis->setMax(static_cast<qreal>(element->yMax()));
+
+  constexpr qreal const CHART_SIZE{ 400. };
+
+  m_widget->resize({ CHART_SIZE, CHART_SIZE });
+
+  updateCurrentValue();
+}
+
+void ScaleInt::synchronizeSeriesFromElement()
+{
+  assert(m_element);
+
+  m_series->clear();
+
+  auto element = static_cast<elements::values::ScaleInt *>(m_element);
+  auto &series = element->series();
+
+  for (auto &point : series) m_series->append(static_cast<qreal>(point.x), static_cast<qreal>(point.y));
+}
+
+void ScaleInt::updateCurrentValue()
+{
+  auto element = static_cast<elements::values::ScaleInt *>(m_element);
+  auto const POINT = element->value();
+  QPointF const position{ static_cast<qreal>(POINT.x), static_cast<qreal>(POINT.y) };
+
+  if (position != m_lastPoint) {
+    m_current->setPos(m_widget->mapToPosition(position));
+    calculateBoundingRect();
+    m_lastPoint = position;
+  }
 }
 
 } // namespace spaghetti::nodes::values

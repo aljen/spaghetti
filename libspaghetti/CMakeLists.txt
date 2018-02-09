@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 project(libSpaghetti VERSION ${Spaghetti_VERSION} LANGUAGES C CXX)
 
 find_package(Threads REQUIRED)
-find_package(Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt5 REQUIRED COMPONENTS Widgets Charts)
 if (SPAGHETTI_USE_OPENGL)
   find_package(Qt5 REQUIRED COMPONENTS OpenGL)
 endif ()
@@ -178,6 +178,13 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/values/const_int.h
   source/nodes/values/scale_int.cc
   source/nodes/values/scale_int.h
+  source/nodes/values/scale_widget.cc
+  source/nodes/values/scale_widget.h
+  source/nodes/values/scale_widget.ui
+  source/nodes/values/scale_widget_editor.cc
+  source/nodes/values/scale_widget_editor.h
+  source/nodes/values/scale_widget_point.cc
+  source/nodes/values/scale_widget_point.h
 
   source/nodes/all.h
 
@@ -244,7 +251,7 @@ target_include_directories(Spaghetti SYSTEM PUBLIC
 ##  $<INSTALL_INTERFACE:vendor/spdlog/include>
   )
 target_link_libraries(Spaghetti
-  PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
+  PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::Charts
   PRIVATE ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
 )
 if (SPAGHETTI_USE_OPENGL)
