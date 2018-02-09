@@ -36,9 +36,9 @@ namespace spaghetti::nodes::values {
 
 class Point;
 
-class ScaleInt : public Node {
+class CharacteristicCurveIntInt : public Node {
  public:
-  ScaleInt();
+  CharacteristicCurveIntInt();
 
  private:
   void refreshCentralWidget() override;

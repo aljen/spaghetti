@@ -38,7 +38,7 @@ using namespace QtCharts;
 
 namespace spaghetti::nodes::values {
 
-ScaleInt::ScaleInt()
+CharacteristicCurveIntInt::CharacteristicCurveIntInt()
   : m_widget{ new QChart }
   , m_series{ new QLineSeries }
   , m_xAxis{ new QValueAxis }
@@ -65,7 +65,7 @@ ScaleInt::ScaleInt()
   m_current->setType(Point::Type::eCurrent);
 }
 
-void ScaleInt::refreshCentralWidget()
+void CharacteristicCurveIntInt::refreshCentralWidget()
 {
   if (!m_element) return;
 
@@ -73,7 +73,7 @@ void ScaleInt::refreshCentralWidget()
   calculateBoundingRect();
 }
 
-void ScaleInt::showProperties()
+void CharacteristicCurveIntInt::showProperties()
 {
   showCommonProperties();
   showIOProperties(IOSocketsType::eInputs);
@@ -203,7 +203,7 @@ void ScaleInt::showProperties()
   QObject::connect(editSeries, &QPushButton::clicked, [this] { qDebug() << "EDIT SERIES"; });
 }
 
-void ScaleInt::elementSet()
+void CharacteristicCurveIntInt::elementSet()
 {
   constexpr qreal const CHART_SIZE{ 400. };
   m_widget->resize({ CHART_SIZE, CHART_SIZE });
@@ -211,7 +211,7 @@ void ScaleInt::elementSet()
   synchronizeFromElement();
 }
 
-void ScaleInt::synchronizeFromElement()
+void CharacteristicCurveIntInt::synchronizeFromElement()
 {
   assert(m_element);
 
@@ -230,7 +230,7 @@ void ScaleInt::synchronizeFromElement()
   updateCurrentValue(true);
 }
 
-void ScaleInt::updateCurrentValue(bool const a_force)
+void CharacteristicCurveIntInt::updateCurrentValue(bool const a_force)
 {
   auto const element = static_cast<elements::values::CharacteristicCurveIntInt *>(m_element);
   auto const POINT = element->value();
