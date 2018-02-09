@@ -33,6 +33,8 @@ class ScaleInt final : public Element {
   static constexpr char const *const TYPE{ "values/scale_int" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
+  using Series = std::vector<vec2>;
+
   ScaleInt();
 
   char const *type() const noexcept override { return TYPE; }
@@ -46,25 +48,31 @@ class ScaleInt final : public Element {
   void setSeriesCount(size_t const a_seriesCount);
   size_t seriesCount() const { return m_series.size(); }
 
-  void setXMin(int32_t const a_xMin) { m_xMin = a_xMin; }
-  int32_t xMin() const { return m_xMin; }
+  void setXMin(int32_t const a_xMin) { m_xRange.x = a_xMin; }
+  int32_t xMin() const { return m_xRange.x; }
 
-  void setXMax(int32_t const a_xMax) { m_xMax = a_xMax; }
-  int32_t xMax() const { return m_xMax; }
+  void setXMax(int32_t const a_xMax) { m_xRange.y = a_xMax; }
+  int32_t xMax() const { return m_xRange.y; }
 
-  void setYMin(int32_t const a_yMin) { m_yMin = a_yMin; }
-  int32_t yMin() const { return m_yMin; }
+  void setYMin(int32_t const a_yMin) { m_yRange.x = a_yMin; }
+  int32_t yMin() const { return m_yRange.x; }
 
-  void setYMax(int32_t const a_yMax) { m_yMax = a_yMax; }
-  int32_t yMax() const { return m_yMax; }
+  void setYMax(int32_t const a_yMax) { m_yRange.y = a_yMax; }
+  int32_t yMax() const { return m_yRange.y; }
+
+  Series &series() { return m_series; }
+  Series const &series() const { return m_series; }
+
+  vec2 value() const { return m_currentValue; }
 
  private:
-  std::vector<vec2> m_series{ { 0, 0 }, { 100, 200 } };
-  int32_t m_lastValue{};
-  int32_t m_xMin{ 0 };
-  int32_t m_xMax{ 100 };
-  int32_t m_yMin{ 0 };
-  int32_t m_yMax{ 200 };
+  Series m_series{ { 0, 0 }, { 100, 200 } };
+  vec2 m_currentValue{};
+  int32_t m_lastValue{ -1 };
+  vec2 m_xRange{ 0, 100 };
+  vec2 m_yRange{ 0, 200 };
+  vec2 m_xTicks{ 5, 0 };
+  vec2 m_yTicks{ 5, 0 };
 };
 
 } // namespace spaghetti::elements::values

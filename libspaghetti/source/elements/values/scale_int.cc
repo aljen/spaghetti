@@ -58,10 +58,12 @@ void ScaleInt::serialize(Json &a_json)
   Element::serialize(a_json);
 
   auto &properties = a_json["properties"];
-  properties["x_min"] = m_xMin;
-  properties["x_max"] = m_xMax;
-  properties["y_min"] = m_yMin;
-  properties["y_max"] = m_yMax;
+
+  properties["series"] = m_series;
+  properties["x_range"] = m_xRange;
+  properties["x_ticks"] = m_xTicks;
+  properties["y_range"] = m_yRange;
+  properties["y_ticks"] = m_yTicks;
 }
 
 void ScaleInt::deserialize(const Json &a_json)
@@ -69,22 +71,20 @@ void ScaleInt::deserialize(const Json &a_json)
   Element::deserialize(a_json);
 
   auto const &PROPERTIES = a_json["properties"];
-  m_xMin = PROPERTIES["x_min"].get<int32_t>();
-  m_xMax = PROPERTIES["x_max"].get<int32_t>();
-  m_yMin = PROPERTIES["y_min"].get<int32_t>();
-  m_yMax = PROPERTIES["y_max"].get<int32_t>();
+
+  m_series = PROPERTIES["series"].get<Series>();
+  m_xRange = PROPERTIES["x_range"].get<vec2>();
+  m_xTicks = PROPERTIES["x_ticks"].get<vec2>();
+  m_yRange = PROPERTIES["y_range"].get<vec2>();
+  m_yTicks = PROPERTIES["y_ticks"].get<vec2>();
 }
 
 void ScaleInt::calculate()
 {
   int32_t const INPUT_VALUE{ std::get<int32_t>(m_inputs[0].value) };
-  int32_t const VALUE{ std::clamp(INPUT_VALUE, m_xMin, m_xMax) };
+  int32_t const VALUE{ std::clamp(INPUT_VALUE, m_xRange.x, m_xRange.y) };
 
   if (VALUE == m_lastValue) return;
-
-  log::info(" input value: {}", INPUT_VALUE);
-  log::info("  last value: {}", m_lastValue);
-  log::info("       value: {}", VALUE);
 
   m_lastValue = VALUE;
 
@@ -92,7 +92,6 @@ void ScaleInt::calculate()
   vec2 *currentPtr{};
 
   size_t const SIZE = m_series.size();
-  log::info(" series count: {}", SIZE);
   for (size_t i = 0; i < SIZE; ++i) {
     currentPtr = &m_series[i];
     if (currentPtr->x < VALUE)
@@ -106,21 +105,19 @@ void ScaleInt::calculate()
   vec2 const PREVIOUS{ *previousPtr };
   vec2 const CURRENT{ *currentPtr };
 
-  log::info(" previous: {}, {}", PREVIOUS.x, PREVIOUS.y);
-  log::info("  current: {}, {}", CURRENT.x, CURRENT.y);
-
   float value{};
-  float percent{};
 
   if (VALUE == PREVIOUS.x)
     value = static_cast<float>(PREVIOUS.y);
   else if (VALUE == CURRENT.x)
     value = static_cast<float>(CURRENT.y);
   else {
-    percent = static_cast<float>(VALUE - PREVIOUS.x) / static_cast<float>(CURRENT.x - PREVIOUS.x);
-    value = lerp(static_cast<float>(PREVIOUS.y), static_cast<float>(CURRENT.y), percent);
+    float const PERCENT{ static_cast<float>(VALUE - PREVIOUS.x) / static_cast<float>(CURRENT.x - PREVIOUS.x) };
+    value = lerp(static_cast<float>(PREVIOUS.y), static_cast<float>(CURRENT.y), PERCENT);
   }
-  log::info(" value: {}, percent: {}", value, percent);
+
+  m_currentValue.x = VALUE;
+  m_currentValue.y = static_cast<int32_t>(value);
 
   m_outputs[0].value = static_cast<int32_t>(value);
 }
