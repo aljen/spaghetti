@@ -97,7 +97,11 @@ void ScaleInt::showProperties()
 
   QObject::connect(xMinValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
     elements::values::ScaleInt *const scalerElement{ static_cast<elements::values::ScaleInt *const>(m_element) };
+    auto const package = scalerElement->package();
+    package->pauseDispatchThread();
     scalerElement->setXMin(a_value);
+    synchronizeFromElement();
+    package->resumeDispatchThread();
   });
 
   currentIndex = m_properties->rowCount();
@@ -114,7 +118,11 @@ void ScaleInt::showProperties()
 
   QObject::connect(xMaxValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
     elements::values::ScaleInt *const scalerElement{ static_cast<elements::values::ScaleInt *const>(m_element) };
+    auto const package = scalerElement->package();
+    package->pauseDispatchThread();
     scalerElement->setXMax(a_value);
+    synchronizeFromElement();
+    package->resumeDispatchThread();
   });
 
   propertiesInsertTitle("Y range");
@@ -133,7 +141,11 @@ void ScaleInt::showProperties()
 
   QObject::connect(yMinValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
     elements::values::ScaleInt *const scalerElement{ static_cast<elements::values::ScaleInt *const>(m_element) };
+    auto const package = scalerElement->package();
+    package->pauseDispatchThread();
     scalerElement->setYMin(a_value);
+    synchronizeFromElement();
+    package->resumeDispatchThread();
   });
 
   currentIndex = m_properties->rowCount();
@@ -150,7 +162,11 @@ void ScaleInt::showProperties()
 
   QObject::connect(yMaxValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
     elements::values::ScaleInt *const scalerElement{ static_cast<elements::values::ScaleInt *const>(m_element) };
+    auto const package = scalerElement->package();
+    package->pauseDispatchThread();
     scalerElement->setYMax(a_value);
+    synchronizeFromElement();
+    package->resumeDispatchThread();
   });
 
   propertiesInsertTitle("Series");
@@ -169,7 +185,11 @@ void ScaleInt::showProperties()
 
   QObject::connect(countValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
     elements::values::ScaleInt *const scalerElement{ static_cast<elements::values::ScaleInt *const>(m_element) };
+    auto const package = scalerElement->package();
+    package->pauseDispatchThread();
     scalerElement->setSeriesCount(static_cast<size_t>(a_value));
+    synchronizeFromElement();
+    package->resumeDispatchThread();
   });
 
   currentIndex = m_properties->rowCount();
@@ -184,25 +204,22 @@ void ScaleInt::showProperties()
 
 void ScaleInt::elementSet()
 {
-  auto const element = static_cast<elements::values::ScaleInt *>(m_element);
+  constexpr qreal const CHART_SIZE{ 400. };
+  m_widget->resize({ CHART_SIZE, CHART_SIZE });
 
-  synchronizeSeriesFromElement();
+  synchronizeFromElement();
+}
+
+void ScaleInt::synchronizeFromElement()
+{
+  assert(m_element);
+
+  auto const element = static_cast<elements::values::ScaleInt *>(m_element);
 
   m_xAxis->setMin(static_cast<qreal>(element->xMin()));
   m_xAxis->setMax(static_cast<qreal>(element->xMax()));
   m_yAxis->setMin(static_cast<qreal>(element->yMin()));
   m_yAxis->setMax(static_cast<qreal>(element->yMax()));
-
-  constexpr qreal const CHART_SIZE{ 400. };
-
-  m_widget->resize({ CHART_SIZE, CHART_SIZE });
-
-  updateCurrentValue();
-}
-
-void ScaleInt::synchronizeSeriesFromElement()
-{
-  assert(m_element);
 
   m_series->clear();
 
