@@ -63,6 +63,8 @@ class ScaleInt final : public Element {
   Series &series() { return m_series; }
   Series const &series() const { return m_series; }
 
+  void clearSeries();
+
   vec2 value() const { return m_currentValue; }
 
  private:

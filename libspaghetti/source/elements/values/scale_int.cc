@@ -129,4 +129,11 @@ void ScaleInt::setSeriesCount(size_t const a_seriesCount)
   m_series.resize(a_seriesCount);
 }
 
+void ScaleInt::clearSeries()
+{
+  m_series.clear();
+  m_series.push_back({ m_xRange.x, m_yRange.x });
+  m_series.push_back({ m_xRange.y, m_yRange.y });
+}
+
 } // namespace spaghetti::elements::values
