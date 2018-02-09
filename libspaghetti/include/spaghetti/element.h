@@ -206,6 +206,19 @@ class SPAGHETTI_API Element {
   uint8_t m_defaultNewOutputFlags{};
 };
 
+template<typename T>
+inline void to_json(Element::Json &a_json, Element::Vec2<T> const &a_value)
+{
+  a_json = Element::Json{ a_value.x, a_value.y };
+}
+
+template<typename T>
+inline void from_json(Element::Json const &a_json, Element::Vec2<T> &a_value)
+{
+  a_value.x = a_json[0].get<T>();
+  a_value.y = a_json[1].get<T>();
+}
+
 } // namespace spaghetti
 
 #endif // SPAGHETTI_ELEMENT_H
