@@ -14,6 +14,7 @@ matrix:
           packages:
             - qt5-default
             - g++-7
+            - libqt5charts5-dev
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
