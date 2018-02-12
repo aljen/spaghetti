@@ -39,10 +39,6 @@ class MemoryResetSet final : public Element {
   string::hash_t hash() const noexcept override { return HASH; }
 
   void calculate() override;
-
- private:
-  bool m_lastSet{};
-  bool m_lastReset{};
 };
 
 } // namespace spaghetti::elements::logic

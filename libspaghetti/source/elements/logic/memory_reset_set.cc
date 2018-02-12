@@ -47,9 +47,6 @@ void MemoryResetSet::calculate()
     m_outputs[0].value = false;
   else if (SET)
     m_outputs[0].value = true;
-
-  m_lastSet = SET;
-  m_lastReset = RESET;
 }
 
 } // namespace spaghetti::elements::logic
