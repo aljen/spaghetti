@@ -94,6 +94,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/math/multiply.h
   source/elements/math/multiply_if.cc
   source/elements/math/multiply_if.h
+  source/elements/math/sign.cc
+  source/elements/math/sign.h
   source/elements/math/sin.cc
   source/elements/math/sin.h
   source/elements/math/subtract.cc

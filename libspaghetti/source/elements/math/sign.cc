@@ -20,23 +20,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
-
-#include "elements/math/abs.h"
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
-#include "elements/math/bcd.h"
-#include "elements/math/cos.h"
-#include "elements/math/divide.h"
-#include "elements/math/divide_if.h"
-#include "elements/math/lerp.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
 #include "elements/math/sign.h"
-#include "elements/math/sin.h"
-#include "elements/math/subtract.h"
-#include "elements/math/subtract_if.h"
 
-#endif // ELEMENTS_MATH_ALL_H
+namespace spaghetti::elements::math {
+
+Sign::Sign()
+  : Element{}
+{
+  setMinInputs(1);
+  setMaxInputs(1);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+
+  addInput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat);
+
+  addOutput(ValueType::eFloat, "Sign", IOSocket::eCanHoldFloat);
+}
+
+void Sign::calculate()
+{
+  float const VALUE{ std::get<float>(m_inputs[0].value) };
+
+  m_outputs[0].value = VALUE > 0.f ? 1.f : VALUE < 0.f ? -1.f : 0.f;
+}
+
+} // namespace spaghetti::elements::math

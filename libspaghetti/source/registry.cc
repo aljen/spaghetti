@@ -169,6 +169,7 @@ void Registry::registerInternalElements()
   registerElement<math::Sin>("Sin (Rad)", ":/unknown.png");
 
   registerElement<math::Lerp>("Lerp (Float)", ":/unknown.png");
+  registerElement<math::Sign>("Sign (Float)", ":/unknown.png");
 
   registerElement<timers::DeltaTime>("Delta Time (ms)", ":/logic/clock.png");
   registerElement<timers::Clock, nodes::timers::Clock>("Clock (ms)", ":/logic/clock.png");
