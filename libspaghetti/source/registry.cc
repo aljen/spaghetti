@@ -183,7 +183,7 @@ void Registry::registerInternalElements()
   registerElement<timers::TimerOff>("T_OFF", ":/logic/clock.png");
   registerElement<timers::TimerPulse>("T_PULSE", ":/logic/clock.png");
 
-  registerElement<ui::BCDToSevenSegmentDisplay>("BCD -> 7SS", ":/unknown.png");
+  registerElement<ui::BCDToSevenSegmentDisplay>("BCD -> 7SD", ":/unknown.png");
 
   registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Info (Float)", ":/values/const_float.png");
   registerElement<ui::IntInfo, nodes::ui::IntInfo>("Info (Int)", ":/values/const_int.png");
