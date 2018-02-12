@@ -274,7 +274,8 @@ target_include_directories(Spaghetti SYSTEM PUBLIC
 ##  $<INSTALL_INTERFACE:vendor/spdlog/include>
   )
 target_link_libraries(Spaghetti
-  PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::Charts
+  PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
+  PRIVATE Qt5::Charts
   PRIVATE ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
 )
 if (SPAGHETTI_USE_OPENGL)
