@@ -172,6 +172,7 @@ void Registry::registerInternalElements()
   registerElement<timers::Clock, nodes::timers::Clock>("Clock (ms)", ":/logic/clock.png");
   registerElement<timers::TimerOn>("T_ON", ":/logic/clock.png");
   registerElement<timers::TimerOff>("T_OFF", ":/logic/clock.png");
+  registerElement<timers::TimerPulse>("T_PULSE", ":/logic/clock.png");
 
   registerElement<ui::BCDToSevenSegmentDisplay>("BCD -> 7SS", ":/unknown.png");
 

@@ -21,13 +21,37 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_TIMERS_ALL_H
-#define ELEMENTS_TIMERS_ALL_H
+#ifndef ELEMENTS_TIMERS_T_PULSE_H
+#define ELEMENTS_TIMERS_T_PULSE_H
 
-#include "elements/timers/clock.h"
-#include "elements/timers/delta_time.h"
-#include "elements/timers/t_off.h"
-#include "elements/timers/t_on.h"
-#include "elements/timers/t_pulse.h"
+#include <chrono>
 
-#endif // ELEMENTS_TIMERS_ALL_H
+#include "spaghetti/element.h"
+
+namespace spaghetti::elements::timers {
+
+class TimerPulse final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "timers/t_pulse" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  TimerPulse();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  void update(duration_t const &a_delta) override;
+  void calculate() override;
+
+ private:
+  enum class State { eWaitForTrigger, eRun, eDone };
+
+  duration_t m_presetTime{};
+  duration_t m_elapsedTime{};
+  State m_state{};
+  bool m_lastInput{};
+};
+
+} // namespace spaghetti::elements::timers
+
+#endif // ELEMENTS_TIMERS_T_PULSE_H

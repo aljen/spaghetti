@@ -108,6 +108,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/timers/t_off.h
   source/elements/timers/t_on.cc
   source/elements/timers/t_on.h
+  source/elements/timers/t_pulse.cc
+  source/elements/timers/t_pulse.h
 
   source/elements/ui/all.h
   source/elements/ui/bcd_to_seven_segment_display.cc
