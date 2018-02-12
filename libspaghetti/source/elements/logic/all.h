@@ -25,7 +25,6 @@
 #define ELEMENTS_LOGIC_ALL_H
 
 #include "elements/logic/blinker.h"
-#include "elements/logic/clock.h"
 #include "elements/logic/demultiplexer_int.h"
 #include "elements/logic/if_equal.h"
 #include "elements/logic/if_greater.h"

@@ -20,45 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/logic/clock.h"
+#pragma once
+#ifndef ELEMENTS_TIMERS_ALL_H
+#define ELEMENTS_TIMERS_ALL_H
 
-namespace spaghetti::elements::logic {
+#include "elements/timers/clock.h"
 
-Clock::Clock()
-  : Element{}
-{
-  setMinInputs(0);
-  setMaxInputs(0);
-  setMinOutputs(1);
-  setMaxOutputs(1);
-
-  addOutput(ValueType::eBool, "State", IOSocket::eCanHoldBool);
-}
-
-void Clock::serialize(Json &a_json)
-{
-  Element::serialize(a_json);
-
-  auto &properties = a_json["properties"];
-  properties["duration"] = m_duration.count();
-}
-
-void Clock::deserialize(const Json &a_json)
-{
-  Element::deserialize(a_json);
-
-  auto const &PROPERTIES = a_json["properties"];
-  m_duration = duration_t{ PROPERTIES["duration"].get<double>() };
-}
-
-void Clock::update(duration_t const &a_delta)
-{
-  m_time += a_delta;
-  if (m_time >= m_duration) {
-    bool const VALUE = !std::get<bool>(m_outputs[0].value);
-    m_outputs[0].value = VALUE;
-    reset();
-  }
-}
-
-} // namespace spaghetti::elements::logic
+#endif // ELEMENTS_TIMERS_ALL_H

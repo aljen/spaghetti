@@ -20,41 +20,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/logic/clock.h"
-#include "elements/timers/clock.h"
+#pragma once
+#ifndef ELEMENTS_TIMERS_CLOCK_H
+#define ELEMENTS_TIMERS_CLOCK_H
 
-#include <QSpinBox>
-#include <QTableWidget>
+#include <chrono>
 
-namespace spaghetti::nodes::timers {
+#include "spaghetti/element.h"
 
-void Clock::showProperties()
-{
-  showCommonProperties();
-  showIOProperties(IOSocketsType::eOutputs);
+namespace spaghetti::elements::timers {
 
-  propertiesInsertTitle("Clock");
+class Clock final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "timers/clock" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
-  int currentIndex = m_properties->rowCount();
-  m_properties->insertRow(currentIndex);
+  Clock();
 
-  QTableWidgetItem *item{};
-  item = new QTableWidgetItem{ "Rate" };
-  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-  m_properties->setItem(currentIndex, 0, item);
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
 
-  auto const clock{ static_cast<elements::timers::Clock *const>(m_element) };
+  void serialize(Json &a_json) override;
+  void deserialize(Json const &a_json) override;
 
-  QSpinBox *rateValue = new QSpinBox{};
-  rateValue->setRange(10, 10000);
-  rateValue->setValue(static_cast<int>(clock->duration().count()));
-  rateValue->setSuffix("ms");
-  m_properties->setCellWidget(currentIndex, 1, rateValue);
+  void reset() override { m_time = duration_t{ 0.0 }; }
+  void update(duration_t const &a_delta) override;
 
-  QObject::connect(rateValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
-    auto const clockElement{ static_cast<elements::timers::Clock *const>(m_element) };
-    clockElement->setDuration(std::chrono::milliseconds(a_value));
-  });
-}
+  void setDuration(duration_t a_duration) { m_duration = a_duration; }
 
-} // namespace spaghetti::nodes::timers
+  duration_t duration() const { return m_duration; }
+
+ private:
+  duration_t m_time{};
+  duration_t m_duration{ 500 };
+};
+
+} // namespace spaghetti::elements::timers
+
+#endif // ELEMENTS_TIMERS_CLOCK_H

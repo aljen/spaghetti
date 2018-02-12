@@ -151,7 +151,6 @@ void Registry::registerInternalElements()
   registerElement<logic::DemultiplexerInt>("Demultiplexer (Int)", ":/unknown.png");
 
   registerElement<logic::Blinker, nodes::logic::Blinker>("Blinker (Bool)", ":/unknown.png");
-  registerElement<logic::Clock, nodes::logic::Clock>("Clock (ms)", ":/logic/clock.png");
   registerElement<logic::Switch>("Switch (Int)", ":/logic/switch.png");
 
   registerElement<math::Abs>("Abs (Float)", ":/unknown.png");
@@ -168,6 +167,8 @@ void Registry::registerInternalElements()
 
   registerElement<math::Cos>("Cos (Rad)", ":/unknown.png");
   registerElement<math::Sin>("Sin (Rad)", ":/unknown.png");
+
+  registerElement<timers::Clock, nodes::timers::Clock>("Clock (ms)", ":/logic/clock.png");
 
   registerElement<ui::BCDToSevenSegmentDisplay>("BCD -> 7SS", ":/unknown.png");
 

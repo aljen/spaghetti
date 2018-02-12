@@ -56,8 +56,6 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/logic/all.h
   source/elements/logic/blinker.cc
   source/elements/logic/blinker.h
-  source/elements/logic/clock.cc
-  source/elements/logic/clock.h
   source/elements/logic/demultiplexer_int.cc
   source/elements/logic/demultiplexer_int.h
   source/elements/logic/if_equal.cc
@@ -100,6 +98,10 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/math/subtract.h
   source/elements/math/subtract_if.cc
   source/elements/math/subtract_if.h
+
+  source/elements/timers/all.h
+  source/elements/timers/clock.cc
+  source/elements/timers/clock.h
 
   source/elements/ui/all.h
   source/elements/ui/bcd_to_seven_segment_display.cc
