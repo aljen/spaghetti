@@ -68,6 +68,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/logic/if_lower.h
   source/elements/logic/if_lower_equal.cc
   source/elements/logic/if_lower_equal.h
+  source/elements/logic/memory_reset_set.cc
+  source/elements/logic/memory_reset_set.h
   source/elements/logic/multiplexer_int.cc
   source/elements/logic/multiplexer_int.h
   source/elements/logic/switch.cc
