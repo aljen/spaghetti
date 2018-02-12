@@ -88,6 +88,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/math/divide.h
   source/elements/math/divide_if.cc
   source/elements/math/divide_if.h
+  source/elements/math/lerp.cc
+  source/elements/math/lerp.h
   source/elements/math/multiply.cc
   source/elements/math/multiply.h
   source/elements/math/multiply_if.cc
