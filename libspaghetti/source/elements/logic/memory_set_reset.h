@@ -21,21 +21,30 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
+#ifndef ELEMENTS_LOGIC_MEMORY_SET_RESET_H
+#define ELEMENTS_LOGIC_MEMORY_SET_RESET_H
 
-#include "elements/logic/blinker.h"
-#include "elements/logic/demultiplexer_int.h"
-#include "elements/logic/if_equal.h"
-#include "elements/logic/if_greater.h"
-#include "elements/logic/if_greater_equal.h"
-#include "elements/logic/if_lower.h"
-#include "elements/logic/if_lower_equal.h"
-#include "elements/logic/memory_reset_set.h"
-#include "elements/logic/memory_set_reset.h"
-#include "elements/logic/multiplexer_int.h"
-#include "elements/logic/switch.h"
-#include "elements/logic/trigger_falling.h"
-#include "elements/logic/trigger_rising.h"
+#include "spaghetti/element.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace spaghetti::elements::logic {
+
+class MemorySetReset final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "logic/memory_set_reset" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  MemorySetReset();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  void calculate() override;
+
+ private:
+  bool m_lastSet{};
+  bool m_lastReset{};
+};
+
+} // namespace spaghetti::elements::logic
+
+#endif // ELEMENTS_LOGIC_MEMORY_SET_RESET_H
