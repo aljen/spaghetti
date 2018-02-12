@@ -153,6 +153,8 @@ void Registry::registerInternalElements()
   registerElement<logic::Blinker, nodes::logic::Blinker>("Blinker (Bool)", ":/unknown.png");
   registerElement<logic::Switch>("Switch (Int)", ":/logic/switch.png");
 
+  registerElement<logic::TriggerRising>("Trigger Rising (Bool)", ":/unknown.png");
+
   registerElement<math::Abs>("Abs (Float)", ":/unknown.png");
   registerElement<math::BCD>("BCD", ":/unknown.png");
 

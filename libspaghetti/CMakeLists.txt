@@ -72,6 +72,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/logic/multiplexer_int.h
   source/elements/logic/switch.cc
   source/elements/logic/switch.h
+  source/elements/logic/trigger_rising.cc
+  source/elements/logic/trigger_rising.h
 
   source/elements/math/abs.cc
   source/elements/math/abs.h
