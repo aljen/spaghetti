@@ -171,6 +171,7 @@ void Registry::registerInternalElements()
   registerElement<timers::DeltaTime>("Delta Time (ms)", ":/logic/clock.png");
   registerElement<timers::Clock, nodes::timers::Clock>("Clock (ms)", ":/logic/clock.png");
   registerElement<timers::TimerOn>("T_ON", ":/logic/clock.png");
+  registerElement<timers::TimerOff>("T_OFF", ":/logic/clock.png");
 
   registerElement<ui::BCDToSevenSegmentDisplay>("BCD -> 7SS", ":/unknown.png");
 
