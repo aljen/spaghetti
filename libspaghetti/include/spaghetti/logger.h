@@ -76,7 +76,10 @@ SPAGHETTI_API Loggers get();
 inline void init_from_plugin()
 {
   auto loggers = get();
-  for (auto &&logger : loggers) spdlog::register_logger(logger);
+  try {
+    for (auto &&logger : loggers) spdlog::register_logger(logger);
+  } catch (spdlog::spdlog_ex &) {
+  }
 }
 
 } // namespace spaghetti::log
