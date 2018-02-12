@@ -20,11 +20,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_TIMERS_ALL_H
-#define ELEMENTS_TIMERS_ALL_H
-
-#include "elements/timers/clock.h"
 #include "elements/timers/delta_time.h"
 
-#endif // ELEMENTS_TIMERS_ALL_H
+namespace spaghetti::elements::timers {
+
+DeltaTime::DeltaTime()
+  : Element{}
+{
+  setMinInputs(0);
+  setMaxInputs(0);
+  setMinOutputs(2);
+  setMaxOutputs(2);
+
+  addOutput(ValueType::eInt, "Delta [ms]", IOSocket::eCanHoldInt);
+  addOutput(ValueType::eFloat, "Delta [s]", IOSocket::eCanHoldFloat);
+}
+
+void DeltaTime::update(duration_t const &a_delta)
+{
+  m_delta = a_delta;
+  m_outputs[0].value = static_cast<int32_t>(std::chrono::duration_cast<std::chrono::milliseconds>(m_delta).count());
+  m_outputs[1].value = static_cast<float>(m_delta.count()) / 1000.f;
+}
+
+} // namespace spaghetti::elements::timers

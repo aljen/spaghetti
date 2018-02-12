@@ -168,6 +168,7 @@ void Registry::registerInternalElements()
   registerElement<math::Cos>("Cos (Rad)", ":/unknown.png");
   registerElement<math::Sin>("Sin (Rad)", ":/unknown.png");
 
+  registerElement<timers::DeltaTime>("Delta Time (ms)", ":/logic/clock.png");
   registerElement<timers::Clock, nodes::timers::Clock>("Clock (ms)", ":/logic/clock.png");
 
   registerElement<ui::BCDToSevenSegmentDisplay>("BCD -> 7SS", ":/unknown.png");

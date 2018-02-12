@@ -21,10 +21,31 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_TIMERS_ALL_H
-#define ELEMENTS_TIMERS_ALL_H
+#ifndef ELEMENTS_TIMERS_DELTA_TIME_H
+#define ELEMENTS_TIMERS_DELTA_TIME_H
 
-#include "elements/timers/clock.h"
-#include "elements/timers/delta_time.h"
+#include <chrono>
 
-#endif // ELEMENTS_TIMERS_ALL_H
+#include "spaghetti/element.h"
+
+namespace spaghetti::elements::timers {
+
+class DeltaTime final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "timers/delta_time" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  DeltaTime();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  void update(duration_t const &a_delta) override;
+
+ private:
+  duration_t m_delta{};
+};
+
+} // namespace spaghetti::elements::timers
+
+#endif // ELEMENTS_TIMERS_DELTA_TIME_H
