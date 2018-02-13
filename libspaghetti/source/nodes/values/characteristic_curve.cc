@@ -20,9 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "nodes/values/characteristic_curve_int_int.h"
+#include "nodes/values/characteristic_curve.h"
 
 #include <QDebug>
+#include <QDoubleSpinBox>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QTableWidget>
@@ -30,21 +31,25 @@
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
 
-#include "elements/values/characteristic_curve_int_int.h"
+#include "elements/values/characteristic_curve.h"
 #include "nodes/values/characteristic_curve/point.h"
+#include "nodes/values/characteristic_curve/editor_window.h"
 #include "spaghetti/package.h"
 
 using namespace QtCharts;
 
+using ElementType = spaghetti::elements::values::CharacteristicCurve;
+
 namespace spaghetti::nodes::values {
 
-CharacteristicCurveIntInt::CharacteristicCurveIntInt()
+CharacteristicCurve::CharacteristicCurve()
   : m_widget{ new QChart }
   , m_series{ new QLineSeries }
   , m_xAxis{ new QValueAxis }
   , m_yAxis{ new QValueAxis }
   , m_lastPoint{ -1.0, -1.0 }
-  , m_current{ new CharacteristicCurvePoint{ m_widget } }
+  , m_current{ new characteristic_curve::Point{ m_widget } }
+  , m_editor{ new characteristic_curve::EditorWindow{} }
 {
   setCentralWidget(m_widget);
 
@@ -62,10 +67,10 @@ CharacteristicCurveIntInt::CharacteristicCurveIntInt()
   m_xAxis->setLabelsFont(labelsFont);
   m_yAxis->setLabelsFont(labelsFont);
 
-  m_current->setType(CharacteristicCurvePoint::Type::eCurrent);
+  m_current->setType(characteristic_curve::Point::Type::eCurrent);
 }
 
-void CharacteristicCurveIntInt::refreshCentralWidget()
+void CharacteristicCurve::refreshCentralWidget()
 {
   if (!m_element) return;
 
@@ -73,7 +78,7 @@ void CharacteristicCurveIntInt::refreshCentralWidget()
   calculateBoundingRect();
 }
 
-void CharacteristicCurveIntInt::showProperties()
+void CharacteristicCurve::showProperties()
 {
   showCommonProperties();
   showIOProperties(IOSocketsType::eInputs);
@@ -84,26 +89,27 @@ void CharacteristicCurveIntInt::showProperties()
   int currentIndex = m_properties->rowCount();
   m_properties->insertRow(currentIndex);
 
-  auto const scaler = static_cast<elements::values::CharacteristicCurveIntInt *const>(m_element);
+  auto const scaler = static_cast<ElementType *const>(m_element);
 
   QTableWidgetItem *item{};
   item = new QTableWidgetItem{ "Min" };
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  auto const xMinValue = new QSpinBox{};
-  xMinValue->setRange(-10000, 10000);
-  xMinValue->setValue(scaler->xMin());
+  auto const xMinValue = new QDoubleSpinBox{};
+  xMinValue->setRange(-10000.0, 10000.0);
+  xMinValue->setValue(static_cast<qreal>(scaler->xMin()));
   m_properties->setCellWidget(currentIndex, 1, xMinValue);
 
-  QObject::connect(xMinValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
-    auto const scalerElement = static_cast<elements::values::CharacteristicCurveIntInt *const>(m_element);
-    auto const package = scalerElement->package();
-    package->pauseDispatchThread();
-    scalerElement->setXMin(a_value);
-    synchronizeFromElement();
-    package->resumeDispatchThread();
-  });
+  QObject::connect(xMinValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
+                   [this](qreal a_value) {
+                     auto const scalerElement = static_cast<ElementType *const>(m_element);
+                     auto const package = scalerElement->package();
+                     package->pauseDispatchThread();
+                     scalerElement->setXMin(static_cast<float>(a_value));
+                     synchronizeFromElement();
+                     package->resumeDispatchThread();
+                   });
 
   currentIndex = m_properties->rowCount();
   m_properties->insertRow(currentIndex);
@@ -112,19 +118,20 @@ void CharacteristicCurveIntInt::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  auto const xMaxValue = new QSpinBox{};
-  xMaxValue->setRange(-10000, 10000);
-  xMaxValue->setValue(scaler->xMax());
+  auto const xMaxValue = new QDoubleSpinBox{};
+  xMaxValue->setRange(-10000.0, 10000.0);
+  xMaxValue->setValue(static_cast<qreal>(scaler->xMax()));
   m_properties->setCellWidget(currentIndex, 1, xMaxValue);
 
-  QObject::connect(xMaxValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
-    auto const scalerElement{ static_cast<elements::values::CharacteristicCurveIntInt *const>(m_element) };
-    auto const package = scalerElement->package();
-    package->pauseDispatchThread();
-    scalerElement->setXMax(a_value);
-    synchronizeFromElement();
-    package->resumeDispatchThread();
-  });
+  QObject::connect(xMaxValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
+                   [this](qreal a_value) {
+                     auto const scalerElement{ static_cast<ElementType *const>(m_element) };
+                     auto const package = scalerElement->package();
+                     package->pauseDispatchThread();
+                     scalerElement->setXMax(static_cast<float>(a_value));
+                     synchronizeFromElement();
+                     package->resumeDispatchThread();
+                   });
 
   propertiesInsertTitle("Y range");
 
@@ -135,19 +142,20 @@ void CharacteristicCurveIntInt::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  auto const yMinValue = new QSpinBox{};
-  yMinValue->setRange(-10000, 10000);
+  auto const yMinValue = new QDoubleSpinBox{};
+  yMinValue->setRange(-10000.0, 10000.0);
   yMinValue->setValue(scaler->yMin());
   m_properties->setCellWidget(currentIndex, 1, yMinValue);
 
-  QObject::connect(yMinValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
-    auto const scalerElement{ static_cast<elements::values::CharacteristicCurveIntInt *const>(m_element) };
-    auto const package = scalerElement->package();
-    package->pauseDispatchThread();
-    scalerElement->setYMin(a_value);
-    synchronizeFromElement();
-    package->resumeDispatchThread();
-  });
+  QObject::connect(yMinValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
+                   [this](qreal a_value) {
+                     auto const scalerElement{ static_cast<ElementType *const>(m_element) };
+                     auto const package = scalerElement->package();
+                     package->pauseDispatchThread();
+                     scalerElement->setYMin(static_cast<float>(a_value));
+                     synchronizeFromElement();
+                     package->resumeDispatchThread();
+                   });
 
   currentIndex = m_properties->rowCount();
   m_properties->insertRow(currentIndex);
@@ -156,19 +164,20 @@ void CharacteristicCurveIntInt::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  auto const yMaxValue = new QSpinBox{};
-  yMaxValue->setRange(-10000, 10000);
-  yMaxValue->setValue(scaler->yMax());
+  auto const yMaxValue = new QDoubleSpinBox{};
+  yMaxValue->setRange(-10000.0, 10000.0);
+  yMaxValue->setValue(static_cast<qreal>(scaler->yMax()));
   m_properties->setCellWidget(currentIndex, 1, yMaxValue);
 
-  QObject::connect(yMaxValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
-    auto const scalerElement{ static_cast<elements::values::CharacteristicCurveIntInt *const>(m_element) };
-    auto const package = scalerElement->package();
-    package->pauseDispatchThread();
-    scalerElement->setYMax(a_value);
-    synchronizeFromElement();
-    package->resumeDispatchThread();
-  });
+  QObject::connect(yMaxValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
+                   [this](qreal a_value) {
+                     auto const scalerElement{ static_cast<ElementType *const>(m_element) };
+                     auto const package = scalerElement->package();
+                     package->pauseDispatchThread();
+                     scalerElement->setYMax(static_cast<float>(a_value));
+                     synchronizeFromElement();
+                     package->resumeDispatchThread();
+                   });
 
   propertiesInsertTitle("Series");
 
@@ -185,7 +194,7 @@ void CharacteristicCurveIntInt::showProperties()
   m_properties->setCellWidget(currentIndex, 1, countValue);
 
   QObject::connect(countValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
-    auto const scalerElement{ static_cast<elements::values::CharacteristicCurveIntInt *const>(m_element) };
+    auto const scalerElement{ static_cast<ElementType *const>(m_element) };
     auto const package = scalerElement->package();
     package->pauseDispatchThread();
     scalerElement->setSeriesCount(static_cast<size_t>(a_value));
@@ -200,10 +209,10 @@ void CharacteristicCurveIntInt::showProperties()
   m_properties->setSpan(currentIndex, 0, 1, 2);
   m_properties->setCellWidget(currentIndex, 0, editSeries);
 
-  QObject::connect(editSeries, &QPushButton::clicked, [this] { qDebug() << "EDIT SERIES"; });
+  QObject::connect(editSeries, &QPushButton::clicked, [this] { open(); });
 }
 
-void CharacteristicCurveIntInt::elementSet()
+void CharacteristicCurve::elementSet()
 {
   constexpr qreal const CHART_SIZE{ 400. };
   m_widget->resize({ CHART_SIZE, CHART_SIZE });
@@ -211,16 +220,26 @@ void CharacteristicCurveIntInt::elementSet()
   synchronizeFromElement();
 }
 
-void CharacteristicCurveIntInt::synchronizeFromElement()
+bool CharacteristicCurve::open()
+{
+  qDebug() << "EDIT SERIES";
+  if (!m_editor->isVisible())
+    m_editor->show();
+  return true;
+}
+
+void CharacteristicCurve::synchronizeFromElement()
 {
   assert(m_element);
 
-  auto const element = static_cast<elements::values::CharacteristicCurveIntInt *>(m_element);
+  auto const element = static_cast<ElementType *>(m_element);
 
   m_xAxis->setMin(static_cast<qreal>(element->xMin()));
   m_xAxis->setMax(static_cast<qreal>(element->xMax()));
+  m_xAxis->setTitleText(inputs()[0]->name());
   m_yAxis->setMin(static_cast<qreal>(element->yMin()));
   m_yAxis->setMax(static_cast<qreal>(element->yMax()));
+  m_yAxis->setTitleText(outputs()[0]->name());
 
   m_series->clear();
 
@@ -230,9 +249,9 @@ void CharacteristicCurveIntInt::synchronizeFromElement()
   updateCurrentValue(true);
 }
 
-void CharacteristicCurveIntInt::updateCurrentValue(bool const a_force)
+void CharacteristicCurve::updateCurrentValue(bool const a_force)
 {
-  auto const element = static_cast<elements::values::CharacteristicCurveIntInt *>(m_element);
+  auto const element = static_cast<ElementType *>(m_element);
   auto const POINT = element->value();
   QPointF const position{ static_cast<qreal>(POINT.x), static_cast<qreal>(POINT.y) };
 
@@ -244,4 +263,3 @@ void CharacteristicCurveIntInt::updateCurrentValue(bool const a_force)
 }
 
 } // namespace spaghetti::nodes::values
-

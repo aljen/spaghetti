@@ -24,7 +24,7 @@
 #ifndef NODES_VALUES_ALL_H
 #define NODES_VALUES_ALL_H
 
-#include "nodes/values/characteristic_curve_int_int.h"
+#include "nodes/values/characteristic_curve.h"
 #include "nodes/values/const_bool.h"
 #include "nodes/values/const_float.h"
 #include "nodes/values/const_int.h"

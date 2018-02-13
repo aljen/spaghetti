@@ -21,53 +21,77 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H
-#define NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H
+#ifndef NODES_VALUES_CHARACTERISTIC_CURVE_SERIES_H
+#define NODES_VALUES_CHARACTERISTIC_CURVE_SERIES_H
 
-#include <QGraphicsItem>
+#include <QList>
 
 namespace QtCharts {
-class QChart;
 class QLineSeries;
-} // namespace QtCharts
+}
 
 namespace spaghetti::nodes::values::characteristic_curve {
 
-class EditorWidget;
+class Axis;
+class Point;
 
-constexpr qreal const POINT_RADIUS = 6.0;
-
-class Point : public QGraphicsItem {
+class Series {
  public:
-  enum class Type { eNormal, eCurrent, eToAdd, eToRemove };
+  enum class GeneratorType {
+    eQuadraticEasyIn,
+    eQuadraticEasyOut,
+    eQuadraticEasyInOut,
+    eCubicEasyIn,
+    eCubicEasyOut,
+    eCubicEasyInOut,
+    eQuarticEasyIn,
+    eQuarticEasyOut,
+    eQuarticEasyInOut,
+    eQuinticEasyIn,
+    eQuinticEasyOut,
+    eQuinticEasyInOut,
+    eSinusoidalEasyIn,
+    eSinusoidalEasyOut,
+    eSinusoidalEasyInOut,
+    eExponentialEasyIn,
+    eExponentialEasyOut,
+    eExponentialEasyInOut,
+    eCircularEasyIn,
+    eCircularEasyOut,
+    eCircularEasyInOut,
+    eRandom,
+    eCount
+  };
 
-  explicit Point(QtCharts::QChart *const a_chart);
-  explicit Point(EditorWidget *const a_editor);
+  Series();
+  ~Series();
 
-  QRectF boundingRect() const override { return m_boundingRect; }
-  void paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget) override;
-  QVariant itemChange(GraphicsItemChange a_change, QVariant const &a_value) override;
-  void hoverEnterEvent(QGraphicsSceneHoverEvent *a_event) override;
-  void hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event) override;
+  void setName(QString const a_name);
 
-  void setType(Type const a_type);
+  void setInput(qreal const a_input);
+  void setRange(qreal const a_min, qreal const a_max);
 
-  int index() const { return m_index; }
-  void setIndex(int const a_index);
+  qreal output() const { return m_output; }
+
+  void generate(GeneratorType const a_type, int const a_steps, qreal const a_start, qreal const a_stop);
+
+  void attachAxis(Axis *const a_axis);
+  void detachAxis();
+
+  QtCharts::QLineSeries *series() const { return m_series; }
 
  private:
-  explicit Point(EditorWidget *const a_editor, QtCharts::QChart *const a_chart);
-
- private:
-  QColor m_color{};
-  EditorWidget *const m_editor{};
-  QtCharts::QChart *const m_chart{};
+  Axis *m_axis{};
   QtCharts::QLineSeries *const m_series{};
-  QRectF m_boundingRect{ -POINT_RADIUS, -POINT_RADIUS, POINT_RADIUS * 2.0, POINT_RADIUS * 2.0 };
-  Type m_type{};
-  int m_index{ -1 };
+  QList<Point *> m_points{};
+  Point *const m_currentValue{};
+  qreal m_input{};
+  qreal m_output{};
+
+  qreal m_min{};
+  qreal m_max{};
 };
 
 } // namespace spaghetti::nodes::values::characteristic_curve
 
-#endif // NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H
+#endif // NODES_VALUES_CHARACTERISTIC_CURVE_SERIES_H

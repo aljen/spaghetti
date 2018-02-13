@@ -192,10 +192,23 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/ui/seven_segment_display.h
 
   source/nodes/values/all.h
+  source/nodes/values/characteristic_curve/axis.cc
+  source/nodes/values/characteristic_curve/axis.h
+  source/nodes/values/characteristic_curve/editor_widget.cc
+  source/nodes/values/characteristic_curve/editor_widget.h
+  source/nodes/values/characteristic_curve/editor_window.cc
+  source/nodes/values/characteristic_curve/editor_window.h
+  source/nodes/values/characteristic_curve/editor_window.ui
+  source/nodes/values/characteristic_curve/generators.cc
+  source/nodes/values/characteristic_curve/generators.h
+  source/nodes/values/characteristic_curve/line.cc
+  source/nodes/values/characteristic_curve/line.h
   source/nodes/values/characteristic_curve/point.cc
   source/nodes/values/characteristic_curve/point.h
-  source/nodes/values/characteristic_curve_int_int.cc
-  source/nodes/values/characteristic_curve_int_int.h
+  source/nodes/values/characteristic_curve/series.cc
+  source/nodes/values/characteristic_curve/series.h
+  source/nodes/values/characteristic_curve.cc
+  source/nodes/values/characteristic_curve.h
   source/nodes/values/const_bool.cc
   source/nodes/values/const_bool.h
   source/nodes/values/const_float.cc

@@ -211,8 +211,8 @@ void Registry::registerInternalElements()
   registerElement<values::ClampFloat>("Clamp value (Float)", ":/unknown.png");
   registerElement<values::ClampInt>("Clamp value (Int)", ":/unknown.png");
 
-  registerElement<values::CharacteristicCurveIntInt, nodes::values::CharacteristicCurveIntInt>(
-      "Characteristic Curve (Int -> Int)", ":/unknown.png");
+  registerElement<values::CharacteristicCurve, nodes::values::CharacteristicCurve>("Characteristic Curve",
+                                                                                   ":/unknown.png");
 }
 
 void Registry::loadPlugins()

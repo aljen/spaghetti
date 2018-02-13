@@ -21,53 +21,30 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H
-#define NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H
+#ifndef NODES_VALUES_CHARACTERISTIC_CURVE_LINE_H
+#define NODES_VALUES_CHARACTERISTIC_CURVE_LINE_H
 
 #include <QGraphicsItem>
 
-namespace QtCharts {
-class QChart;
-class QLineSeries;
-} // namespace QtCharts
-
 namespace spaghetti::nodes::values::characteristic_curve {
 
-class EditorWidget;
+class LineEditor;
 
-constexpr qreal const POINT_RADIUS = 6.0;
-
-class Point : public QGraphicsItem {
+class Line : public QGraphicsItem {
  public:
-  enum class Type { eNormal, eCurrent, eToAdd, eToRemove };
-
-  explicit Point(QtCharts::QChart *const a_chart);
-  explicit Point(EditorWidget *const a_editor);
+  explicit Line(QColor const a_color, QGraphicsItem *const a_parent);
 
   QRectF boundingRect() const override { return m_boundingRect; }
   void paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget) override;
-  QVariant itemChange(GraphicsItemChange a_change, QVariant const &a_value) override;
-  void hoverEnterEvent(QGraphicsSceneHoverEvent *a_event) override;
-  void hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event) override;
 
-  void setType(Type const a_type);
-
-  int index() const { return m_index; }
-  void setIndex(int const a_index);
-
- private:
-  explicit Point(EditorWidget *const a_editor, QtCharts::QChart *const a_chart);
+  void setLength(qreal a_length);
 
  private:
   QColor m_color{};
-  EditorWidget *const m_editor{};
-  QtCharts::QChart *const m_chart{};
-  QtCharts::QLineSeries *const m_series{};
-  QRectF m_boundingRect{ -POINT_RADIUS, -POINT_RADIUS, POINT_RADIUS * 2.0, POINT_RADIUS * 2.0 };
-  Type m_type{};
-  int m_index{ -1 };
+  QRectF m_boundingRect{};
+  qreal m_length{};
 };
 
 } // namespace spaghetti::nodes::values::characteristic_curve
 
-#endif // NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H
+#endif // NODES_VALUES_CHARACTERISTIC_CURVE_LINE_H

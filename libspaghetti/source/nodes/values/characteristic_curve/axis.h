@@ -21,53 +21,62 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H
-#define NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H
+#ifndef NODES_VALUES_CHARACTERISTIC_CURVE_AXIS_H
+#define NODES_VALUES_CHARACTERISTIC_CURVE_AXIS_H
 
-#include <QGraphicsItem>
+#include <QList>
+#include <QString>
+#include <QtGlobal>
 
 namespace QtCharts {
-class QChart;
-class QLineSeries;
-} // namespace QtCharts
+class QValueAxis;
+}
 
 namespace spaghetti::nodes::values::characteristic_curve {
 
-class EditorWidget;
+class Series;
 
-constexpr qreal const POINT_RADIUS = 6.0;
-
-class Point : public QGraphicsItem {
+class Axis {
  public:
-  enum class Type { eNormal, eCurrent, eToAdd, eToRemove };
+  enum class Type { eInt, eFloat };
 
-  explicit Point(QtCharts::QChart *const a_chart);
-  explicit Point(EditorWidget *const a_editor);
+  Axis();
+  ~Axis();
 
-  QRectF boundingRect() const override { return m_boundingRect; }
-  void paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget) override;
-  QVariant itemChange(GraphicsItemChange a_change, QVariant const &a_value) override;
-  void hoverEnterEvent(QGraphicsSceneHoverEvent *a_event) override;
-  void hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event) override;
+  QtCharts::QValueAxis *axis() const { return m_axis; }
+
+  void setName(QString a_name);
+  QString name() const { return m_name; }
 
   void setType(Type const a_type);
+  Type type() const { return m_type; }
 
-  int index() const { return m_index; }
-  void setIndex(int const a_index);
+  void setMajorTicks(int const a_majorTicks);
+  int majorTicks() const { return m_majorTicks; }
+
+  void setMinorTicks(int const a_minorTicks);
+  int minorTicks() const { return m_minorTicks; }
+
+  void setMinimum(qreal const a_min);
+  qreal minimum() const { return m_min; }
+
+  void setMaximum(qreal const a_max);
+  qreal maximum() const { return m_max; }
+
+  void attachSeries(Series *const a_series);
+  void detachSeries(Series *const a_series);
 
  private:
-  explicit Point(EditorWidget *const a_editor, QtCharts::QChart *const a_chart);
-
- private:
-  QColor m_color{};
-  EditorWidget *const m_editor{};
-  QtCharts::QChart *const m_chart{};
-  QtCharts::QLineSeries *const m_series{};
-  QRectF m_boundingRect{ -POINT_RADIUS, -POINT_RADIUS, POINT_RADIUS * 2.0, POINT_RADIUS * 2.0 };
+  QList<Series *> m_series{};
+  QtCharts::QValueAxis *m_axis{};
+  QString m_name{};
   Type m_type{};
-  int m_index{ -1 };
+  int m_majorTicks{};
+  int m_minorTicks{};
+  qreal m_min{};
+  qreal m_max{};
 };
 
 } // namespace spaghetti::nodes::values::characteristic_curve
 
-#endif // NODES_VALUES_CHARACTERISTIC_CURVE_POINT_H
+#endif // NODES_VALUES_CHARACTERISTIC_CURVE_AXIS_H

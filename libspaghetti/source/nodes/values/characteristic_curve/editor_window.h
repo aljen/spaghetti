@@ -21,48 +21,43 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_VALUES_CHARACTERISTIC_CURVE_H
-#define NODES_VALUES_CHARACTERISTIC_CURVE_H
+#ifndef NODES_VALUES_CHARACTERISTIC_CURVE_EDITOR_WINDOW_H
+#define NODES_VALUES_CHARACTERISTIC_CURVE_EDITOR_WINDOW_H
 
-#include "spaghetti/node.h"
+#include <QGraphicsItem>
+#include <QMainWindow>
 
 namespace QtCharts {
 class QChart;
 class QLineSeries;
-class QValueAxis;
 } // namespace QtCharts
 
-namespace spaghetti::nodes::values {
+namespace spaghetti::nodes::values::characteristic_curve {
 
-namespace characteristic_curve {
-class Point;
+namespace Ui {
 class EditorWindow;
-} // namespace characteristic_curve
+}
 
-class CharacteristicCurve : public Node {
+class EditorWindow : public QMainWindow {
+  Q_OBJECT
+
  public:
-  CharacteristicCurve();
+  explicit EditorWindow(QWidget *const a_parent = nullptr);
+  ~EditorWindow();
+
+  void showEvent(QShowEvent *a_event) override;
+  void resizeEvent(QResizeEvent *a_event) override;
+
+  void addAxis();
+  void removeAxis();
+
+  void addSeries();
+  void removeSeries();
 
  private:
-  void refreshCentralWidget() override;
-  void showProperties() override;
-  void elementSet() override;
-  bool open() override;
-
- private:
-  void synchronizeFromElement();
-  void updateCurrentValue(bool const a_force);
-
- private:
-  QtCharts::QChart *m_widget{};
-  QtCharts::QLineSeries *m_series{};
-  QtCharts::QValueAxis *m_xAxis{};
-  QtCharts::QValueAxis *m_yAxis{};
-  QPointF m_lastPoint{};
-  characteristic_curve::Point *m_current{};
-  characteristic_curve::EditorWindow *m_editor{};
+  Ui::EditorWindow *const m_ui{};
 };
 
-} // namespace spaghetti::nodes::values
+} // namespace spaghetti::nodes::values::characteristic_curve
 
-#endif // NODES_VALUES_CHARACTERISTIC_CURVE_H
+#endif // NODES_VALUES_CHARACTERISTIC_CURVE_EDITOR_WINDOW_H

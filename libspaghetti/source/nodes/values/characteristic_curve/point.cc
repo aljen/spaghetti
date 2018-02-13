@@ -1,16 +1,38 @@
+// MIT License
+//
+// Copyright (c) 2017-2018 Artur Wyszyński, aljen at hitomi dot pl
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 #include "nodes/values/characteristic_curve/point.h"
 
 #include <QtCharts/QChart>
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
 
-#include "nodes/values/scale_widget_editor.h"
+#include "nodes/values/characteristic_curve/editor_widget.h"
 
 using namespace QtCharts;
 
-namespace spaghetti::nodes::values {
+namespace spaghetti::nodes::values::characteristic_curve {
 
-CharacteristicCurvePoint::CharacteristicCurvePoint(ScaleWidgetEditor *const a_editor, QChart *const a_chart)
+Point::Point(EditorWidget *const a_editor, QChart *const a_chart)
   : QGraphicsItem{ a_chart }
   , m_editor{ a_editor }
   , m_chart{ a_chart }
@@ -21,17 +43,17 @@ CharacteristicCurvePoint::CharacteristicCurvePoint(ScaleWidgetEditor *const a_ed
   setZValue(100.0);
 }
 
-CharacteristicCurvePoint::CharacteristicCurvePoint(QChart *const a_chart)
-  : CharacteristicCurvePoint{ nullptr, a_chart }
+Point::Point(QChart *const a_chart)
+  : Point{ nullptr, a_chart }
 {
 }
 
-CharacteristicCurvePoint::CharacteristicCurvePoint(ScaleWidgetEditor *const a_editor)
-  : CharacteristicCurvePoint{ a_editor, a_editor->chart() }
+Point::Point(EditorWidget *const a_editor)
+  : Point{ a_editor, a_editor->chart() }
 {
 }
 
-void CharacteristicCurvePoint::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget)
+void Point::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget)
 {
   (void)a_option;
   (void)a_widget;
@@ -42,7 +64,7 @@ void CharacteristicCurvePoint::paint(QPainter *a_painter, QStyleOptionGraphicsIt
   a_painter->drawEllipse({ 0.0, 0.0 }, POINT_RADIUS, POINT_RADIUS);
 }
 
-QVariant CharacteristicCurvePoint::itemChange(GraphicsItemChange a_change, QVariant const &a_value)
+QVariant Point::itemChange(GraphicsItemChange a_change, QVariant const &a_value)
 {
   if (m_index >= 0) {
     switch (a_change) {
@@ -94,7 +116,7 @@ QVariant CharacteristicCurvePoint::itemChange(GraphicsItemChange a_change, QVari
   return QGraphicsItem::itemChange(a_change, a_value);
 }
 
-void CharacteristicCurvePoint::hoverEnterEvent(QGraphicsSceneHoverEvent *a_event)
+void Point::hoverEnterEvent(QGraphicsSceneHoverEvent *a_event)
 {
   (void)a_event;
 
@@ -109,7 +131,7 @@ void CharacteristicCurvePoint::hoverEnterEvent(QGraphicsSceneHoverEvent *a_event
   }
 }
 
-void CharacteristicCurvePoint::hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event)
+void Point::hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event)
 {
   (void)a_event;
 
@@ -120,7 +142,7 @@ void CharacteristicCurvePoint::hoverLeaveEvent(QGraphicsSceneHoverEvent *a_event
   }
 }
 
-void CharacteristicCurvePoint::setType(const CharacteristicCurvePoint::Type a_type)
+void Point::setType(Type const a_type)
 {
   m_type = a_type;
 
@@ -137,9 +159,9 @@ void CharacteristicCurvePoint::setType(const CharacteristicCurvePoint::Type a_ty
   update();
 }
 
-void CharacteristicCurvePoint::setIndex(int const a_index)
+void Point::setIndex(int const a_index)
 {
   m_index = a_index;
 }
 
-} // namespace spaghetti::nodes::values
+} // namespace spaghetti::nodes::values::characteristic_curve
