@@ -26,6 +26,7 @@
 #include <cmath>
 #include <iostream>
 
+#include <QApplication>
 #include <QComboBox>
 #include <QDebug>
 #include <QLineEdit>
@@ -159,7 +160,9 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *a_event)
 {
-  (m_mode == Mode::eIconified) ? expand() : iconify();
+  auto const MODIFIERS = QApplication::keyboardModifiers();
+
+  if (!((MODIFIERS & Qt::ControlModifier) && open())) (m_mode == Mode::eIconified) ? expand() : iconify();
 
   QGraphicsItem::mouseDoubleClickEvent(a_event);
 }
