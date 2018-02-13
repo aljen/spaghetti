@@ -55,14 +55,14 @@ class SPAGHETTI_API Element {
   using Json = nlohmann::json;
   using Value = std::variant<bool, int32_t, float>;
   enum class ValueType { eBool, eInt, eFloat };
-  template<typename A, typename B>
+  template<typename T>
   struct Vec2 {
-    A x{};
-    B y{};
+    T x{};
+    T y{};
   };
-  using vec2 = Vec2<int32_t, int32_t>;
-  using vec2f = Vec2<float, float>;
-  using vec2d = Vec2<double, double>;
+  using vec2 = Vec2<int32_t>;
+  using vec2f = Vec2<float>;
+  using vec2d = Vec2<double>;
 
   struct IOSocket {
     enum Flags {
@@ -207,17 +207,17 @@ class SPAGHETTI_API Element {
   uint8_t m_defaultNewOutputFlags{};
 };
 
-template<typename A, typename B>
-inline void to_json(Element::Json &a_json, Element::Vec2<A, B> const &a_value)
+template<typename T>
+inline void to_json(Element::Json &a_json, Element::Vec2<T> const &a_value)
 {
   a_json = Element::Json{ a_value.x, a_value.y };
 }
 
-template<typename A, typename B>
-inline void from_json(Element::Json const &a_json, Element::Vec2<A, B> &a_value)
+template<typename T>
+inline void from_json(Element::Json const &a_json, Element::Vec2<T> &a_value)
 {
-  a_value.x = a_json[0].get<A>();
-  a_value.y = a_json[1].get<B>();
+  a_value.x = a_json[0].get<T>();
+  a_value.y = a_json[1].get<T>();
 }
 
 } // namespace spaghetti
