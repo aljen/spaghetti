@@ -138,9 +138,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/ui/seven_segment_display.h
 
   source/elements/values/all.h
+  source/elements/values/characteristic_curve.cc
   source/elements/values/characteristic_curve.h
-  source/elements/values/characteristic_curve_int_int.cc
-  source/elements/values/characteristic_curve_int_int.h
   source/elements/values/clamp_float.cc
   source/elements/values/clamp_float.h
   source/elements/values/clamp_int.cc

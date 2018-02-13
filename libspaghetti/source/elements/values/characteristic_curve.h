@@ -29,119 +29,53 @@
 
 namespace spaghetti::elements::values {
 
-template<typename A, typename B>
 class CharacteristicCurve : public Element {
  public:
-  using Series = std::vector<Vec2<A, B>>;
+  using Series = std::vector<vec2f>;
 
-  void calculate() override
-  {
-    A const INPUT_VALUE{ std::get<A>(m_inputs[0].value) };
-    A const VALUE{ std::clamp(INPUT_VALUE, m_xRange.x, m_xRange.y) };
+  static constexpr char const *const TYPE{ "values/characteristic_curve" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
 
-    if (VALUE == m_lastValue) return;
+  CharacteristicCurve();
 
-    m_lastValue = VALUE;
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
 
-    Vec2<A, B> *previousPtr{ &m_series[0] };
-    Vec2<A, B> *currentPtr{};
+  void calculate() override;
 
-    size_t const SIZE = m_series.size();
-    for (size_t i = 0; i < SIZE; ++i) {
-      currentPtr = &m_series[i];
-      if (currentPtr->x < VALUE)
-        previousPtr = currentPtr;
-      else
-        break;
-    }
+  void serialize(Json &a_json) override;
+  void deserialize(Json const &a_json) override;
 
-    assert(previousPtr);
-    assert(currentPtr);
-    auto const PREVIOUS{ *previousPtr };
-    auto const CURRENT{ *currentPtr };
-
-    float value{};
-
-    if (VALUE == PREVIOUS.x)
-      value = static_cast<float>(PREVIOUS.y);
-    else if (VALUE == CURRENT.x)
-      value = static_cast<float>(CURRENT.y);
-    else {
-      float const PERCENT{ static_cast<float>(VALUE - PREVIOUS.x) / static_cast<float>(CURRENT.x - PREVIOUS.x) };
-      value = lerp(static_cast<float>(PREVIOUS.y), static_cast<float>(CURRENT.y), PERCENT);
-    }
-
-    m_currentValue.x = VALUE;
-    m_currentValue.y = static_cast<B>(value);
-
-    m_outputs[0].value = static_cast<B>(value);
-  }
-
-  void serialize(Json &a_json) override
-  {
-    Element::serialize(a_json);
-
-    auto &properties = a_json["properties"];
-
-    properties["series"] = m_series;
-    properties["x_range"] = m_xRange;
-    properties["x_ticks"] = m_xTicks;
-    properties["y_range"] = m_yRange;
-    properties["y_ticks"] = m_yTicks;
-  }
-
-  void deserialize(Json const &a_json) override
-  {
-    Element::deserialize(a_json);
-
-    auto const &PROPERTIES = a_json["properties"];
-
-    m_series = PROPERTIES["series"].get<Series>();
-    m_xRange = PROPERTIES["x_range"].get<vec2>();
-    m_xTicks = PROPERTIES["x_ticks"].get<vec2>();
-    m_yRange = PROPERTIES["y_range"].get<vec2>();
-    m_yTicks = PROPERTIES["y_ticks"].get<vec2>();
-  }
-
-  void setSeriesCount(size_t const a_seriesCount)
-  {
-    if (a_seriesCount < 2) return;
-    m_series.resize(a_seriesCount);
-  }
+  void setSeriesCount(size_t const a_seriesCount);
   size_t seriesCount() const { return m_series.size(); }
 
-  void setXMin(A const a_xMin) { m_xRange.x = a_xMin; }
-  A xMin() const { return m_xRange.x; }
+  void setXMin(float const a_xMin) { m_xRange.x = a_xMin; }
+  float xMin() const { return m_xRange.x; }
 
-  void setXMax(A const a_xMax) { m_xRange.y = a_xMax; }
-  A xMax() const { return m_xRange.y; }
+  void setXMax(float const a_xMax) { m_xRange.y = a_xMax; }
+  float xMax() const { return m_xRange.y; }
 
-  void setYMin(B const a_yMin) { m_yRange.x = a_yMin; }
-  B yMin() const { return m_yRange.x; }
+  void setYMin(float const a_yMin) { m_yRange.x = a_yMin; }
+  float yMin() const { return m_yRange.x; }
 
-  void setYMax(B const a_yMax) { m_yRange.y = a_yMax; }
-  B yMax() const { return m_yRange.y; }
+  void setYMax(float const a_yMax) { m_yRange.y = a_yMax; }
+  float yMax() const { return m_yRange.y; }
 
   Series &series() { return m_series; }
   Series const &series() const { return m_series; }
 
-  void clearSeries()
-  {
-    m_series.clear();
-    m_series.push_back({ m_xRange.x, m_yRange.x });
-    m_series.push_back({ m_xRange.y, m_yRange.y });
-  }
+  void clearSeries();
 
   auto value() const { return m_currentValue; }
 
  protected:
-  Series m_series{ { 0, 0 }, { 100, 200 } };
-  Vec2<A, B> m_currentValue{};
-  A m_lastValue{ -1 };
-  Vec2<A, B> m_xRange{ 0, 100 };
-  Vec2<A, B> m_yRange{ 0, 200 };
-  Vec2<A, B> m_xTicks{ 5, 0 };
-  Vec2<A, B> m_yTicks{ 5, 0 };
+  Series m_series{};
+  vec2f m_currentValue{};
+  vec2f m_xRange{ 0.f, 100.f };
+  vec2f m_yRange{ 0.f, 200.f };
+  vec2 m_xTicks{ 5, 0 };
+  vec2 m_yTicks{ 5, 0 };
+  float m_lastValue{ 0.0 };
 };
 
 } // namespace spaghetti::elements::values
