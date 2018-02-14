@@ -22,6 +22,8 @@
 
 #include "nodes/values/characteristic_curve/editor_window.h"
 #include "nodes/values/characteristic_curve/ui_editor_window.h"
+#include "nodes/values/characteristic_curve.h"
+#include "elements/values/characteristic_curve.h"
 
 #include <algorithm>
 
@@ -30,6 +32,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QSpinBox>
+#include <QtCharts/QLineSeries>
 
 #include <QComboBox>
 #include <QGroupBox>
@@ -56,54 +59,44 @@ class VPtr {
 
 namespace spaghetti::nodes::values::characteristic_curve {
 
-EditorWindow::EditorWindow(QWidget *parent)
-  : QMainWindow{ parent }
+EditorWindow::EditorWindow(CharacteristicCurve *const a_characteristicCurve)
+  : QMainWindow{}
   , m_ui{ new Ui::EditorWindow }
+  , m_characteristicCurve{ a_characteristicCurve }
 {
   m_ui->setupUi(this);
 
-  m_ui->xAxisName->setText(m_ui->editor->inputName());
-  m_ui->xAxisMajorTicks->setValue(m_ui->editor->inputMajorTicks());
-  m_ui->xAxisMinorTicks->setValue(m_ui->editor->inputMinorTicks());
-  m_ui->xAxisMinimum->setValue(m_ui->editor->inputMinimum());
-  m_ui->xAxisMaximum->setValue(m_ui->editor->inputMaximum());
+  m_ui->xAxisName->setText(m_ui->editor->xName());
+  m_ui->xAxisMajorTicks->setValue(m_ui->editor->xMajorTicks());
+  m_ui->xAxisMinorTicks->setValue(m_ui->editor->xMinorTicks());
+  m_ui->xAxisMinimum->setValue(m_ui->editor->xMinimum());
+  m_ui->xAxisMaximum->setValue(m_ui->editor->xMaximum());
 
   connect(m_ui->xAxisName, &QLineEdit::textChanged,
-          [this](QString const &a_name) { m_ui->editor->setInputName(a_name); });
+          [this](QString const &a_name) { m_ui->editor->setXName(a_name); });
 
   connect(m_ui->xAxisMajorTicks, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-          [this](int a_value) { m_ui->editor->setInputMajorTicks(a_value); });
+          [this](int a_value) { m_ui->editor->setXMajorTicks(a_value); });
 
   connect(m_ui->xAxisMinorTicks, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-          [this](int a_value) { m_ui->editor->setInputMinorTicks(a_value); });
+          [this](int a_value) { m_ui->editor->setXMinorTicks(a_value); });
 
   connect(m_ui->xAxisMinimum, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-          [this](qreal a_value) { m_ui->editor->setInputMinimum(a_value); });
+          [this](qreal a_value) { m_ui->editor->setXMinimum(a_value); });
 
   connect(m_ui->xAxisMaximum, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-          [this](qreal a_value) { m_ui->editor->setInputMaximum(a_value); });
+          [this](qreal a_value) { m_ui->editor->setXMaximum(a_value); });
 
   connect(m_ui->xAxisValueSlider, &QSlider::valueChanged, [this](int a_value) {
     qreal const VALUE = a_value / 1000.0;
-    m_ui->editor->setInput(VALUE);
+    m_ui->editor->setX(VALUE);
   });
-
-  connect(m_ui->addYAxis, &QPushButton::clicked, [this]() { addAxis(); });
-
-  connect(m_ui->removeYAxis, &QPushButton::clicked, [this]() { removeAxis(); });
-
-  connect(m_ui->addSeries, &QPushButton::clicked, [this]() { addSeries(); });
-
-  connect(m_ui->removeSeries, &QPushButton::clicked, [this]() { removeSeries(); });
 
   m_ui->yAxes->clear();
   m_ui->series->clear();
 
   m_ui->removeYAxis->setDisabled(true);
   m_ui->removeSeries->setDisabled(true);
-
-  addAxis();
-  addSeries();
 }
 
 EditorWindow::~EditorWindow()
@@ -119,9 +112,8 @@ void EditorWindow::showEvent(QShowEvent *a_event)
   if (!first) QMainWindow::showEvent(a_event);
 
   first = true;
-#if 0
-  m_ui->editor->createPoints();
-#endif
+
+  m_ui->editor->updatePoints();
 }
 
 void EditorWindow::resizeEvent(QResizeEvent *a_event)
@@ -130,163 +122,36 @@ void EditorWindow::resizeEvent(QResizeEvent *a_event)
   QMainWindow::resizeEvent(a_event);
 }
 
-void EditorWindow::addAxis()
+void EditorWindow::synchronizeFromNode()
 {
-  Axis *const axis{ new Axis };
-  m_ui->editor->addAxis(axis);
+  auto const editor = m_ui->editor;
+  auto const editorSeries = editor->series();
+  auto const node = m_characteristicCurve;
+  auto const element = static_cast<elements::values::CharacteristicCurve *>(m_characteristicCurve->element());
 
-  QString axisName = QString("Y #%1").arg(m_ui->yAxes->count() + 1);
-  axis->setName(axisName);
+  editor->setXName(node->inputs()[0]->name());
+  editor->setXMajorTicks(element->xMajorTicks());
+  editor->setXMinorTicks(element->xMinorTicks());
+  editor->setXMinimum(static_cast<qreal>(element->xMinimum()));
+  editor->setXMaximum(static_cast<qreal>(element->xMaximum()));
 
-  //  auto const tab = new AxisWidget{ axis, m_ui->yAxes };
-  //  auto const index = m_ui->yAxes->addTab(tab, axisName);
-  //  m_ui->yAxes->setCurrentIndex(index);
+  editor->setYName(node->outputs()[0]->name());
+  editor->setYMajorTicks(element->yMajorTicks());
+  editor->setYMinorTicks(element->yMinorTicks());
+  editor->setYMinimum(static_cast<qreal>(element->yMinimum()));
+  editor->setYMaximum(static_cast<qreal>(element->yMaximum()));
 
-  //  m_ui->removeYAxis->setEnabled(true);
+  editorSeries->clear();
+
+  auto &series = element->series();
+  for (auto &point : series) editorSeries->append(static_cast<qreal>(point.x), static_cast<qreal>(point.y));
+
+  editor->updatePoints();
 }
 
-void EditorWindow::removeAxis()
+void EditorWindow::setValue(qreal const a_value)
 {
-  auto const index = m_ui->yAxes->currentIndex();
-  auto const tab = m_ui->yAxes->widget(index);
-  m_ui->yAxes->removeTab(index);
-  delete tab;
-
-  m_ui->editor->removeAxis(index);
-
-  if (m_ui->yAxes->count() == 0) m_ui->removeYAxis->setDisabled(true);
-}
-
-void EditorWindow::addSeries()
-{
-  Series *const series{ new Series };
-  m_ui->editor->addSeries(series);
-
-  QString seriesName = QString("Series #%1").arg(m_ui->series->count() + 1);
-  series->setName(seriesName);
-
-#if 0
-  auto const tab = new QWidget{};
-  auto const tabLayout = new QVBoxLayout{};
-  tab->setLayout(tabLayout);
-
-  auto const nameBox = new QGroupBox{ "Name" };
-  auto const nameBoxLayout = new QVBoxLayout{};
-  nameBox->setLayout(nameBoxLayout);
-
-  auto const name = new QLineEdit{ seriesName };
-  nameBoxLayout->addWidget(name);
-
-  tabLayout->addWidget(nameBox);
-
-  auto const yAxisBox = new QGroupBox{ "Y Axis" };
-  auto const yAxisBoxLayout = new QVBoxLayout{};
-  yAxisBox->setLayout(yAxisBoxLayout);
-
-  auto const yAxis = new QComboBox{};
-
-  yAxis->addItem("<None>", VPtr<Axis>::asQVariant(nullptr));
-  auto axes = m_ui->editor->axes();
-  for (int i = 0; i < axes.count(); ++i) yAxis->addItem(axes.at(i)->name(), VPtr<Axis>::asQVariant(axes.at(i)));
-
-  yAxisBoxLayout->addWidget(yAxis);
-
-  tabLayout->addWidget(yAxisBox);
-
-  auto const csvBox = new QGroupBox{ "CSV" };
-  auto const csvBoxLayout = new QGridLayout{};
-
-  csvBox->setLayout(csvBoxLayout);
-
-  auto const csvImport = new QPushButton{ "Import" };
-  auto const csvExport = new QPushButton{ "Export" };
-  auto const csvToClipboard = new QPushButton{ "To Clipboard" };
-  auto const csvFromClipboard = new QPushButton{ "From Clipboard" };
-  csvBoxLayout->addWidget(csvImport, 0, 0);
-  csvBoxLayout->addWidget(csvExport, 0, 1);
-  csvBoxLayout->addWidget(csvToClipboard, 1, 0);
-  csvBoxLayout->addWidget(csvFromClipboard, 1, 1);
-
-  tabLayout->addWidget(csvBox);
-
-  auto const templatesBox = new QGroupBox{ "Templates" };
-  auto const templatesBoxLayout = new QGridLayout{};
-  templatesBox->setLayout(templatesBoxLayout);
-
-  auto const templatesTypeLabel = new QLabel{ "Type" };
-  auto const templatesType = new QComboBox{};
-
-  for (size_t i = 0; i < static_cast<size_t>(Series::GeneratorType::eCount); ++i) {
-    templatesType->addItem(generatorTypeToName(static_cast<Series::GeneratorType>(i)), i);
-  }
-
-  auto const templatesStartLabel = new QLabel{ "Start" };
-  auto const templatesStart = new QDoubleSpinBox{};
-
-  templatesStart->setMinimum(-200.0);
-  templatesStart->setMaximum(200.0);
-  templatesStart->setSuffix("%");
-
-  auto const templatesStopLabel = new QLabel{ "Stop" };
-  auto const templatesStop = new QDoubleSpinBox{};
-
-  templatesStop->setMinimum(-200.0);
-  templatesStop->setMaximum(200.0);
-  templatesStop->setValue(100.0);
-  templatesStop->setSuffix("%");
-
-  auto const templatesStepsLabel = new QLabel{ "Steps" };
-  auto const templatesSteps = new QSpinBox{};
-
-  templatesSteps->setMinimum(2);
-  templatesSteps->setMaximum(1000);
-  templatesSteps->setValue(10);
-
-  auto const templatesGenerate = new QPushButton{ "Generate" };
-
-  templatesBoxLayout->addWidget(templatesTypeLabel, 0, 0);
-  templatesBoxLayout->addWidget(templatesType, 0, 1);
-  templatesBoxLayout->addWidget(templatesStartLabel, 1, 0);
-  templatesBoxLayout->addWidget(templatesStart, 1, 1);
-  templatesBoxLayout->addWidget(templatesStopLabel, 2, 0);
-  templatesBoxLayout->addWidget(templatesStop, 2, 1);
-  templatesBoxLayout->addWidget(templatesStepsLabel, 3, 0);
-  templatesBoxLayout->addWidget(templatesSteps, 3, 1);
-  templatesBoxLayout->addWidget(templatesGenerate, 4, 0, 1, 2);
-
-  connect(templatesGenerate, &QPushButton::clicked,
-          [series, templatesType, templatesSteps, templatesStart, templatesStop]() {
-            int const steps = templatesSteps->value();
-            qreal const start = templatesStart->value();
-            qreal const stop = templatesStop->value();
-            series->generate(static_cast<Series::GeneratorType>(templatesType->currentData().toInt()), steps, start,
-                             stop);
-          });
-
-  tabLayout->addWidget(templatesBox);
-
-  auto const table = new QTableWidget{};
-  tabLayout->addWidget(table);
-#endif
-
-  //  auto tab = new SeriesWidget{ series };
-
-  //  auto const index = m_ui->series->addTab(tab, seriesName);
-  //  m_ui->series->setCurrentIndex(index);
-
-  //  m_ui->removeSeries->setEnabled(true);
-}
-
-void EditorWindow::removeSeries()
-{
-  auto const index = m_ui->series->currentIndex();
-  auto const tab = m_ui->series->widget(index);
-  m_ui->series->removeTab(index);
-  delete tab;
-
-  m_ui->editor->removeSeries(index);
-
-  if (m_ui->series->count() == 0) m_ui->removeSeries->setDisabled(true);
+  m_ui->editor->setX(a_value);
 }
 
 } // namespace spaghetti::nodes::values::characteristic_curve

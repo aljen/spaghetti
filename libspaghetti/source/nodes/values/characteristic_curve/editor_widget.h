@@ -42,35 +42,47 @@ class EditorWidget : public QtCharts::QChartView {
  public:
   explicit EditorWidget(QWidget *const a_parent = nullptr);
 
-  void setInputName(QString const &a_name);
-  QString inputName() const;
+  void setXName(QString const &a_name);
+  QString xName() const;
 
-  void setInputMajorTicks(int const a_ticks);
-  int inputMajorTicks() const;
+  void setXMajorTicks(int const a_ticks);
+  int xMajorTicks() const;
 
-  void setInputMinorTicks(int const a_ticks);
-  int inputMinorTicks() const;
+  void setXMinorTicks(int const a_ticks);
+  int xMinorTicks() const;
 
-  void setInputMinimum(qreal const a_min);
-  qreal inputMinimum() const;
+  void setXMinimum(qreal const a_min);
+  qreal xMinimum() const;
 
-  void setInputMaximum(qreal const a_max);
-  qreal inputMaximum() const;
+  void setXMaximum(qreal const a_max);
+  qreal xMaximum() const;
 
-  void addAxis(Axis *const a_axis);
-  void removeAxis(int const a_index);
-  QList<Axis *> axes() const { return m_axes; }
+  void setYName(QString const &a_name);
+  QString yName() const;
 
-  void addSeries(Series *const a_series);
-  void removeSeries(int const a_index);
-  QList<Series *> series() const { return m_series; }
+  void setYMajorTicks(int const a_ticks);
+  int yMajorTicks() const;
 
-  void setInput(qreal const a_value);
+  void setYMinorTicks(int const a_ticks);
+  int yMinorTicks() const;
+
+  void setYMinimum(qreal const a_min);
+  qreal yMinimum() const;
+
+  void setYMaximum(qreal const a_max);
+  qreal yMaximum() const;
+
+  void setX(qreal const a_value);
 
   //  void createPoints();
 
   void setHoveredItem(Point *const a_item);
   void updateCurrentValue();
+
+  QtCharts::QLineSeries const *series() const { return m_series; }
+  QtCharts::QLineSeries *series() { return m_series; }
+
+  void updatePoints();
 
  protected:
   void keyPressEvent(QKeyEvent *a_event) override;
@@ -86,13 +98,16 @@ class EditorWidget : public QtCharts::QChartView {
 
  private:
   QtCharts::QValueAxis *m_xAxis{};
-  QList<Axis *> m_axes{};
-  QList<Series *> m_series{};
+  QtCharts::QValueAxis *m_yAxis{};
+  QtCharts::QLineSeries *m_series{};
+  QList<Point *> m_points{};
   Line *const m_line{};
+  Point *m_currentValue{};
   Point *m_pointToAdd{};
   Point *m_pointToRemove{};
   QPointF m_lastMousePosition{};
-  qreal m_input{};
+  qreal m_x{};
+  qreal m_y{};
 };
 
 } // namespace spaghetti::nodes::values::characteristic_curve

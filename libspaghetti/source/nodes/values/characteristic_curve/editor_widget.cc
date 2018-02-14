@@ -22,15 +22,15 @@
 
 #include "nodes/values/characteristic_curve/editor_widget.h"
 
+#include <QDebug>
 #include <QGuiApplication>
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
 
-#include "nodes/values/characteristic_curve/axis.h"
 #include "nodes/values/characteristic_curve/line.h"
 #include "nodes/values/characteristic_curve/point.h"
-#include "nodes/values/characteristic_curve/series.h"
+#include "spaghetti/utils.h"
 
 using namespace QtCharts;
 
@@ -38,9 +38,11 @@ namespace spaghetti::nodes::values::characteristic_curve {
 
 EditorWidget::EditorWidget(QWidget *const a_parent)
   : QChartView{ a_parent }
-  , m_xAxis{ new QValueAxis } //  , m_series{ new QLineSeries }
-                              //  , m_currentValue{ new Point{ this } }
+  , m_xAxis{ new QValueAxis }
+  , m_yAxis{ new QValueAxis }
+  , m_series{ new QtCharts::QLineSeries }
   , m_line{ new Line{ QColor{ Qt::yellow }, this->chart() } }
+  , m_currentValue{ new Point{ this } }
 {
   setRenderHint(QPainter::Antialiasing);
   setViewportUpdateMode(QChartView::FullViewportUpdate);
@@ -49,132 +51,136 @@ EditorWidget::EditorWidget(QWidget *const a_parent)
   m_xAxis->setMax(1.0);
   m_xAxis->setTitleText("X");
 
+  m_yAxis->setMin(0.0);
+  m_yAxis->setMax(1.0);
+  m_yAxis->setTitleText("Y");
+
   chart()->addAxis(m_xAxis, Qt::AlignBottom);
+  chart()->addAxis(m_yAxis, Qt::AlignLeft);
   chart()->setTheme(QChart::ChartThemeDark);
+  chart()->addSeries(m_series);
+  m_series->attachAxis(m_xAxis);
+  m_series->attachAxis(m_yAxis);
 
-  //  m_series->append(0.0, 14);
-  //  m_series->append(0.25, 18);
-  //  m_series->append(0.45, 24);
-  //  m_series->append(0.6, 29);
-  //  m_series->append(0.75, 34);
-  //  m_series->append(1.0, 50);
-  //  m_series->setName("Wykres");
+  chart()->legend()->hide();
 
-  //  chart()->addSeries(m_series);
-
-  //  chart()->createDefaultAxes();
-
-  //  auto xAxis = chart()->axisX(m_series);
-  //  xAxis->setTitleText("Time");
-  //  auto yAxis = static_cast<QValueAxis *>(chart()->axisY(m_series));
-  ////  yAxis->setMin(0.0);
-  ////  yAxis->setMax(148500.0);
-  //  yAxis->setTickCount(5);
-  //  yAxis->setMinorTickCount(5);
-  //  yAxis->setTitleText("F");
-
-  //  m_currentValue->setType(Point::Type::eCurrent);
+  m_currentValue->setType(Point::Type::eCurrent);
 }
 
-void EditorWidget::setInputName(const QString &a_name)
+void EditorWidget::setXName(const QString &a_name)
 {
   m_xAxis->setTitleText(a_name);
 }
 
-QString EditorWidget::inputName() const
+QString EditorWidget::xName() const
 {
   return m_xAxis->titleText();
 }
 
-void EditorWidget::setInputMajorTicks(const int a_ticks)
+void EditorWidget::setXMajorTicks(const int a_ticks)
 {
   m_xAxis->setTickCount(a_ticks);
 }
 
-int EditorWidget::inputMajorTicks() const
+int EditorWidget::xMajorTicks() const
 {
   return m_xAxis->tickCount();
 }
 
-void EditorWidget::setInputMinorTicks(const int a_ticks)
+void EditorWidget::setXMinorTicks(const int a_ticks)
 {
   m_xAxis->setMinorTickCount(a_ticks);
 }
 
-int EditorWidget::inputMinorTicks() const
+int EditorWidget::xMinorTicks() const
 {
   return m_xAxis->minorTickCount();
 }
 
-void EditorWidget::setInputMinimum(const qreal a_min)
+void EditorWidget::setXMinimum(const qreal a_min)
 {
   m_xAxis->setMin(a_min);
 }
 
-qreal EditorWidget::inputMinimum() const
+qreal EditorWidget::xMinimum() const
 {
   return m_xAxis->min();
 }
 
-void EditorWidget::setInputMaximum(const qreal a_max)
+void EditorWidget::setXMaximum(const qreal a_max)
 {
   m_xAxis->setMax(a_max);
 }
 
-qreal EditorWidget::inputMaximum() const
+qreal EditorWidget::xMaximum() const
 {
   return m_xAxis->max();
 }
 
-void EditorWidget::addAxis(Axis *const a_axis)
+void EditorWidget::setYName(const QString &a_name)
 {
-  m_axes.push_back(a_axis);
-
-  chart()->addAxis(a_axis->axis(), Qt::AlignLeft);
+  m_yAxis->setTitleText(a_name);
 }
 
-void EditorWidget::removeAxis(const int a_index)
+QString EditorWidget::yName() const
 {
-  auto axis = m_axes.at(a_index);
-  m_axes.removeAt(a_index);
-  delete axis;
+  return m_yAxis->titleText();
 }
 
-void EditorWidget::addSeries(Series *const a_series)
+void EditorWidget::setYMajorTicks(const int a_ticks)
 {
-  m_series.push_back(a_series);
-  chart()->addSeries(a_series->series());
-  a_series->series()->append(0.0, 0.0);
-  a_series->series()->append(1.0, 1.0);
-  a_series->series()->attachAxis(m_xAxis);
-  a_series->series()->attachAxis(m_axes[0]->axis());
-
-  //  chart()->createDefaultAxes();
+  m_yAxis->setTickCount(a_ticks);
 }
 
-void EditorWidget::removeSeries(const int a_index)
+int EditorWidget::yMajorTicks() const
 {
-  auto series = m_series.at(a_index);
-  m_series.removeAt(a_index);
-  delete series;
+  return m_yAxis->tickCount();
+}
+
+void EditorWidget::setYMinorTicks(const int a_ticks)
+{
+  m_yAxis->setMinorTickCount(a_ticks);
+}
+
+int EditorWidget::yMinorTicks() const
+{
+  return m_yAxis->minorTickCount();
+}
+
+void EditorWidget::setYMinimum(const qreal a_min)
+{
+  m_yAxis->setMin(a_min);
+}
+
+qreal EditorWidget::yMinimum() const
+{
+  return m_yAxis->min();
+}
+
+void EditorWidget::setYMaximum(const qreal a_max)
+{
+  m_yAxis->setMax(a_max);
+}
+
+qreal EditorWidget::yMaximum() const
+{
+  return m_xAxis->max();
 }
 
 void EditorWidget::keyPressEvent(QKeyEvent *a_event)
 {
   QChartView::keyPressEvent(a_event);
 
-  auto const modifiers = a_event->modifiers();
-  if (modifiers & Qt::ControlModifier) {
-    createPointToAdd();
-  }
+  auto const MODIFIERS = a_event->modifiers();
+  if (MODIFIERS & Qt::ControlModifier) createPointToAdd();
 }
 
 void EditorWidget::keyReleaseEvent(QKeyEvent *a_event)
 {
   QChartView::keyReleaseEvent(a_event);
 
-  auto const modifiers = a_event->modifiers();
-  if ((modifiers & Qt::ControlModifier) == 0 && m_pointToAdd) {
+  auto const MODIFIERS = a_event->modifiers();
+  if ((MODIFIERS & Qt::ControlModifier) == 0 && m_pointToAdd) {
     delete m_pointToAdd;
     m_pointToAdd = nullptr;
   }
@@ -184,7 +190,6 @@ void EditorWidget::mousePressEvent(QMouseEvent *a_event)
 {
   QChartView::mousePressEvent(a_event);
 
-#if 0
   if (m_pointToAdd) {
     int index{};
     int const SIZE = m_series->count();
@@ -201,28 +206,25 @@ void EditorWidget::mousePressEvent(QMouseEvent *a_event)
     createPointToAdd();
   }
 
-  auto const modifiers = QGuiApplication::keyboardModifiers();
-  if (modifiers & Qt::AltModifier && m_pointToRemove) {
+  auto const MODIFIERS = QGuiApplication::keyboardModifiers();
+  if (MODIFIERS & Qt::AltModifier && m_pointToRemove) {
     removePoint(m_pointToRemove->index());
+    m_pointToRemove = nullptr;
   }
-#endif
 }
 
 void EditorWidget::mouseMoveEvent(QMouseEvent *a_event)
 {
   QChartView::mouseMoveEvent(a_event);
 
-#if 0
   m_lastMousePosition = chart()->mapToValue(a_event->pos());
   if (m_pointToAdd) m_pointToAdd->setPos(chart()->mapToPosition(m_lastMousePosition));
-#endif
 }
 
 void EditorWidget::resizeEvent(QResizeEvent *a_event)
 {
   QChartView::resizeEvent(a_event);
 
-#if 0
   for (auto &point : m_points) {
     auto const index = point->index();
     auto const pointOnChart = m_series->at(index);
@@ -230,16 +232,13 @@ void EditorWidget::resizeEvent(QResizeEvent *a_event)
     point->setPos(pointOnView);
   }
   updateCurrentValue();
-#endif
 }
 
-void EditorWidget::setInput(qreal const a_value)
+void EditorWidget::setX(qreal const a_value)
 {
-  m_input = a_value;
+  m_x = a_value;
 
-#if 0
   updateCurrentValue();
-#endif
 }
 
 #if 0
@@ -267,61 +266,67 @@ void EditorWidget::setHoveredItem(Point *const a_item)
 
 void EditorWidget::updateCurrentValue()
 {
-//  qDebug() << Q_FUNC_INFO;
-
-#if 0
   QPointF previous{ m_series->at(0) };
   QPointF current{};
 
   int const SIZE = m_series->count();
   for (int i = 0; i < SIZE; ++i) {
     current = m_series->at(i);
-    //    qDebug() << "testing point" << current << "previous:" << previous;
-    if (current.x() < m_input) {
-      //      qDebug() << "skipping point" << current << "previous:" << previous;
+    if (current.x() < m_x)
       previous = current;
-    } else {
-      //      qDebug() << "found point" << current << "previous:" << previous;
+    else
       break;
-    }
   }
 
   qreal y{};
   qreal percent{};
 
-  if (m_input == previous.x())
+  if (m_x == previous.x())
     y = previous.y();
-  else if (m_input == current.x())
+  else if (m_x == current.x())
     y = current.y();
   else {
-    percent = (m_input - previous.x()) / (current.x() - previous.x());
+    percent = (m_x - previous.x()) / (current.x() - previous.x());
     y = lerp(previous.y(), current.y(), percent);
   }
-  //  qDebug() << "percent:" << percent << "y:" << y;
 
-  QPointF const position{ m_input, y };
+  QPointF const position{ m_x, y };
   m_currentValue->setPos(chart()->mapToPosition(position));
 
-  m_output = y;
+  m_y = y;
 
-  auto axisY = static_cast<QValueAxis*>(chart()->axisY(m_series));
   auto point1 = position;
-  point1.ry() = axisY->max();
+  point1.ry() = m_yAxis->max();
   auto point2 = position;
-  point2.ry() = axisY->min();
+  point2.ry() = m_yAxis->min();
   auto const pointPos1 = chart()->mapToPosition(point1);
   auto const pointPos2 = chart()->mapToPosition(point2);
 
   m_line->setPos(pointPos1);
   m_line->setLength(pointPos2.y() - pointPos1.y());
-#endif
 }
 
-void EditorWidget::addPoint(const int a_index, const QPointF a_point)
+void EditorWidget::updatePoints()
 {
-  (void)a_index;
-  (void)a_point;
-#if 0
+  for (auto &point : m_points) delete point;
+  m_points.clear();
+
+  int const SIZE{ m_series->count() };
+  for (int i = 0; i < SIZE; ++i) {
+    auto const POINT = m_series->at(i);
+    auto const POINT_POS = chart()->mapToPosition(POINT);
+    qDebug() << "Adding" << POINT << "AT" << POINT_POS;
+
+    Point *const point = new Point{ this };
+    point->setType(Point::Type::eNormal);
+    point->setIndex(i);
+    point->setPos(POINT_POS);
+    m_points.push_back(point);
+  }
+}
+
+void EditorWidget::addPoint(int const a_index, QPointF const a_point)
+{
   m_series->insert(a_index, a_point);
 
   m_pointToAdd->setIndex(a_index);
@@ -334,13 +339,10 @@ void EditorWidget::addPoint(const int a_index, const QPointF a_point)
             [](Point *const a_first, Point *const a_second) { return a_first->index() < a_second->index(); });
 
   updateCurrentValue();
-#endif
 }
 
-void EditorWidget::removePoint(const int a_index)
+void EditorWidget::removePoint(int const a_index)
 {
-  (void)a_index;
-#if 0
   int const SIZE = m_points.size();
   for (int i = a_index; i < SIZE; ++i) m_points[i]->setIndex(i - 1);
 
@@ -350,7 +352,6 @@ void EditorWidget::removePoint(const int a_index)
   delete point;
 
   updateCurrentValue();
-#endif
 }
 
 void EditorWidget::createPointToAdd()

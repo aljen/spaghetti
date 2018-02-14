@@ -32,7 +32,11 @@ class QChart;
 class QLineSeries;
 } // namespace QtCharts
 
-namespace spaghetti::nodes::values::characteristic_curve {
+namespace spaghetti::nodes::values {
+
+class CharacteristicCurve;
+
+namespace characteristic_curve {
 
 namespace Ui {
 class EditorWindow;
@@ -42,22 +46,22 @@ class EditorWindow : public QMainWindow {
   Q_OBJECT
 
  public:
-  explicit EditorWindow(QWidget *const a_parent = nullptr);
+  explicit EditorWindow(CharacteristicCurve *const a_characteristicCurve);
   ~EditorWindow();
 
   void showEvent(QShowEvent *a_event) override;
   void resizeEvent(QResizeEvent *a_event) override;
 
-  void addAxis();
-  void removeAxis();
+  void synchronizeFromNode();
 
-  void addSeries();
-  void removeSeries();
+  void setValue(qreal const a_value);
 
  private:
   Ui::EditorWindow *const m_ui{};
+  CharacteristicCurve *const m_characteristicCurve{};
 };
 
-} // namespace spaghetti::nodes::values::characteristic_curve
+} // namespace characteristic_curve
+} // namespace spaghetti::nodes::values
 
 #endif // NODES_VALUES_CHARACTERISTIC_CURVE_EDITOR_WINDOW_H

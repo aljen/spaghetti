@@ -49,17 +49,29 @@ class CharacteristicCurve : public Element {
   void setSeriesCount(size_t const a_seriesCount);
   size_t seriesCount() const { return m_series.size(); }
 
-  void setXMin(float const a_xMin) { m_xRange.x = a_xMin; }
-  float xMin() const { return m_xRange.x; }
+  void setXMinimum(float const a_xMin) { m_xRange.x = a_xMin; }
+  float xMinimum() const { return m_xRange.x; }
 
-  void setXMax(float const a_xMax) { m_xRange.y = a_xMax; }
-  float xMax() const { return m_xRange.y; }
+  void setXMaximum(float const a_xMax) { m_xRange.y = a_xMax; }
+  float xMaximum() const { return m_xRange.y; }
 
-  void setYMin(float const a_yMin) { m_yRange.x = a_yMin; }
-  float yMin() const { return m_yRange.x; }
+  void setYMinimum(float const a_yMin) { m_yRange.x = a_yMin; }
+  float yMinimum() const { return m_yRange.x; }
 
-  void setYMax(float const a_yMax) { m_yRange.y = a_yMax; }
-  float yMax() const { return m_yRange.y; }
+  void setYMaximum(float const a_yMax) { m_yRange.y = a_yMax; }
+  float yMaximum() const { return m_yRange.y; }
+
+  void setXMajorTicks(int32_t const a_xMajorTicks) { m_xTicks.x = a_xMajorTicks; }
+  int32_t xMajorTicks() const { return m_xTicks.x; }
+
+  void setXMinorTicks(int32_t const a_xMinorTicks) { m_xTicks.y = a_xMinorTicks; }
+  int32_t xMinorTicks() const { return m_xTicks.y; }
+
+  void setYMajorTicks(int32_t const a_yMajorTicks) { m_yTicks.x = a_yMajorTicks; }
+  int32_t yMajorTicks() const { return m_yTicks.x; }
+
+  void setYMinorTicks(int32_t const a_yMinorTicks) { m_yTicks.y = a_yMinorTicks; }
+  int32_t yMinorTicks() const { return m_yTicks.y; }
 
   Series &series() { return m_series; }
   Series const &series() const { return m_series; }
