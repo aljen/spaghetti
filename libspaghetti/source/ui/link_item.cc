@@ -65,10 +65,10 @@ void LinkItem::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_opti
   if (m_valueType != ValueType::eBool) {
     QPen dash = pen;
     QColor hover2 = signalColor;
-    hover2.setAlpha(64);
+    hover2.setAlpha(85);
     dash.setColor(hover2);
     dash.setStyle(Qt::DotLine);
-    dash.setWidth(5);
+    dash.setWidth(6);
     dash.setDashOffset(m_dashOffset);
     a_painter->setPen(dash);
     a_painter->drawPath(m_path);
@@ -168,7 +168,7 @@ void LinkItem::trackNodes()
 
   QPointF c1{}, c2{};
 
-  double dist{ fabs(m_toPoint.x()) * 0.3 };
+  double dist{ fabs(m_toPoint.x()) * 0.5 };
 
   c1.setX(dist);
 
