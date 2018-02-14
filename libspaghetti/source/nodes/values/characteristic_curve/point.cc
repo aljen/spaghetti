@@ -36,6 +36,7 @@ Point::Point(EditorWidget *const a_editor, QChart *const a_chart)
   : QGraphicsItem{ a_chart }
   , m_editor{ a_editor }
   , m_chart{ a_chart }
+  , m_series{ a_editor ? a_editor->series() : nullptr }
 {
   setFlag(ItemIsMovable, true);
   setFlag(ItemSendsScenePositionChanges, true);
