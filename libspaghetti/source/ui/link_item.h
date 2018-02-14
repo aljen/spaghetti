@@ -73,8 +73,6 @@ class LinkItem final : public QGraphicsPathItem {
   void trackNodes();
 
  private:
-  ValueType m_valueType{};
-
   SocketItem *m_from{};
   SocketItem *m_to{};
 
@@ -84,12 +82,14 @@ class LinkItem final : public QGraphicsPathItem {
 
   QColor m_colorSignalOn{};
   QColor m_colorSignalOff{};
-  bool m_isSignalOn{};
 
   QPointF m_toPoint{};
+
+  qreal m_dashOffset{};
+  ValueType m_valueType{};
   bool m_isHover{};
   bool m_isSnapped{};
-  qreal m_dashOffset{};
+  bool m_isSignalOn{};
 };
 
 } // namespace spaghetti
