@@ -124,9 +124,9 @@ void Point::hoverEnterEvent(QGraphicsSceneHoverEvent *a_event)
   if (m_editor == nullptr) return;
 
   bool const FIRST = m_index == 0;
-  bool const last = m_index == m_series->count() - 1;
+  bool const LAST = m_index == m_series->count() - 1;
 
-  if (m_type == Type::eNormal && !FIRST && !last) {
+  if (m_type == Type::eNormal && !FIRST && !LAST) {
     m_editor->setHoveredItem(this);
     setType(Type::eToRemove);
   }
