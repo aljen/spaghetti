@@ -229,6 +229,7 @@ bool CharacteristicCurve::open()
 {
   m_editor->synchronizeFromNode();
   m_editor->exec();
+//  m_editor->show();
   return true;
 }
 
