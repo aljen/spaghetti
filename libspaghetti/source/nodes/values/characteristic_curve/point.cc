@@ -25,8 +25,10 @@
 #include <QtCharts/QChart>
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
+#include <cmath>
 
 #include "nodes/values/characteristic_curve/editor_widget.h"
+#include "nodes/values/characteristic_curve/editor_window.h"
 
 using namespace QtCharts;
 
@@ -36,7 +38,7 @@ Point::Point(EditorWidget *const a_editor, QChart *const a_chart)
   : QGraphicsItem{ a_chart }
   , m_editor{ a_editor }
   , m_chart{ a_chart }
-  , m_series{ a_editor ? a_editor->series() : nullptr }
+  , m_series{ (a_editor ? a_editor->series() : nullptr) }
 {
   setFlag(ItemIsMovable, true);
   setFlag(ItemSendsScenePositionChanges, true);
@@ -96,8 +98,14 @@ QVariant Point::itemChange(GraphicsItemChange a_change, QVariant const &a_value)
 
         auto newPointOnChart = m_chart->mapToValue(a_value.toPointF());
 
+        auto const editorWindow = m_editor->editorWindow();
+        bool const X_IS_INT = editorWindow->xValueType() == EditorWindow::ValueType::eInt;
+        bool const Y_IS_INT = editorWindow->yValueType() == EditorWindow::ValueType::eInt;
+
         newPointOnChart.rx() = std::clamp(newPointOnChart.x(), minX, maxX);
+        if (X_IS_INT) newPointOnChart.rx() = static_cast<int32_t>(newPointOnChart.x());
         newPointOnChart.ry() = std::clamp(newPointOnChart.y(), minY, maxY);
+        if (Y_IS_INT) newPointOnChart.ry() = static_cast<int32_t>(newPointOnChart.y());
 
         auto scenePoint = m_chart->mapToPosition(newPointOnChart);
 
@@ -106,6 +114,8 @@ QVariant Point::itemChange(GraphicsItemChange a_change, QVariant const &a_value)
       case ItemPositionHasChanged: {
         QPointF const newPoint = m_chart->mapToValue(a_value.toPointF());
         m_series->replace(m_index, newPoint);
+        auto const editorWindow = m_editor->editorWindow();
+        editorWindow->changePoint(m_index, newPoint);
         m_editor->updateCurrentValue();
         break;
       }
