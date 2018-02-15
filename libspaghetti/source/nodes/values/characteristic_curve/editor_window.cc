@@ -80,8 +80,10 @@ EditorWindow::EditorWindow(CharacteristicCurve *const a_characteristicCurve)
   m_ui->xAxisMinimum->setValue(m_ui->editor->xMinimum());
   m_ui->xAxisMaximum->setValue(m_ui->editor->xMaximum());
 
-  connect(m_ui->xAxisName, &QLineEdit::textChanged,
-          [this](QString const &a_name) { m_ui->editor->setXName(a_name); });
+  connect(m_ui->xAxisName, &QLineEdit::textChanged, [this](QString const &a_name) {
+    m_characteristicCurve->changeInputName(0, a_name);
+    m_ui->editor->setXName(a_name);
+  });
 
   connect(m_ui->xAxisMajorTicks, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
           [this](int a_value) { m_ui->editor->setXMajorTicks(a_value); });
@@ -95,16 +97,36 @@ EditorWindow::EditorWindow(CharacteristicCurve *const a_characteristicCurve)
   connect(m_ui->xAxisMaximum, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
           [this](qreal a_value) { m_ui->editor->setXMaximum(a_value); });
 
-  connect(m_ui->xAxisValueSlider, &QSlider::valueChanged, [this](int a_value) {
-    qreal const VALUE = a_value / 1000.0;
-    m_ui->editor->setX(VALUE);
+  connect(m_ui->yAxisName, &QLineEdit::textChanged, [this](QString const &a_name) {
+    m_characteristicCurve->changeOutputName(0, a_name);
+    m_ui->editor->setYName(a_name);
   });
 
-  m_ui->yAxes->clear();
-  m_ui->series->clear();
+  connect(m_ui->yAxisMajorTicks, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+          [this](int a_value) { m_ui->editor->setYMajorTicks(a_value); });
 
-  m_ui->removeYAxis->setDisabled(true);
-  m_ui->removeSeries->setDisabled(true);
+  connect(m_ui->yAxisMinorTicks, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+          [this](int a_value) { m_ui->editor->setYMinorTicks(a_value); });
+
+  connect(m_ui->yAxisMinimum, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+          [this](qreal a_value) { m_ui->editor->setYMinimum(a_value); });
+
+  connect(m_ui->yAxisMaximum, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+          [this](qreal a_value) { m_ui->editor->setYMaximum(a_value); });
+
+  connect(m_ui->seriesTable, &QTableWidget::cellChanged, [this](int a_row, int a_column) {
+    auto const xItem = m_ui->seriesTable->item(a_row, 0);
+    auto const yItem = m_ui->seriesTable->item(a_row, 1);
+    if (!xItem || !yItem) return;
+
+    auto const X = xItem->data(Qt::DisplayRole).toDouble();
+    auto const Y = yItem->data(Qt::DisplayRole).toDouble();
+
+    m_ui->editor->changePoint(a_row, QPointF{ X, Y });
+  });
+  connect(m_ui->live, &QCheckBox::stateChanged, [this](int const a_state) { setLive(a_state == 2); });
+
+  setLive(false);
 }
 
 EditorWindow::~EditorWindow()

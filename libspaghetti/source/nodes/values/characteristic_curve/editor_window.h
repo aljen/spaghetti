@@ -57,8 +57,12 @@ class EditorWindow : public QDialog {
   void setValue(qreal const a_value);
 
  private:
+  void setLive(bool const a_live);
+
+ private:
   Ui::EditorWindow *const m_ui{};
   CharacteristicCurve *const m_characteristicCurve{};
+  bool m_live{};
 };
 
 } // namespace characteristic_curve
