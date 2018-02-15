@@ -44,6 +44,8 @@ class CharacteristicCurve : public Node {
   CharacteristicCurve();
   ~CharacteristicCurve() override;
 
+  QtCharts::QLineSeries *series() { return m_series; }
+
  private:
   void refreshCentralWidget() override;
   void showProperties() override;
