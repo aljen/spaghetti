@@ -88,6 +88,8 @@ class EditorWidget : public QtCharts::QChartView {
   void setEditorWindow(EditorWindow *const a_window);
   EditorWindow *editorWindow() const { return m_window; }
 
+  void changePoint(int const a_index, QPointF const a_point);
+
  protected:
   void keyPressEvent(QKeyEvent *a_event) override;
   void keyReleaseEvent(QKeyEvent *a_event) override;

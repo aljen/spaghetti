@@ -331,6 +331,17 @@ void EditorWidget::setEditorWindow(EditorWindow *const a_window)
   m_window = a_window;
 }
 
+void EditorWidget::changePoint(int const a_index, QPointF const a_point)
+{
+  if (m_points.empty()) return;
+
+  m_series->replace(a_index, a_point);
+  auto const POINT_ON_VIEW = chart()->mapToPosition(a_point);
+  m_points[a_index]->setPos(POINT_ON_VIEW);
+
+  updateCurrentValue();
+}
+
 void EditorWidget::addPoint(int const a_index, QPointF const a_point)
 {
   m_series->insert(a_index, a_point);
