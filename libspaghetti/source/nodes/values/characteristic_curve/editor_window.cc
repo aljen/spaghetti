@@ -232,14 +232,20 @@ void EditorWindow::setLive(bool const a_live)
 void EditorWindow::addPoint(int const a_index, QPointF const a_point)
 {
   auto const seriesTable = m_ui->seriesTable;
+
+  auto const BLOCKED{ seriesTable->blockSignals(true) };
+
   seriesTable->insertRow(a_index);
 
   auto const xItem = new QTableWidgetItem;
   xItem->setData(Qt::DisplayRole, a_point.x());
+  if (a_index == 0 || a_index == seriesTable->rowCount() - 1) xItem->setFlags(xItem->flags() & ~Qt::ItemIsEditable);
   seriesTable->setItem(a_index, 0, xItem);
   auto const yItem = new QTableWidgetItem;
   yItem->setData(Qt::DisplayRole, a_point.y());
   seriesTable->setItem(a_index, 1, yItem);
+
+  seriesTable->blockSignals(BLOCKED);
 }
 
 void EditorWindow::changePoint(int const a_index, QPointF const a_point)
