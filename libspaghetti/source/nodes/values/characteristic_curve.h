@@ -42,6 +42,7 @@ class EditorWindow;
 class CharacteristicCurve : public Node {
  public:
   CharacteristicCurve();
+  ~CharacteristicCurve() override;
 
  private:
   void refreshCentralWidget() override;
