@@ -165,7 +165,7 @@ void EditorWidget::setYMaximum(const qreal a_max)
 
 qreal EditorWidget::yMaximum() const
 {
-  return m_xAxis->max();
+  return m_yAxis->max();
 }
 
 void EditorWidget::keyPressEvent(QKeyEvent *a_event)
