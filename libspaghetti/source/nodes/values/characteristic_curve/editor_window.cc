@@ -183,6 +183,35 @@ void EditorWindow::resizeEvent(QResizeEvent *a_event)
   QWidget::resizeEvent(a_event);
 }
 
+void EditorWindow::synchronizeToNode()
+{
+  auto const editor = m_ui->editor;
+  auto const element = static_cast<elements::values::CharacteristicCurve *>(m_characteristicCurve->element());
+
+  element->setXMajorTicks(editor->xMajorTicks());
+  element->setXMinorTicks(editor->xMinorTicks());
+  element->setXMinimum(static_cast<float>(editor->xMinimum()));
+  element->setXMaximum(static_cast<float>(editor->xMaximum()));
+
+  element->setYMajorTicks(editor->yMajorTicks());
+  element->setYMinorTicks(editor->yMinorTicks());
+  element->setYMinimum(static_cast<float>(editor->yMinimum()));
+  element->setYMaximum(static_cast<float>(editor->yMaximum()));
+
+  auto &series = element->series();
+  auto const nodeSeries = m_characteristicCurve->series();
+  auto const editorSeries = editor->series();
+  auto const SIZE = editorSeries->count();
+
+  series.clear();
+  nodeSeries->clear();
+  for (int i = 0; i < SIZE; ++i) {
+    auto const &point = editorSeries->at(i);
+    series.push_back(Element::vec2f{ static_cast<float>(point.x()), static_cast<float>(point.y()) });
+    nodeSeries->append(point);
+  }
+}
+
 void EditorWindow::synchronizeFromNode()
 {
   auto const editor = m_ui->editor;

@@ -54,6 +54,7 @@ class EditorWindow : public QDialog {
   void showEvent(QShowEvent *a_event) override;
   void resizeEvent(QResizeEvent *a_event) override;
 
+  void synchronizeToNode();
   void synchronizeFromNode();
 
   void setValue(qreal const a_value);
