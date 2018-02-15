@@ -219,7 +219,15 @@ void EditorWidget::mouseMoveEvent(QMouseEvent *a_event)
   QChartView::mouseMoveEvent(a_event);
 
   m_lastMousePosition = chart()->mapToValue(a_event->pos());
-  if (m_pointToAdd) m_pointToAdd->setPos(chart()->mapToPosition(m_lastMousePosition));
+  bool const X_IS_INT = m_window->xValueType() == EditorWindow::ValueType::eInt;
+  bool const Y_IS_INT = m_window->yValueType() == EditorWindow::ValueType::eInt;
+  m_lastMousePosition.rx() = X_IS_INT ? static_cast<int32_t>(m_lastMousePosition.x()) : m_lastMousePosition.x();
+  m_lastMousePosition.ry() = Y_IS_INT ? static_cast<int32_t>(m_lastMousePosition.y()) : m_lastMousePosition.y();
+
+  if (m_pointToAdd) {
+    auto const NEW_POS = chart()->mapToPosition(m_lastMousePosition);
+    m_pointToAdd->setPos(NEW_POS);
+  }
 }
 
 void EditorWidget::resizeEvent(QResizeEvent *a_event)
@@ -355,6 +363,8 @@ void EditorWidget::addPoint(int const a_index, QPointF const a_point)
   std::sort(std::begin(m_points), std::end(m_points),
             [](Point *const a_first, Point *const a_second) { return a_first->index() < a_second->index(); });
 
+  m_window->addPoint(a_index, a_point);
+
   updateCurrentValue();
 }
 
@@ -367,6 +377,8 @@ void EditorWidget::removePoint(int const a_index)
   m_series->remove(a_index);
   m_points.removeAt(a_index);
   delete point;
+
+  m_window->removePoint(a_index);
 
   updateCurrentValue();
 }
