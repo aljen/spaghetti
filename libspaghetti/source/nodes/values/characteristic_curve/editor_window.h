@@ -46,6 +46,8 @@ class EditorWindow : public QDialog {
   Q_OBJECT
 
  public:
+  enum class ValueType{ eInt, eDouble };
+
   explicit EditorWindow(CharacteristicCurve *const a_characteristicCurve);
   ~EditorWindow();
 
@@ -56,12 +58,25 @@ class EditorWindow : public QDialog {
 
   void setValue(qreal const a_value);
 
+  void addPoint(int const a_index, QPointF const a_point);
+  void changePoint(int const a_index, QPointF const a_point);
+  void removePoint(int const a_index);
+
+  void recreateSeries();
+
+  void setXValueType(ValueType const a_type);
+  ValueType xValueType() const { return m_xValueType; }
+  void setYValueType(ValueType const a_type);
+  ValueType yValueType() const { return m_yValueType; }
+
  private:
   void setLive(bool const a_live);
 
  private:
   Ui::EditorWindow *const m_ui{};
   CharacteristicCurve *const m_characteristicCurve{};
+  ValueType m_xValueType{ ValueType::eInt };
+  ValueType m_yValueType{ ValueType::eDouble };
   bool m_live{};
 };
 

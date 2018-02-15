@@ -62,6 +62,37 @@ class VPtr {
 
 namespace spaghetti::nodes::values::characteristic_curve {
 
+class Delegate : public QItemDelegate {
+ public:
+  Delegate(EditorWindow *const a_window)
+    : QItemDelegate{ a_window }
+    , m_window{ a_window }
+  {
+  }
+
+  QWidget *createEditor(QWidget *a_parent, QStyleOptionViewItem const &a_option,
+                        QModelIndex const &a_index) const override
+  {
+    (void)a_option;
+
+    auto const lineEdit = new QLineEdit{ a_parent };
+
+    EditorWindow::ValueType const TYPE{ (a_index.column() == 0 ? m_window->xValueType() : m_window->yValueType()) };
+    QValidator *validator{};
+    if (TYPE == EditorWindow::ValueType::eInt)
+      validator = new QIntValidator;
+    else
+      validator = new QDoubleValidator;
+    QLocale const LOCALE(QLocale::Language::English);
+    validator->setLocale(LOCALE);
+    lineEdit->setValidator(validator);
+    return lineEdit;
+  }
+
+ private:
+  EditorWindow *const m_window{};
+};
+
 EditorWindow::EditorWindow(CharacteristicCurve *const a_characteristicCurve)
   : QDialog{ a_characteristicCurve->packageView() }
   , m_ui{ new Ui::EditorWindow }
@@ -155,7 +186,6 @@ void EditorWindow::resizeEvent(QResizeEvent *a_event)
 void EditorWindow::synchronizeFromNode()
 {
   auto const editor = m_ui->editor;
-  auto const editorSeries = editor->series();
   auto const node = m_characteristicCurve;
   auto const element = static_cast<elements::values::CharacteristicCurve *>(m_characteristicCurve->element());
 
@@ -164,24 +194,95 @@ void EditorWindow::synchronizeFromNode()
   editor->setXMinorTicks(element->xMinorTicks());
   editor->setXMinimum(static_cast<qreal>(element->xMinimum()));
   editor->setXMaximum(static_cast<qreal>(element->xMaximum()));
+  m_ui->xAxisName->setText(node->inputs()[0]->name());
+  m_ui->xAxisMajorTicks->setValue(element->xMajorTicks());
+  m_ui->xAxisMinorTicks->setValue(element->xMinorTicks());
+  m_ui->xAxisMinimum->setValue(static_cast<qreal>(element->xMinimum()));
+  m_ui->xAxisMaximum->setValue(static_cast<qreal>(element->xMaximum()));
 
   editor->setYName(node->outputs()[0]->name());
   editor->setYMajorTicks(element->yMajorTicks());
   editor->setYMinorTicks(element->yMinorTicks());
   editor->setYMinimum(static_cast<qreal>(element->yMinimum()));
   editor->setYMaximum(static_cast<qreal>(element->yMaximum()));
+  m_ui->yAxisName->setText(node->outputs()[0]->name());
+  m_ui->yAxisMajorTicks->setValue(element->yMajorTicks());
+  m_ui->yAxisMinorTicks->setValue(element->yMinorTicks());
+  m_ui->yAxisMinimum->setValue(static_cast<qreal>(element->yMinimum()));
+  m_ui->yAxisMaximum->setValue(static_cast<qreal>(element->yMaximum()));
 
-  editorSeries->clear();
-
-  auto &series = element->series();
-  for (auto &point : series) editorSeries->append(static_cast<qreal>(point.x), static_cast<qreal>(point.y));
-
-  editor->updatePoints();
+  recreateSeries();
 }
 
 void EditorWindow::setValue(qreal const a_value)
 {
   m_ui->editor->setX(a_value);
+}
+
+void EditorWindow::setLive(bool const a_live)
+{
+  m_live = a_live;
+  m_ui->load->setDisabled(a_live);
+  m_ui->save->setDisabled(a_live);
+}
+
+void EditorWindow::addPoint(int const a_index, QPointF const a_point)
+{
+  auto const seriesTable = m_ui->seriesTable;
+  seriesTable->insertRow(a_index);
+
+  auto const xItem = new QTableWidgetItem;
+  xItem->setData(Qt::DisplayRole, a_point.x());
+  seriesTable->setItem(a_index, 0, xItem);
+  auto const yItem = new QTableWidgetItem;
+  yItem->setData(Qt::DisplayRole, a_point.y());
+  seriesTable->setItem(a_index, 1, yItem);
+}
+
+void EditorWindow::changePoint(int const a_index, QPointF const a_point)
+{
+  auto const xItem = m_ui->seriesTable->item(a_index, 0);
+  xItem->setData(Qt::DisplayRole, a_point.x());
+  auto const yItem = m_ui->seriesTable->item(a_index, 1);
+  yItem->setData(Qt::DisplayRole, a_point.y());
+}
+
+void EditorWindow::removePoint(int const a_index)
+{
+  m_ui->seriesTable->removeRow(a_index);
+}
+
+void EditorWindow::recreateSeries()
+{
+  auto const editor = m_ui->editor;
+  auto const editorSeries = editor->series();
+  auto const element = static_cast<elements::values::CharacteristicCurve *>(m_characteristicCurve->element());
+  auto const seriesTable = m_ui->seriesTable;
+  auto &series = element->series();
+
+  editorSeries->clear();
+  seriesTable->setRowCount(0);
+
+  seriesTable->setItemDelegate(new Delegate{ this });
+
+  for (auto &point : series) {
+    editorSeries->append(static_cast<qreal>(point.x), static_cast<qreal>(point.y));
+
+    auto const ROW = seriesTable->rowCount();
+    addPoint(ROW, QPointF{ static_cast<qreal>(point.x), static_cast<qreal>(point.y) });
+  }
+
+  editor->updatePoints();
+}
+
+void EditorWindow::setXValueType(ValueType const a_type)
+{
+  m_xValueType = a_type;
+}
+
+void EditorWindow::setYValueType(ValueType const a_type)
+{
+  m_yValueType = a_type;
 }
 
 } // namespace spaghetti::nodes::values::characteristic_curve
