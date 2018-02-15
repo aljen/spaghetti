@@ -45,6 +45,7 @@
 #include <QTabWidget>
 #include <QVBoxLayout>
 
+#include "ui/package_view.h"
 //#include "nodes/values/characteristic_curve/axis_widget.h"
 #include "nodes/values/characteristic_curve/axis.h"
 //#include "nodes/values/characteristic_curve/series_widget.h"
@@ -60,7 +61,7 @@ class VPtr {
 namespace spaghetti::nodes::values::characteristic_curve {
 
 EditorWindow::EditorWindow(CharacteristicCurve *const a_characteristicCurve)
-  : QMainWindow{}
+  : QDialog{ a_characteristicCurve->packageView() }
   , m_ui{ new Ui::EditorWindow }
   , m_characteristicCurve{ a_characteristicCurve }
 {
@@ -109,7 +110,7 @@ void EditorWindow::showEvent(QShowEvent *a_event)
   //  qDebug() << Q_FUNC_INFO;
 
   static bool first{ true };
-  if (!first) QMainWindow::showEvent(a_event);
+  if (!first) QWidget::showEvent(a_event);
 
   first = true;
 
@@ -119,7 +120,7 @@ void EditorWindow::showEvent(QShowEvent *a_event)
 void EditorWindow::resizeEvent(QResizeEvent *a_event)
 {
   //  qDebug() << Q_FUNC_INFO << a_event;
-  QMainWindow::resizeEvent(a_event);
+  QWidget::resizeEvent(a_event);
 }
 
 void EditorWindow::synchronizeFromNode()

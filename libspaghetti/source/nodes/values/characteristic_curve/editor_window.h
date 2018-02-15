@@ -24,8 +24,8 @@
 #ifndef NODES_VALUES_CHARACTERISTIC_CURVE_EDITOR_WINDOW_H
 #define NODES_VALUES_CHARACTERISTIC_CURVE_EDITOR_WINDOW_H
 
+#include <QDialog>
 #include <QGraphicsItem>
-#include <QMainWindow>
 
 namespace QtCharts {
 class QChart;
@@ -42,7 +42,7 @@ namespace Ui {
 class EditorWindow;
 }
 
-class EditorWindow : public QMainWindow {
+class EditorWindow : public QDialog {
   Q_OBJECT
 
  public:
