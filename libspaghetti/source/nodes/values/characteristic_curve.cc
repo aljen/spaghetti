@@ -228,7 +228,7 @@ void CharacteristicCurve::elementSet()
 bool CharacteristicCurve::open()
 {
   m_editor->synchronizeFromNode();
-  m_editor->show();
+  m_editor->exec();
   return true;
 }
 
