@@ -102,6 +102,9 @@ class SPAGHETTI_API Node : public QGraphicsItem {
 
   void calculateBoundingRect();
 
+  void changeInputName(int const a_id, QString const a_name);
+  void changeOutputName(int const a_id, QString const a_name);
+
  protected:
   void setCentralWidget(QGraphicsItem *a_centralWidget);
   void propertiesInsertTitle(QString a_title);

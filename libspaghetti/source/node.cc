@@ -561,6 +561,16 @@ void Node::calculateBoundingRect()
   m_boundingRect = QRectF{ 0.0, 0.0, width, height };
 }
 
+void Node::changeInputName(const int a_id, const QString a_name)
+{
+  changeIOName(IOSocketsType::eInputs, a_id, a_name);
+}
+
+void Node::changeOutputName(const int a_id, const QString a_name)
+{
+  changeIOName(IOSocketsType::eOutputs, a_id, a_name);
+}
+
 void Node::addInput()
 {
   uint8_t const SIZE{ static_cast<uint8_t>(m_element->inputs().size()) };
