@@ -211,6 +211,9 @@ void EditorWindow::synchronizeFromNode()
   m_ui->yAxisMinimum->setValue(static_cast<qreal>(element->yMinimum()));
   m_ui->yAxisMaximum->setValue(static_cast<qreal>(element->yMaximum()));
 
+  m_xValueType = element->inputs()[0].type == Element::ValueType::eInt ? ValueType::eInt : ValueType::eDouble;
+  m_yValueType = element->outputs()[0].type == Element::ValueType::eInt ? ValueType::eInt : ValueType::eDouble;
+
   recreateSeries();
 }
 
