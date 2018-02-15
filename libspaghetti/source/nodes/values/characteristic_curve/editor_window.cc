@@ -69,6 +69,11 @@ EditorWindow::EditorWindow(CharacteristicCurve *const a_characteristicCurve)
 {
   m_ui->setupUi(this);
 
+  m_ui->editor->setEditorWindow(this);
+  QLocale const LOCALE{ QLocale::Language::English };
+  m_ui->editor->setLocale(LOCALE);
+  m_ui->seriesTable->setLocale(LOCALE);
+
   m_ui->xAxisName->setText(m_ui->editor->xName());
   m_ui->xAxisMajorTicks->setValue(m_ui->editor->xMajorTicks());
   m_ui->xAxisMinorTicks->setValue(m_ui->editor->xMinorTicks());
