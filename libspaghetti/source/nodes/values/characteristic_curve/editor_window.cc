@@ -21,29 +21,31 @@
 // SOFTWARE.
 
 #include "nodes/values/characteristic_curve/editor_window.h"
-#include "nodes/values/characteristic_curve/ui_editor_window.h"
-#include "nodes/values/characteristic_curve.h"
 #include "elements/values/characteristic_curve.h"
+#include "nodes/values/characteristic_curve.h"
+#include "nodes/values/characteristic_curve/ui_editor_window.h"
 
 #include <algorithm>
 
+#include <QCheckBox>
+#include <QComboBox>
 #include <QDebug>
+#include <QDoubleValidator>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QIntValidator>
+#include <QItemDelegate>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QLayout>
-#include <QSpinBox>
-#include <QtCharts/QLineSeries>
-
-#include <QComboBox>
-#include <QGroupBox>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QTableWidget>
-
-#include <QGridLayout>
-#include <QHBoxLayout>
+#include <QSpinBox>
 #include <QTabWidget>
+#include <QTableWidget>
 #include <QVBoxLayout>
+#include <QtCharts/QLineSeries>
 
 #include "ui/package_view.h"
 //#include "nodes/values/characteristic_curve/axis_widget.h"
