@@ -156,6 +156,8 @@ EditorWindow::EditorWindow(CharacteristicCurve *const a_characteristicCurve)
     m_ui->editor->changePoint(a_row, QPointF{ X, Y });
   });
   connect(m_ui->live, &QCheckBox::stateChanged, [this](int const a_state) { setLive(a_state == 2); });
+  connect(m_ui->save, &QPushButton::clicked, [this]() { synchronizeToNode(); });
+  connect(m_ui->load, &QPushButton::clicked, [this]() { synchronizeFromNode(); });
 
   setLive(false);
 }
