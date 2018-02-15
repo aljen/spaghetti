@@ -187,6 +187,8 @@ void EditorWindow::resizeEvent(QResizeEvent *a_event)
 
 void EditorWindow::synchronizeToNode()
 {
+  if (!m_characteristicCurve->element()) return;
+
   auto const editor = m_ui->editor;
   auto const element = static_cast<elements::values::CharacteristicCurve *>(m_characteristicCurve->element());
 
@@ -258,6 +260,7 @@ void EditorWindow::setLive(bool const a_live)
   m_live = a_live;
   m_ui->load->setDisabled(a_live);
   m_ui->save->setDisabled(a_live);
+  if (a_live) synchronizeToNode();
 }
 
 void EditorWindow::addPoint(int const a_index, QPointF const a_point)
@@ -277,6 +280,15 @@ void EditorWindow::addPoint(int const a_index, QPointF const a_point)
   seriesTable->setItem(a_index, 1, yItem);
 
   seriesTable->blockSignals(BLOCKED);
+
+  if (m_live) {
+    auto const element = static_cast<elements::values::CharacteristicCurve *>(m_characteristicCurve->element());
+    auto &series = element->series();
+    auto const nodeSeries = m_characteristicCurve->series();
+    series.insert(std::begin(series) + a_index,
+                  Element::vec2f{ static_cast<float>(a_point.x()), static_cast<float>(a_point.y()) });
+    nodeSeries->insert(a_index, a_point);
+  }
 }
 
 void EditorWindow::changePoint(int const a_index, QPointF const a_point)
@@ -285,11 +297,28 @@ void EditorWindow::changePoint(int const a_index, QPointF const a_point)
   xItem->setData(Qt::DisplayRole, a_point.x());
   auto const yItem = m_ui->seriesTable->item(a_index, 1);
   yItem->setData(Qt::DisplayRole, a_point.y());
+
+  if (m_live) {
+    auto const element = static_cast<elements::values::CharacteristicCurve *>(m_characteristicCurve->element());
+    auto &series = element->series();
+    auto const nodeSeries = m_characteristicCurve->series();
+    series[a_index].x = static_cast<float>(a_point.x());
+    series[a_index].y = static_cast<float>(a_point.y());
+    nodeSeries->replace(a_index, a_point);
+  }
 }
 
 void EditorWindow::removePoint(int const a_index)
 {
   m_ui->seriesTable->removeRow(a_index);
+
+  if (m_live) {
+    auto const element = static_cast<elements::values::CharacteristicCurve *>(m_characteristicCurve->element());
+    auto &series = element->series();
+    auto const nodeSeries = m_characteristicCurve->series();
+    series.erase(std::begin(series) + a_index);
+    nodeSeries->remove(a_index);
+  }
 }
 
 void EditorWindow::recreateSeries()
