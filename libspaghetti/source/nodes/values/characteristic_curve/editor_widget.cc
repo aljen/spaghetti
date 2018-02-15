@@ -28,6 +28,7 @@
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
 
+#include "nodes/values/characteristic_curve/editor_window.h"
 #include "nodes/values/characteristic_curve/line.h"
 #include "nodes/values/characteristic_curve/point.h"
 #include "spaghetti/utils.h"
@@ -323,6 +324,11 @@ void EditorWidget::updatePoints()
     point->setPos(POINT_POS);
     m_points.push_back(point);
   }
+}
+
+void EditorWidget::setEditorWindow(EditorWindow *const a_window)
+{
+  m_window = a_window;
 }
 
 void EditorWidget::addPoint(int const a_index, QPointF const a_point)

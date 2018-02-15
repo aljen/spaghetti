@@ -33,6 +33,7 @@ class QValueAxis;
 
 namespace spaghetti::nodes::values::characteristic_curve {
 
+class EditorWindow;
 class Point;
 class Line;
 class Series;
@@ -84,6 +85,9 @@ class EditorWidget : public QtCharts::QChartView {
 
   void updatePoints();
 
+  void setEditorWindow(EditorWindow *const a_window);
+  EditorWindow *editorWindow() const { return m_window; }
+
  protected:
   void keyPressEvent(QKeyEvent *a_event) override;
   void keyReleaseEvent(QKeyEvent *a_event) override;
@@ -97,6 +101,7 @@ class EditorWidget : public QtCharts::QChartView {
   void createPointToAdd();
 
  private:
+  EditorWindow *m_window{};
   QtCharts::QValueAxis *m_xAxis{};
   QtCharts::QValueAxis *m_yAxis{};
   QtCharts::QLineSeries *m_series{};
