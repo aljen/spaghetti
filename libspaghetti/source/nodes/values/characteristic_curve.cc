@@ -70,6 +70,11 @@ CharacteristicCurve::CharacteristicCurve()
   m_current->setType(characteristic_curve::Point::Type::eCurrent);
 }
 
+CharacteristicCurve::~CharacteristicCurve()
+{
+  delete m_editor;
+}
+
 void CharacteristicCurve::refreshCentralWidget()
 {
   if (!m_element) return;
