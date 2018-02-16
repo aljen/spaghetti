@@ -45,8 +45,9 @@ void Tank::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  QDoubleSpinBox *pressureValue = new QDoubleSpinBox;
-  pressureValue->setRange(1.0, 10000.0);
+  auto const pressureValue = new QDoubleSpinBox;
+  pressureValue->setRange(0.0001, 9999999.0);
+  pressureValue->setDecimals(6);
   pressureValue->setValue(static_cast<qreal>(tank->initialPressure()));
   m_properties->setCellWidget(currentIndex, 1, pressureValue);
 
@@ -63,8 +64,9 @@ void Tank::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  QDoubleSpinBox *volumeValue = new QDoubleSpinBox;
-  volumeValue->setRange(1.0, 10000.0);
+  auto const volumeValue = new QDoubleSpinBox;
+  volumeValue->setRange(0.0001, 9999999.0);
+  volumeValue->setDecimals(6);
   volumeValue->setValue(static_cast<qreal>(tank->volume()));
   m_properties->setCellWidget(currentIndex, 1, volumeValue);
 

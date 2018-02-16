@@ -46,7 +46,7 @@ void Clock::showProperties()
   auto const clock{ static_cast<elements::timers::Clock *const>(m_element) };
 
   QSpinBox *rateValue = new QSpinBox{};
-  rateValue->setRange(10, 10000);
+  rateValue->setRange(10, 100000);
   rateValue->setValue(static_cast<int>(clock->duration().count()));
   rateValue->setSuffix("ms");
   m_properties->setCellWidget(currentIndex, 1, rateValue);

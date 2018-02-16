@@ -102,7 +102,8 @@ void CharacteristicCurve::showProperties()
   m_properties->setItem(currentIndex, 0, item);
 
   auto const xMinValue = new QDoubleSpinBox{};
-  xMinValue->setRange(-10000.0, 10000.0);
+  xMinValue->setRange(-9999999.0, 9999999.0);
+  xMinValue->setDecimals(6);
   xMinValue->setValue(static_cast<qreal>(scaler->xMinimum()));
   m_properties->setCellWidget(currentIndex, 1, xMinValue);
 
@@ -124,7 +125,8 @@ void CharacteristicCurve::showProperties()
   m_properties->setItem(currentIndex, 0, item);
 
   auto const xMaxValue = new QDoubleSpinBox{};
-  xMaxValue->setRange(-10000.0, 10000.0);
+  xMaxValue->setRange(-9999999.0, 9999999.0);
+  xMaxValue->setDecimals(6);
   xMaxValue->setValue(static_cast<qreal>(scaler->xMaximum()));
   m_properties->setCellWidget(currentIndex, 1, xMaxValue);
 
@@ -148,7 +150,8 @@ void CharacteristicCurve::showProperties()
   m_properties->setItem(currentIndex, 0, item);
 
   auto const yMinValue = new QDoubleSpinBox{};
-  yMinValue->setRange(-10000.0, 10000.0);
+  yMinValue->setRange(-9999999.0, 9999999.0);
+  yMinValue->setDecimals(6);
   yMinValue->setValue(static_cast<qreal>(scaler->yMinimum()));
   m_properties->setCellWidget(currentIndex, 1, yMinValue);
 
@@ -170,7 +173,8 @@ void CharacteristicCurve::showProperties()
   m_properties->setItem(currentIndex, 0, item);
 
   auto const yMaxValue = new QDoubleSpinBox{};
-  yMaxValue->setRange(-10000.0, 10000.0);
+  yMaxValue->setRange(-9999999.0, 9999999.0);
+  yMaxValue->setDecimals(6);
   yMaxValue->setValue(static_cast<qreal>(scaler->yMaximum()));
   m_properties->setCellWidget(currentIndex, 1, yMaxValue);
 
