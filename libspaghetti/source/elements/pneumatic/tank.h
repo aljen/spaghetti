@@ -52,7 +52,7 @@ class Tank final : public Element {
  private:
   float m_initialPressure{};
   float m_pressure{};
-  float m_volume{ 10.0 };
+  float m_volume{};
 };
 
 } // namespace spaghetti::elements::pneumatic
