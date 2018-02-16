@@ -272,6 +272,7 @@ target_compile_definitions(Spaghetti
   PRIVATE SPAGHETTI_EXPORTS ${SPAGHETTI_DEFINITIONS}
   PRIVATE $<$<CONFIG:Debug>:${SPAGHETTI_DEFINITIONS_DEBUG}>
   PRIVATE $<$<CONFIG:Release>:${SPAGHETTI_DEFINITIONS_RELEASE}>
+  PRIVATE $<$<BOOL:${SPAGHETTI_USE_OPENGL}>:SPAGHETTI_USE_OPENGL>
   )
 target_compile_options(Spaghetti
   PRIVATE ${SPAGHETTI_FLAGS}
@@ -299,12 +300,8 @@ target_link_libraries(Spaghetti
   PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
   PRIVATE Qt5::Charts
   PRIVATE ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
+  PRIVATE $<$<BOOL:${SPAGHETTI_USE_OPENGL}>:Qt5::OpenGL>
 )
-if (SPAGHETTI_USE_OPENGL)
-  target_compile_definitions(Spaghetti PRIVATE SPAGHETTI_USE_OPENGL)
-  target_link_libraries(Spaghetti PUBLIC Qt5::OpenGL)
-endif ()
-
 if (CLANG)
   target_link_libraries(Spaghetti PUBLIC -stdlib=libc++)
 endif ()
