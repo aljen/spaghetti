@@ -24,6 +24,7 @@
 #ifndef ELEMENTS_VALUES_ALL_H
 #define ELEMENTS_VALUES_ALL_H
 
+#include "elements/values/characteristic_curve.h"
 #include "elements/values/clamp_float.h"
 #include "elements/values/clamp_int.h"
 #include "elements/values/const_bool.h"

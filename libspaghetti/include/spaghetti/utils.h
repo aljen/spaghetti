@@ -39,6 +39,12 @@ inline bool nearly_equal(float const &a_a, float const &a_b)
          std::nextafter(a_a, std::numeric_limits<float>::max()) >= a_b;
 }
 
+template<typename T>
+inline T lerp(T a_v0, T a_v1, T a_t)
+{
+  return (1 - a_t) * a_v0 + a_t * a_v1;
+}
+
 } // namespace spaghetti
 
 #endif // SPAGHETTI_UTILS_H

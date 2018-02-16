@@ -25,6 +25,7 @@
 #define NODES_ALL_H
 
 #include "nodes/logic/all.h"
+#include "nodes/pneumatic/all.h"
 #include "nodes/ui/all.h"
 #include "nodes/values/all.h"
 

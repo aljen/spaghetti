@@ -25,14 +25,17 @@
 #define ELEMENTS_LOGIC_ALL_H
 
 #include "elements/logic/blinker.h"
-#include "elements/logic/clock.h"
 #include "elements/logic/demultiplexer_int.h"
 #include "elements/logic/if_equal.h"
 #include "elements/logic/if_greater.h"
 #include "elements/logic/if_greater_equal.h"
 #include "elements/logic/if_lower.h"
 #include "elements/logic/if_lower_equal.h"
+#include "elements/logic/memory_reset_set.h"
+#include "elements/logic/memory_set_reset.h"
 #include "elements/logic/multiplexer_int.h"
 #include "elements/logic/switch.h"
+#include "elements/logic/trigger_falling.h"
+#include "elements/logic/trigger_rising.h"
 
 #endif // ELEMENTS_LOGIC_ALL_H

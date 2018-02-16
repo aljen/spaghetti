@@ -55,9 +55,14 @@ class SPAGHETTI_API Element {
   using Json = nlohmann::json;
   using Value = std::variant<bool, int32_t, float>;
   enum class ValueType { eBool, eInt, eFloat };
+  template<typename T>
   struct Vec2 {
-    double x{}, y{};
+    T x{};
+    T y{};
   };
+  using vec2 = Vec2<int32_t>;
+  using vec2f = Vec2<float>;
+  using vec2d = Vec2<double>;
 
   struct IOSocket {
     enum Flags {
@@ -104,11 +109,14 @@ class SPAGHETTI_API Element {
     m_position.x = a_x;
     m_position.y = a_y;
   }
-  void setPosition(Vec2 const a_position) { m_position = a_position; }
-  Vec2 const &position() const { return m_position; }
+  void setPosition(vec2d const a_position) { m_position = a_position; }
+  vec2d const &position() const { return m_position; }
 
   void iconify(bool const a_iconify) { m_isIconified = a_iconify; }
   bool isIconified() const { return m_isIconified; }
+
+  void setIconifyingHidesCentralWidget(bool const a_hide) { m_iconifyingHidesCentralWidget = a_hide; }
+  bool iconifyingHidesCentralWidget() const { return m_iconifyingHidesCentralWidget; }
 
   IOSockets &inputs() { return m_inputs; }
   IOSockets const &inputs() const { return m_inputs; }
@@ -188,8 +196,9 @@ class SPAGHETTI_API Element {
  private:
   size_t m_id{};
   std::string m_name{};
-  Vec2 m_position{};
+  vec2d m_position{};
   bool m_isIconified{};
+  bool m_iconifyingHidesCentralWidget{};
   uint8_t m_minInputs{};
   uint8_t m_maxInputs{ std::numeric_limits<uint8_t>::max() };
   uint8_t m_minOutputs{};
@@ -197,6 +206,19 @@ class SPAGHETTI_API Element {
   uint8_t m_defaultNewInputFlags{};
   uint8_t m_defaultNewOutputFlags{};
 };
+
+template<typename T>
+inline void to_json(Element::Json &a_json, Element::Vec2<T> const &a_value)
+{
+  a_json = Element::Json{ a_value.x, a_value.y };
+}
+
+template<typename T>
+inline void from_json(Element::Json const &a_json, Element::Vec2<T> &a_value)
+{
+  a_value.x = a_json[0].get<T>();
+  a_value.y = a_json[1].get<T>();
+}
 
 } // namespace spaghetti
 

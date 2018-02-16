@@ -48,6 +48,8 @@ void DemultiplexerInt::calculate()
   int32_t const SIZE{ static_cast<int32_t>(m_outputs.size()) - 1 };
   int32_t const INDEX{ std::clamp<int32_t>(SELECT, 0, SIZE) };
 
+  for (auto &&output : m_outputs) output.value = 0;
+
   m_outputs[static_cast<size_t>(INDEX)].value = VALUE;
 }
 

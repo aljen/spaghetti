@@ -21,17 +21,17 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_LOGIC_CLOCK_H
-#define NODES_LOGIC_CLOCK_H
+#ifndef NODES_TIMERS_CLOCK_H
+#define NODES_TIMERS_CLOCK_H
 
 #include "spaghetti/node.h"
 
-namespace spaghetti::nodes::logic {
+namespace spaghetti::nodes::timers {
 
 class Clock : public Node {
   void showProperties() override;
 };
 
-} // namespace spaghetti::nodes::logic
+} // namespace spaghetti::nodes::timers
 
-#endif // NODES_LOGIC_CLOCK_H
+#endif // NODES_TIMERS_CLOCK_H

@@ -20,41 +20,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_LOGIC_CLOCK_H
-#define ELEMENTS_LOGIC_CLOCK_H
+#include "elements/timers/clock.h"
 
-#include <chrono>
+namespace spaghetti::elements::timers {
 
-#include "spaghetti/element.h"
+Clock::Clock()
+  : Element{}
+{
+  setMinInputs(0);
+  setMaxInputs(0);
+  setMinOutputs(1);
+  setMaxOutputs(1);
 
-namespace spaghetti::elements::logic {
+  addOutput(ValueType::eBool, "State", IOSocket::eCanHoldBool);
+}
 
-class Clock final : public Element {
- public:
-  static constexpr char const *const TYPE{ "logic/clock" };
-  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+void Clock::serialize(Json &a_json)
+{
+  Element::serialize(a_json);
 
-  Clock();
+  auto &properties = a_json["properties"];
+  properties["duration"] = m_duration.count();
+}
 
-  char const *type() const noexcept override { return TYPE; }
-  string::hash_t hash() const noexcept override { return HASH; }
+void Clock::deserialize(const Json &a_json)
+{
+  Element::deserialize(a_json);
 
-  void serialize(Json &a_json) override;
-  void deserialize(Json const &a_json) override;
+  auto const &PROPERTIES = a_json["properties"];
+  m_duration = duration_t{ PROPERTIES["duration"].get<double>() };
+}
 
-  void reset() override { m_time = duration_t{ 0.0 }; }
-  void update(duration_t const &a_delta) override;
+void Clock::update(duration_t const &a_delta)
+{
+  m_time += a_delta;
+  if (m_time >= m_duration) {
+    bool const VALUE = !std::get<bool>(m_outputs[0].value);
+    m_outputs[0].value = VALUE;
+    reset();
+  }
+}
 
-  void setDuration(duration_t a_duration) { m_duration = a_duration; }
-
-  duration_t duration() const { return m_duration; }
-
- private:
-  duration_t m_time{};
-  duration_t m_duration{ 500 };
-};
-
-} // namespace spaghetti::elements::logic
-
-#endif // ELEMENTS_LOGIC_CLOCK_H
+} // namespace spaghetti::elements::timers

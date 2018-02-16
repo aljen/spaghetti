@@ -25,8 +25,8 @@
 // clang-format off
 #if defined(_WIN64) || defined(_WIN32)
 # define WIN32_LEAN_AND_MEAN
-# include <Windows.h>
-# include <ShlObj.h>
+# include <windows.h>
+# include <shlobj.h>
 # include <sstream>
 #endif
 // clang-format on
@@ -147,12 +147,17 @@ void Registry::registerInternalElements()
   registerElement<logic::IfLower>("If A < B (Float)", ":/unknown.png");
   registerElement<logic::IfLowerEqual>("If A <= B (Float)", ":/unknown.png");
 
+  registerElement<logic::MemoryResetSet>("Memory RS (Bool)", ":/unknown.png");
+  registerElement<logic::MemorySetReset>("Memory SR (Bool)", ":/unknown.png");
+
   registerElement<logic::MultiplexerInt>("Multiplexer (Int)", ":/unknown.png");
   registerElement<logic::DemultiplexerInt>("Demultiplexer (Int)", ":/unknown.png");
 
   registerElement<logic::Blinker, nodes::logic::Blinker>("Blinker (Bool)", ":/unknown.png");
-  registerElement<logic::Clock, nodes::logic::Clock>("Clock (ms)", ":/logic/clock.png");
   registerElement<logic::Switch>("Switch (Int)", ":/logic/switch.png");
+
+  registerElement<logic::TriggerFalling>("Trigger Falling (Bool)", ":/unknown.png");
+  registerElement<logic::TriggerRising>("Trigger Rising (Bool)", ":/unknown.png");
 
   registerElement<math::Abs>("Abs (Float)", ":/unknown.png");
   registerElement<math::BCD>("BCD", ":/unknown.png");
@@ -169,7 +174,19 @@ void Registry::registerInternalElements()
   registerElement<math::Cos>("Cos (Rad)", ":/unknown.png");
   registerElement<math::Sin>("Sin (Rad)", ":/unknown.png");
 
-  registerElement<ui::BCDToSevenSegmentDisplay>("BCD -> 7SS", ":/unknown.png");
+  registerElement<math::Lerp>("Lerp (Float)", ":/unknown.png");
+  registerElement<math::Sign>("Sign (Float)", ":/unknown.png");
+
+  registerElement<pneumatic::Tank, nodes::pneumatic::Tank>("Tank", ":/unknown.png");
+  registerElement<pneumatic::Valve>("Valve", ":/unknown.png");
+
+  registerElement<timers::DeltaTime>("Delta Time (ms)", ":/logic/clock.png");
+  registerElement<timers::Clock, nodes::timers::Clock>("Clock (ms)", ":/logic/clock.png");
+  registerElement<timers::TimerOn>("T_ON", ":/logic/clock.png");
+  registerElement<timers::TimerOff>("T_OFF", ":/logic/clock.png");
+  registerElement<timers::TimerPulse>("T_PULSE", ":/logic/clock.png");
+
+  registerElement<ui::BCDToSevenSegmentDisplay>("BCD -> 7SD", ":/unknown.png");
 
   registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Info (Float)", ":/values/const_float.png");
   registerElement<ui::IntInfo, nodes::ui::IntInfo>("Info (Int)", ":/values/const_int.png");
@@ -196,6 +213,14 @@ void Registry::registerInternalElements()
 
   registerElement<values::ClampFloat>("Clamp value (Float)", ":/unknown.png");
   registerElement<values::ClampInt>("Clamp value (Int)", ":/unknown.png");
+
+// clang-format off
+  registerElement<values::CharacteristicCurve
+#ifdef SPAGHETTI_USE_CHARTS
+                  , nodes::values::CharacteristicCurve
+#endif
+                  >("Characteristic Curve", ":/unknown.png");
+// clang-format on
 }
 
 void Registry::loadPlugins()

@@ -77,7 +77,7 @@ void ConstFloat::showProperties()
 
   QDoubleSpinBox *const value = new QDoubleSpinBox;
   value->setRange(-9999999.0, 9999999.0);
-  value->setDecimals(4);
+  value->setDecimals(6);
   value->setValue(static_cast<qreal>(CURRENT));
   m_properties->setCellWidget(row, 1, value);
 

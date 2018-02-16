@@ -26,7 +26,6 @@
 
 #include "spaghetti/package.h"
 
-#include "elements/logic/clock.h"
 #include "spaghetti/logger.h"
 #include "spaghetti/registry.h"
 

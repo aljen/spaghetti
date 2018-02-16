@@ -82,6 +82,7 @@ void Element::serialize(Element::Json &a_json)
   jsonNode["position"]["x"] = m_position.x;
   jsonNode["position"]["y"] = m_position.y;
   jsonNode["iconify"] = m_isIconified;
+  jsonNode["iconifying_hides_central_widget"] = m_iconifyingHidesCentralWidget;
 }
 
 void Element::deserialize(Json const &a_json)
@@ -101,6 +102,7 @@ void Element::deserialize(Json const &a_json)
 
   auto const &NODE = a_json["node"];
   auto const ICONIFY = NODE["iconify"].get<bool>();
+  auto const ICONIFYING_HIDES_CENTRAL_WIDGET = NODE["iconifying_hides_central_widget"].get<bool>();
   auto const &POSITION = NODE["position"];
   auto const POSITION_X = POSITION["x"].get<double>();
   auto const POSITION_Y = POSITION["y"].get<double>();
@@ -116,6 +118,7 @@ void Element::deserialize(Json const &a_json)
   setDefaultNewInputFlags(DEFAULT_NEW_INPUT_FLAGS);
   setDefaultNewOutputFlags(DEFAULT_NEW_OUTPUT_FLAGS);
   iconify(ICONIFY);
+  setIconifyingHidesCentralWidget(ICONIFYING_HIDES_CENTRAL_WIDGET);
 
   auto add_socket = [&](Json const &a_socket, bool const a_input, uint8_t &a_socketCount) {
     auto const SOCKET_ID = a_socket["socket"].get<uint8_t>();

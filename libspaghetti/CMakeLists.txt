@@ -7,6 +7,9 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets)
 if (SPAGHETTI_USE_OPENGL)
   find_package(Qt5 REQUIRED COMPONENTS OpenGL)
 endif ()
+if (SPAGHETTI_USE_CHARTS)
+  find_package(Qt5 REQUIRED COMPONENTS Charts)
+endif ()
 
 if (HAVE_CXX_FILESYSTEM)
   set(SPAGHETTI_FILESYSTEM_IMPLEMENTATION SPAGHETTI_FS_STD_FILESYSTEM)
@@ -56,8 +59,6 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/logic/all.h
   source/elements/logic/blinker.cc
   source/elements/logic/blinker.h
-  source/elements/logic/clock.cc
-  source/elements/logic/clock.h
   source/elements/logic/demultiplexer_int.cc
   source/elements/logic/demultiplexer_int.h
   source/elements/logic/if_equal.cc
@@ -70,10 +71,18 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/logic/if_lower.h
   source/elements/logic/if_lower_equal.cc
   source/elements/logic/if_lower_equal.h
+  source/elements/logic/memory_reset_set.cc
+  source/elements/logic/memory_reset_set.h
+  source/elements/logic/memory_set_reset.cc
+  source/elements/logic/memory_set_reset.h
   source/elements/logic/multiplexer_int.cc
   source/elements/logic/multiplexer_int.h
   source/elements/logic/switch.cc
   source/elements/logic/switch.h
+  source/elements/logic/trigger_falling.cc
+  source/elements/logic/trigger_falling.h
+  source/elements/logic/trigger_rising.cc
+  source/elements/logic/trigger_rising.h
 
   source/elements/math/abs.cc
   source/elements/math/abs.h
@@ -90,16 +99,38 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/math/divide.h
   source/elements/math/divide_if.cc
   source/elements/math/divide_if.h
+  source/elements/math/lerp.cc
+  source/elements/math/lerp.h
   source/elements/math/multiply.cc
   source/elements/math/multiply.h
   source/elements/math/multiply_if.cc
   source/elements/math/multiply_if.h
+  source/elements/math/sign.cc
+  source/elements/math/sign.h
   source/elements/math/sin.cc
   source/elements/math/sin.h
   source/elements/math/subtract.cc
   source/elements/math/subtract.h
   source/elements/math/subtract_if.cc
   source/elements/math/subtract_if.h
+
+  source/elements/pneumatic/all.h
+  source/elements/pneumatic/tank.cc
+  source/elements/pneumatic/tank.h
+  source/elements/pneumatic/valve.cc
+  source/elements/pneumatic/valve.h
+
+  source/elements/timers/all.h
+  source/elements/timers/clock.cc
+  source/elements/timers/clock.h
+  source/elements/timers/delta_time.cc
+  source/elements/timers/delta_time.h
+  source/elements/timers/t_off.cc
+  source/elements/timers/t_off.h
+  source/elements/timers/t_on.cc
+  source/elements/timers/t_on.h
+  source/elements/timers/t_pulse.cc
+  source/elements/timers/t_pulse.h
 
   source/elements/ui/all.h
   source/elements/ui/bcd_to_seven_segment_display.cc
@@ -116,6 +147,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/ui/seven_segment_display.h
 
   source/elements/values/all.h
+  source/elements/values/characteristic_curve.cc
+  source/elements/values/characteristic_curve.h
   source/elements/values/clamp_float.cc
   source/elements/values/clamp_float.h
   source/elements/values/clamp_int.cc
@@ -154,6 +187,10 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/logic/blinker.h
   source/nodes/logic/clock.cc
   source/nodes/logic/clock.h
+
+  source/nodes/pneumatic/all.h
+  source/nodes/pneumatic/tank.cc
+  source/nodes/pneumatic/tank.h
 
   source/nodes/ui/all.h
   source/nodes/ui/float_info.cc
@@ -201,21 +238,41 @@ set(LIBSPAGHETTI_SOURCES
   source/filesystem.h.in
   )
 
+set(LIBSPAGHETTI_CHARTS_SOURCES
+  source/nodes/values/characteristic_curve/editor_widget.cc
+  source/nodes/values/characteristic_curve/editor_widget.h
+  source/nodes/values/characteristic_curve/editor_window.cc
+  source/nodes/values/characteristic_curve/editor_window.h
+  source/nodes/values/characteristic_curve/editor_window.ui
+  source/nodes/values/characteristic_curve/generators.cc
+  source/nodes/values/characteristic_curve/generators.h
+  source/nodes/values/characteristic_curve/line.cc
+  source/nodes/values/characteristic_curve/line.h
+  source/nodes/values/characteristic_curve/point.cc
+  source/nodes/values/characteristic_curve/point.h
+  source/nodes/values/characteristic_curve.cc
+  source/nodes/values/characteristic_curve.h
+  )
+
 set(LIBSPAGHETTI_ALL_SOURCES
   ${LIBSPAGHETTI_GENERATED_SOURCES}
   ${LIBSPAGHETTI_SOURCES}
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${LIBSPAGHETTI_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${LIBSPAGHETTI_CHARTS_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${LIBSPAGHETTI_GENERATED_SOURCES})
 
 add_library(Spaghetti SHARED ${LIBSPAGHETTI_ALL_SOURCES})
+target_sources(Spaghetti PRIVATE $<$<BOOL:${SPAGHETTI_USE_CHARTS}>:${LIBSPAGHETTI_CHARTS_SOURCES}>)
 target_compile_features(Spaghetti PUBLIC cxx_std_17)
 target_compile_definitions(Spaghetti
   PUBLIC SPAGHETTI_SHARED
   PRIVATE SPAGHETTI_EXPORTS ${SPAGHETTI_DEFINITIONS}
   PRIVATE $<$<CONFIG:Debug>:${SPAGHETTI_DEFINITIONS_DEBUG}>
   PRIVATE $<$<CONFIG:Release>:${SPAGHETTI_DEFINITIONS_RELEASE}>
+  PRIVATE $<$<BOOL:${SPAGHETTI_USE_OPENGL}>:SPAGHETTI_USE_OPENGL>
+  PRIVATE $<$<BOOL:${SPAGHETTI_USE_CHARTS}>:SPAGHETTI_USE_CHARTS>
   )
 target_compile_options(Spaghetti
   PRIVATE ${SPAGHETTI_FLAGS}
@@ -236,18 +293,13 @@ target_include_directories(Spaghetti
 target_include_directories(Spaghetti SYSTEM PUBLIC
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
-##  $<INSTALL_INTERFACE:vendor>
-##  $<INSTALL_INTERFACE:vendor/spdlog/include>
   )
 target_link_libraries(Spaghetti
   PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
   PRIVATE ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
+  PRIVATE $<$<BOOL:${SPAGHETTI_USE_OPENGL}>:Qt5::OpenGL>
+  PRIVATE $<$<BOOL:${SPAGHETTI_USE_CHARTS}>:Qt5::Charts>
 )
-if (SPAGHETTI_USE_OPENGL)
-  target_compile_definitions(Spaghetti PRIVATE SPAGHETTI_USE_OPENGL)
-  target_link_libraries(Spaghetti PUBLIC Qt5::OpenGL)
-endif ()
-
 if (CLANG)
   target_link_libraries(Spaghetti PUBLIC -stdlib=libc++)
 endif ()

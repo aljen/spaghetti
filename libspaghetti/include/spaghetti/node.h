@@ -95,11 +95,15 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   virtual void showProperties();
   virtual void refreshCentralWidget() {}
   virtual void elementSet() {}
+  virtual bool open() { return false; }
 
   void showCommonProperties();
   void showIOProperties(IOSocketsType const a_type);
 
   void calculateBoundingRect();
+
+  void changeInputName(int const a_id, QString const a_name);
+  void changeOutputName(int const a_id, QString const a_name);
 
  protected:
   void setCentralWidget(QGraphicsItem *a_centralWidget);

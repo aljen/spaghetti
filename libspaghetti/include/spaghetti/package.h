@@ -102,12 +102,12 @@ class SPAGHETTI_API Package final : public Element {
   void resumeDispatchThread();
 
   void setInputsPosition(double const a_x, double const a_y);
-  void setInputsPosition(Vec2 const a_position) { m_inputsPosition = a_position; }
-  Vec2 const &inputsPosition() const { return m_inputsPosition; }
+  void setInputsPosition(vec2d const a_position) { m_inputsPosition = a_position; }
+  vec2d const &inputsPosition() const { return m_inputsPosition; }
 
   void setOutputsPosition(double const a_x, double const a_y);
-  void setOutputsPosition(Vec2 const a_position) { m_outputsPosition = a_position; }
-  Vec2 const &outputsPosition() const { return m_outputsPosition; }
+  void setOutputsPosition(vec2d const a_position) { m_outputsPosition = a_position; }
+  vec2d const &outputsPosition() const { return m_outputsPosition; }
 
   Elements const &elements() const { return m_elements; }
   Connections const &connections() const { return m_connections; }
@@ -119,8 +119,8 @@ class SPAGHETTI_API Package final : public Element {
   std::string m_packageDescription{ "A package" };
   std::string m_packagePath{ "packages/unknown_package" };
   std::string m_packageIcon{ "icons/unknown.png" };
-  Vec2 m_inputsPosition{};
-  Vec2 m_outputsPosition{};
+  vec2d m_inputsPosition{};
+  vec2d m_outputsPosition{};
   Elements m_elements{};
   Connections m_connections{};
 
