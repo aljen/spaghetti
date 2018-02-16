@@ -48,7 +48,7 @@ Valve::Valve()
 
 void Valve::update(duration_t const &a_delta)
 {
-  m_deltaMS = static_cast<float>(a_delta.count()) / 1000.f;
+  m_deltaS = static_cast<float>(a_delta.count()) / 1000.f;
 }
 
 void Valve::calculate()
@@ -71,7 +71,7 @@ void Valve::calculate()
     m_outputs[1].value = -(m_deltaP / V2);
   }
 
-  m_deltaP = VALVE * (RO * m_deltaV * m_deltaV) / 2.f * m_deltaMS;
+  m_deltaP = VALVE * (RO * m_deltaV * m_deltaV) / 2.f * m_deltaS;
 }
 
 } // namespace spaghetti::elements::pneumatic

@@ -42,7 +42,7 @@ class Valve final : public Element {
   void calculate() override;
 
  private:
-  float m_deltaMS{};
+  float m_deltaS{};
   float m_deltaV{};
   float m_deltaP{};
 };
