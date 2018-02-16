@@ -67,7 +67,7 @@ void Tank::deserialize(const Json &a_json)
 void Tank::calculate()
 {
   float deltaP{};
-  for (auto &input : m_inputs) deltaP += std::get<float>(input.value);
+  for (auto const &input : m_inputs) deltaP += std::get<float>(input.value);
   m_pressure += deltaP;
   m_outputs[0].value = m_pressure;
   m_outputs[1].value = m_volume;
