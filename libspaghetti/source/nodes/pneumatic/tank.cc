@@ -31,6 +31,7 @@ namespace spaghetti::nodes::pneumatic {
 void Tank::showProperties()
 {
   showCommonProperties();
+  showIOProperties(IOSocketsType::eInputs);
 
   propertiesInsertTitle("Tank");
 
@@ -49,10 +50,11 @@ void Tank::showProperties()
   pressureValue->setValue(static_cast<qreal>(tank->initialPressure()));
   m_properties->setCellWidget(currentIndex, 1, pressureValue);
 
-  QObject::connect(pressureValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged), [this](qreal a_value) {
-    auto const tankElement{ static_cast<elements::pneumatic::Tank *const>(m_element) };
-    tankElement->setInitialPressure(static_cast<qreal>(a_value));
-  });
+  QObject::connect(pressureValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
+                   [this](qreal a_value) {
+                     auto const tankElement{ static_cast<elements::pneumatic::Tank *const>(m_element) };
+                     tankElement->setInitialPressure(static_cast<float>(a_value));
+                   });
 
   currentIndex = m_properties->rowCount();
   m_properties->insertRow(currentIndex);
@@ -66,10 +68,11 @@ void Tank::showProperties()
   volumeValue->setValue(static_cast<qreal>(tank->volume()));
   m_properties->setCellWidget(currentIndex, 1, volumeValue);
 
-  QObject::connect(volumeValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged), [this](qreal a_value) {
-    auto const tankElement{ static_cast<elements::pneumatic::Tank *const>(m_element) };
-    tankElement->setVolume(static_cast<qreal>(a_value));
-  });
+  QObject::connect(volumeValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
+                   [this](qreal a_value) {
+                     auto const tankElement{ static_cast<elements::pneumatic::Tank *const>(m_element) };
+                     tankElement->setVolume(static_cast<float>(a_value));
+                   });
 }
 
 } // namespace spaghetti::nodes::pneumatic

@@ -34,14 +34,15 @@ Tank::Tank()
   , m_volume{ INITIAL_VOLUME }
 {
   setMinInputs(1);
-  setMaxInputs(1);
   setMinOutputs(2);
   setMaxOutputs(2);
 
-  addInput(ValueType::eFloat, "ΔP", IOSocket::eCanHoldFloat);
+  addInput(ValueType::eFloat, "ΔP", IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 
   addOutput(ValueType::eFloat, "P", IOSocket::eCanHoldFloat);
   addOutput(ValueType::eFloat, "V", IOSocket::eCanHoldFloat);
+
+  setDefaultNewInputFlags(IOSocket::eCanHoldFloat | IOSocket::eCanChangeName);
 }
 
 void Tank::serialize(Json &a_json)
@@ -65,8 +66,9 @@ void Tank::deserialize(const Json &a_json)
 
 void Tank::calculate()
 {
-  float const DELTA_P{ std::get<float>(m_inputs[0].value) };
-  m_pressure += DELTA_P;
+  float deltaP{};
+  for (auto &input : m_inputs) deltaP += std::get<float>(input.value);
+  m_pressure += deltaP;
   m_outputs[0].value = m_pressure;
   m_outputs[1].value = m_volume;
 }
