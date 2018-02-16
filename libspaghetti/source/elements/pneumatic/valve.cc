@@ -55,9 +55,9 @@ void Valve::calculate()
 {
   float const VALVE{ std::get<float>(m_inputs[0].value) };
   float const P1{ std::get<float>(m_inputs[1].value) };
-  float const V1{ std::get<float>(m_inputs[2].value) };
+  float const V1{ std::get<float>(m_inputs[2].value) + 0.001f };
   float const P2{ std::get<float>(m_inputs[3].value) };
-  float const V2{ std::get<float>(m_inputs[4].value) };
+  float const V2{ std::get<float>(m_inputs[4].value) + 0.001f };
 
   float const ABS_DELTA_P{ std::abs(P1 - P2) };
   float const SQRT_ABS_DELTA_P{ std::sqrt((2.f / RO) * ABS_DELTA_P) };
