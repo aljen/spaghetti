@@ -26,8 +26,6 @@
 
 #include <functional>
 
-#include "nodes/values/characteristic_curve/series.h"
-
 namespace spaghetti::nodes::values::characteristic_curve {
 
 using GeneratorFunc = std::function<double(double, double, double)>;

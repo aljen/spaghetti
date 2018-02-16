@@ -48,10 +48,6 @@
 #include <QtCharts/QLineSeries>
 
 #include "ui/package_view.h"
-//#include "nodes/values/characteristic_curve/axis_widget.h"
-#include "nodes/values/characteristic_curve/axis.h"
-//#include "nodes/values/characteristic_curve/series_widget.h"
-#include "nodes/values/characteristic_curve/series.h"
 
 template<class T>
 class VPtr {

@@ -211,11 +211,6 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/values/const_float.h
   source/nodes/values/const_int.cc
   source/nodes/values/const_int.h
-  source/nodes/values/scale_widget.cc
-  source/nodes/values/scale_widget.h
-  source/nodes/values/scale_widget.ui
-  source/nodes/values/scale_widget_editor.cc
-  source/nodes/values/scale_widget_editor.h
 
   source/nodes/all.h
 
@@ -244,8 +239,6 @@ set(LIBSPAGHETTI_SOURCES
   )
 
 set(LIBSPAGHETTI_CHARTS_SOURCES
-  source/nodes/values/characteristic_curve/axis.cc
-  source/nodes/values/characteristic_curve/axis.h
   source/nodes/values/characteristic_curve/editor_widget.cc
   source/nodes/values/characteristic_curve/editor_widget.h
   source/nodes/values/characteristic_curve/editor_window.cc
@@ -257,8 +250,6 @@ set(LIBSPAGHETTI_CHARTS_SOURCES
   source/nodes/values/characteristic_curve/line.h
   source/nodes/values/characteristic_curve/point.cc
   source/nodes/values/characteristic_curve/point.h
-  source/nodes/values/characteristic_curve/series.cc
-  source/nodes/values/characteristic_curve/series.h
   source/nodes/values/characteristic_curve.cc
   source/nodes/values/characteristic_curve.h
   )
