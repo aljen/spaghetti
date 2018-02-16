@@ -214,8 +214,13 @@ void Registry::registerInternalElements()
   registerElement<values::ClampFloat>("Clamp value (Float)", ":/unknown.png");
   registerElement<values::ClampInt>("Clamp value (Int)", ":/unknown.png");
 
-  registerElement<values::CharacteristicCurve, nodes::values::CharacteristicCurve>("Characteristic Curve",
-                                                                                   ":/unknown.png");
+// clang-format off
+  registerElement<values::CharacteristicCurve
+#ifdef SPAGHETTI_USE_CHARTS
+                  , nodes::values::CharacteristicCurve
+#endif
+                  >("Characteristic Curve", ":/unknown.png");
+// clang-format on
 }
 
 void Registry::loadPlugins()

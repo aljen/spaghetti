@@ -24,7 +24,11 @@
 #ifndef NODES_VALUES_ALL_H
 #define NODES_VALUES_ALL_H
 
-#include "nodes/values/characteristic_curve.h"
+// clang-format off
+#ifdef SPAGHETTI_USE_CHARTS
+# include "nodes/values/characteristic_curve.h"
+#endif
+// clang-format on
 #include "nodes/values/const_bool.h"
 #include "nodes/values/const_float.h"
 #include "nodes/values/const_int.h"

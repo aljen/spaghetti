@@ -202,23 +202,6 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/ui/seven_segment_display.h
 
   source/nodes/values/all.h
-  source/nodes/values/characteristic_curve/axis.cc
-  source/nodes/values/characteristic_curve/axis.h
-  source/nodes/values/characteristic_curve/editor_widget.cc
-  source/nodes/values/characteristic_curve/editor_widget.h
-  source/nodes/values/characteristic_curve/editor_window.cc
-  source/nodes/values/characteristic_curve/editor_window.h
-  source/nodes/values/characteristic_curve/editor_window.ui
-  source/nodes/values/characteristic_curve/generators.cc
-  source/nodes/values/characteristic_curve/generators.h
-  source/nodes/values/characteristic_curve/line.cc
-  source/nodes/values/characteristic_curve/line.h
-  source/nodes/values/characteristic_curve/point.cc
-  source/nodes/values/characteristic_curve/point.h
-  source/nodes/values/characteristic_curve/series.cc
-  source/nodes/values/characteristic_curve/series.h
-  source/nodes/values/characteristic_curve.cc
-  source/nodes/values/characteristic_curve.h
   source/nodes/values/const_bool.cc
   source/nodes/values/const_bool.h
   source/nodes/values/const_float.cc
@@ -257,15 +240,37 @@ set(LIBSPAGHETTI_SOURCES
   source/filesystem.h.in
   )
 
+set(LIBSPAGHETTI_CHARTS_SOURCES
+  source/nodes/values/characteristic_curve/axis.cc
+  source/nodes/values/characteristic_curve/axis.h
+  source/nodes/values/characteristic_curve/editor_widget.cc
+  source/nodes/values/characteristic_curve/editor_widget.h
+  source/nodes/values/characteristic_curve/editor_window.cc
+  source/nodes/values/characteristic_curve/editor_window.h
+  source/nodes/values/characteristic_curve/editor_window.ui
+  source/nodes/values/characteristic_curve/generators.cc
+  source/nodes/values/characteristic_curve/generators.h
+  source/nodes/values/characteristic_curve/line.cc
+  source/nodes/values/characteristic_curve/line.h
+  source/nodes/values/characteristic_curve/point.cc
+  source/nodes/values/characteristic_curve/point.h
+  source/nodes/values/characteristic_curve/series.cc
+  source/nodes/values/characteristic_curve/series.h
+  source/nodes/values/characteristic_curve.cc
+  source/nodes/values/characteristic_curve.h
+  )
+
 set(LIBSPAGHETTI_ALL_SOURCES
   ${LIBSPAGHETTI_GENERATED_SOURCES}
   ${LIBSPAGHETTI_SOURCES}
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${LIBSPAGHETTI_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${LIBSPAGHETTI_CHARTS_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${LIBSPAGHETTI_GENERATED_SOURCES})
 
 add_library(Spaghetti SHARED ${LIBSPAGHETTI_ALL_SOURCES})
+target_sources(Spaghetti PRIVATE $<$<BOOL:${SPAGHETTI_USE_CHARTS}>:${LIBSPAGHETTI_CHARTS_SOURCES}>)
 target_compile_features(Spaghetti PUBLIC cxx_std_17)
 target_compile_definitions(Spaghetti
   PUBLIC SPAGHETTI_SHARED
@@ -273,6 +278,7 @@ target_compile_definitions(Spaghetti
   PRIVATE $<$<CONFIG:Debug>:${SPAGHETTI_DEFINITIONS_DEBUG}>
   PRIVATE $<$<CONFIG:Release>:${SPAGHETTI_DEFINITIONS_RELEASE}>
   PRIVATE $<$<BOOL:${SPAGHETTI_USE_OPENGL}>:SPAGHETTI_USE_OPENGL>
+  PRIVATE $<$<BOOL:${SPAGHETTI_USE_CHARTS}>:SPAGHETTI_USE_CHARTS>
   )
 target_compile_options(Spaghetti
   PRIVATE ${SPAGHETTI_FLAGS}
@@ -296,9 +302,9 @@ target_include_directories(Spaghetti SYSTEM PUBLIC
   )
 target_link_libraries(Spaghetti
   PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
-  PRIVATE Qt5::Charts
   PRIVATE ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
   PRIVATE $<$<BOOL:${SPAGHETTI_USE_OPENGL}>:Qt5::OpenGL>
+  PRIVATE $<$<BOOL:${SPAGHETTI_USE_CHARTS}>:Qt5::Charts>
 )
 if (CLANG)
   target_link_libraries(Spaghetti PUBLIC -stdlib=libc++)
