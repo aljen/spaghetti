@@ -27,6 +27,8 @@
 namespace spaghetti::elements::pneumatic {
 
 constexpr float const RO = 1.2f;
+constexpr float const MIN_V = 0.0001f;
+constexpr float const MAX_V = 9999999.0f;
 
 Valve::Valve()
   : Element{}
