@@ -145,7 +145,7 @@ EditorWindow::EditorWindow(CharacteristicCurve *const a_characteristicCurve)
   connect(m_ui->yAxisMaximum, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
           [this](qreal a_value) { m_ui->editor->setYMaximum(a_value); });
 
-  connect(m_ui->seriesTable, &QTableWidget::cellChanged, [this](int a_row, int a_column) {
+  connect(m_ui->seriesTable, &QTableWidget::cellChanged, [this](int a_row, int) {
     auto const xItem = m_ui->seriesTable->item(a_row, 0);
     auto const yItem = m_ui->seriesTable->item(a_row, 1);
     if (!xItem || !yItem) return;
