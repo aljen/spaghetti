@@ -293,8 +293,6 @@ target_include_directories(Spaghetti
 target_include_directories(Spaghetti SYSTEM PUBLIC
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
-##  $<INSTALL_INTERFACE:vendor>
-##  $<INSTALL_INTERFACE:vendor/spdlog/include>
   )
 target_link_libraries(Spaghetti
   PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
