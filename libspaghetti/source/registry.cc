@@ -177,6 +177,9 @@ void Registry::registerInternalElements()
   registerElement<math::Lerp>("Lerp (Float)", ":/unknown.png");
   registerElement<math::Sign>("Sign (Float)", ":/unknown.png");
 
+  registerElement<pneumatic::Tank, nodes::pneumatic::Tank>("Tank", ":/unknown.png");
+  registerElement<pneumatic::Valve>("Valve", ":/unknown.png");
+
   registerElement<timers::DeltaTime>("Delta Time (ms)", ":/logic/clock.png");
   registerElement<timers::Clock, nodes::timers::Clock>("Clock (ms)", ":/logic/clock.png");
   registerElement<timers::TimerOn>("T_ON", ":/logic/clock.png");

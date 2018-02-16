@@ -27,6 +27,7 @@
 #include "elements/gates/all.h"
 #include "elements/logic/all.h"
 #include "elements/math/all.h"
+#include "elements/pneumatic/all.h"
 #include "elements/timers/all.h"
 #include "elements/ui/all.h"
 #include "elements/values/all.h"

@@ -21,12 +21,40 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_ALL_H
-#define NODES_ALL_H
+#ifndef ELEMENTS_PNEUMATIC_TANK_H
+#define ELEMENTS_PNEUMATIC_TANK_H
 
-#include "nodes/logic/all.h"
-#include "nodes/pneumatic/all.h"
-#include "nodes/ui/all.h"
-#include "nodes/values/all.h"
+#include "spaghetti/element.h"
 
-#endif // NODES_ALL_H
+namespace spaghetti::elements::pneumatic {
+
+class Tank final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "pneumatic/tank" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  Tank();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  void serialize(Json &a_json) override;
+  void deserialize(Json const &a_json) override;
+
+  void calculate() override;
+
+  void setInitialPressure(float const a_pressure);
+  float initialPressure() const { return m_initialPressure; }
+
+  void setVolume(float const a_volume);
+  float volume() const { return m_volume; }
+
+ private:
+  float m_initialPressure{};
+  float m_pressure{};
+  float m_volume{ 10.0 };
+};
+
+} // namespace spaghetti::elements::pneumatic
+
+#endif // ELEMENTS_PNEUMATIC_TANK_H

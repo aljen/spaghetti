@@ -21,12 +21,32 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_ALL_H
-#define NODES_ALL_H
+#ifndef ELEMENTS_PNEUMATIC_VALVE_H
+#define ELEMENTS_PNEUMATIC_VALVE_H
 
-#include "nodes/logic/all.h"
-#include "nodes/pneumatic/all.h"
-#include "nodes/ui/all.h"
-#include "nodes/values/all.h"
+#include "spaghetti/element.h"
 
-#endif // NODES_ALL_H
+namespace spaghetti::elements::pneumatic {
+
+class Valve final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "pneumatic/valve" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  Valve();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  void update(duration_t const &a_delta);
+  void calculate() override;
+
+ private:
+  float m_deltaMS{};
+  float m_deltaV{};
+  float m_deltaP{};
+};
+
+} // namespace spaghetti::elements::pneumatic
+
+#endif // ELEMENTS_PNEUMATIC_VALVE_H

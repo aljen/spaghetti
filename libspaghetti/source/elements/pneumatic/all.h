@@ -21,12 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_ALL_H
-#define NODES_ALL_H
+#ifndef ELEMENTS_PNEUMATIC_ALL_H
+#define ELEMENTS_PNEUMATIC_ALL_H
 
-#include "nodes/logic/all.h"
-#include "nodes/pneumatic/all.h"
-#include "nodes/ui/all.h"
-#include "nodes/values/all.h"
+#include "elements/pneumatic/tank.h"
+#include "elements/pneumatic/valve.h"
 
-#endif // NODES_ALL_H
+#endif // ELEMENTS_PNEUMATIC_ALL_H

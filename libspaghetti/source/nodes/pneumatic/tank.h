@@ -21,12 +21,17 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_ALL_H
-#define NODES_ALL_H
+#ifndef NODES_PNEUMATIC_TANK_H
+#define NODES_PNEUMATIC_TANK_H
 
-#include "nodes/logic/all.h"
-#include "nodes/pneumatic/all.h"
-#include "nodes/ui/all.h"
-#include "nodes/values/all.h"
+#include "spaghetti/node.h"
 
-#endif // NODES_ALL_H
+namespace spaghetti::nodes::pneumatic {
+
+class Tank : public Node {
+  void showProperties() override;
+};
+
+} // namespace spaghetti::nodes::pneumatic
+
+#endif // NODES_PNEUMATIC_TANK_H

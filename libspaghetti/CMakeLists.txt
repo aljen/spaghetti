@@ -111,6 +111,12 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/math/subtract_if.cc
   source/elements/math/subtract_if.h
 
+  source/elements/pneumatic/all.h
+  source/elements/pneumatic/tank.cc
+  source/elements/pneumatic/tank.h
+  source/elements/pneumatic/valve.cc
+  source/elements/pneumatic/valve.h
+
   source/elements/timers/all.h
   source/elements/timers/clock.cc
   source/elements/timers/clock.h
@@ -178,6 +184,10 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/logic/blinker.h
   source/nodes/logic/clock.cc
   source/nodes/logic/clock.h
+
+  source/nodes/pneumatic/all.h
+  source/nodes/pneumatic/tank.cc
+  source/nodes/pneumatic/tank.h
 
   source/nodes/ui/all.h
   source/nodes/ui/float_info.cc
