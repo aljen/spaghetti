@@ -117,6 +117,9 @@ PackageView::PackageView(QTableWidget *const a_properties, Package *const a_pack
   m_timer.start();
 
   m_package->startDispatchThread();
+
+  m_inputs->hide();
+  m_outputs->hide();
 }
 
 PackageView::~PackageView()
