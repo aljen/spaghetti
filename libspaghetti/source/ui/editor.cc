@@ -95,6 +95,15 @@ Editor::Editor(QWidget *const a_parent)
   connect(m_ui->tabWidget, &QTabWidget::tabCloseRequested, this, &Editor::tabCloseRequested);
   connect(m_ui->tabWidget, &QTabWidget::currentChanged, this, &Editor::tabChanged);
 
+  connect(m_ui->elementsList, &QListView::doubleClicked, [this](QModelIndex const &a_index) {
+    (void)a_index;
+
+    auto const view = packageView();
+    if (!view) return;
+
+    view->selectItem(a_index);
+  });
+
   connect(m_ui->clearSearchText, &QToolButton::clicked, [this] { m_ui->searchNode->clear(); });
 
   connect(m_ui->searchNode, &QLineEdit::textChanged, [this](QString const &a_search) {
