@@ -231,6 +231,8 @@ void Node::setName(QString a_name)
 {
   m_name = a_name;
 
+  if (m_packageView) m_packageView->updateName(this);
+
   if (m_element) {
     m_element->setName(a_name.toStdString());
     setToolTip(QString("%1 (%2)").arg(a_name).arg(m_element->id()));
