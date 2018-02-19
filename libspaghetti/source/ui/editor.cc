@@ -42,6 +42,7 @@
 #include <QPolygonF>
 #include <QPushButton>
 #include <QTableWidget>
+#include <QToolButton>
 #include <QUrl>
 #include <cctype>
 #include <fstream>
@@ -67,6 +68,7 @@ Editor::Editor(QWidget *const a_parent)
   m_ui->setupUi(this);
   m_ui->libraryContainer->removeItem(0);
   m_ui->tabWidget->removeTab(0);
+  m_ui->clearSearchText->setIcon(style()->standardIcon(QStyle::SP_DialogResetButton));
 
   connect(m_ui->actionNew, &QAction::triggered, this, &Editor::newPackage);
   connect(m_ui->actionOpen, &QAction::triggered, this, &Editor::openPackage);
