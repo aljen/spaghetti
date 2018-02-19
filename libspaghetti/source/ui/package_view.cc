@@ -493,6 +493,8 @@ void PackageView::selectItem(QModelIndex const &a_index)
   node->setSelected(true);
   setSelectedNode(node);
   showProperties();
+
+  centerOn(node);
 }
 
 void PackageView::setSelectedNode(Node *const a_node)
