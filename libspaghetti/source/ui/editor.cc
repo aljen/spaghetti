@@ -103,7 +103,7 @@ Editor::Editor(QWidget *const a_parent)
     auto const view = packageView();
     if (!view) return;
 
-    auto const model = view->model();
+    auto const model = view->proxyModel();
     model->setFilterWildcard(a_search);
   });
 
@@ -153,7 +153,7 @@ void Editor::tabChanged(int const a_index)
   m_packageViewIndex = a_index;
   if (a_index >= 0) {
     auto const view = packageViewForIndex(a_index);
-    m_ui->elementsList->setModel(view->model());
+    m_ui->elementsList->setModel(view->proxyModel());
   }
 }
 

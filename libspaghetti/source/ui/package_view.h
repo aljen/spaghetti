@@ -104,7 +104,8 @@ class PackageView final : public QGraphicsView {
 
   Node *getNode(size_t const a_id) const { return m_nodes[a_id]; }
 
-  QSortFilterProxyModel *model() const { return m_nodesProxyModel; }
+  NodesListModel *model() const { return m_nodesModel; }
+  QSortFilterProxyModel *proxyModel() const { return m_nodesProxyModel; }
 
   void setSelectedNode(Node *const a_node);
 
