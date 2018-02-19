@@ -29,6 +29,7 @@
 #include <QGraphicsScene>
 #include <QHeaderView>
 #include <QMimeData>
+#include <QSortFilterProxyModel>
 #include <QTableWidget>
 #include <QTimeLine>
 
@@ -214,6 +215,9 @@ void PackageView::open()
     node->setPos(element->position().x, element->position().y);
     node->setElement(element);
     m_scene->addItem(node);
+
+    m_nodesModel->add(node);
+    m_nodesProxyModel->sort(0);
   }
 
   auto const &connections = m_package->connections();
@@ -301,6 +305,8 @@ void PackageView::dropEvent(QDropEvent *a_event)
     m_dragNode->iconify();
 
     m_nodes[element->id()] = m_dragNode;
+    m_nodesModel->add(m_dragNode);
+    m_nodesProxyModel->sort(0);
 
     m_dragNode = nullptr;
   }
@@ -438,6 +444,8 @@ void PackageView::deleteElement()
         auto const node = reinterpret_cast<Node *const>(item);
         auto const ID = node->element()->id();
         m_nodes.remove(ID);
+        m_nodesModel->remove(node);
+        m_nodesProxyModel->sort(0);
 
         if (node == m_selectedNode) setSelectedNode(nullptr);
         delete node;
@@ -456,6 +464,12 @@ void PackageView::deleteElement()
 
   m_timer.start();
   showProperties();
+}
+
+void PackageView::updateName(Node *const a_node)
+{
+  m_nodesModel->update(a_node);
+  m_nodesProxyModel->sort(0);
 }
 
 void PackageView::setSelectedNode(Node *const a_node)
