@@ -36,6 +36,7 @@
 #include <QFileDialog>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
+#include <QListView>
 #include <QMessageBox>
 #include <QPainterPath>
 #include <QPolygonF>
@@ -211,7 +212,7 @@ int Editor::openPackageViews() const
 
 void Editor::newPackage()
 {
-  auto const packageView = new PackageView{ m_ui->propertiesTable };
+  auto const packageView = new PackageView{ m_ui->elementsList, m_ui->propertiesTable };
   m_packageViewIndex = m_ui->tabWidget->addTab(packageView, "New package");
   m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
   packageView->setSelectedNode(nullptr);

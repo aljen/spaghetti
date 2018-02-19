@@ -46,9 +46,59 @@
 
 namespace spaghetti {
 
-PackageView::PackageView(QTableWidget *const a_properties, Package *const a_package)
+NodesListModel::NodesListModel(QObject *const a_parent)
+  : QAbstractListModel{ a_parent }
+{
+}
+
+int NodesListModel::rowCount(QModelIndex const &a_parent) const
+{
+  (void)a_parent;
+  return m_nodes.count();
+}
+
+QVariant NodesListModel::data(QModelIndex const &a_index, int a_role) const
+{
+  if (!a_index.isValid()) return QVariant{};
+
+  auto const node = m_nodes[a_index.row()];
+  if (a_role == Qt::DecorationRole)
+    return node->icon().scaled(QSize(50, 25));
+  else if (a_role == Qt::DisplayRole)
+    return QString("%1 (%2)").arg(node->name()).arg(node->element()->id());
+
+  return QVariant{};
+}
+
+void NodesListModel::add(Node *const a_node)
+{
+  auto const ROW = rowCount();
+  beginInsertRows(QModelIndex(), ROW, ROW);
+  m_nodes.append(a_node);
+  endInsertRows();
+}
+
+void NodesListModel::remove(Node *const a_node)
+{
+  auto const INDEX = m_nodes.indexOf(a_node);
+  beginRemoveRows(QModelIndex(), INDEX, INDEX);
+  m_nodes.removeAt(INDEX);
+  endRemoveRows();
+}
+
+void NodesListModel::update(Node *const a_node)
+{
+  (void)a_node;
+  auto const INDEX = m_nodes.indexOf(a_node);
+  emit dataChanged(index(INDEX), index(INDEX));
+}
+
+PackageView::PackageView(QListView *const a_elements, QTableWidget *const a_properties, Package *const a_package)
   : QGraphicsView{ new QGraphicsScene }
+  , m_elements{ a_elements }
   , m_properties{ a_properties }
+  , m_nodesModel{ new NodesListModel{ this } }
+  , m_nodesProxyModel{ new QSortFilterProxyModel{ this } }
   , m_package{ (a_package ? a_package : new Package) }
   , m_scene{ scene() }
   , m_inputs{ new Node }
@@ -72,6 +122,8 @@ PackageView::PackageView(QTableWidget *const a_properties, Package *const a_pack
   setOptimizationFlags(QGraphicsView::DontSavePainterState | QGraphicsView::DontAdjustForAntialiasing);
 
   setObjectName("PackageView");
+
+  m_nodesProxyModel->setSourceModel(m_nodesModel);
 
   m_scene->setItemIndexMethod(QGraphicsScene::NoIndex);
   m_scene->setSceneRect(-32000, -32000, 64000, 64000);
