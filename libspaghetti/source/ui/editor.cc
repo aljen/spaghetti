@@ -36,11 +36,16 @@
 #include <QFileDialog>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
+#include <QLineEdit>
+#include <QListView>
 #include <QMessageBox>
 #include <QPainterPath>
 #include <QPolygonF>
 #include <QPushButton>
+#include <QShortcut>
+#include <QSortFilterProxyModel>
 #include <QTableWidget>
+#include <QToolButton>
 #include <QUrl>
 #include <cctype>
 #include <fstream>
@@ -66,6 +71,10 @@ Editor::Editor(QWidget *const a_parent)
   m_ui->setupUi(this);
   m_ui->libraryContainer->removeItem(0);
   m_ui->tabWidget->removeTab(0);
+  m_ui->clearSearchText->setIcon(style()->standardIcon(QStyle::SP_DialogResetButton));
+  m_ui->elementsList->setIconSize(QSize(50, 25));
+  m_ui->elementsList->setSpacing(5);
+  m_ui->elementsList->setUniformItemSizes(true);
 
   connect(m_ui->actionNew, &QAction::triggered, this, &Editor::newPackage);
   connect(m_ui->actionOpen, &QAction::triggered, this, &Editor::openPackage);
@@ -85,6 +94,30 @@ Editor::Editor(QWidget *const a_parent)
   connect(m_ui->actionAboutQt, &QAction::triggered, this, &Editor::aboutQt);
   connect(m_ui->tabWidget, &QTabWidget::tabCloseRequested, this, &Editor::tabCloseRequested);
   connect(m_ui->tabWidget, &QTabWidget::currentChanged, this, &Editor::tabChanged);
+
+  connect(m_ui->elementsList, &QListView::doubleClicked, [this](QModelIndex const &a_index) {
+    (void)a_index;
+
+    auto const view = packageView();
+    if (!view) return;
+
+    view->selectItem(a_index);
+  });
+
+  connect(m_ui->clearSearchText, &QToolButton::clicked, [this] { m_ui->searchNode->clear(); });
+
+  connect(m_ui->searchNode, &QLineEdit::textChanged, [this](QString const &a_search) {
+    m_ui->clearSearchText->setDisabled(a_search.isEmpty());
+
+    auto const view = packageView();
+    if (!view) return;
+
+    auto const model = view->proxyModel();
+    model->setFilterWildcard(a_search);
+  });
+
+  auto const shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), this);
+  connect(shortcut, &QShortcut::activated, [this] { m_ui->searchNode->setFocus(); });
 
   QDir packagesDir{ PACKAGES_DIR };
   if (!packagesDir.exists()) packagesDir.mkpath(".");
@@ -127,6 +160,10 @@ void Editor::tabCloseRequested(int const a_index)
 void Editor::tabChanged(int const a_index)
 {
   m_packageViewIndex = a_index;
+  if (a_index >= 0) {
+    auto const view = packageViewForIndex(a_index);
+    m_ui->elementsList->setModel(view->proxyModel());
+  }
 }
 
 void Editor::populateLibrary()
@@ -211,7 +248,7 @@ int Editor::openPackageViews() const
 
 void Editor::newPackage()
 {
-  auto const packageView = new PackageView{ m_ui->propertiesTable };
+  auto const packageView = new PackageView{ m_ui->elementsList, m_ui->propertiesTable };
   m_packageViewIndex = m_ui->tabWidget->addTab(packageView, "New package");
   m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
   packageView->setSelectedNode(nullptr);

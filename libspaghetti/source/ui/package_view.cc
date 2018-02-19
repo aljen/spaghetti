@@ -29,6 +29,7 @@
 #include <QGraphicsScene>
 #include <QHeaderView>
 #include <QMimeData>
+#include <QSortFilterProxyModel>
 #include <QTableWidget>
 #include <QTimeLine>
 
@@ -46,9 +47,68 @@
 
 namespace spaghetti {
 
-PackageView::PackageView(QTableWidget *const a_properties, Package *const a_package)
+NodesListModel::NodesListModel(QObject *const a_parent)
+  : QAbstractListModel{ a_parent }
+{
+}
+
+int NodesListModel::rowCount(QModelIndex const &a_parent) const
+{
+  (void)a_parent;
+  return m_nodes.count();
+}
+
+QVariant NodesListModel::data(QModelIndex const &a_index, int a_role) const
+{
+  if (!a_index.isValid()) return QVariant{};
+
+  auto const node = m_nodes[a_index.row()];
+  if (a_role == Qt::DecorationRole)
+    return node->icon().scaled(QSize(50, 25));
+  else if (a_role == Qt::DisplayRole)
+    return QString("%1 (%2)").arg(node->name()).arg(node->element()->id());
+
+  return QVariant{};
+}
+
+void NodesListModel::add(Node *const a_node)
+{
+  auto const ROW = rowCount();
+  beginInsertRows(QModelIndex(), ROW, ROW);
+  m_nodes.append(a_node);
+  endInsertRows();
+}
+
+void NodesListModel::remove(Node *const a_node)
+{
+  auto const INDEX = m_nodes.indexOf(a_node);
+  beginRemoveRows(QModelIndex(), INDEX, INDEX);
+  m_nodes.removeAt(INDEX);
+  endRemoveRows();
+}
+
+void NodesListModel::update(Node *const a_node)
+{
+  (void)a_node;
+  auto const INDEX = m_nodes.indexOf(a_node);
+  emit dataChanged(index(INDEX), index(INDEX));
+}
+
+Node *NodesListModel::nodeFor(const QModelIndex &a_index)
+{
+  if (!a_index.isValid()) return nullptr;
+  auto const ROW = a_index.row();
+  if (ROW < 0 || ROW > m_nodes.size()) return nullptr;
+
+  return m_nodes[ROW];
+}
+
+PackageView::PackageView(QListView *const a_elements, QTableWidget *const a_properties, Package *const a_package)
   : QGraphicsView{ new QGraphicsScene }
+  , m_elements{ a_elements }
   , m_properties{ a_properties }
+  , m_nodesModel{ new NodesListModel{ this } }
+  , m_nodesProxyModel{ new QSortFilterProxyModel{ this } }
   , m_package{ (a_package ? a_package : new Package) }
   , m_scene{ scene() }
   , m_inputs{ new Node }
@@ -72,6 +132,8 @@ PackageView::PackageView(QTableWidget *const a_properties, Package *const a_pack
   setOptimizationFlags(QGraphicsView::DontSavePainterState | QGraphicsView::DontAdjustForAntialiasing);
 
   setObjectName("PackageView");
+
+  m_nodesProxyModel->setSourceModel(m_nodesModel);
 
   m_scene->setItemIndexMethod(QGraphicsScene::NoIndex);
   m_scene->setSceneRect(-32000, -32000, 64000, 64000);
@@ -162,6 +224,9 @@ void PackageView::open()
     node->setPos(element->position().x, element->position().y);
     node->setElement(element);
     m_scene->addItem(node);
+
+    m_nodesModel->add(node);
+    m_nodesProxyModel->sort(0);
   }
 
   auto const &connections = m_package->connections();
@@ -249,6 +314,8 @@ void PackageView::dropEvent(QDropEvent *a_event)
     m_dragNode->iconify();
 
     m_nodes[element->id()] = m_dragNode;
+    m_nodesModel->add(m_dragNode);
+    m_nodesProxyModel->sort(0);
 
     m_dragNode = nullptr;
   }
@@ -386,6 +453,8 @@ void PackageView::deleteElement()
         auto const node = reinterpret_cast<Node *const>(item);
         auto const ID = node->element()->id();
         m_nodes.remove(ID);
+        m_nodesModel->remove(node);
+        m_nodesProxyModel->sort(0);
 
         if (node == m_selectedNode) setSelectedNode(nullptr);
         delete node;
@@ -404,6 +473,28 @@ void PackageView::deleteElement()
 
   m_timer.start();
   showProperties();
+}
+
+void PackageView::updateName(Node *const a_node)
+{
+  m_nodesModel->update(a_node);
+  m_nodesProxyModel->sort(0);
+}
+
+void PackageView::selectItem(QModelIndex const &a_index)
+{
+  auto const INDEX = m_nodesProxyModel->mapToSource(a_index);
+  auto const node = m_nodesModel->nodeFor(INDEX);
+
+  assert(node);
+
+  scene()->clearSelection();
+
+  node->setSelected(true);
+  setSelectedNode(node);
+  showProperties();
+
+  centerOn(node);
 }
 
 void PackageView::setSelectedNode(Node *const a_node)

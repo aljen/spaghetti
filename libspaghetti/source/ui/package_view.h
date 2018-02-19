@@ -24,11 +24,14 @@
 #ifndef UI_PACKAGE_VIEW_H
 #define UI_PACKAGE_VIEW_H
 
+#include <QAbstractListModel>
 #include <QGraphicsView>
 #include <QHash>
 #include <QTimer>
 
 class QTableWidget;
+class QListView;
+class QSortFilterProxyModel;
 
 namespace spaghetti {
 
@@ -36,13 +39,33 @@ class Package;
 class Node;
 class LinkItem;
 
+class NodesListModel : public QAbstractListModel {
+  Q_OBJECT
+
+ public:
+  explicit NodesListModel(QObject *const a_parent);
+
+  int rowCount(QModelIndex const &a_parent = QModelIndex()) const override;
+  QVariant data(QModelIndex const &a_index, int a_role = Qt::DisplayRole) const override;
+
+  void add(Node *const a_node);
+  void remove(Node *const a_node);
+  void update(Node *const a_node);
+
+  Node *nodeFor(QModelIndex const &a_index);
+
+ private:
+  QList<Node *> m_nodes{};
+};
+
 class PackageView final : public QGraphicsView {
   Q_OBJECT
 
  public:
   using Nodes = QHash<size_t, Node *>;
 
-  explicit PackageView(QTableWidget *const a_properties, Package *const a_package = nullptr);
+  explicit PackageView(QListView *const a_elements, QTableWidget *const a_properties,
+                       Package *const a_package = nullptr);
   ~PackageView() override;
 
   void open();
@@ -76,10 +99,16 @@ class PackageView final : public QGraphicsView {
 
   void deleteElement();
 
+  void updateName(Node *const a_node);
+  void selectItem(QModelIndex const &a_index);
+
   Nodes &nodes() { return m_nodes; }
   Nodes const &nodes() const { return m_nodes; }
 
   Node *getNode(size_t const a_id) const { return m_nodes[a_id]; }
+
+  NodesListModel *model() const { return m_nodesModel; }
+  QSortFilterProxyModel *proxyModel() const { return m_nodesProxyModel; }
 
   void setSelectedNode(Node *const a_node);
 
@@ -90,7 +119,10 @@ class PackageView final : public QGraphicsView {
   void updateGrid(qreal const a_scale);
 
  private:
+  QListView *const m_elements{};
   QTableWidget *const m_properties{};
+  NodesListModel *const m_nodesModel{};
+  QSortFilterProxyModel *const m_nodesProxyModel{};
   Package *const m_package{};
   Nodes m_nodes{};
   QGraphicsScene *const m_scene{};

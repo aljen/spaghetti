@@ -231,6 +231,8 @@ void Node::setName(QString a_name)
 {
   m_name = a_name;
 
+  if (m_packageView) m_packageView->updateName(this);
+
   if (m_element) {
     m_element->setName(a_name.toStdString());
     setToolTip(QString("%1 (%2)").arg(a_name).arg(m_element->id()));
@@ -424,7 +426,7 @@ void Node::showIOProperties(IOSocketsType const a_type)
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(row, 0, item);
 
-  QSpinBox *const count = new QSpinBox;
+  auto const count = new QSpinBox;
   count->setRange(MIN_IOS_SIZE, MAX_IOS_SIZE);
   count->setValue(static_cast<int>(ios.size()));
   m_properties->setCellWidget(row, 1, count);
@@ -454,7 +456,7 @@ void Node::showIOProperties(IOSocketsType const a_type)
       m_properties->setItem(row, 0, item);
     }
 
-    QComboBox *const comboBox{ new QComboBox };
+    auto const comboBox{ new QComboBox };
     if (IO.flags & Element::IOSocket::eCanHoldBool)
       comboBox->addItem(valueType2QString(ValueType::eBool), static_cast<int>(ValueType::eBool));
     if (IO.flags & Element::IOSocket::eCanHoldInt)
