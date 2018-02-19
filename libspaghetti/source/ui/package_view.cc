@@ -481,6 +481,20 @@ void PackageView::updateName(Node *const a_node)
   m_nodesProxyModel->sort(0);
 }
 
+void PackageView::selectItem(QModelIndex const &a_index)
+{
+  auto const INDEX = m_nodesProxyModel->mapToSource(a_index);
+  auto const node = m_nodesModel->nodeFor(INDEX);
+
+  assert(node);
+
+  scene()->clearSelection();
+
+  node->setSelected(true);
+  setSelectedNode(node);
+  showProperties();
+}
+
 void PackageView::setSelectedNode(Node *const a_node)
 {
   if (a_node == nullptr)

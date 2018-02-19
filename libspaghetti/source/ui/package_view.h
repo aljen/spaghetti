@@ -100,6 +100,7 @@ class PackageView final : public QGraphicsView {
   void deleteElement();
 
   void updateName(Node *const a_node);
+  void selectItem(QModelIndex const &a_index);
 
   Nodes &nodes() { return m_nodes; }
   Nodes const &nodes() const { return m_nodes; }
