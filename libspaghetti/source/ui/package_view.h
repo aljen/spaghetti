@@ -52,6 +52,8 @@ class NodesListModel : public QAbstractListModel {
   void remove(Node *const a_node);
   void update(Node *const a_node);
 
+  Node *nodeFor(QModelIndex const &a_index);
+
  private:
   QList<Node *> m_nodes{};
 };

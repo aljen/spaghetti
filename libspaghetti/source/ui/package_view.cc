@@ -94,6 +94,15 @@ void NodesListModel::update(Node *const a_node)
   emit dataChanged(index(INDEX), index(INDEX));
 }
 
+Node *NodesListModel::nodeFor(const QModelIndex &a_index)
+{
+  if (!a_index.isValid()) return nullptr;
+  auto const ROW = a_index.row();
+  if (ROW < 0 || ROW > m_nodes.size()) return nullptr;
+
+  return m_nodes[ROW];
+}
+
 PackageView::PackageView(QListView *const a_elements, QTableWidget *const a_properties, Package *const a_package)
   : QGraphicsView{ new QGraphicsScene }
   , m_elements{ a_elements }
