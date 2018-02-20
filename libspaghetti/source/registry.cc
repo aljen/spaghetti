@@ -147,6 +147,8 @@ void Registry::registerInternalElements()
   registerElement<logic::IfLower>("If A < B (Float)", ":/unknown.png");
   registerElement<logic::IfLowerEqual>("If A <= B (Float)", ":/unknown.png");
 
+  registerElement<logic::Latch>("Latch (Bool)", ":/unknown.png");
+
   registerElement<logic::MemoryResetSet>("Memory RS (Bool)", ":/unknown.png");
   registerElement<logic::MemorySetReset>("Memory SR (Bool)", ":/unknown.png");
 

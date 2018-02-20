@@ -20,23 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
-
-#include "elements/logic/blinker.h"
-#include "elements/logic/demultiplexer_int.h"
-#include "elements/logic/if_equal.h"
-#include "elements/logic/if_greater.h"
-#include "elements/logic/if_greater_equal.h"
-#include "elements/logic/if_lower.h"
-#include "elements/logic/if_lower_equal.h"
 #include "elements/logic/latch.h"
-#include "elements/logic/memory_reset_set.h"
-#include "elements/logic/memory_set_reset.h"
-#include "elements/logic/multiplexer_int.h"
-#include "elements/logic/switch.h"
-#include "elements/logic/trigger_falling.h"
-#include "elements/logic/trigger_rising.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace spaghetti::elements::logic {
+
+Latch ::Latch()
+  : Element{}
+{
+  setMinInputs(1);
+  setMaxInputs(1);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+
+  addInput(ValueType::eBool, "Input", IOSocket::eCanHoldBool);
+
+  addOutput(ValueType::eBool, "State", IOSocket::eCanHoldBool);
+}
+
+void Latch ::calculate()
+{
+  bool const INPUT{ std::get<bool>(m_inputs[0].value) };
+
+  if (INPUT != m_lastValue && INPUT) m_state = !m_state;
+
+  m_outputs[0].value = m_state;
+
+  m_lastValue = INPUT;
+}
+
+} // namespace spaghetti::elements::logic
