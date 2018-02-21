@@ -141,6 +141,7 @@ void Registry::registerInternalElements()
   registerElement<gates::Not>("NOT (Bool)", ":/gates/not.png");
   registerElement<gates::Or>("OR (Bool)", ":/gates/or.png");
 
+  registerElement<logic::AssignFloat>("Assign (Float)", ":/unknown.png");
   registerElement<logic::AssignInt>("Assign (Int)", ":/unknown.png");
 
   registerElement<logic::IfGreaterEqual>("If A >= B (Float)", ":/unknown.png");
