@@ -170,6 +170,8 @@ void Registry::registerInternalElements()
 
   registerElement<logic::PID>("PID", ":/unknown.png");
 
+  registerElement<logic::SnapshotFloat>("Snapshot (Float)", ":/unknown.png");
+
   registerElement<math::Abs>("Abs (Float)", ":/unknown.png");
   registerElement<math::BCD>("BCD", ":/unknown.png");
 
