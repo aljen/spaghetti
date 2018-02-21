@@ -57,6 +57,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/gates/or.h
 
   source/elements/logic/all.h
+  source/elements/logic/assign_int.cc
+  source/elements/logic/assign_int.h
   source/elements/logic/blinker.cc
   source/elements/logic/blinker.h
   source/elements/logic/demultiplexer_int.cc
