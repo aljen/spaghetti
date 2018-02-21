@@ -144,6 +144,8 @@ void Registry::registerInternalElements()
   registerElement<logic::AssignFloat>("Assign (Float)", ":/unknown.png");
   registerElement<logic::AssignInt>("Assign (Int)", ":/unknown.png");
 
+  registerElement<logic::CounterDown>("Counter Down (Int)", ":/unknown.png");
+
   registerElement<logic::IfGreaterEqual>("If A >= B (Float)", ":/unknown.png");
   registerElement<logic::IfGreater>("If A > B (Float)", ":/unknown.png");
   registerElement<logic::IfEqual>("If A == B (Float)", ":/unknown.png");

@@ -63,6 +63,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/logic/assign_int.h
   source/elements/logic/blinker.cc
   source/elements/logic/blinker.h
+  source/elements/logic/counter_down.cc
+  source/elements/logic/counter_down.h
   source/elements/logic/demultiplexer_int.cc
   source/elements/logic/demultiplexer_int.h
   source/elements/logic/if_equal.cc

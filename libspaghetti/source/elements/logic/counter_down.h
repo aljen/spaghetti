@@ -21,25 +21,33 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
+#ifndef ELEMENTS_LOGIC_COUNTER_DOWN_H
+#define ELEMENTS_LOGIC_COUNTER_DOWN_H
 
-#include "elements/logic/assign_float.h"
-#include "elements/logic/assign_int.h"
-#include "elements/logic/blinker.h"
-#include "elements/logic/counter_down.h"
-#include "elements/logic/demultiplexer_int.h"
-#include "elements/logic/if_equal.h"
-#include "elements/logic/if_greater.h"
-#include "elements/logic/if_greater_equal.h"
-#include "elements/logic/if_lower.h"
-#include "elements/logic/if_lower_equal.h"
-#include "elements/logic/latch.h"
-#include "elements/logic/memory_reset_set.h"
-#include "elements/logic/memory_set_reset.h"
-#include "elements/logic/multiplexer_int.h"
-#include "elements/logic/switch.h"
-#include "elements/logic/trigger_falling.h"
-#include "elements/logic/trigger_rising.h"
+#include "spaghetti/element.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace spaghetti::elements::logic {
+
+class CounterDown final : public Element {
+ public:
+  static constexpr char const *const TYPE{ "logic/counter_down" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+  CounterDown();
+
+  char const *type() const noexcept override { return TYPE; }
+  string::hash_t hash() const noexcept override { return HASH; }
+
+  void calculate() override;
+
+ private:
+  int32_t m_preset{};
+  int32_t m_current{};
+  bool m_state{};
+  bool m_lastCD{};
+  bool m_lastLoad{};
+};
+
+} // namespace spaghetti::elements::logic
+
+#endif // ELEMENTS_LOGIC_COUNTER_DOWN_H
