@@ -146,6 +146,7 @@ void Registry::registerInternalElements()
 
   registerElement<logic::CounterDown>("Counter Down (Int)", ":/unknown.png");
   registerElement<logic::CounterUp>("Counter Up (Int)", ":/unknown.png");
+  registerElement<logic::CounterUpDown>("Counter Up/Down (Int)", ":/unknown.png");
 
   registerElement<logic::IfGreaterEqual>("If A >= B (Float)", ":/unknown.png");
   registerElement<logic::IfGreater>("If A > B (Float)", ":/unknown.png");
