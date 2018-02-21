@@ -168,6 +168,8 @@ void Registry::registerInternalElements()
   registerElement<logic::TriggerFalling>("Trigger Falling (Bool)", ":/unknown.png");
   registerElement<logic::TriggerRising>("Trigger Rising (Bool)", ":/unknown.png");
 
+  registerElement<logic::PID>("PID", ":/unknown.png");
+
   registerElement<math::Abs>("Abs (Float)", ":/unknown.png");
   registerElement<math::BCD>("BCD", ":/unknown.png");
 

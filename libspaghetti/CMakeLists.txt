@@ -89,6 +89,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/logic/memory_set_reset.h
   source/elements/logic/multiplexer_int.cc
   source/elements/logic/multiplexer_int.h
+  source/elements/logic/pid.cc
+  source/elements/logic/pid.h
   source/elements/logic/switch.cc
   source/elements/logic/switch.h
   source/elements/logic/trigger_falling.cc
