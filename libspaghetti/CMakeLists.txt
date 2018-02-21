@@ -57,8 +57,18 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/gates/or.h
 
   source/elements/logic/all.h
+  source/elements/logic/assign_float.cc
+  source/elements/logic/assign_float.h
+  source/elements/logic/assign_int.cc
+  source/elements/logic/assign_int.h
   source/elements/logic/blinker.cc
   source/elements/logic/blinker.h
+  source/elements/logic/counter_down.cc
+  source/elements/logic/counter_down.h
+  source/elements/logic/counter_up.cc
+  source/elements/logic/counter_up.h
+  source/elements/logic/counter_up_down.cc
+  source/elements/logic/counter_up_down.h
   source/elements/logic/demultiplexer_int.cc
   source/elements/logic/demultiplexer_int.h
   source/elements/logic/if_equal.cc
@@ -79,6 +89,12 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/logic/memory_set_reset.h
   source/elements/logic/multiplexer_int.cc
   source/elements/logic/multiplexer_int.h
+  source/elements/logic/pid.cc
+  source/elements/logic/pid.h
+  source/elements/logic/snapshot_float.cc
+  source/elements/logic/snapshot_float.h
+  source/elements/logic/snapshot_int.cc
+  source/elements/logic/snapshot_int.h
   source/elements/logic/switch.cc
   source/elements/logic/switch.h
   source/elements/logic/trigger_falling.cc

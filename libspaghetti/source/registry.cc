@@ -141,6 +141,13 @@ void Registry::registerInternalElements()
   registerElement<gates::Not>("NOT (Bool)", ":/gates/not.png");
   registerElement<gates::Or>("OR (Bool)", ":/gates/or.png");
 
+  registerElement<logic::AssignFloat>("Assign (Float)", ":/unknown.png");
+  registerElement<logic::AssignInt>("Assign (Int)", ":/unknown.png");
+
+  registerElement<logic::CounterDown>("Counter Down (Int)", ":/unknown.png");
+  registerElement<logic::CounterUp>("Counter Up (Int)", ":/unknown.png");
+  registerElement<logic::CounterUpDown>("Counter Up/Down (Int)", ":/unknown.png");
+
   registerElement<logic::IfGreaterEqual>("If A >= B (Float)", ":/unknown.png");
   registerElement<logic::IfGreater>("If A > B (Float)", ":/unknown.png");
   registerElement<logic::IfEqual>("If A == B (Float)", ":/unknown.png");
@@ -160,6 +167,11 @@ void Registry::registerInternalElements()
 
   registerElement<logic::TriggerFalling>("Trigger Falling (Bool)", ":/unknown.png");
   registerElement<logic::TriggerRising>("Trigger Rising (Bool)", ":/unknown.png");
+
+  registerElement<logic::PID>("PID", ":/unknown.png");
+
+  registerElement<logic::SnapshotFloat>("Snapshot (Float)", ":/unknown.png");
+  registerElement<logic::SnapshotInt>("Snapshot (Int)", ":/unknown.png");
 
   registerElement<math::Abs>("Abs (Float)", ":/unknown.png");
   registerElement<math::BCD>("BCD", ":/unknown.png");

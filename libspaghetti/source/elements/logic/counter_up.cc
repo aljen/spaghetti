@@ -20,31 +20,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
-
-#include "elements/logic/assign_float.h"
-#include "elements/logic/assign_int.h"
-#include "elements/logic/blinker.h"
-#include "elements/logic/counter_down.h"
 #include "elements/logic/counter_up.h"
-#include "elements/logic/counter_up_down.h"
-#include "elements/logic/demultiplexer_int.h"
-#include "elements/logic/if_equal.h"
-#include "elements/logic/if_greater.h"
-#include "elements/logic/if_greater_equal.h"
-#include "elements/logic/if_lower.h"
-#include "elements/logic/if_lower_equal.h"
-#include "elements/logic/latch.h"
-#include "elements/logic/memory_reset_set.h"
-#include "elements/logic/memory_set_reset.h"
-#include "elements/logic/multiplexer_int.h"
-#include "elements/logic/pid.h"
-#include "elements/logic/snapshot_float.h"
-#include "elements/logic/snapshot_int.h"
-#include "elements/logic/switch.h"
-#include "elements/logic/trigger_falling.h"
-#include "elements/logic/trigger_rising.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace spaghetti::elements::logic {
+
+CounterUp::CounterUp()
+  : Element{}
+{
+  setMinInputs(3);
+  setMaxInputs(3);
+  setMinOutputs(2);
+  setMaxOutputs(2);
+
+  addInput(ValueType::eBool, "Counts up", IOSocket::eCanHoldBool);
+  addInput(ValueType::eBool, "Reset", IOSocket::eCanHoldBool);
+  addInput(ValueType::eInt, "Preset value", IOSocket::eCanHoldInt);
+
+  addOutput(ValueType::eBool, "State", IOSocket::eCanHoldBool);
+  addOutput(ValueType::eInt, "Current value", IOSocket::eCanHoldInt);
+}
+
+void CounterUp::calculate()
+{
+  bool const CU{ std::get<bool>(m_inputs[0].value) };
+  bool const RESET{ std::get<bool>(m_inputs[1].value) };
+  int32_t const PRESET_VALUE{ std::get<int32_t>(m_inputs[2].value) };
+
+  if (RESET != m_lastReset && RESET) {
+    m_preset = PRESET_VALUE;
+    m_current = 0;
+    m_state = false;
+  }
+
+  if (CU != m_lastCU && CU && m_current < m_preset) m_state = ++m_current == m_preset;
+
+  m_outputs[0].value = m_state;
+  m_outputs[1].value = m_current;
+
+  m_lastCU = CU;
+  m_lastReset = RESET;
+}
+
+} // namespace spaghetti::elements::logic

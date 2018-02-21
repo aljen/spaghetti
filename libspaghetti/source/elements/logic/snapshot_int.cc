@@ -20,31 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
-
-#include "elements/logic/assign_float.h"
-#include "elements/logic/assign_int.h"
-#include "elements/logic/blinker.h"
-#include "elements/logic/counter_down.h"
-#include "elements/logic/counter_up.h"
-#include "elements/logic/counter_up_down.h"
-#include "elements/logic/demultiplexer_int.h"
-#include "elements/logic/if_equal.h"
-#include "elements/logic/if_greater.h"
-#include "elements/logic/if_greater_equal.h"
-#include "elements/logic/if_lower.h"
-#include "elements/logic/if_lower_equal.h"
-#include "elements/logic/latch.h"
-#include "elements/logic/memory_reset_set.h"
-#include "elements/logic/memory_set_reset.h"
-#include "elements/logic/multiplexer_int.h"
-#include "elements/logic/pid.h"
-#include "elements/logic/snapshot_float.h"
 #include "elements/logic/snapshot_int.h"
-#include "elements/logic/switch.h"
-#include "elements/logic/trigger_falling.h"
-#include "elements/logic/trigger_rising.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace spaghetti::elements::logic {
+
+SnapshotInt::SnapshotInt()
+  : Element{}
+{
+  setMinInputs(2);
+  setMaxInputs(2);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+
+  addInput(ValueType::eBool, "Input", IOSocket::eCanHoldBool);
+  addInput(ValueType::eInt, "Value", IOSocket::eCanHoldInt);
+
+  addOutput(ValueType::eInt, "Value", IOSocket::eCanHoldInt);
+}
+
+void SnapshotInt::calculate()
+{
+  bool const INPUT{ std::get<bool>(m_inputs[0].value) };
+  int32_t const VALUE{ std::get<int32_t>(m_inputs[1].value) };
+
+  if (INPUT) m_value = VALUE;
+
+  m_outputs[0].value = m_value;
+}
+
+} // namespace spaghetti::elements::logic

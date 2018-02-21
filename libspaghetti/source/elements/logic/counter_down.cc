@@ -20,31 +20,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
-
-#include "elements/logic/assign_float.h"
-#include "elements/logic/assign_int.h"
-#include "elements/logic/blinker.h"
 #include "elements/logic/counter_down.h"
-#include "elements/logic/counter_up.h"
-#include "elements/logic/counter_up_down.h"
-#include "elements/logic/demultiplexer_int.h"
-#include "elements/logic/if_equal.h"
-#include "elements/logic/if_greater.h"
-#include "elements/logic/if_greater_equal.h"
-#include "elements/logic/if_lower.h"
-#include "elements/logic/if_lower_equal.h"
-#include "elements/logic/latch.h"
-#include "elements/logic/memory_reset_set.h"
-#include "elements/logic/memory_set_reset.h"
-#include "elements/logic/multiplexer_int.h"
-#include "elements/logic/pid.h"
-#include "elements/logic/snapshot_float.h"
-#include "elements/logic/snapshot_int.h"
-#include "elements/logic/switch.h"
-#include "elements/logic/trigger_falling.h"
-#include "elements/logic/trigger_rising.h"
 
-#endif // ELEMENTS_LOGIC_ALL_H
+namespace spaghetti::elements::logic {
+
+CounterDown::CounterDown()
+  : Element{}
+{
+  setMinInputs(3);
+  setMaxInputs(3);
+  setMinOutputs(2);
+  setMaxOutputs(2);
+
+  addInput(ValueType::eBool, "Counts down", IOSocket::eCanHoldBool);
+  addInput(ValueType::eBool, "Load", IOSocket::eCanHoldBool);
+  addInput(ValueType::eInt, "Preset value", IOSocket::eCanHoldInt);
+
+  addOutput(ValueType::eBool, "State", IOSocket::eCanHoldBool);
+  addOutput(ValueType::eInt, "Current value", IOSocket::eCanHoldInt);
+}
+
+void CounterDown::calculate()
+{
+  bool const CD{ std::get<bool>(m_inputs[0].value) };
+  bool const LOAD{ std::get<bool>(m_inputs[1].value) };
+  int32_t const PRESET_VALUE{ std::get<int32_t>(m_inputs[2].value) };
+
+  if (LOAD != m_lastLoad && LOAD) {
+    m_preset = PRESET_VALUE;
+    m_current = PRESET_VALUE;
+    m_state = false;
+  }
+
+  if (CD != m_lastCD && CD && m_current > 0) m_state = --m_current == 0;
+
+  m_outputs[0].value = m_state;
+  m_outputs[1].value = m_current;
+
+  m_lastCD = CD;
+  m_lastLoad = LOAD;
+}
+
+} // namespace spaghetti::elements::logic
