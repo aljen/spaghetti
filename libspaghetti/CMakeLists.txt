@@ -93,6 +93,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/logic/pid.h
   source/elements/logic/snapshot_float.cc
   source/elements/logic/snapshot_float.h
+  source/elements/logic/snapshot_int.cc
+  source/elements/logic/snapshot_int.h
   source/elements/logic/switch.cc
   source/elements/logic/switch.h
   source/elements/logic/trigger_falling.cc
