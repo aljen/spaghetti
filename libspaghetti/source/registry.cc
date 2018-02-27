@@ -175,6 +175,7 @@ void Registry::registerInternalElements()
 
   registerElement<math::Abs>("Abs (Float)", ":/unknown.png");
   registerElement<math::BCD>("BCD", ":/unknown.png");
+  registerElement<math::SQRT>("Square Root (Float)", ":/unknown.png");
 
   registerElement<math::Add>("Add (Float)", ":/unknown.png");
   registerElement<math::AddIf>("Add If (Float)", ":/unknown.png");

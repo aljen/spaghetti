@@ -127,6 +127,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/math/sign.h
   source/elements/math/sin.cc
   source/elements/math/sin.h
+  source/elements/math/square_root.cc
+  source/elements/math/square_root.h
   source/elements/math/subtract.cc
   source/elements/math/subtract.h
   source/elements/math/subtract_if.cc
