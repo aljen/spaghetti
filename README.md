@@ -13,7 +13,6 @@
 * Feedback loops
 * Custom plugins
 * Run-time wiring
-* Plugins
 
 ## Rich library of built-in elements
 

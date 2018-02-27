@@ -87,7 +87,7 @@ class CharacteristicCurve : public Element {
   vec2f m_yRange{ 0.f, 200.f };
   vec2 m_xTicks{ 5, 0 };
   vec2 m_yTicks{ 5, 0 };
-  float m_lastValue{ 0.0 };
+  float m_lastValue{ std::numeric_limits<float>::quiet_NaN() };
 };
 
 } // namespace spaghetti::elements::values
