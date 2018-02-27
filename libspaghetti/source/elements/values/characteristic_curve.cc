@@ -45,8 +45,8 @@ void CharacteristicCurve::calculate()
 {
   bool const IN_FLOAT{ m_inputs[0].type == ValueType::eFloat };
   bool const OUT_FLOAT{ m_outputs[0].type == ValueType::eFloat };
-  float const INPUT_VALUE{ IN_FLOAT ? std::get<float>(m_inputs[0].value)
-                                    : static_cast<float>(std::get<int32_t>(m_inputs[0].value)) };
+  float const INPUT_VALUE = (IN_FLOAT ? std::get<float>(m_inputs[0].value)
+                                     : static_cast<float>(std::get<int32_t>(m_inputs[0].value)));
   float const VALUE{ std::clamp(INPUT_VALUE, m_xRange.x, m_xRange.y) };
 
   if (nearly_equal(VALUE, m_lastValue)) return;
