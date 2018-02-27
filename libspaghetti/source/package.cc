@@ -271,6 +271,8 @@ void Package::dispatchThreadFunction()
   using clock_t = std::chrono::high_resolution_clock;
   auto last = clock_t::now();
 
+  auto const ONE_MILLISECOND = std::chrono::milliseconds(1);
+
   while (!m_quit) {
     auto const NOW = clock_t::now();
     auto const DELTA = NOW - last;
@@ -291,7 +293,9 @@ void Package::dispatchThreadFunction()
     }
 
     last = NOW;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+    auto const WAIT_START = clock_t::now();
+    while ((clock_t::now() - WAIT_START) < ONE_MILLISECOND) std::this_thread::sleep_for(ONE_MILLISECOND);
 
     if (m_pause) {
       spaghetti::log::trace("Pause requested..");
