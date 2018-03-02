@@ -83,6 +83,8 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/logic/if_lower_equal.h
   source/elements/logic/latch.cc
   source/elements/logic/latch.h
+  source/elements/logic/memory_difference.cc
+  source/elements/logic/memory_difference.h
   source/elements/logic/memory_reset_set.cc
   source/elements/logic/memory_reset_set.h
   source/elements/logic/memory_set_reset.cc
