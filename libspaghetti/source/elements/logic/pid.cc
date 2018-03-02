@@ -60,10 +60,11 @@ void PID::calculate()
 
   float const ERROR{ SP - PV };
 
-  m_integral += ERROR * m_delta;
+  m_integral += (ERROR * m_delta) / KI;
+  m_integral = std::clamp(m_integral, CV_LOW, CV_HIGH);
 
   float const P{ KP * ERROR };
-  float const I{ KI * m_integral };
+  float const I{ m_integral };
   float const D{ KD * ((ERROR - m_lastError) / m_delta) };
 
   float const CV{ std::clamp(P + I + D, CV_LOW, CV_HIGH) };
