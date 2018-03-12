@@ -199,6 +199,14 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/values/radian_to_degree.h
   source/elements/values/random_bool.cc
   source/elements/values/random_bool.h
+  source/elements/values/random_float.cc
+  source/elements/values/random_float.h
+  source/elements/values/random_float_if.cc
+  source/elements/values/random_float_if.h
+  source/elements/values/random_int.cc
+  source/elements/values/random_int.h
+  source/elements/values/random_int_if.cc
+  source/elements/values/random_int_if.h
 
   source/elements/all.h
 
@@ -233,6 +241,14 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/values/const_float.h
   source/nodes/values/const_int.cc
   source/nodes/values/const_int.h
+  source/nodes/values/random_float.cc
+  source/nodes/values/random_float.h
+  source/nodes/values/random_float_if.cc
+  source/nodes/values/random_float_if.h
+  source/nodes/values/random_int.cc
+  source/nodes/values/random_int.h
+  source/nodes/values/random_int_if.cc
+  source/nodes/values/random_int_if.h
 
   source/nodes/all.h
 

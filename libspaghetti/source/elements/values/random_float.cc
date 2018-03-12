@@ -20,28 +20,55 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef ELEMENTS_VALUES_ALL_H
-#define ELEMENTS_VALUES_ALL_H
-
-#include "elements/values/characteristic_curve.h"
-#include "elements/values/clamp_float.h"
-#include "elements/values/clamp_int.h"
-#include "elements/values/const_bool.h"
-#include "elements/values/const_float.h"
-#include "elements/values/const_int.h"
-#include "elements/values/degree_to_radian.h"
-#include "elements/values/float_to_int.h"
-#include "elements/values/int_to_float.h"
-#include "elements/values/max_float.h"
-#include "elements/values/max_int.h"
-#include "elements/values/min_float.h"
-#include "elements/values/min_int.h"
-#include "elements/values/radian_to_degree.h"
-#include "elements/values/random_bool.h"
 #include "elements/values/random_float.h"
-#include "elements/values/random_float_if.h"
-#include "elements/values/random_int.h"
-#include "elements/values/random_int_if.h"
 
-#endif // ELEMENTS_VALUES_ALL_H
+namespace {
+std::random_device g_random{};
+std::mt19937 g_generator{ g_random() };
+} // namespace
+
+namespace spaghetti::elements::values {
+
+RandomFloat::RandomFloat()
+  : Element{}
+{
+  setMinInputs(1);
+  setMaxInputs(1);
+  setMinOutputs(1);
+  setMaxOutputs(1);
+
+  addInput(ValueType::eBool, "Trigger", IOSocket::eCanHoldBool);
+
+  addOutput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat);
+}
+
+void RandomFloat::serialize(Json &a_json)
+{
+  Element::serialize(a_json);
+
+  auto &properties = a_json["properties"];
+  properties["min"] = m_min;
+  properties["max"] = m_max;
+}
+
+void RandomFloat::deserialize(const Json &a_json)
+{
+  Element::deserialize(a_json);
+
+  auto const &PROPERTIES = a_json["properties"];
+  m_min = PROPERTIES["min"].get<float>();
+  m_max = PROPERTIES["max"].get<float>();
+}
+
+void RandomFloat::calculate()
+{
+  bool const STATE{ std::get<bool>(m_inputs[0].value) };
+
+  if (STATE != m_state && STATE) {
+    float const VALUE{ m_distrib(g_generator) };
+    m_outputs[0].value = VALUE;
+  }
+  m_state = STATE;
+}
+
+} // namespace spaghetti::elements::values

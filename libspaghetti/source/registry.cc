@@ -216,6 +216,10 @@ void Registry::registerInternalElements()
   registerElement<values::ConstFloat, nodes::values::ConstFloat>("Const value (Float)", ":/values/const_float.png");
   registerElement<values::ConstInt, nodes::values::ConstInt>("Const value (Int)", ":/values/const_int.png");
   registerElement<values::RandomBool>("Random value (Bool)", ":/values/random_value.png");
+  registerElement<values::RandomFloat, nodes::values::RandomFloat>("Random value (Float)", ":/values/random_value.png");
+  registerElement<values::RandomFloatIf, nodes::values::RandomFloatIf>("Random value If (Float)", ":/values/random_value.png");
+  registerElement<values::RandomInt, nodes::values::RandomInt>("Random value (Int)", ":/values/random_value.png");
+  registerElement<values::RandomIntIf, nodes::values::RandomIntIf>("Random value If (Int)", ":/values/random_value.png");
 
   registerElement<values::Degree2Radian>("Convert angle (Deg2Rad)", ":/unknown.png");
   registerElement<values::Radian2Degree>("Convert angle (Rad2Deg)", ":/unknown.png");

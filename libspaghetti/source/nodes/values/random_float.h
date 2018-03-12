@@ -21,27 +21,21 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_VALUES_ALL_H
-#define ELEMENTS_VALUES_ALL_H
+#ifndef NODES_VALUES_RANDOM_FLOAT_H
+#define NODES_VALUES_RANDOM_FLOAT_H
 
-#include "elements/values/characteristic_curve.h"
-#include "elements/values/clamp_float.h"
-#include "elements/values/clamp_int.h"
-#include "elements/values/const_bool.h"
-#include "elements/values/const_float.h"
-#include "elements/values/const_int.h"
-#include "elements/values/degree_to_radian.h"
-#include "elements/values/float_to_int.h"
-#include "elements/values/int_to_float.h"
-#include "elements/values/max_float.h"
-#include "elements/values/max_int.h"
-#include "elements/values/min_float.h"
-#include "elements/values/min_int.h"
-#include "elements/values/radian_to_degree.h"
-#include "elements/values/random_bool.h"
-#include "elements/values/random_float.h"
-#include "elements/values/random_float_if.h"
-#include "elements/values/random_int.h"
-#include "elements/values/random_int_if.h"
+#include "spaghetti/node.h"
 
-#endif // ELEMENTS_VALUES_ALL_H
+namespace spaghetti::nodes::values {
+
+class RandomFloat : public Node {
+ public:
+  RandomFloat();
+
+ private:
+  void showProperties() override;
+};
+
+} // namespace spaghetti::nodes::values
+
+#endif // NODES_VALUES_RANDOM_FLOAT_H
