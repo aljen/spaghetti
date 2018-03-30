@@ -65,6 +65,8 @@ void RandomIntIf::deserialize(const Json &a_json)
   m_enabledMax = PROPERTIES["enabled_max"].get<int32_t>();
   m_disabledMin = PROPERTIES["disabled_min"].get<int32_t>();
   m_disabledMax = PROPERTIES["disabled_max"].get<int32_t>();
+
+  updateDistributions();
 }
 
 void RandomIntIf::update(duration_t const &a_delta)

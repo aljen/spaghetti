@@ -58,6 +58,8 @@ void RandomInt::deserialize(const Json &a_json)
   auto const &PROPERTIES = a_json["properties"];
   m_min = PROPERTIES["min"].get<int32_t>();
   m_max = PROPERTIES["max"].get<int32_t>();
+
+  updateDistribution();
 }
 
 void RandomInt::calculate()

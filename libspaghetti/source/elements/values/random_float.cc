@@ -58,6 +58,8 @@ void RandomFloat::deserialize(const Json &a_json)
   auto const &PROPERTIES = a_json["properties"];
   m_min = PROPERTIES["min"].get<float>();
   m_max = PROPERTIES["max"].get<float>();
+
+  updateDistribution();
 }
 
 void RandomFloat::calculate()

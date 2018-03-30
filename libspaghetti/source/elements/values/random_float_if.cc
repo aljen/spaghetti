@@ -65,6 +65,8 @@ void RandomFloatIf::deserialize(const Json &a_json)
   m_enabledMax = PROPERTIES["enabled_max"].get<float>();
   m_disabledMin = PROPERTIES["disabled_min"].get<float>();
   m_disabledMax = PROPERTIES["disabled_max"].get<float>();
+
+  updateDistributions();
 }
 
 void RandomFloatIf::update(duration_t const &a_delta)
