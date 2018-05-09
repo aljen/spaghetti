@@ -376,8 +376,8 @@ void PackageView::wheelEvent(QWheelEvent *a_event)
     else
       m_scheduledScalings++;
     if (sender()) sender()->deleteLater();
-    qreal const realScale = matrix().m11();
-    updateGrid(realScale);
+    auto const REAL_SCALE = matrix().m11();
+    updateGrid(REAL_SCALE);
   });
 
   animation->start();
