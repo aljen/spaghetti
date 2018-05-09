@@ -339,6 +339,8 @@ void Package::quitDispatchThread()
 
 void Package::pauseDispatchThread()
 {
+  if (!m_dispatchThreadStarted) return;
+
   m_pauseCount++;
 
   spaghetti::log::trace("Trying to pause dispatch thread ({})..", m_pauseCount.load());
@@ -353,6 +355,8 @@ void Package::pauseDispatchThread()
 
 void Package::resumeDispatchThread()
 {
+  if (!m_dispatchThreadStarted) return;
+
   m_pauseCount--;
 
   spaghetti::log::trace("Trying to resume dispatch thread ({})..", m_pauseCount.load());
@@ -368,10 +372,10 @@ void Package::open(std::string const &a_filename)
 {
   spaghetti::log::debug("Opening package {}", a_filename);
 
-  pauseDispatchThread();
-
   std::ifstream file{ a_filename };
   if (!file.is_open()) return;
+
+  pauseDispatchThread();
 
   Json json{};
   file >> json;

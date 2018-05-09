@@ -37,6 +37,7 @@ class QGraphicsItem;
 
 namespace spaghetti {
 
+class Package;
 class PackageView;
 
 class SPAGHETTI_API Editor final : public QMainWindow {
@@ -54,6 +55,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
 
   void aboutToQuit();
 
+  void openOrCreatePackageView(Package *const a_package);
   PackageView *packageView() const { return packageViewForIndex(m_packageViewIndex); }
   int packageViewIndex() const { return m_packageViewIndex; }
 
@@ -88,6 +90,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   Ui::Editor *const m_ui{};
   int m_packageViewIndex{ -1 };
   QMap<QString, int> m_openFiles{};
+  QMap<Package*, int> m_openPackages{};
 };
 
 } // namespace spaghetti

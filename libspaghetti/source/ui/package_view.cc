@@ -39,6 +39,7 @@
 #endif
 // clang-format on
 
+#include "spaghetti/editor.h"
 #include "spaghetti/node.h"
 #include "spaghetti/package.h"
 #include "spaghetti/registry.h"
@@ -103,18 +104,20 @@ Node *NodesListModel::nodeFor(const QModelIndex &a_index)
   return m_nodes[ROW];
 }
 
-PackageView::PackageView(QListView *const a_elements, QTableWidget *const a_properties, Package *const a_package)
+PackageView::PackageView(Editor *const a_editor, QListView *const a_elements, QTableWidget *const a_properties,
+                         Package *const a_package)
   : QGraphicsView{ new QGraphicsScene }
+  , m_editor{ a_editor }
   , m_elements{ a_elements }
   , m_properties{ a_properties }
   , m_nodesModel{ new NodesListModel{ this } }
   , m_nodesProxyModel{ new QSortFilterProxyModel{ this } }
-  , m_package{ (a_package ? a_package : new Package) }
+  , m_package{ a_package }
   , m_scene{ scene() }
   , m_inputs{ new Node }
   , m_outputs{ new Node }
   , m_packageNode{ Registry::get().createNode("logic/package") }
-  , m_standalone{ !a_package }
+  , m_standalone{ m_package->package() == nullptr }
 {
 #ifdef SPAGHETTI_USE_OPENGL
   QGLFormat format{ QGL::DoubleBuffer | QGL::SampleBuffers | QGL::DirectRendering };
@@ -178,7 +181,8 @@ PackageView::PackageView(QListView *const a_elements, QTableWidget *const a_prop
   connect(&m_timer, &QTimer::timeout, [this]() { m_scene->advance(); });
   m_timer.start();
 
-  m_package->startDispatchThread();
+  if (m_standalone)
+    m_package->startDispatchThread();
 
   m_inputs->hide();
   m_outputs->hide();
@@ -195,7 +199,6 @@ PackageView::~PackageView()
 
 void PackageView::open()
 {
-  m_package->open(m_filename.toStdString());
 
   auto const &inputsPosition = m_package->inputsPosition();
   auto const &outputsPosition = m_package->outputsPosition();

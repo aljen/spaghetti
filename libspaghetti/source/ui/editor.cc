@@ -54,6 +54,7 @@
 
 #include "elements/logic/all.h"
 #include "spaghetti/node.h"
+#include "spaghetti/package.h"
 #include "spaghetti/registry.h"
 #include "spaghetti/version.h"
 #include "ui/expander_widget.h"
@@ -123,7 +124,6 @@ Editor::Editor(QWidget *const a_parent)
   if (!packagesDir.exists()) packagesDir.mkpath(".");
 
   populateLibrary();
-  newPackage();
 }
 
 Editor::~Editor()
@@ -134,31 +134,37 @@ Editor::~Editor()
 
 void Editor::tabCloseRequested(int const a_index)
 {
-  QTabWidget *const tab{ m_ui->tabWidget };
-  QWidget *const widget{ tab->widget(a_index) };
-  PackageView *const packageView{ reinterpret_cast<PackageView *>(widget) };
+  qDebug() << Q_FUNC_INFO << a_index;
+  auto const tab = m_ui->tabWidget;
+  auto const widget = tab->widget(a_index);
+  auto const packageView = reinterpret_cast<PackageView *>(widget);
 
-  if (packageView->canClose()) {
-    QString const FILENAME = packageView->filename();
-    if (!FILENAME.isEmpty()) m_openFiles.remove(FILENAME);
-    tab->removeTab(a_index);
-    delete packageView;
-  }
+  if (!packageView->canClose()) return;
+
+  QString const FILENAME = packageView->filename();
+  if (!FILENAME.isEmpty()) m_openFiles.remove(FILENAME);
+  m_openPackages.remove(packageView->package());
+  qDebug() << "Removing package view for ptr:" << packageView->package() << "at:" << a_index;
+  tab->removeTab(a_index);
+  delete packageView;
 
   int const SIZE{ tab->count() };
+  qDebug() << "Opened package views:" << SIZE;
 
   for (int i = 0; i < SIZE; ++i) {
-    QWidget *const tempWidget{ tab->widget(i) };
-    PackageView *const tempPackageView{ reinterpret_cast<PackageView *>(tempWidget) };
-    QString const FILENAME = tempPackageView->filename();
-    if (FILENAME.isEmpty()) continue;
-
-    m_openFiles[FILENAME] = i;
+    auto const tempWidget = tab->widget(i);
+    auto const tempPackageView = reinterpret_cast<PackageView *>(tempWidget);
+    QString const TEMP_FILENAME = tempPackageView->filename();
+    if (!TEMP_FILENAME.isEmpty()) m_openFiles[TEMP_FILENAME] = i;
+    m_openPackages[tempPackageView->package()] = i;
+    qDebug() << "package ptr:" << tempPackageView->package() << "is at:" << i;
   }
+  qDebug() << "Final size:" << m_openPackages.size();
 }
 
 void Editor::tabChanged(int const a_index)
 {
+  qDebug() << Q_FUNC_INFO << a_index;
   m_packageViewIndex = a_index;
   if (a_index >= 0) {
     auto const view = packageViewForIndex(a_index);
@@ -224,6 +230,9 @@ void Editor::showEvent(QShowEvent *a_event)
 
   if (s_firstTime) {
     s_firstTime = false;
+    newPackage();
+  //  openPackage();
+
     auto const tab = m_ui->tabWidget;
     auto const index = tab->currentIndex();
     auto packageView = qobject_cast<PackageView *const>(tab->widget(index));
@@ -231,6 +240,33 @@ void Editor::showEvent(QShowEvent *a_event)
   }
 
   QMainWindow::showEvent(a_event);
+}
+
+void Editor::openOrCreatePackageView(Package *const a_package)
+{
+  qDebug() << "Opening package ptr:" << a_package;
+
+  auto const FOUND = m_openPackages.constFind(a_package);
+
+  if (FOUND != m_openPackages.constEnd()) {
+    qDebug() << "Found at:" << FOUND.value();
+    m_packageViewIndex = FOUND.value();
+  } else {
+    qDebug() << "Not found, creating new package view";
+    auto const packageView = new PackageView{ this, m_ui->elementsList, m_ui->propertiesTable, a_package };
+    packageView->open();
+    packageView->setSelectedNode(nullptr);
+    packageView->showProperties();
+
+    connect(packageView, &PackageView::requestOpenFile,
+            [this](QString const a_filename) { openPackageFile(a_filename); });
+
+    m_packageViewIndex = m_ui->tabWidget->addTab(packageView, "New package");
+    qDebug() << "Created at index:" << m_packageViewIndex;
+    m_openPackages[a_package] = m_packageViewIndex;
+  }
+
+  m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
 }
 
 PackageView *Editor::packageViewForIndex(int const a_index) const
@@ -248,14 +284,8 @@ int Editor::openPackageViews() const
 
 void Editor::newPackage()
 {
-  auto const packageView = new PackageView{ m_ui->elementsList, m_ui->propertiesTable };
-  m_packageViewIndex = m_ui->tabWidget->addTab(packageView, "New package");
-  m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
-  packageView->setSelectedNode(nullptr);
-  packageView->showProperties();
-
-  connect(packageView, &PackageView::requestOpenFile,
-          [this](QString const a_filename) { openPackageFile(a_filename); });
+  auto const package = new Package;
+  openOrCreatePackageView(package);
 }
 
 void Editor::openPackage()
@@ -283,17 +313,16 @@ void Editor::openPackageFile(QString const a_filename)
     return;
   }
 
-  newPackage();
+  auto const package = new Package;
+  package->open(a_filename.toStdString());
+
+  openOrCreatePackageView(package);
 
   auto const packageView = packageViewForIndex(m_packageViewIndex);
   packageView->setFilename(a_filename);
 
   QDir const PACKAGES{ PACKAGES_DIR };
   m_ui->tabWidget->setTabText(m_packageViewIndex, PACKAGES.relativeFilePath(a_filename));
-
-  packageView->open();
-  packageView->setSelectedNode(nullptr);
-  packageView->showProperties();
 
   m_openFiles[a_filename] = m_packageViewIndex;
 }
@@ -349,6 +378,7 @@ void Editor::closePackageView(int const a_index)
   auto const packageView = packageViewForIndex(a_index);
   if (packageView->canClose()) m_ui->tabWidget->removeTab(a_index);
   delete packageView;
+  m_packageViewIndex = m_ui->tabWidget->currentIndex();
 }
 
 void Editor::deleteElement()
