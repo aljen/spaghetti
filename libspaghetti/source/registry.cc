@@ -133,7 +133,7 @@ void Registry::registerInternalElements()
 
   using namespace elements;
 
-  registerElement<Package>("Package", ":/logic/package.png");
+  registerElement<Package, nodes::Package>("Package", ":/logic/package.png");
 
   registerElement<gates::And>("AND (Bool)", ":/gates/and.png");
   registerElement<gates::Nand>("NAND (Bool)", ":/gates/nand.png");

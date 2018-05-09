@@ -20,14 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#ifndef NODES_ALL_H
-#define NODES_ALL_H
+#include <QDebug>
 
-#include "nodes/logic/all.h"
-#include "nodes/pneumatic/all.h"
-#include "nodes/ui/all.h"
-#include "nodes/values/all.h"
 #include "nodes/package.h"
+#include "spaghetti/editor.h"
+#include "spaghetti/package.h"
+#include "ui/package_view.h"
 
-#endif // NODES_ALL_H
+namespace spaghetti::nodes {
+
+Package::Package() {}
+
+void Package::showProperties()
+{
+  showCommonProperties();
+  showIOProperties(IOSocketsType::eInputs);
+  showIOProperties(IOSocketsType::eOutputs);
+}
+
+bool Package::open()
+{
+  qDebug() << Q_FUNC_INFO;
+
+  auto const editor = m_packageView->editor();
+  editor->openOrCreatePackageView(static_cast<spaghetti::Package *>(m_element));
+
+  return true;
+}
+
+} // namespace spaghetti::nodes

@@ -21,13 +21,22 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_ALL_H
-#define NODES_ALL_H
+#ifndef NODES_PACKAGE_H
+#define NODES_PACKAGE_H
 
-#include "nodes/logic/all.h"
-#include "nodes/pneumatic/all.h"
-#include "nodes/ui/all.h"
-#include "nodes/values/all.h"
-#include "nodes/package.h"
+#include "spaghetti/node.h"
 
-#endif // NODES_ALL_H
+namespace spaghetti::nodes {
+
+class Package : public Node {
+ public:
+  Package();
+
+ private:
+  void showProperties() override;
+  bool open() override;
+};
+
+} // namespace spaghetti::nodes
+
+#endif // NODES_PACKAGE_H

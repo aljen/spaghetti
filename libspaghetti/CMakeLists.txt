@@ -251,6 +251,8 @@ set(LIBSPAGHETTI_SOURCES
   source/nodes/values/random_int_if.h
 
   source/nodes/all.h
+  source/nodes/package.cc
+  source/nodes/package.h
 
   source/ui/colors.cc
   source/ui/colors.h
