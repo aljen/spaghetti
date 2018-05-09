@@ -40,7 +40,7 @@ void RandomInt::showProperties()
   int row = m_properties->rowCount();
   m_properties->insertRow(row);
 
-  auto const randomInt = static_cast<elements::values::RandomInt *const>(m_element);
+  auto const randomInt = static_cast<elements::values::RandomInt *>(m_element);
 
   QTableWidgetItem *item{};
 

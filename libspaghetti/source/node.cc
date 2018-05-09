@@ -139,12 +139,12 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
         switch (m_type) {
           case Type::eElement: m_element->setPosition(POSITION.x(), POSITION.y()); break;
           case Type::eInputs: {
-            auto const package = reinterpret_cast<Package *const>(m_element);
+            auto const package = reinterpret_cast<Package *>(m_element);
             package->setInputsPosition(POSITION.x(), POSITION.y());
             break;
           }
           case Type::eOutputs: {
-            auto const package = reinterpret_cast<Package *const>(m_element);
+            auto const package = reinterpret_cast<Package *>(m_element);
             package->setOutputsPosition(POSITION.x(), POSITION.y());
             break;
           }
@@ -456,7 +456,7 @@ void Node::showIOProperties(IOSocketsType const a_type)
       m_properties->setItem(row, 0, item);
     }
 
-    auto const comboBox{ new QComboBox };
+    auto const comboBox = new QComboBox;
     if (IO.flags & Element::IOSocket::eCanHoldBool)
       comboBox->addItem(valueType2QString(ValueType::eBool), static_cast<int>(ValueType::eBool));
     if (IO.flags & Element::IOSocket::eCanHoldInt)
@@ -634,7 +634,7 @@ void Node::setOutputName(uint8_t const a_socketId, QString const a_name)
 void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType,
                      bool const a_swapped)
 {
-  auto const socket{ new SocketItem{ this, a_type } };
+  auto const socket = new SocketItem{ this, a_type };
   socket->setElementId(m_element->id());
   socket->setSocketId(a_id);
 

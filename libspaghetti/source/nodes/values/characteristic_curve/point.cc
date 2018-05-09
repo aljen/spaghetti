@@ -75,8 +75,8 @@ QVariant Point::itemChange(GraphicsItemChange a_change, QVariant const &a_value)
         bool const FIRST_POINT = m_index == 0;
         bool const LAST_POINT = m_index == m_series->count() - 1;
 
-        auto const axisX = static_cast<QValueAxis *const>(m_chart->axisX(m_series));
-        auto const axisY = static_cast<QValueAxis *const>(m_chart->axisY(m_series));
+        auto const axisX = static_cast<QValueAxis *>(m_chart->axisX(m_series));
+        auto const axisY = static_cast<QValueAxis *>(m_chart->axisY(m_series));
 
         qreal minX{};
         qreal maxX{};

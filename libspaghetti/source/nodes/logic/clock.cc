@@ -43,16 +43,16 @@ void Clock::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  auto const clock{ static_cast<elements::timers::Clock *const>(m_element) };
+  auto const clock = static_cast<elements::timers::Clock *>(m_element);
 
-  QSpinBox *rateValue = new QSpinBox{};
+  QSpinBox *rateValue = new QSpinBox;
   rateValue->setRange(10, 100000);
   rateValue->setValue(static_cast<int>(clock->duration().count()));
   rateValue->setSuffix("ms");
   m_properties->setCellWidget(currentIndex, 1, rateValue);
 
   QObject::connect(rateValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
-    auto const clockElement{ static_cast<elements::timers::Clock *const>(m_element) };
+    auto const clockElement = static_cast<elements::timers::Clock *>(m_element);
     clockElement->setDuration(std::chrono::milliseconds(a_value));
   });
 }

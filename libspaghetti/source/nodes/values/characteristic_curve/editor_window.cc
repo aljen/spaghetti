@@ -263,7 +263,7 @@ void EditorWindow::addPoint(int const a_index, QPointF const a_point)
 {
   auto const seriesTable = m_ui->seriesTable;
 
-  auto const BLOCKED{ seriesTable->blockSignals(true) };
+  auto const BLOCKED = seriesTable->blockSignals(true);
 
   seriesTable->insertRow(a_index);
 

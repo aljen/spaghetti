@@ -42,7 +42,7 @@ void RandomIntIf::showProperties()
   int row = m_properties->rowCount();
   m_properties->insertRow(row);
 
-  auto const randomInt = static_cast<elements::values::RandomIntIf *const>(m_element);
+  auto const randomInt = static_cast<elements::values::RandomIntIf *>(m_element);
 
   QTableWidgetItem *item{};
 

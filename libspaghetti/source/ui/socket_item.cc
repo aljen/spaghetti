@@ -151,7 +151,7 @@ void SocketItem::dragEnterEvent(QGraphicsSceneDragDropEvent *a_event)
     return;
   }
 
-  PackageView *const view{ reinterpret_cast<PackageView *const>(scene()->views()[0]) };
+  auto const view = reinterpret_cast<PackageView *>(scene()->views()[0]);
 
   LinkItem *const linkItem{ view->dragLink() };
   if (!linkItem || m_valueType != linkItem->valueType()) {
@@ -169,7 +169,7 @@ void SocketItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *a_event)
 
   m_isDrop = false;
 
-  PackageView *const view{ reinterpret_cast<PackageView *const>(scene()->views()[0]) };
+  auto const view = reinterpret_cast<PackageView *>(scene()->views()[0]);
 
   LinkItem *const linkItem{ view->dragLink() };
   if (!linkItem) return;
@@ -185,7 +185,7 @@ void SocketItem::dropEvent(QGraphicsSceneDragDropEvent *a_event)
 {
   Q_UNUSED(a_event);
 
-  PackageView *const packageView{ reinterpret_cast<PackageView *const>(scene()->views()[0]) };
+  auto const packageView = reinterpret_cast<PackageView *>(scene()->views()[0]);
 
   LinkItem *const linkItem{ packageView->dragLink() };
   if (!linkItem) return;
@@ -238,7 +238,7 @@ void SocketItem::mouseMoveEvent(QGraphicsSceneMouseEvent *a_event)
   scene()->addItem(linkItem);
   m_links.push_back(linkItem);
 
-  PackageView *const view{ reinterpret_cast<PackageView *const>(scene()->views()[0]) };
+  auto const view = reinterpret_cast<PackageView *>(scene()->views()[0]);
   view->setDragLink(linkItem);
 
   Qt::DropAction const action{ drag->exec() };

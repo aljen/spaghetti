@@ -450,7 +450,7 @@ void PackageView::deleteElement()
   for (auto &&item : selectedItems) {
     switch (item->type()) {
       case NODE_TYPE: {
-        auto const node = reinterpret_cast<Node *const>(item);
+        auto const node = reinterpret_cast<Node *>(item);
         auto const ID = node->element()->id();
         m_nodes.remove(ID);
         m_nodesModel->remove(node);
@@ -461,7 +461,7 @@ void PackageView::deleteElement()
         break;
       }
       case LINK_TYPE: {
-        auto const link = reinterpret_cast<LinkItem *const>(item);
+        auto const link = reinterpret_cast<LinkItem *>(item);
         auto const from = link->from();
         auto const to = link->to();
 

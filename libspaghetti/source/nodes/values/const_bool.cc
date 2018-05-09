@@ -44,7 +44,7 @@ void ConstBool::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(row, 0, item);
 
-  auto const constBool = static_cast<elements::values::ConstBool *const>(m_element);
+  auto const constBool = static_cast<elements::values::ConstBool *>(m_element);
   bool const current = constBool->currentValue();
 
   QCheckBox *const value = new QCheckBox;

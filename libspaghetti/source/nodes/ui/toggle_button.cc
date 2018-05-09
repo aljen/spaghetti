@@ -106,7 +106,7 @@ void ToggleButton::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(row, 0, item);
 
-  auto const element = static_cast<elements::ui::ToggleButton *const>(m_element);
+  auto const element = static_cast<elements::ui::ToggleButton *>(m_element);
   bool const current = element->currentValue();
 
   QCheckBox *const value = new QCheckBox;
@@ -118,8 +118,8 @@ void ToggleButton::showProperties()
 
 void ToggleButton::elementSet()
 {
-  auto const widget = static_cast<ToggleButtonWidget *const>(m_centralWidget);
-  widget->setToggleButton(static_cast<elements::ui::ToggleButton *const>(m_element));
+  auto const widget = static_cast<ToggleButtonWidget *>(m_centralWidget);
+  widget->setToggleButton(static_cast<elements::ui::ToggleButton *>(m_element));
 }
 
 } // namespace spaghetti::nodes::ui

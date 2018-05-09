@@ -169,7 +169,7 @@ void Editor::tabChanged(int const a_index)
 void Editor::populateLibrary()
 {
   Registry const &registry{ Registry::get() };
-  auto const &SIZE{ registry.size() };
+  auto const &SIZE = registry.size();
 
   for (size_t i = 0; i < SIZE; ++i) {
     auto const &info = registry.metaInfoAt(i);

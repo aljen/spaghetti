@@ -99,7 +99,7 @@ void PushButton::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(row, 0, item);
 
-  auto const element = static_cast<elements::ui::PushButton *const>(m_element);
+  auto const element = static_cast<elements::ui::PushButton *>(m_element);
   bool const current = element->currentValue();
 
   QCheckBox *const value = new QCheckBox;
@@ -111,8 +111,8 @@ void PushButton::showProperties()
 
 void PushButton::elementSet()
 {
-  auto const pushButtonWidget = static_cast<PushButtonWidget *const>(m_centralWidget);
-  pushButtonWidget->setPushButton(static_cast<elements::ui::PushButton *const>(m_element));
+  auto const pushButtonWidget = static_cast<PushButtonWidget *>(m_centralWidget);
+  pushButtonWidget->setPushButton(static_cast<elements::ui::PushButton *>(m_element));
 }
 
 } // namespace spaghetti::nodes::ui

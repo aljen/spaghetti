@@ -94,14 +94,14 @@ void CharacteristicCurve::showProperties()
   int currentIndex = m_properties->rowCount();
   m_properties->insertRow(currentIndex);
 
-  auto const scaler = static_cast<ElementType *const>(m_element);
+  auto const scaler = static_cast<ElementType *>(m_element);
 
   QTableWidgetItem *item{};
   item = new QTableWidgetItem{ "Min" };
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  auto const xMinValue = new QDoubleSpinBox{};
+  auto const xMinValue = new QDoubleSpinBox;
   xMinValue->setRange(-9999999.0, 9999999.0);
   xMinValue->setDecimals(6);
   xMinValue->setValue(static_cast<qreal>(scaler->xMinimum()));
@@ -109,7 +109,7 @@ void CharacteristicCurve::showProperties()
 
   QObject::connect(xMinValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
                    [this](qreal a_value) {
-                     auto const scalerElement = static_cast<ElementType *const>(m_element);
+                     auto const scalerElement = static_cast<ElementType *>(m_element);
                      auto const package = scalerElement->package();
                      package->pauseDispatchThread();
                      scalerElement->setXMinimum(static_cast<float>(a_value));
@@ -124,7 +124,7 @@ void CharacteristicCurve::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  auto const xMaxValue = new QDoubleSpinBox{};
+  auto const xMaxValue = new QDoubleSpinBox;
   xMaxValue->setRange(-9999999.0, 9999999.0);
   xMaxValue->setDecimals(6);
   xMaxValue->setValue(static_cast<qreal>(scaler->xMaximum()));
@@ -132,7 +132,7 @@ void CharacteristicCurve::showProperties()
 
   QObject::connect(xMaxValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
                    [this](qreal a_value) {
-                     auto const scalerElement{ static_cast<ElementType *const>(m_element) };
+                     auto const scalerElement = static_cast<ElementType *>(m_element);
                      auto const package = scalerElement->package();
                      package->pauseDispatchThread();
                      scalerElement->setXMaximum(static_cast<float>(a_value));
@@ -149,7 +149,7 @@ void CharacteristicCurve::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  auto const yMinValue = new QDoubleSpinBox{};
+  auto const yMinValue = new QDoubleSpinBox;
   yMinValue->setRange(-9999999.0, 9999999.0);
   yMinValue->setDecimals(6);
   yMinValue->setValue(static_cast<qreal>(scaler->yMinimum()));
@@ -157,7 +157,7 @@ void CharacteristicCurve::showProperties()
 
   QObject::connect(yMinValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
                    [this](qreal a_value) {
-                     auto const scalerElement{ static_cast<ElementType *const>(m_element) };
+                     auto const scalerElement = static_cast<ElementType *>(m_element);
                      auto const package = scalerElement->package();
                      package->pauseDispatchThread();
                      scalerElement->setYMinimum(static_cast<float>(a_value));
@@ -172,7 +172,7 @@ void CharacteristicCurve::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  auto const yMaxValue = new QDoubleSpinBox{};
+  auto const yMaxValue = new QDoubleSpinBox;
   yMaxValue->setRange(-9999999.0, 9999999.0);
   yMaxValue->setDecimals(6);
   yMaxValue->setValue(static_cast<qreal>(scaler->yMaximum()));
@@ -180,7 +180,7 @@ void CharacteristicCurve::showProperties()
 
   QObject::connect(yMaxValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
                    [this](qreal a_value) {
-                     auto const scalerElement{ static_cast<ElementType *const>(m_element) };
+                     auto const scalerElement = static_cast<ElementType *>(m_element);
                      auto const package = scalerElement->package();
                      package->pauseDispatchThread();
                      scalerElement->setYMaximum(static_cast<float>(a_value));
@@ -197,13 +197,13 @@ void CharacteristicCurve::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(currentIndex, 0, item);
 
-  auto const countValue = new QSpinBox{};
+  auto const countValue = new QSpinBox;
   countValue->setRange(2, 100);
   countValue->setValue(static_cast<int32_t>(scaler->seriesCount()));
   m_properties->setCellWidget(currentIndex, 1, countValue);
 
   QObject::connect(countValue, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int a_value) {
-    auto const scalerElement{ static_cast<ElementType *const>(m_element) };
+    auto const scalerElement = static_cast<ElementType *>(m_element);
     auto const package = scalerElement->package();
     package->pauseDispatchThread();
     scalerElement->setSeriesCount(static_cast<size_t>(a_value));
