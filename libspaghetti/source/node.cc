@@ -197,6 +197,13 @@ void Node::setElement(Element *const a_element)
         QString const NAME{ QString::fromStdString(OUTPUTS[i].name) };
         addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type, false);
       }
+
+      m_element->setPosition(x(), y());
+      m_element->iconify(m_mode == Mode::eIconified);
+      m_element->calculate();
+
+      setName(QString::fromStdString(m_element->name()));
+      updateOutputs();
       break;
     case Type::eInputs:
       for (size_t i = 0; i < INPUTS.size(); ++i) {
@@ -210,16 +217,6 @@ void Node::setElement(Element *const a_element)
         addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type, true);
       }
       break;
-  }
-
-  m_element->setPosition(x(), y());
-  m_element->iconify(m_mode == Mode::eIconified);
-
-  m_element->calculate();
-
-  if (m_type == Type::eElement) {
-    setName(QString::fromStdString(m_element->name()));
-    updateOutputs();
   }
 
   elementSet();
