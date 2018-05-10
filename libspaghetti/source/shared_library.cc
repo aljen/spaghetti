@@ -33,13 +33,13 @@
 
 namespace spaghetti {
 
-SharedLibrary::SharedLibrary(fs::path a_file, std::error_code &a_errorCode)
+SharedLibrary::SharedLibrary(fs::path const &a_file, std::error_code &a_errorCode)
   : m_filename{ a_file.string() }
 {
   log::info("[shared_library]: Opening {}", m_filename);
 
   if (!fs::exists(a_file)) {
-    log::error("{} don't exist!", m_filename);
+    log::error("[shared_library]: {} don't exist!", m_filename);
     a_errorCode = std::error_code(ENOENT, std::system_category());
     return;
   }
@@ -49,7 +49,7 @@ SharedLibrary::SharedLibrary(fs::path a_file, std::error_code &a_errorCode)
 #else
   if (a_file.extension() != ".so") {
 #endif
-    log::debug("{} is not shared library!", m_filename);
+    log::debug("[shared_library]: {} is not shared library!", m_filename);
     a_errorCode = std::error_code(EINVAL, std::system_category());
     return;
   }
@@ -64,13 +64,13 @@ SharedLibrary::SharedLibrary(fs::path a_file, std::error_code &a_errorCode)
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&buffer), 0, nullptr) };
     std::string const MESSAGE(buffer, SIZE);
     LocalFree(buffer);
-    log::error("LoadLibrary error: {}", MESSAGE);
+    log::error("[shared_library]: LoadLibrary error: {}", MESSAGE);
     a_errorCode = std::error_code(ERROR_CODE, std::system_category());
   }
 #elif defined(__unix__)
   m_handle = dlopen(a_file.c_str(), RTLD_NOW);
   if (m_handle == nullptr) {
-    log::error("{}", dlerror());
+    log::error("[shared_library]: dlopen error: {}", dlerror());
     a_errorCode = std::error_code(EINVAL, std::system_category());
     return;
   }

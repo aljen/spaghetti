@@ -31,7 +31,7 @@ namespace spaghetti {
 
 class SharedLibrary final {
  public:
-  SharedLibrary(fs::path a_file, std::error_code &a_errorCode);
+  SharedLibrary(fs::path const &a_file, std::error_code &a_errorCode);
   ~SharedLibrary();
 
   bool has(std::string_view a_signature) const;
