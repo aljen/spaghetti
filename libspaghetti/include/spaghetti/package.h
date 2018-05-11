@@ -117,7 +117,7 @@ class SPAGHETTI_API Package final : public Element {
 
  private:
   std::string m_packageDescription{ "A package" };
-  std::string m_packagePath{ "packages/unknown_package" };
+  std::string m_packagePath{};
   std::string m_packageIcon{ "icons/unknown.png" };
   vec2d m_inputsPosition{};
   vec2d m_outputsPosition{};
