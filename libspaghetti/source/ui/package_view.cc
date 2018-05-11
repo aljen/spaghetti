@@ -183,9 +183,6 @@ PackageView::PackageView(Editor *const a_editor, QListView *const a_elements, QT
 
   if (m_standalone)
     m_package->startDispatchThread();
-
-  m_inputs->hide();
-  m_outputs->hide();
 }
 
 PackageView::~PackageView()
