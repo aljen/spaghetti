@@ -70,6 +70,7 @@ struct Registry::PIMPL {
   using MetaInfos = std::vector<MetaInfo>;
   MetaInfos metaInfos{};
   Plugins plugins{};
+  Packages packages{};
   fs::path app_path{};
   fs::path system_plugins_path{};
   fs::path user_plugins_path{};
@@ -330,6 +331,11 @@ Registry::MetaInfo const &Registry::metaInfoAt(size_t const a_index) const
 {
   auto const &META_INFOS = m_pimpl->metaInfos;
   return META_INFOS[a_index];
+}
+
+Registry::Packages const &Registry::packages() const
+{
+  return m_pimpl->packages;
 }
 
 std::string Registry::appPath() const
