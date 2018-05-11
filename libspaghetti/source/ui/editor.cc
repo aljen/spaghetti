@@ -32,6 +32,7 @@
 #include <QDebug>
 #include <QDesktopServices>
 #include <QDir>
+#include <QDirIterator>
 #include <QDockWidget>
 #include <QFileDialog>
 #include <QGraphicsItem>
@@ -70,7 +71,8 @@ Editor::Editor(QWidget *const a_parent)
 {
   setObjectName("SpaghettiEditor");
   m_ui->setupUi(this);
-  m_ui->libraryContainer->removeItem(0);
+  m_ui->elementsContainer->removeItem(0);
+  m_ui->packagesContainer->removeItem(0);
   m_ui->tabWidget->removeTab(0);
   m_ui->clearSearchText->setIcon(style()->standardIcon(QStyle::SP_DialogResetButton));
   m_ui->elementsList->setIconSize(QSize(50, 25));
@@ -174,11 +176,11 @@ void Editor::tabChanged(int const a_index)
 
 void Editor::populateLibrary()
 {
-  Registry const &registry{ Registry::get() };
-  auto const &SIZE = registry.size();
+  auto const &REGISTRY = Registry::get();
 
-  for (size_t i = 0; i < SIZE; ++i) {
-    auto const &info = registry.metaInfoAt(i);
+  auto const &ELEMENTS_SIZE = REGISTRY.size();
+  for (size_t i = 0; i < ELEMENTS_SIZE; ++i) {
+    auto const &info = REGISTRY.metaInfoAt(i);
     std::string const path{ info.type };
     std::string category{ path };
 
@@ -192,7 +194,7 @@ void Editor::populateLibrary()
 
 void Editor::addElement(QString const &a_category, QString const &a_name, QString const &a_type, QString const &a_icon)
 {
-  ExpanderWidget *const library{ m_ui->libraryContainer };
+  ExpanderWidget *const library{ m_ui->elementsContainer };
 
   ElementsList *list{};
 
