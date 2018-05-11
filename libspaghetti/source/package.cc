@@ -400,4 +400,19 @@ void Package::save(std::string const &a_filename)
   resumeDispatchThread();
 }
 
+std::string Package::getPathFor(std::string const &a_filename)
+{
+  std::string type{};
+
+  std::ifstream file{ a_filename };
+  if (!file.is_open()) return type;
+
+  Json json{};
+  file >> json;
+
+  type = json["package"]["path"];
+
+  return type;
+}
+
 } // namespace spaghetti

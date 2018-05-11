@@ -115,6 +115,8 @@ class SPAGHETTI_API Package final : public Element {
   void open(std::string const &a_filename);
   void save(std::string const &a_filename);
 
+  static std::string getPathFor(std::string const &a_filename);
+
  private:
   std::string m_packageDescription{ "A package" };
   std::string m_packagePath{};
