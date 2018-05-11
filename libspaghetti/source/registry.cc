@@ -270,8 +270,8 @@ void Registry::loadPlugins()
   auto const ADDITIONAL_PLUGINS_PATH = getenv("SPAGHETTI_ADDITIONAL_PLUGINS_PATH");
   if (ADDITIONAL_PLUGINS_PATH) loadFrom(fs::path{ ADDITIONAL_PLUGINS_PATH });
 
-  loadFrom(m_pimpl->user_plugins_path);
   loadFrom(m_pimpl->system_plugins_path);
+  loadFrom(m_pimpl->user_plugins_path);
 }
 
 std::vector<fs::path> scan_for_dirs(fs::path const &a_path)
