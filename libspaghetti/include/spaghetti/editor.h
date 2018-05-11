@@ -51,7 +51,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   void tabChanged(int const a_index);
 
   void populateLibrary();
-  void addElement(QString a_category, QString a_name, QString a_type, QString a_icon);
+  void addElement(QString const &a_category, QString const &a_name, QString const &a_type, QString const &a_icon);
 
   void aboutToQuit();
 
