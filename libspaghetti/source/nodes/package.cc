@@ -21,6 +21,8 @@
 // SOFTWARE.
 
 #include <QDebug>
+#include <QTableWidget>
+#include <QLineEdit>
 
 #include "nodes/package.h"
 #include "spaghetti/editor.h"
@@ -34,6 +36,45 @@ Package::Package() {}
 void Package::showProperties()
 {
   showCommonProperties();
+
+  auto const package = static_cast<spaghetti::Package *>(m_element);
+  auto const PATH = QString::fromStdString(std::string(package->packagePath()));
+  auto const ICON = QString::fromStdString(std::string(package->packageIcon()));
+
+  propertiesInsertTitle("Package");
+
+  QTableWidgetItem *item{};
+
+  int row = m_properties->rowCount();
+  m_properties->insertRow(row);
+  item = new QTableWidgetItem{ "Path" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(row, 0, item);
+
+  QLineEdit *pathEdit = new QLineEdit{ PATH };
+  pathEdit->setPlaceholderText("<path>");
+  m_properties->setCellWidget(row, 1, pathEdit);
+  QObject::connect(pathEdit, &QLineEdit::textChanged, [this](QString const &a_text) {
+    (void)a_text;
+    qDebug() << "PATH:" << a_text;
+    /* TODO */
+  });
+
+  row = m_properties->rowCount();
+  m_properties->insertRow(row);
+  item = new QTableWidgetItem{ "Icon" };
+  item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+  m_properties->setItem(row, 0, item);
+
+  QLineEdit *iconEdit = new QLineEdit{ ICON };
+  iconEdit->setPlaceholderText("<icon>");
+  m_properties->setCellWidget(row, 1, iconEdit);
+  QObject::connect(iconEdit, &QLineEdit::textChanged, [this](QString const &a_text)  {
+    (void)a_text;
+    qDebug() << "ICON:" << a_text;
+    /* TODO */
+  });
+
   showIOProperties(IOSocketsType::eInputs);
   showIOProperties(IOSocketsType::eOutputs);
 }
