@@ -64,6 +64,7 @@ class SPAGHETTI_API Registry final {
 
   void registerInternalElements();
   void loadPlugins();
+  void loadPackages();
 
   template<typename ElementDerived, typename NodeDerived = Node>
   typename std::enable_if_t<(std::is_base_of_v<Element, ElementDerived> && std::is_base_of_v<Node, NodeDerived>)>

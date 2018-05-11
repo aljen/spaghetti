@@ -31,6 +31,7 @@
 #endif
 // clang-format on
 
+#include <algorithm>
 #include <vector>
 
 #include "filesystem.h"
@@ -111,8 +112,9 @@ Registry::Registry()
   fs::path const HOME_PATH{ getenv("HOME") };
 
   fs::path const LIB_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../lib" }) };
+  fs::path const PACKAGES_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../packages" }) };
   fs::path const SYSTEM_PLUGINS_PATH{ LIB_PATH / "spaghetti" };
-  fs::path const SYSTEM_PACKAGES_PATH{ "" };
+  fs::path const SYSTEM_PACKAGES_PATH{ PACKAGES_PATH };
 
   fs::path const USER_PLUGINS_PATH{ fs::absolute(HOME_PATH / ".config/spaghetti/plugins") };
   fs::path const USER_PACKAGES_PATH{ fs::absolute(HOME_PATH / ".config/spaghetti/packages") };
@@ -270,6 +272,48 @@ void Registry::loadPlugins()
 
   loadFrom(m_pimpl->user_plugins_path);
   loadFrom(m_pimpl->system_plugins_path);
+}
+
+std::vector<fs::path> scan_for_dirs(fs::path const &a_path)
+{
+  std::vector<fs::path> ret{};
+
+  for (auto const &ENTRY : fs::directory_iterator(a_path)) {
+    if (fs::is_directory(ENTRY)) {
+      auto temp = scan_for_dirs(ENTRY);
+      ret.insert(std::end(ret), std::begin(temp), std::end(temp));
+      ret.push_back(ENTRY);
+    }
+  }
+
+  return ret;
+}
+
+void Registry::loadPackages()
+{
+  Packages packages{};
+
+  auto loadFrom = [&packages](fs::path const &a_path) {
+    auto directories = scan_for_dirs(a_path);
+    directories.push_back(a_path);
+    std::sort(std::begin(directories), std::end(directories));
+    for (auto const &DIRECTORY : directories) {
+      for (auto const &ENTRY : fs::directory_iterator(DIRECTORY)) {
+        if (fs::is_directory(ENTRY)) continue;
+        auto const FILENAME = ENTRY.path().string();
+        log::warn("Loading package '{}'", FILENAME);
+        packages[FILENAME] = Package::getPathFor(FILENAME);
+      }
+    }
+  };
+
+  loadFrom(m_pimpl->system_packages_path);
+  loadFrom(m_pimpl->user_packages_path);
+
+  log::warn("Loaded {} packages", packages.size());
+  for (auto const &PACKAGE : packages) log::warn("{} as '{}'", PACKAGE.first, PACKAGE.second);
+
+  m_pimpl->packages = packages;
 }
 
 Element *Registry::createElement(string::hash_t const a_hash)

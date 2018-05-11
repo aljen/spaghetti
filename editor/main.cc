@@ -55,6 +55,7 @@ int main(int argc, char **argv)
   auto &registry = spaghetti::Registry::get();
   registry.registerInternalElements();
   registry.loadPlugins();
+  registry.loadPackages();
 
   spaghetti::Editor editor{};
   QObject::connect(&app, &QApplication::aboutToQuit, &editor, &spaghetti::Editor::aboutToQuit);
