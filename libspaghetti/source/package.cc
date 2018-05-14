@@ -41,6 +41,9 @@ Package::Package()
   addInput(ValueType::eBool, "#3", IOSocket::eDefaultFlags);
 
   addOutput(ValueType::eBool, "#1", IOSocket::eDefaultFlags);
+
+  setDefaultNewInputFlags(IOSocket::eDefaultFlags);
+  setDefaultNewOutputFlags(IOSocket::eDefaultFlags);
 }
 
 Package::~Package()
