@@ -255,7 +255,7 @@ void Editor::openOrCreatePackageView(Package *const a_package)
     m_packageViewIndex = FOUND.value();
   } else {
     qDebug() << "Not found, creating new package view";
-    auto const packageView = new PackageView{ this, m_ui->elementsList, m_ui->propertiesTable, a_package };
+    auto const packageView = new PackageView{ this, a_package };
     packageView->open();
     packageView->setSelectedNode(nullptr);
     packageView->showProperties();
@@ -269,6 +269,16 @@ void Editor::openOrCreatePackageView(Package *const a_package)
   }
 
   m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
+}
+
+QListView *Editor::elementsList()
+{
+  return m_ui->elementsList;
+}
+
+QTableWidget *Editor::propertiesTable()
+{
+  return m_ui->propertiesTable;
 }
 
 PackageView *Editor::packageViewForIndex(int const a_index) const

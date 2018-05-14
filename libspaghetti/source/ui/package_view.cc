@@ -104,12 +104,11 @@ Node *NodesListModel::nodeFor(const QModelIndex &a_index)
   return m_nodes[ROW];
 }
 
-PackageView::PackageView(Editor *const a_editor, QListView *const a_elements, QTableWidget *const a_properties,
-                         Package *const a_package)
+PackageView::PackageView(Editor *const a_editor, Package *const a_package)
   : QGraphicsView{ new QGraphicsScene }
   , m_editor{ a_editor }
-  , m_elements{ a_elements }
-  , m_properties{ a_properties }
+  , m_elements{ a_editor->elementsList() }
+  , m_properties{ a_editor->propertiesTable() }
   , m_nodesModel{ new NodesListModel{ this } }
   , m_nodesProxyModel{ new QSortFilterProxyModel{ this } }
   , m_package{ a_package }

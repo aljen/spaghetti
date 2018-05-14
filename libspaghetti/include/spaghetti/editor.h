@@ -34,6 +34,8 @@ class Editor;
 }
 
 class QGraphicsItem;
+class QListView;
+class QTableWidget;
 
 namespace spaghetti {
 
@@ -58,6 +60,9 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   void openOrCreatePackageView(Package *const a_package);
   PackageView *packageView() const { return packageViewForIndex(m_packageViewIndex); }
   int packageViewIndex() const { return m_packageViewIndex; }
+
+  QListView* elementsList();
+  QTableWidget* propertiesTable();
 
  protected:
   void showEvent(QShowEvent *a_event) override;

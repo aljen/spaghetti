@@ -65,8 +65,7 @@ class PackageView final : public QGraphicsView {
  public:
   using Nodes = QHash<size_t, Node *>;
 
-  explicit PackageView(Editor *const a_editor, QListView *const a_elements, QTableWidget *const a_properties,
-                       Package *const a_package);
+  explicit PackageView(Editor *const a_editor, Package *const a_package);
   ~PackageView() override;
 
   void open();
