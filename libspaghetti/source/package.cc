@@ -67,38 +67,42 @@ void Package::serialize(Element::Json &a_json)
   jsonPackage["path"] = m_packagePath;
   jsonPackage["icon"] = m_packageIcon;
 
-  auto jsonElements = Json::array();
-  // TODO(aljen): fix holes
-  size_t const DATA_SIZE{ m_elements.size() };
-  for (size_t i = 1; i < DATA_SIZE; ++i) {
-    auto const element = m_elements[i];
-    if (element == nullptr) continue;
+  if (!m_isExternal) {
+    auto jsonElements = Json::array();
+    // TODO(aljen): fix holes
+    size_t const DATA_SIZE{ m_elements.size() };
+    for (size_t i = 1; i < DATA_SIZE; ++i) {
+      auto const element = m_elements[i];
+      if (element == nullptr) continue;
 
-    Json jsonElement{};
-    element->serialize(jsonElement);
-    jsonElements.push_back(jsonElement);
+      Json jsonElement{};
+      element->serialize(jsonElement);
+      jsonElements.push_back(jsonElement);
+    }
+    jsonPackage["elements"] = jsonElements;
+
+    auto jsonConnections = Json::array();
+    for (auto const &CONNECTION : m_connections) {
+      Json jsonConnection{}, jsonConnect{}, jsonTo{};
+
+      jsonConnect["id"] = CONNECTION.from_id;
+      jsonConnect["socket"] = CONNECTION.from_socket;
+      jsonTo["id"] = CONNECTION.to_id;
+      jsonTo["socket"] = CONNECTION.to_socket;
+
+      jsonConnection["connect"] = jsonConnect;
+      jsonConnection["to"] = jsonTo;
+      jsonConnections.push_back(jsonConnection);
+    }
+    jsonPackage["connections"] = jsonConnections;
   }
-  jsonPackage["elements"] = jsonElements;
-
-  auto jsonConnections = Json::array();
-  for (auto const &CONNECTION : m_connections) {
-    Json jsonConnection{}, jsonConnect{}, jsonTo{};
-
-    jsonConnect["id"] = CONNECTION.from_id;
-    jsonConnect["socket"] = CONNECTION.from_socket;
-    jsonTo["id"] = CONNECTION.to_id;
-    jsonTo["socket"] = CONNECTION.to_socket;
-
-    jsonConnection["connect"] = jsonConnect;
-    jsonConnection["to"] = jsonTo;
-    jsonConnections.push_back(jsonConnection);
-  }
-  jsonPackage["connections"] = jsonConnections;
 }
 
 void Package::deserialize(Json const &a_json)
 {
   Element::deserialize(a_json);
+
+  auto const IS_ROOT = m_package == nullptr;
 
   auto const &NODE = a_json["node"];
   auto const INPUTS_POSITION = NODE["inputs_position"];
@@ -109,11 +113,43 @@ void Package::deserialize(Json const &a_json)
   auto const OUTPUTS_POSITION_Y = OUTPUTS_POSITION["y"].get<double>();
 
   auto const &PACKAGE = a_json["package"];
-  auto const &ELEMENTS = PACKAGE["elements"];
-  auto const &CONNECTIONS = PACKAGE["connections"];
   auto const &DESCRIPTION = PACKAGE["description"].get<std::string>();
   auto const &ICON = PACKAGE["icon"].get<std::string>();
   auto const &PATH = PACKAGE["path"].get<std::string>();
+
+  m_isExternal = !IS_ROOT && !PATH.empty();
+
+  spaghetti::log::debug("deserialize root? {} isExternal? {}", IS_ROOT, m_isExternal);
+
+  Json json{};
+
+  if (m_isExternal) {
+    log::debug("Package is external one, looking for real one registered as '{}'", PATH);
+
+    auto const &REGISTRY = Registry::get();
+    auto const &PACKAGES = REGISTRY.packages();
+
+    std::string filename{};
+
+    for (auto const &PACKAGE_INFO : PACKAGES) {
+      if (PACKAGE_INFO.second.path == PATH) {
+        filename = PACKAGE_INFO.second.filename;
+        log::debug("Found one, '{}' is at '{}'", PATH, filename);
+        break;
+      }
+    }
+
+    assert(!filename.empty() && "Can't find external package");
+
+    std::ifstream file{ filename };
+    if (!file.is_open()) return;
+
+    file >> json;
+  }
+
+  auto const &REAL_PACKAGE = m_isExternal ? json["package"] : PACKAGE;
+  auto const &ELEMENTS = REAL_PACKAGE["elements"];
+  auto const &CONNECTIONS = REAL_PACKAGE["connections"];
 
   setPackageDescription(DESCRIPTION);
   setPackageIcon(ICON);
@@ -384,6 +420,9 @@ void Package::open(std::string const &a_filename)
   file >> json;
 
   deserialize(json);
+
+  m_isExternal = m_package != nullptr;
+  spaghetti::log::debug("{} Is external: {}", a_filename, m_isExternal);
 
   resumeDispatchThread();
 }
