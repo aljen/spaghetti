@@ -45,6 +45,7 @@
 #include "spaghetti/registry.h"
 #include "ui/elements_list.h"
 #include "ui/link_item.h"
+#include "nodes/package.h"
 
 namespace spaghetti {
 
@@ -115,9 +116,15 @@ PackageView::PackageView(Editor *const a_editor, Package *const a_package)
   , m_scene{ scene() }
   , m_inputs{ new Node }
   , m_outputs{ new Node }
-  , m_packageNode{ Registry::get().createNode("logic/package") }
   , m_standalone{ m_package->package() == nullptr }
 {
+  if (m_standalone) {
+    m_packageNode = static_cast<nodes::Package *>(Registry::get().createNode("logic/package"));
+    m_package->setNode(m_packageNode);
+  } else
+    m_packageNode = m_package->node<nodes::Package>();
+  Q_ASSERT(m_package->node<Node*>());
+  qDebug() << "Creating PackageView standalone:" << m_standalone << "node:" << m_packageNode << "package:" << m_package;
 #ifdef SPAGHETTI_USE_OPENGL
   QGLFormat format{ QGL::DoubleBuffer | QGL::SampleBuffers | QGL::DirectRendering };
   format.setProfile(QGLFormat::CoreProfile);
@@ -147,24 +154,29 @@ PackageView::PackageView(Editor *const a_editor, Package *const a_package)
   m_inputs->setPropertiesTable(m_properties);
   m_outputs->setPropertiesTable(m_properties);
 
+  // TODO(aljen): Ok, but what if we open package in external packageview, and close it?
+  m_packageNode->setPackageView(this);
   m_packageNode->setPropertiesTable(m_properties);
-  m_packageNode->setElement(m_package);
 
   setAcceptDrops(true);
 
   using NodeType = Node::Type;
-  m_inputs->setPos(-600.0, 0.0);
   m_inputs->setType(NodeType::eInputs);
+  m_inputs->setPos(-100.0, 0.0);
   m_inputs->setElement(m_package);
   m_inputs->setIcon(":/logic/inputs.png");
   m_inputs->setPackageView(this);
   m_inputs->iconify();
-  m_outputs->setPos(600.0, 0.0);
   m_outputs->setType(NodeType::eOutputs);
+  m_outputs->setPos(100.0, 0.0);
   m_outputs->setElement(m_package);
   m_outputs->setIcon(":/logic/outputs.png");
   m_outputs->setPackageView(this);
   m_outputs->iconify();
+
+  m_packageNode->setInputsNode(m_inputs);
+  m_packageNode->setOutputsNode(m_outputs);
+  m_packageNode->setElement(m_package);
 
   Registry &registry{ Registry::get() };
 
@@ -180,8 +192,7 @@ PackageView::PackageView(Editor *const a_editor, Package *const a_package)
   connect(&m_timer, &QTimer::timeout, [this]() { m_scene->advance(); });
   m_timer.start();
 
-  if (m_standalone)
-    m_package->startDispatchThread();
+  if (m_standalone) m_package->startDispatchThread();
 }
 
 PackageView::~PackageView()
@@ -195,7 +206,6 @@ PackageView::~PackageView()
 
 void PackageView::open()
 {
-
   auto const &inputsPosition = m_package->inputsPosition();
   auto const &outputsPosition = m_package->outputsPosition();
   m_inputs->setPos(inputsPosition.x, inputsPosition.y);
@@ -212,6 +222,7 @@ void PackageView::open()
     auto const nodeIcon = QString::fromStdString(registry.elementIcon(element->hash()));
     auto const nodePath = QString::fromLocal8Bit(element->type());
 
+    element->setNode(node);
     m_nodes[element->id()] = node;
 
     element->isIconified() ? node->iconify() : node->expand();
@@ -247,14 +258,25 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
 {
   auto const mimeData = a_event->mimeData();
 
+  //  mimeData->setData("metadata/is_package", IS_PACKAGE);
+  //  mimeData->setData("metadata/name", NAME);
+  //  mimeData->setData("metadata/icon", ICON);
+  //  mimeData->setData("metadata/filename", FILE);
+
   if (mimeData->hasFormat("metadata/name") && mimeData->hasFormat("metadata/icon")) {
-    auto const pathString = mimeData->text();
+    auto const isPackage = mimeData->data("metadata/is_package") == "true";
+    auto const pathString = isPackage ? QString{ "logic/package" } : mimeData->text();
     auto const name = mimeData->data("metadata/name");
     auto const icon = mimeData->data("metadata/icon");
+    auto const file = mimeData->data("metadata/filename");
     auto const stringData = pathString.toLatin1();
     auto const path = stringData.data();
 
-    auto const dropPosition = mapToScene(a_event->pos());
+    qDebug() << "IS_PACKAGE:" << mimeData->data("metadata/is_package");
+    qDebug() << "drag isPackage:" << isPackage << "path:" << pathString << "name:" << name << "icon:" << icon
+             << "file:" << file;
+
+    auto const DROP_POSITION = mapToScene(a_event->pos());
 
     Registry &registry{ Registry::get() };
 
@@ -263,9 +285,9 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
     m_dragNode->setPackageView(this);
     m_dragNode->setPropertiesTable(m_properties);
     m_dragNode->setName(name);
-    m_dragNode->setPath(pathString);
+    m_dragNode->setPath(isPackage ? name : "");
     m_dragNode->setIcon(icon);
-    m_dragNode->setPos(dropPosition);
+    m_dragNode->setPos(DROP_POSITION);
     m_scene->addItem(m_dragNode);
     m_dragNode->calculateBoundingRect();
     a_event->accept();
@@ -303,12 +325,19 @@ void PackageView::dropEvent(QDropEvent *a_event)
     emit requestOpenFile(STRIPPED);
     a_event->accept();
   } else if (mimeData->hasFormat("metadata/name") && mimeData->hasFormat("metadata/icon")) {
+    auto const isPackage = mimeData->data("metadata/is_package") == "true";
+    auto const file = mimeData->data("metadata/filename").toStdString();
     auto const pathString = a_event->mimeData()->text();
     auto const stringData = pathString.toLatin1();
-    char const *const path{ stringData.data() };
+    char const *const path{ isPackage ? "logic/package" : stringData.data() };
 
     auto const element = m_package->add(path);
+    element->setNode(m_dragNode);
     if (element->name().empty()) element->setName(m_dragNode->name().toStdString());
+    if (isPackage) {
+      auto const package = static_cast<Package *>(element);
+      package->open(file);
+    }
     m_dragNode->setElement(element);
     m_dragNode->iconify();
 

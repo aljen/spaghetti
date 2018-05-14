@@ -35,6 +35,10 @@ class QSortFilterProxyModel;
 
 namespace spaghetti {
 
+namespace nodes {
+class Package;
+}
+
 class Package;
 class Node;
 class LinkItem;
@@ -132,7 +136,7 @@ class PackageView final : public QGraphicsView {
   QTimer m_timer{};
   Node *const m_inputs{};
   Node *const m_outputs{};
-  Node *const m_packageNode{};
+  nodes::Package *m_packageNode{};
   Node *m_dragNode{};
   Node *m_selectedNode{};
   LinkItem *m_dragLink{};

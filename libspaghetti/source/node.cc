@@ -345,8 +345,18 @@ void Node::paintIcon(QPainter *const a_painter)
 void Node::showProperties()
 {
   showCommonProperties();
-  showIOProperties(IOSocketsType::eInputs);
-  showIOProperties(IOSocketsType::eOutputs);
+  switch (m_type) {
+    case Type::eElement:
+      showIOProperties(IOSocketsType::eInputs);
+      showIOProperties(IOSocketsType::eOutputs);
+      break;
+    case Type::eInputs:
+      showIOProperties(IOSocketsType::eInputs);
+      break;
+    case Type::eOutputs:
+      showIOProperties(IOSocketsType::eOutputs);
+      break;
+  }
 }
 
 void Node::showCommonProperties()
@@ -570,14 +580,30 @@ void Node::changeOutputName(const int a_id, const QString a_name)
   changeIOName(IOSocketsType::eOutputs, a_id, a_name);
 }
 
+QString nodetype2string(Node::Type a_type)
+{
+  switch (a_type) {
+    case Node::Type::eElement: return "Element";
+    case Node::Type::eInputs: return "Inputs";
+    case Node::Type::eOutputs: return "Outputs";
+  }
+
+  return "UNKNOWN TYPE";
+}
+
 void Node::addInput()
 {
   uint8_t const SIZE{ static_cast<uint8_t>(m_element->inputs().size()) };
-  QString const INPUT_NAME{ QString("#%1").arg(SIZE) };
+  QString const INPUT_NAME{ QString("#%1").arg(SIZE + 1) };
 
+  qDebug() << "type: " << nodetype2string(m_type);
+  qDebug() << "checking type";
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewInputFlags()) };
+  qDebug() << "adding input";
   m_element->addInput(TYPE, INPUT_NAME.toStdString(), m_element->defaultNewInputFlags());
-  addSocket(SocketType::eInput, SIZE, INPUT_NAME, TYPE, false);
+  const bool SWAPPED = m_type == Type::eInputs;
+  SocketType const REAL_SOCKET_TYPE = SWAPPED ? SocketType::eOutput : SocketType::eInput;
+  addSocket(REAL_SOCKET_TYPE, SIZE, INPUT_NAME, TYPE, SWAPPED);
 
   calculateBoundingRect();
   m_packageView->showProperties();
@@ -586,7 +612,7 @@ void Node::addInput()
 void Node::removeInput()
 {
   m_element->removeInput();
-  removeSocket(SocketType::eInput);
+  removeSocket(m_type == Type::eInputs ? SocketType::eOutput : SocketType::eInput);
   calculateBoundingRect();
   m_packageView->showProperties();
 }
@@ -602,11 +628,13 @@ void Node::setInputName(uint8_t const a_socketId, QString const a_name)
 void Node::addOutput()
 {
   uint8_t const SIZE{ static_cast<uint8_t>(m_element->outputs().size()) };
-  QString const NAME{ QString("#%1").arg(SIZE) };
+  QString const NAME{ QString("#%1").arg(SIZE) + 1 };
 
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewOutputFlags()) };
   m_element->addOutput(TYPE, NAME.toStdString(), m_element->defaultNewOutputFlags());
-  addSocket(SocketType::eOutput, SIZE, NAME, TYPE, false);
+  const bool SWAPPED = m_type == Type::eOutputs;
+  SocketType const REAL_SOCKET_TYPE = SWAPPED ? SocketType::eInput : SocketType::eOutput;
+  addSocket(REAL_SOCKET_TYPE, SIZE, NAME, TYPE, SWAPPED);
 
   calculateBoundingRect();
   m_packageView->showProperties();
@@ -615,7 +643,7 @@ void Node::addOutput()
 void Node::removeOutput()
 {
   m_element->removeOutput();
-  removeSocket(SocketType::eOutput);
+  removeSocket(m_type == Type::eOutputs ? SocketType::eInput : SocketType::eOutput);
   calculateBoundingRect();
   m_packageView->showProperties();
 }
@@ -678,7 +706,7 @@ void Node::setSocketType(IOSocketsType const a_socketType, uint8_t const a_socke
 
   if (io.type == a_type) return;
 
-  auto &socket = INPUTS ? m_inputs[a_socketId] : m_outputs[a_socketId];
+  auto &socket = (INPUTS && m_type == Type::eElement) ? m_inputs[a_socketId] : m_outputs[a_socketId];
   socket->disconnectAll();
 
   m_element->setIOValueType(INPUTS, a_socketId, a_type);

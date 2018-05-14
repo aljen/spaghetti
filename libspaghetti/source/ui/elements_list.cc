@@ -41,6 +41,13 @@ ElementsList::ElementsList(Editor *const a_parent)
   setViewMode(QListView::ListMode);
   setIconSize(QSize(50, 25));
   setSpacing(5);
+
+  connect(this, &ElementsList::itemDoubleClicked, [this](auto a_item) {
+    auto const IS_PACKAGE = a_item->data(ElementsList::eMetaDataIsPackage).toBool();
+    auto const FILE = a_item->data(ElementsList::eMetaDataFilename).toString();
+    if (IS_PACKAGE)
+      m_editor->openPackageFile(FILE);
+  });
 }
 
 void ElementsList::doResize()
@@ -57,14 +64,19 @@ void ElementsList::startDrag(Qt::DropActions a_supportedActions)
   if (!packageView) return;
 
   auto const item = currentItem();
-  auto const type = item->data(ElementsList::eMetaDataType).toString();
-  auto const name = item->data(ElementsList::eMetaDataName).toByteArray();
-  auto const icon = item->data(ElementsList::eMetaDataIcon).toByteArray();
+  auto const TYPE = item->data(ElementsList::eMetaDataType).toString();
+  auto const IS_PACKAGE = item->data(ElementsList::eMetaDataIsPackage).toByteArray();
+  auto const NAME = item->data(ElementsList::eMetaDataName).toByteArray();
+  auto const ICON = item->data(ElementsList::eMetaDataIcon).toByteArray();
+  auto const FILE = item->data(ElementsList::eMetaDataFilename).toByteArray();
 
   auto const mimeData = new QMimeData;
-  mimeData->setText(type);
-  mimeData->setData("metadata/name", name);
-  mimeData->setData("metadata/icon", icon);
+  mimeData->setText(TYPE);
+  mimeData->setData("metadata/is_package", IS_PACKAGE);
+  mimeData->setData("metadata/name", NAME);
+  mimeData->setData("metadata/icon", ICON);
+  mimeData->setData("metadata/filename", FILE);
+  qDebug() << "mimeData:" << mimeData << "isPackage:" << IS_PACKAGE << "type:" << TYPE << "name:" << NAME << "icon:" << ICON << "file:" << FILE;
 
   auto const drag = new QDrag{ this };
   drag->setMimeData(mimeData);

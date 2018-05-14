@@ -190,10 +190,28 @@ void Editor::populateLibrary()
     addElement(QString::fromStdString(category), QString::fromStdString(info.name), QString::fromStdString(info.type),
                QString::fromStdString(info.icon));
   }
+
+  auto const &PACKAGES = REGISTRY.packages();
+  for (auto const &PACKAGE : PACKAGES) {
+    std::string const FILENAME{ PACKAGE.first };
+    std::string const PATH{ PACKAGE.second.path };
+    std::string const ICON{ PACKAGE.second.icon };
+    std::string category{ PATH };
+
+    if (!category.empty()) {
+      if (auto const it = PATH.find_first_of('/'); it != std::string::npos) category = PATH.substr(0, it);
+      category[0] = static_cast<char>(std::toupper(category[0]));
+    } else
+      category = "Invalid packages";
+
+    addPackage(QString::fromStdString(category), QString::fromStdString(FILENAME), QString::fromStdString(PATH),
+               QString::fromStdString(ICON));
+  }
 }
 
 void Editor::addElement(QString const &a_category, QString const &a_name, QString const &a_type, QString const &a_icon)
 {
+  //  qDebug() << "Adding" << a_category << '/' << a_name << "type:" << a_type << "icon:" << a_icon;
   ExpanderWidget *const library{ m_ui->elementsContainer };
 
   ElementsList *list{};
@@ -214,9 +232,53 @@ void Editor::addElement(QString const &a_category, QString const &a_name, QStrin
   }
 
   QListWidgetItem *const item{ new QListWidgetItem{ a_name } };
+  item->setData(ElementsList::eMetaDataIsPackage, false);
   item->setData(ElementsList::eMetaDataType, a_type);
   item->setData(ElementsList::eMetaDataName, a_name);
   item->setData(ElementsList::eMetaDataIcon, a_icon);
+  item->setIcon(QIcon(a_icon));
+
+  list->addItem(item);
+  list->doResize();
+  list->sortItems();
+}
+
+void Editor::addPackage(QString const &a_category, QString const &a_filename, QString const &a_path,
+                        QString const &a_icon)
+{
+  (void)a_category;
+  (void)a_filename;
+  (void)a_path;
+  (void)a_icon;
+
+  //  qDebug() << "addPackage: category:" << a_category << "filename:" << a_filename << "path:" << a_path << "icon:" <<
+  //  a_icon;
+
+  ExpanderWidget *const library{ m_ui->packagesContainer };
+
+  ElementsList *list{};
+
+  int const count{ library->count() };
+  for (int i = 0; i < count; ++i) {
+    QString const text{ library->itemText(i) };
+    if (text != a_category) continue;
+
+    list = qobject_cast<ElementsList *>(library->widget(i));
+    assert(list);
+    break;
+  }
+
+  if (list == nullptr) {
+    list = new ElementsList{ this };
+    library->addItem(list, a_category);
+  }
+
+  QListWidgetItem *const item{ new QListWidgetItem{ (a_path.isEmpty() ? "Invalid" : a_path) } };
+  item->setData(ElementsList::eMetaDataIsPackage, true);
+  item->setData(ElementsList::eMetaDataType, a_path);
+  item->setData(ElementsList::eMetaDataName, a_path);
+  item->setData(ElementsList::eMetaDataIcon, a_icon);
+  item->setData(ElementsList::eMetaDataFilename, a_filename);
   item->setIcon(QIcon(a_icon));
 
   list->addItem(item);
@@ -315,7 +377,7 @@ void Editor::openPackage()
   openPackageFile(FILENAME);
 }
 
-void Editor::openPackageFile(QString const a_filename)
+void Editor::openPackageFile(QString const &a_filename)
 {
   auto const FOUND = m_openFiles.constFind(a_filename);
 
