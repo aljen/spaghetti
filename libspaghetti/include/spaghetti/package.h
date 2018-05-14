@@ -142,6 +142,7 @@ class SPAGHETTI_API Package final : public Element {
   std::atomic_bool m_pause{};
   std::atomic_bool m_paused{};
   std::atomic_uint32_t m_pauseCount{};
+  bool m_isExternal{};
 };
 
 inline void Package::setInputsPosition(double const a_x, double const a_y)
