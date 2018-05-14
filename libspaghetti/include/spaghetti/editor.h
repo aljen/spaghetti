@@ -57,6 +57,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
 
   void aboutToQuit();
 
+  void openPackageFile(QString const &a_filename);
   void openOrCreatePackageView(Package *const a_package);
   PackageView *packageView() const { return packageViewForIndex(m_packageViewIndex); }
   int packageViewIndex() const { return m_packageViewIndex; }
@@ -72,7 +73,6 @@ class SPAGHETTI_API Editor final : public QMainWindow {
 
   void newPackage();
   void openPackage();
-  void openPackageFile(QString const a_filename);
   void savePackage();
   void saveAsPackage();
   void closePackage();
