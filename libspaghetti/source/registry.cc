@@ -302,7 +302,7 @@ void Registry::loadPackages()
         if (fs::is_directory(ENTRY)) continue;
         auto const FILENAME = ENTRY.path().string();
         log::warn("Loading package '{}'", FILENAME);
-        packages[FILENAME] = Package::getPathFor(FILENAME);
+        packages[FILENAME] = Package::getInfoFor(FILENAME);
       }
     }
   };
@@ -311,7 +311,7 @@ void Registry::loadPackages()
   loadFrom(m_pimpl->user_packages_path);
 
   log::warn("Loaded {} packages", packages.size());
-  for (auto const &PACKAGE : packages) log::warn("{} as '{}'", PACKAGE.first, PACKAGE.second);
+  for (auto const &PACKAGE : packages) log::warn("{} as '{}'", PACKAGE.first, PACKAGE.second.path);
 
   m_pimpl->packages = packages;
 }

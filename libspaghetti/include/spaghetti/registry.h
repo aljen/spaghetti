@@ -55,9 +55,15 @@ class SPAGHETTI_API Registry final {
     CloneFunc<Element> cloneElement{};
     CloneFunc<Node> cloneNode{};
   };
-  using Packages = std::unordered_map<std::string, std::string>;
 
  public:
+  struct PackageInfo {
+    std::string filename{};
+    std::string path{};
+    std::string icon{};
+  };
+  using Packages = std::unordered_map<std::string, PackageInfo>;
+
   static Registry &get();
 
   ~Registry();

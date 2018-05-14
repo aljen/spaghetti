@@ -400,9 +400,9 @@ void Package::save(std::string const &a_filename)
   resumeDispatchThread();
 }
 
-std::string Package::getPathFor(std::string const &a_filename)
+Registry::PackageInfo Package::getInfoFor(std::string const &a_filename)
 {
-  std::string type{};
+  Registry::PackageInfo type{};
 
   std::ifstream file{ a_filename };
   if (!file.is_open()) return type;
@@ -410,7 +410,9 @@ std::string Package::getPathFor(std::string const &a_filename)
   Json json{};
   file >> json;
 
-  type = json["package"]["path"];
+  type.filename = a_filename;
+  type.icon = json["package"]["icon"];
+  type.path = json["package"]["path"];
 
   return type;
 }

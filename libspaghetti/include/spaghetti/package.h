@@ -37,6 +37,7 @@
 #include <spaghetti/api.h>
 #include <spaghetti/element.h>
 #include <spaghetti/strings.h>
+#include <spaghetti/registry.h>
 
 // clang-format off
 #define PACKAGE_SPP_MAP 1
@@ -115,7 +116,7 @@ class SPAGHETTI_API Package final : public Element {
   void open(std::string const &a_filename);
   void save(std::string const &a_filename);
 
-  static std::string getPathFor(std::string const &a_filename);
+  static Registry::PackageInfo getInfoFor(std::string const &a_filename);
 
  private:
   std::string m_packageDescription{ "A package" };
