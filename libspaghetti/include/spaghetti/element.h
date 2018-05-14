@@ -148,6 +148,11 @@ class SPAGHETTI_API Element {
 
   void resetIOSocketValue(IOSocket &a_io);
 
+  void setNode(void *const a_node) { m_node = a_node; }
+
+  template<typename T>
+  T* node() { return static_cast<T*>(m_node); }
+
  protected:
   struct NameChanged {
     std::string from;
@@ -205,6 +210,7 @@ class SPAGHETTI_API Element {
   uint8_t m_maxOutputs{ std::numeric_limits<uint8_t>::max() };
   uint8_t m_defaultNewInputFlags{};
   uint8_t m_defaultNewOutputFlags{};
+  void *m_node{};
 };
 
 template<typename T>
