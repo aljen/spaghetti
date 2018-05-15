@@ -326,7 +326,7 @@ void PackageView::dropEvent(QDropEvent *a_event)
     a_event->accept();
   } else if (mimeData->hasFormat("metadata/name") && mimeData->hasFormat("metadata/icon")) {
     auto const isPackage = mimeData->data("metadata/is_package") == "true";
-    auto const file = mimeData->data("metadata/filename").toStdString();
+    auto const file = mimeData->data("metadata/filename");
     auto const pathString = a_event->mimeData()->text();
     auto const stringData = pathString.toLatin1();
     char const *const path{ isPackage ? "logic/package" : stringData.data() };
@@ -336,7 +336,7 @@ void PackageView::dropEvent(QDropEvent *a_event)
     if (element->name().empty()) element->setName(m_dragNode->name().toStdString());
     if (isPackage) {
       auto const package = static_cast<Package *>(element);
-      package->open(file);
+      package->open(QString{ file }.toStdString());
     }
     m_dragNode->setElement(element);
     m_dragNode->iconify();
