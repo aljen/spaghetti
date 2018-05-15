@@ -48,13 +48,50 @@ namespace spaghetti {
 
 class Package;
 
+enum class ValueType { eBool, eInt, eFloat };
+
+struct EventNameChanged {
+  std::string from;
+  std::string to;
+};
+struct EventIONameChanged {
+  std::string from;
+  std::string to;
+  uint8_t id;
+  bool input;
+};
+struct EventIOTypeChanged {
+  bool input;
+  uint8_t id;
+  ValueType from;
+  ValueType to;
+};
+struct EventEmpty {
+};
+using EventValue = std::variant<EventNameChanged, EventIONameChanged, EventIOTypeChanged, EventEmpty>;
+enum class EventType {
+  eElementNameChanged,
+  eIONameChanged,
+  eIOTypeChanged,
+  eInputAdded,
+  eInputRemoved,
+  eOutputAdded,
+  eOutputRemoved
+};
+
+struct Event {
+  EventType type{};
+  EventValue payload{};
+};
+
+using EventCallback = std::function<void(Event const &)>;
+
 class SPAGHETTI_API Element {
  public:
   using duration_t = std::chrono::duration<double, std::milli>;
 
   using Json = nlohmann::json;
   using Value = std::variant<bool, int32_t, float>;
-  enum class ValueType { eBool, eInt, eFloat };
   template<typename T>
   struct Vec2 {
     T x{};
@@ -151,36 +188,15 @@ class SPAGHETTI_API Element {
   void setNode(void *const a_node) { m_node = a_node; }
 
   template<typename T>
-  T* node() { return static_cast<T*>(m_node); }
+  T *node()
+  {
+    return static_cast<T *>(m_node);
+  }
+
+  void registerEventHandler(EventCallback const &a_handler) { m_handler = a_handler; }
 
  protected:
-  struct NameChanged {
-    std::string from;
-    std::string to;
-  };
-  struct IONameChanged {
-    bool input;
-    uint8_t id;
-    std::string from;
-    std::string to;
-  };
-  struct IOTypeChanged {
-    bool input;
-    uint8_t id;
-    ValueType from;
-    ValueType to;
-  };
-  struct InputAdded {
-  };
-  struct InputRemoved {
-  };
-  struct OutputAdded {
-  };
-  struct OutputRemoved {
-  };
-  using Event =
-      std::variant<NameChanged, IONameChanged, IOTypeChanged, InputAdded, InputRemoved, OutputAdded, OutputRemoved>;
-
+  void handleEvent(Event const &a_event);
   virtual void onEvent(Event const &a_event) { (void)a_event; }
 
   void setMinInputs(uint8_t const a_min);
@@ -210,6 +226,7 @@ class SPAGHETTI_API Element {
   uint8_t m_maxOutputs{ std::numeric_limits<uint8_t>::max() };
   uint8_t m_defaultNewInputFlags{};
   uint8_t m_defaultNewOutputFlags{};
+  EventCallback m_handler{};
   void *m_node{};
 };
 

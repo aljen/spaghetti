@@ -50,22 +50,22 @@ qreal const ROUNDED_SOCKET_SIZE_2 = ROUNDED_SOCKET_SIZE / 2.0;
 # pragma warning(disable:4715)
 #endif
 // clang-format on
-bool value_type_allowed(uint8_t const a_flags, Element::ValueType const a_type)
+bool value_type_allowed(uint8_t const a_flags, ValueType const a_type)
 {
   switch (a_type) {
-    case Element::ValueType::eBool: return a_flags & Element::IOSocket::eCanHoldBool;
-    case Element::ValueType::eInt: return a_flags & Element::IOSocket::eCanHoldInt;
-    case Element::ValueType::eFloat: return a_flags & Element::IOSocket::eCanHoldFloat;
+    case ValueType::eBool: return a_flags & Element::IOSocket::eCanHoldBool;
+    case ValueType::eInt: return a_flags & Element::IOSocket::eCanHoldInt;
+    case ValueType::eFloat: return a_flags & Element::IOSocket::eCanHoldFloat;
   }
 
   assert(false);
 }
 
-Element::ValueType first_available_type_for_flags(uint8_t const a_flags)
+ValueType first_available_type_for_flags(uint8_t const a_flags)
 {
-  if (a_flags & Element::IOSocket::eCanHoldBool) return Element::ValueType::eBool;
-  if (a_flags & Element::IOSocket::eCanHoldInt) return Element::ValueType::eInt;
-  if (a_flags & Element::IOSocket::eCanHoldFloat) return Element::ValueType::eFloat;
+  if (a_flags & Element::IOSocket::eCanHoldBool) return ValueType::eBool;
+  if (a_flags & Element::IOSocket::eCanHoldInt) return ValueType::eInt;
+  if (a_flags & Element::IOSocket::eCanHoldFloat) return ValueType::eFloat;
 
   assert(false);
 }
@@ -350,12 +350,21 @@ void Node::showProperties()
       showIOProperties(IOSocketsType::eInputs);
       showIOProperties(IOSocketsType::eOutputs);
       break;
-    case Type::eInputs:
-      showIOProperties(IOSocketsType::eInputs);
-      break;
-    case Type::eOutputs:
-      showIOProperties(IOSocketsType::eOutputs);
-      break;
+    case Type::eInputs: showIOProperties(IOSocketsType::eInputs); break;
+    case Type::eOutputs: showIOProperties(IOSocketsType::eOutputs); break;
+  }
+}
+
+void Node::handleEvent(Event const &a_event)
+{
+  switch (a_event.type) {
+    case EventType::eElementNameChanged: break;
+    case EventType::eIONameChanged: break;
+    case EventType::eIOTypeChanged: break;
+    case EventType::eInputAdded: break;
+    case EventType::eInputRemoved: break;
+    case EventType::eOutputAdded: break;
+    case EventType::eOutputRemoved: break;
   }
 }
 
@@ -400,16 +409,6 @@ void Node::showCommonProperties()
   QLineEdit *nameEdit = new QLineEdit{ NAME };
   m_properties->setCellWidget(row, 1, nameEdit);
   QObject::connect(nameEdit, &QLineEdit::textChanged, [this](QString const &a_text) { setName(a_text); });
-}
-
-QString valueType2QString(Element::ValueType a_type)
-{
-  switch (a_type) {
-    case Element::ValueType::eBool: return "Bool";
-    case Element::ValueType::eInt: return "Int";
-    case Element::ValueType::eFloat: return "Float";
-  }
-  return "Unknown";
 }
 
 void Node::showIOProperties(IOSocketsType const a_type)
@@ -465,11 +464,11 @@ void Node::showIOProperties(IOSocketsType const a_type)
 
     auto const comboBox = new QComboBox;
     if (IO.flags & Element::IOSocket::eCanHoldBool)
-      comboBox->addItem(valueType2QString(ValueType::eBool), static_cast<int>(ValueType::eBool));
+      comboBox->addItem(ValueType_to_QString(ValueType::eBool), static_cast<int>(ValueType::eBool));
     if (IO.flags & Element::IOSocket::eCanHoldInt)
-      comboBox->addItem(valueType2QString(ValueType::eInt), static_cast<int>(ValueType::eInt));
+      comboBox->addItem(ValueType_to_QString(ValueType::eInt), static_cast<int>(ValueType::eInt));
     if (IO.flags & Element::IOSocket::eCanHoldFloat)
-      comboBox->addItem(valueType2QString(ValueType::eFloat), static_cast<int>(ValueType::eFloat));
+      comboBox->addItem(ValueType_to_QString(ValueType::eFloat), static_cast<int>(ValueType::eFloat));
     int const INDEX{ comboBox->findData(static_cast<int>(IO.type)) };
     comboBox->setCurrentIndex(INDEX);
     m_properties->setCellWidget(row, 1, comboBox);

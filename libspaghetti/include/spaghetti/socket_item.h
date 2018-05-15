@@ -40,7 +40,6 @@ constexpr int SOCKET_TYPE{ QGraphicsItem::UserType + 3 };
 class SocketItem final : public QGraphicsItem {
  public:
   enum class Type { eInput, eOutput };
-  using ValueType = Element::ValueType;
 
   constexpr static int SIZE{ 16 };
 
