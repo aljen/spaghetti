@@ -180,9 +180,16 @@ void Node::advance(int a_phase)
 
 void Node::setElement(Element *const a_element)
 {
-  if (m_element) qDebug() << "Already have element!";
+  qDebug() << Q_FUNC_INFO << "ELEMENT:" << m_element << a_element;
 
-  m_element = a_element;
+  if (!m_element) {
+    m_element = a_element;
+    if (m_type == Type::eElement) {
+      qDebug() << "Registering event handler for element:" << m_element->id();
+      m_element->registerEventHandler([this](Event const &a_event) { handleEvent(a_event); });
+    }
+  } else
+    qDebug() << "Already have element!";
 
   auto const &INPUTS = m_element->inputs();
   auto const &OUTPUTS = m_element->outputs();
@@ -595,16 +602,16 @@ void Node::addInput()
   uint8_t const SIZE{ static_cast<uint8_t>(m_element->inputs().size()) };
   QString const INPUT_NAME{ QString("#%1").arg(SIZE + 1) };
 
-  qDebug() << "type: " << nodetype2string(m_type);
-  qDebug() << "checking type";
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewInputFlags()) };
-  qDebug() << "adding input";
   m_element->addInput(TYPE, INPUT_NAME.toStdString(), m_element->defaultNewInputFlags());
-  const bool SWAPPED = m_type == Type::eInputs;
-  SocketType const REAL_SOCKET_TYPE = SWAPPED ? SocketType::eOutput : SocketType::eInput;
-  addSocket(REAL_SOCKET_TYPE, SIZE, INPUT_NAME, TYPE, SWAPPED);
 
-  calculateBoundingRect();
+  if (m_type == Type::eElement) {
+    const bool SWAPPED = m_type == Type::eInputs;
+    SocketType const REAL_SOCKET_TYPE = SWAPPED ? SocketType::eOutput : SocketType::eInput;
+    addSocket(REAL_SOCKET_TYPE, SIZE, INPUT_NAME, TYPE, SWAPPED);
+    calculateBoundingRect();
+  }
+
   m_packageView->showProperties();
 }
 
@@ -627,15 +634,18 @@ void Node::setInputName(uint8_t const a_socketId, QString const a_name)
 void Node::addOutput()
 {
   uint8_t const SIZE{ static_cast<uint8_t>(m_element->outputs().size()) };
-  QString const NAME{ QString("#%1").arg(SIZE) + 1 };
+  QString const OUTPUT_NAME{ QString("#%1").arg(SIZE + 1) };
 
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewOutputFlags()) };
-  m_element->addOutput(TYPE, NAME.toStdString(), m_element->defaultNewOutputFlags());
-  const bool SWAPPED = m_type == Type::eOutputs;
-  SocketType const REAL_SOCKET_TYPE = SWAPPED ? SocketType::eInput : SocketType::eOutput;
-  addSocket(REAL_SOCKET_TYPE, SIZE, NAME, TYPE, SWAPPED);
+  m_element->addOutput(TYPE, OUTPUT_NAME.toStdString(), m_element->defaultNewOutputFlags());
 
-  calculateBoundingRect();
+  if (m_type == Type::eElement) {
+    const bool SWAPPED = m_type == Type::eOutputs;
+    SocketType const REAL_SOCKET_TYPE = SWAPPED ? SocketType::eInput : SocketType::eOutput;
+    addSocket(REAL_SOCKET_TYPE, SIZE, OUTPUT_NAME, TYPE, SWAPPED);
+    calculateBoundingRect();
+  }
+
   m_packageView->showProperties();
 }
 
@@ -699,13 +709,18 @@ void Node::setSocketType(IOSocketsType const a_socketType, uint8_t const a_socke
 
   if (!value_type_allowed(io.flags, a_type)) {
     spaghetti::log::error("Changing io's {}@{} type to {} is not allowed.", m_element->id(), io.id,
-                          valueType2QString(a_type).toStdString());
+                          ValueType_to_QString(a_type).toStdString());
     return;
   }
 
-  if (io.type == a_type) return;
+  SocketItem *socket{};
+  if (m_type == Type::eElement)
+    socket = INPUTS ? m_inputs[a_socketId] : m_outputs[a_socketId];
+  else
+    socket = m_type == Type::eInputs ? m_outputs[a_socketId] : m_inputs[a_socketId];
 
-  auto &socket = (INPUTS && m_type == Type::eElement) ? m_inputs[a_socketId] : m_outputs[a_socketId];
+  if (socket->valueType() == a_type) return;
+
   socket->disconnectAll();
 
   m_element->setIOValueType(INPUTS, a_socketId, a_type);

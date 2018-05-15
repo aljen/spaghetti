@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #include <QDebug>
-#include <QTableWidget>
 #include <QLineEdit>
+#include <QTableWidget>
 
 #include "nodes/package.h"
 #include "spaghetti/editor.h"
@@ -69,7 +69,7 @@ void Package::showProperties()
   QLineEdit *iconEdit = new QLineEdit{ ICON };
   iconEdit->setPlaceholderText("<icon>");
   m_properties->setCellWidget(row, 1, iconEdit);
-  QObject::connect(iconEdit, &QLineEdit::textChanged, [this](QString const &a_text)  {
+  QObject::connect(iconEdit, &QLineEdit::textChanged, [this](QString const &a_text) {
     (void)a_text;
     qDebug() << "ICON:" << a_text;
     /* TODO */
@@ -77,6 +77,73 @@ void Package::showProperties()
 
   showIOProperties(IOSocketsType::eInputs);
   showIOProperties(IOSocketsType::eOutputs);
+}
+
+void Package::handleEvent(Event const &a_event)
+{
+  qDebug() << Q_FUNC_INFO << "package_id:" << m_element->id();
+  switch (a_event.type) {
+    case EventType::eElementNameChanged: {
+      auto const &EVENT = std::get<EventNameChanged>(a_event.payload);
+      qDebug() << "Name changed from" << QString::fromStdString(EVENT.from) << "to" << QString::fromStdString(EVENT.to);
+      break;
+    }
+    case EventType::eIONameChanged: {
+      auto const &EVENT = std::get<EventIONameChanged>(a_event.payload);
+      qDebug() << (EVENT.input ? "Input" : "Output") << EVENT.id << "name changed from"
+               << QString::fromStdString(EVENT.from) << "to" << QString::fromStdString(EVENT.to);
+      break;
+    }
+    case EventType::eIOTypeChanged: {
+      auto const &EVENT = std::get<EventIOTypeChanged>(a_event.payload);
+      qDebug() << (EVENT.input ? "Input" : "Output") << EVENT.id << "type changed from"
+               << ValueType_to_QString(EVENT.from) << "to" << ValueType_to_QString(EVENT.to);
+      //      auto const TYPE = EVENT.input ? IOSocketsType::eInputs : IOSocketsType::eOutputs;
+      if (m_inputsNode && m_outputsNode) {
+        if (EVENT.input) {
+          m_inputsNode->setSocketType(IOSocketsType::eInputs, EVENT.id, EVENT.to);
+          m_inputsNode->update();
+        } else
+          m_outputsNode->setSocketType(IOSocketsType::eOutputs, EVENT.id, EVENT.to);
+      }
+      break;
+    }
+    case EventType::eInputAdded: {
+      qDebug() << "Input added";
+      if (m_inputsNode) {
+        auto const OUTPUTS_SIZE = m_inputsNode->outputs().size();
+        auto const &INPUTS = m_element->inputs();
+        auto const INPUTS_SIZE = static_cast<int>(INPUTS.size());
+        auto const &LAST_INPUT = INPUTS.back();
+        auto const ADD_SOCKET_NEEDED = OUTPUTS_SIZE < INPUTS_SIZE;
+        qDebug() << "package inputs:" << inputs().size() << "inputsNode->outputs:" << OUTPUTS_SIZE << "element->inputs:" << INPUTS_SIZE;
+        if (ADD_SOCKET_NEEDED) {
+          m_inputsNode->addSocket(SocketType::eOutput, static_cast<uint8_t>(OUTPUTS_SIZE),
+                                  QString::fromStdString(LAST_INPUT.name), LAST_INPUT.type, true);
+          m_inputsNode->calculateBoundingRect();
+        }
+      }
+      break;
+    }
+    case EventType::eInputRemoved: qDebug() << "Input removed"; break;
+    case EventType::eOutputAdded: {
+      qDebug() << "Output added";
+      if (m_outputsNode) {
+        auto const INPUTS_SIZE = m_outputsNode->inputs().size();
+        auto const &OUTPUTS = m_element->outputs();
+        auto const OUTPUTS_SIZE = static_cast<int>(OUTPUTS.size());
+        auto const &LAST_OUTPUT = OUTPUTS.back();
+        auto const ADD_SOCKET_NEEDED = INPUTS_SIZE < OUTPUTS_SIZE;
+        if (ADD_SOCKET_NEEDED) {
+          m_outputsNode->addSocket(SocketType::eInput, static_cast<uint8_t>(INPUTS_SIZE),
+                                  QString::fromStdString(LAST_OUTPUT.name), LAST_OUTPUT.type, true);
+          m_outputsNode->calculateBoundingRect();
+        }
+      }
+      break;
+    }
+    case EventType::eOutputRemoved: qDebug() << "Output removed"; break;
+  }
 }
 
 bool Package::open()

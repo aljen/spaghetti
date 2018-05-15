@@ -42,6 +42,7 @@ class Package : public Node {
 
  private:
   void showProperties() override;
+  void handleEvent(Event const &a_event) override;
   bool open() override;
 
  private:
