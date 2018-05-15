@@ -220,9 +220,11 @@ void Registry::registerInternalElements()
   registerElement<values::ConstInt, nodes::values::ConstInt>("Const value (Int)", ":/values/const_int.png");
   registerElement<values::RandomBool>("Random value (Bool)", ":/values/random_value.png");
   registerElement<values::RandomFloat, nodes::values::RandomFloat>("Random value (Float)", ":/values/random_value.png");
-  registerElement<values::RandomFloatIf, nodes::values::RandomFloatIf>("Random value If (Float)", ":/values/random_value.png");
+  registerElement<values::RandomFloatIf, nodes::values::RandomFloatIf>("Random value If (Float)",
+                                                                       ":/values/random_value.png");
   registerElement<values::RandomInt, nodes::values::RandomInt>("Random value (Int)", ":/values/random_value.png");
-  registerElement<values::RandomIntIf, nodes::values::RandomIntIf>("Random value If (Int)", ":/values/random_value.png");
+  registerElement<values::RandomIntIf, nodes::values::RandomIntIf>("Random value If (Int)",
+                                                                   ":/values/random_value.png");
 
   registerElement<values::Degree2Radian>("Convert angle (Deg2Rad)", ":/unknown.png");
   registerElement<values::Radian2Degree>("Convert angle (Rad2Deg)", ":/unknown.png");
@@ -237,13 +239,13 @@ void Registry::registerInternalElements()
   registerElement<values::ClampFloat>("Clamp value (Float)", ":/unknown.png");
   registerElement<values::ClampInt>("Clamp value (Int)", ":/unknown.png");
 
-// clang-format off
+  // clang-format off
   registerElement<values::CharacteristicCurve
 #ifdef SPAGHETTI_USE_CHARTS
                   , nodes::values::CharacteristicCurve
 #endif
                   >("Characteristic Curve", ":/unknown.png");
-// clang-format on
+  // clang-format on
 }
 
 void Registry::loadPlugins()
