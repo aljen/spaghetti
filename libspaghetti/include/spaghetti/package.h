@@ -75,6 +75,8 @@ class SPAGHETTI_API Package final : public Element {
   void serialize(Json &a_json) override;
   void deserialize(Json const &a_json) override;
 
+  void update(duration_t const &a_delta) override { m_delta = a_delta; }
+
   std::string_view packageDescription() const { return m_packageDescription; }
   void setPackageDescription(std::string const &a_description) { m_packageDescription = a_description; }
 
@@ -119,6 +121,7 @@ class SPAGHETTI_API Package final : public Element {
   static Registry::PackageInfo getInfoFor(std::string const &a_filename);
 
  private:
+  duration_t m_delta{};
   std::string m_packageDescription{ "A package" };
   std::string m_packagePath{};
   std::string m_packageIcon{ "icons/unknown.png" };
