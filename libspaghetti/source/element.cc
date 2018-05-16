@@ -230,6 +230,14 @@ void Element::clearOutputs()
   m_outputs.clear();
 }
 
+void Element::setIOName(bool const a_input, uint8_t const a_id, std::string const &a_name)
+{
+  if (a_input)
+    setInputName(a_id, a_name);
+  else
+    setOutputName(a_id, a_name);
+}
+
 void Element::setIOValueType(bool const a_input, uint8_t const a_id, ValueType const a_type)
 {
   auto &io = a_input ? m_inputs[a_id] : m_outputs[a_id];

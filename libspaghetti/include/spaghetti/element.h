@@ -170,6 +170,7 @@ class SPAGHETTI_API Element {
   void removeOutput();
   void clearOutputs();
 
+  void setIOName(bool const a_input, uint8_t const a_id, std::string const &a_name);
   void setIOValueType(bool const a_input, uint8_t const a_id, ValueType const a_type);
 
   bool connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t const a_inputId);
