@@ -361,12 +361,38 @@ void Node::handleEvent(Event const &a_event)
 {
   switch (a_event.type) {
     case EventType::eElementNameChanged: break;
-    case EventType::eIONameChanged: break;
+    case EventType::eIONameChanged: {
+      auto const &EVENT = std::get<EventIONameChanged>(a_event.payload);
+      changeIOName(EVENT.input ? IOSocketsType::eInputs : IOSocketsType::eOutputs, EVENT.id,
+                   QString::fromStdString(EVENT.to));
+      calculateBoundingRect();
+      break;
+    }
     case EventType::eIOTypeChanged: break;
-    case EventType::eInputAdded: break;
-    case EventType::eInputRemoved: break;
-    case EventType::eOutputAdded: break;
-    case EventType::eOutputRemoved: break;
+    case EventType::eInputAdded: {
+      auto const &INPUTS = m_element->inputs();
+      auto const SIZE = inputs().size();
+      auto const &INPUT = INPUTS.back();
+      addSocket(SocketType::eInput, static_cast<uint8_t>(SIZE), QString::fromStdString(INPUT.name), INPUT.type);
+      calculateBoundingRect();
+      break;
+    }
+    case EventType::eInputRemoved:
+      removeSocket(SocketType::eInput);
+      calculateBoundingRect();
+      break;
+    case EventType::eOutputAdded: {
+      auto const &OUTPUTS = m_element->outputs();
+      auto const SIZE = outputs().size();
+      auto const &OUTPUT = OUTPUTS.back();
+      addSocket(SocketType::eOutput, static_cast<uint8_t>(SIZE), QString::fromStdString(OUTPUT.name), OUTPUT.type);
+      calculateBoundingRect();
+      break;
+    }
+    case EventType::eOutputRemoved:
+      removeSocket(SocketType::eOutput);
+      calculateBoundingRect();
+      break;
   }
 }
 
