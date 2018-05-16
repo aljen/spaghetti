@@ -87,29 +87,24 @@ void Package::handleEvent(Event const &a_event)
 
   qDebug() << Q_FUNC_INFO << "package_id:" << m_element->id();
   switch (a_event.type) {
-    case EventType::eElementNameChanged: {
-      auto const &EVENT = std::get<EventNameChanged>(a_event.payload);
-      qDebug() << "Name changed from" << QString::fromStdString(EVENT.from) << "to" << QString::fromStdString(EVENT.to);
-      break;
-    }
+    case EventType::eElementNameChanged: break;
     case EventType::eIONameChanged: {
       auto const &EVENT = std::get<EventIONameChanged>(a_event.payload);
-      qDebug() << (EVENT.input ? "Input" : "Output") << EVENT.id << "name changed from"
-               << QString::fromStdString(EVENT.from) << "to" << QString::fromStdString(EVENT.to);
+      if (EVENT.input) {
+        m_inputsNode->outputs()[EVENT.id]->setName(QString::fromStdString(EVENT.to));
+        m_inputsNode->calculateBoundingRect();
+      } else {
+        m_outputsNode->inputs()[EVENT.id]->setName(QString::fromStdString(EVENT.to));
+        m_outputsNode->calculateBoundingRect();
+      }
       break;
     }
     case EventType::eIOTypeChanged: {
       auto const &EVENT = std::get<EventIOTypeChanged>(a_event.payload);
-      qDebug() << (EVENT.input ? "Input" : "Output") << EVENT.id << "type changed from"
-               << ValueType_to_QString(EVENT.from) << "to" << ValueType_to_QString(EVENT.to);
-      //      auto const TYPE = EVENT.input ? IOSocketsType::eInputs : IOSocketsType::eOutputs;
-      if (m_inputsNode && m_outputsNode) {
-        if (EVENT.input) {
-          m_inputsNode->setSocketType(IOSocketsType::eInputs, EVENT.id, EVENT.to);
-          m_inputsNode->update();
-        } else
-          m_outputsNode->setSocketType(IOSocketsType::eOutputs, EVENT.id, EVENT.to);
-      }
+      if (EVENT.input)
+        m_inputsNode->setSocketType(IOSocketsType::eInputs, EVENT.id, EVENT.to);
+      else
+        m_outputsNode->setSocketType(IOSocketsType::eOutputs, EVENT.id, EVENT.to);
       break;
     }
     case EventType::eInputAdded: {
@@ -124,7 +119,11 @@ void Package::handleEvent(Event const &a_event)
       m_inputsNode->calculateBoundingRect();
       break;
     }
-    case EventType::eInputRemoved: qDebug() << "Input removed"; break;
+    case EventType::eInputRemoved: {
+      m_inputsNode->removeSocket(SocketType::eOutput);
+      m_inputsNode->calculateBoundingRect();
+      break;
+    }
     case EventType::eOutputAdded: {
       auto const &OUTPUTS = m_element->outputs();
       auto const OUTPUTS_SIZE = static_cast<int>(OUTPUTS.size());
@@ -137,7 +136,11 @@ void Package::handleEvent(Event const &a_event)
       m_outputsNode->calculateBoundingRect();
       break;
     }
-    case EventType::eOutputRemoved: qDebug() << "Output removed"; break;
+    case EventType::eOutputRemoved: {
+      m_outputsNode->removeSocket(SocketType::eInput);
+      m_outputsNode->calculateBoundingRect();
+      break;
+    }
   }
 }
 
