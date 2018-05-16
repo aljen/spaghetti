@@ -175,6 +175,28 @@ void Package::deserialize(Json const &a_json)
   }
 }
 
+void Package::calculate()
+{
+  for (auto &&connection : m_connections) {
+    Element *const source{ get(connection.from_id) };
+    Element *const target{ get(connection.to_id) };
+
+    auto const IS_SOURCE_SELF = connection.from_id == 0;
+    auto const IS_TARGET_SELF = connection.to_id == 0;
+
+    auto const &SOURCE_IO = IS_SOURCE_SELF ? source->inputs() : source->outputs();
+    auto &targetIO = IS_TARGET_SELF ? target->outputs() : target->inputs();
+    targetIO[connection.to_socket].value = SOURCE_IO[connection.from_socket].value;
+  }
+
+  for (auto &&element : m_elements) {
+    if (!element || element == this) continue;
+
+    element->update(m_delta);
+    element->calculate();
+  }
+}
+
 Element *Package::add(string::hash_t const a_hash)
 {
   pauseDispatchThread();

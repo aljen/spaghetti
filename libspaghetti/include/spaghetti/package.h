@@ -75,6 +75,7 @@ class SPAGHETTI_API Package final : public Element {
   void serialize(Json &a_json) override;
   void deserialize(Json const &a_json) override;
 
+  void calculate() override;
   void update(duration_t const &a_delta) override { m_delta = a_delta; }
 
   std::string_view packageDescription() const { return m_packageDescription; }
