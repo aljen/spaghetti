@@ -455,8 +455,9 @@ void Node::showIOProperties(IOSocketsType const a_type)
 
     if (IO.flags & Element::IOSocket::eCanChangeName) {
       QLineEdit *const ioName{ new QLineEdit{ QString::fromStdString(IO.name) } };
-      QObject::connect(ioName, &QLineEdit::editingFinished,
-                       [a_type, i, ioName, this]() { changeIOName(a_type, i, ioName->text()); });
+      QObject::connect(ioName, &QLineEdit::editingFinished, [a_type, i, ioName, this]() {
+        m_element->setIOName(a_type == IOSocketsType::eInputs, static_cast<uint8_t>(i), ioName->text().toStdString());
+      });
       m_properties->setCellWidget(row, 0, ioName);
     } else {
       item = new QTableWidgetItem{ QString::fromStdString(IO.name) };
