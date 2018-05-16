@@ -331,21 +331,9 @@ void Package::dispatchThreadFunction()
   while (!m_quit) {
     auto const NOW = clock_t::now();
     auto const DELTA = NOW - last;
-    for (auto &&connection : m_connections) {
-      Element *const source{ get(connection.from_id) };
-      Element *const target{ get(connection.to_id) };
 
-      auto const &SOURCE_OUTPUTS = source->outputs();
-      auto &targetInputs = target->inputs();
-      targetInputs[connection.to_socket].value = SOURCE_OUTPUTS[connection.from_socket].value;
-    }
-
-    for (auto &&element : m_elements) {
-      if (!element) continue;
-
-      element->update(DELTA);
-      element->calculate();
-    }
+    update(DELTA);
+    calculate();
 
     last = NOW;
 
