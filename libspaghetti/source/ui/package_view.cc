@@ -241,10 +241,15 @@ void PackageView::open()
 
   auto const &connections = m_package->connections();
   for (auto const &connection : connections) {
-    auto const source = getNode(connection.from_id);
-    auto const target = getNode(connection.to_id);
-    auto const sourceSocket = source->outputs()[connection.from_socket];
-    auto const targetSocket = target->inputs()[connection.to_socket];
+    auto const SOURCE_ID = connection.from_id;
+    auto const SOURCE_SOCKET = connection.from_socket;
+    auto const TARGET_ID = connection.to_id;
+    auto const TARGET_SOCKET = connection.to_socket;
+
+    auto const source = SOURCE_ID != 0 ? getNode(SOURCE_ID) : m_packageNode->inputsNode();
+    auto const target = TARGET_ID != 0 ? getNode(TARGET_ID) : m_packageNode->outputsNode();
+    auto const sourceSocket = source->outputs()[SOURCE_SOCKET];
+    auto const targetSocket = target->inputs()[TARGET_SOCKET];
     sourceSocket->connect(targetSocket);
   }
 }
