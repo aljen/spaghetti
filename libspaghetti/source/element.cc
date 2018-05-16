@@ -176,6 +176,8 @@ bool Element::addInput(ValueType const a_type, std::string const &a_name, uint8_
 void Element::setInputName(uint8_t const a_input, std::string const &a_name)
 {
   auto const OLD_NAME = m_inputs[a_input].name;
+  if (OLD_NAME == a_name) return;
+
   m_inputs[a_input].name = a_name;
 
   handleEvent(Event{ EventType::eIONameChanged, EventIONameChanged{ OLD_NAME, a_name, a_input, true } });
@@ -213,6 +215,8 @@ bool Element::addOutput(ValueType const a_type, std::string const &a_name, uint8
 void Element::setOutputName(uint8_t const a_output, std::string const &a_name)
 {
   auto const OLD_NAME = m_outputs[a_output].name;
+  if (OLD_NAME == a_name) return;
+
   m_outputs[a_output].name = a_name;
 
   handleEvent(Event{ EventType::eIONameChanged, EventIONameChanged{ OLD_NAME, a_name, a_output, false } });
