@@ -184,8 +184,7 @@ void Node::setElement(Element *const a_element)
 
   m_element = a_element;
 
-  if (m_type == Type::eElement)
-    m_element->registerEventHandler([this](Event const &a_event) { handleEvent(a_event); });
+  if (m_type == Type::eElement) m_element->registerEventHandler([this](Event const &a_event) { handleEvent(a_event); });
 
   auto const &INPUTS = m_element->inputs();
   auto const &OUTPUTS = m_element->outputs();
