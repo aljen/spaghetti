@@ -71,7 +71,7 @@ class SocketItem final : public QGraphicsItem {
   void setHover(bool const a_hover) { m_isHover = a_hover; }
 
   QString name() const { return m_name; }
-  void setName(QString a_name, bool const a_swapped);
+  void setName(QString const &a_name);
 
   void showName() { m_nameHidden = false; }
   void hideName() { m_nameHidden = true; }

@@ -109,37 +109,28 @@ void Package::handleEvent(Event const &a_event)
       break;
     }
     case EventType::eInputAdded: {
-      qDebug() << "Input added";
-      if (m_inputsNode) {
-        auto const OUTPUTS_SIZE = m_inputsNode->outputs().size();
-        auto const &INPUTS = m_element->inputs();
-        auto const INPUTS_SIZE = static_cast<int>(INPUTS.size());
-        auto const &LAST_INPUT = INPUTS.back();
-        auto const ADD_SOCKET_NEEDED = OUTPUTS_SIZE < INPUTS_SIZE;
-        qDebug() << "package inputs:" << inputs().size() << "inputsNode->outputs:" << OUTPUTS_SIZE << "element->inputs:" << INPUTS_SIZE;
-        if (ADD_SOCKET_NEEDED) {
-          m_inputsNode->addSocket(SocketType::eOutput, static_cast<uint8_t>(OUTPUTS_SIZE),
-                                  QString::fromStdString(LAST_INPUT.name), LAST_INPUT.type, true);
-          m_inputsNode->calculateBoundingRect();
-        }
-      }
+      auto const &INPUTS = m_element->inputs();
+      auto const INPUTS_SIZE = static_cast<int>(INPUTS.size());
+      auto const &LAST_INPUT = INPUTS.back();
+      auto const OUTPUTS_SIZE = m_inputsNode->outputs().size();
+      auto const ADD_SOCKET_NEEDED = OUTPUTS_SIZE < INPUTS_SIZE;
+      assert(ADD_SOCKET_NEEDED == true);
+      m_inputsNode->addSocket(SocketType::eOutput, static_cast<uint8_t>(OUTPUTS_SIZE),
+                              QString::fromStdString(LAST_INPUT.name), LAST_INPUT.type);
+      m_inputsNode->calculateBoundingRect();
       break;
     }
     case EventType::eInputRemoved: qDebug() << "Input removed"; break;
     case EventType::eOutputAdded: {
-      qDebug() << "Output added";
-      if (m_outputsNode) {
-        auto const INPUTS_SIZE = m_outputsNode->inputs().size();
-        auto const &OUTPUTS = m_element->outputs();
-        auto const OUTPUTS_SIZE = static_cast<int>(OUTPUTS.size());
-        auto const &LAST_OUTPUT = OUTPUTS.back();
-        auto const ADD_SOCKET_NEEDED = INPUTS_SIZE < OUTPUTS_SIZE;
-        if (ADD_SOCKET_NEEDED) {
-          m_outputsNode->addSocket(SocketType::eInput, static_cast<uint8_t>(INPUTS_SIZE),
-                                  QString::fromStdString(LAST_OUTPUT.name), LAST_OUTPUT.type, true);
-          m_outputsNode->calculateBoundingRect();
-        }
-      }
+      auto const &OUTPUTS = m_element->outputs();
+      auto const OUTPUTS_SIZE = static_cast<int>(OUTPUTS.size());
+      auto const &LAST_OUTPUT = OUTPUTS.back();
+      auto const INPUTS_SIZE = m_outputsNode->inputs().size();
+      auto const ADD_SOCKET_NEEDED = INPUTS_SIZE < OUTPUTS_SIZE;
+      assert(ADD_SOCKET_NEEDED == true);
+      m_outputsNode->addSocket(SocketType::eInput, static_cast<uint8_t>(INPUTS_SIZE),
+                               QString::fromStdString(LAST_OUTPUT.name), LAST_OUTPUT.type);
+      m_outputsNode->calculateBoundingRect();
       break;
     }
     case EventType::eOutputRemoved: qDebug() << "Output removed"; break;

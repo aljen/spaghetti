@@ -112,10 +112,9 @@ class SPAGHETTI_API Node : public QGraphicsItem {
 
   void calculateBoundingRect();
 
-  void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType,
-                 bool const a_swapped);
   void changeInputName(int const a_id, QString const &a_name);
   void changeOutputName(int const a_id, QString const &a_name);
+  void addSocket(SocketType const a_type, uint8_t const a_id, QString const &a_name, ValueType const a_valueType);
   void setSocketType(IOSocketsType const a_socketType, uint8_t const a_socketId, ValueType const a_type);
 
  protected:
