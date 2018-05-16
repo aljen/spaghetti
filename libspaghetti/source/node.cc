@@ -607,21 +607,12 @@ void Node::addInput()
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewInputFlags()) };
   m_element->addInput(TYPE, INPUT_NAME.toStdString(), m_element->defaultNewInputFlags());
 
-  if (m_type == Type::eElement) {
-    const bool SWAPPED = m_type == Type::eInputs;
-    SocketType const REAL_SOCKET_TYPE = SWAPPED ? SocketType::eOutput : SocketType::eInput;
-    addSocket(REAL_SOCKET_TYPE, SIZE, INPUT_NAME, TYPE, SWAPPED);
-    calculateBoundingRect();
-  }
-
   m_packageView->showProperties();
 }
 
 void Node::removeInput()
 {
   m_element->removeInput();
-  removeSocket(m_type == Type::eInputs ? SocketType::eOutput : SocketType::eInput);
-  calculateBoundingRect();
   m_packageView->showProperties();
 }
 
@@ -641,21 +632,12 @@ void Node::addOutput()
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewOutputFlags()) };
   m_element->addOutput(TYPE, OUTPUT_NAME.toStdString(), m_element->defaultNewOutputFlags());
 
-  if (m_type == Type::eElement) {
-    const bool SWAPPED = m_type == Type::eOutputs;
-    SocketType const REAL_SOCKET_TYPE = SWAPPED ? SocketType::eInput : SocketType::eOutput;
-    addSocket(REAL_SOCKET_TYPE, SIZE, OUTPUT_NAME, TYPE, SWAPPED);
-    calculateBoundingRect();
-  }
-
   m_packageView->showProperties();
 }
 
 void Node::removeOutput()
 {
   m_element->removeOutput();
-  removeSocket(m_type == Type::eOutputs ? SocketType::eInput : SocketType::eOutput);
-  calculateBoundingRect();
   m_packageView->showProperties();
 }
 
