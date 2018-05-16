@@ -72,6 +72,9 @@ class SPAGHETTI_API Package final : public Element {
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
 
+  void serialize(Json &a_json) override;
+  void deserialize(Json const &a_json) override;
+
   std::string_view packageDescription() const { return m_packageDescription; }
   void setPackageDescription(std::string const &a_description) { m_packageDescription = a_description; }
 
@@ -80,9 +83,6 @@ class SPAGHETTI_API Package final : public Element {
 
   std::string_view packageIcon() const { return m_packageIcon; }
   void setPackageIcon(std::string const &a_icon) { m_packageIcon = a_icon; }
-
-  void serialize(Json &a_json) override;
-  void deserialize(Json const &a_json) override;
 
   Element *add(char const *const a_name) { return add(string::hash(a_name)); }
   Element *add(string::hash_t const a_hash);
