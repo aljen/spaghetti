@@ -678,7 +678,7 @@ void Node::setOutputName(uint8_t const a_socketId, QString const &a_name)
 void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const &a_name, ValueType const a_valueType)
 {
   auto const socket = new SocketItem{ this, a_type };
-  socket->setElementId(m_element->id());
+  socket->setElementId(m_type == Type::eElement ? m_element->id() : 0);
   socket->setSocketId(a_id);
 
   socket->setName(a_name);
