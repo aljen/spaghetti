@@ -257,26 +257,14 @@ bool Package::connect(size_t const a_sourceId, uint8_t const a_outputId, size_t 
 {
   pauseDispatchThread();
 
-  Element *const source{ get(a_sourceId) };
-  Element *const target{ get(a_targetId) };
+  auto const source = get(a_sourceId);
+  auto const target = get(a_targetId);
 
   spaghetti::log::debug("Connecting source: {}@{} to target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
                         a_targetId, static_cast<int>(a_inputId));
 
-  if (a_sourceId != 0 && a_targetId != 0) {
-    spaghetti::log::trace("Normal connect, element to element");
-    assert(target->m_inputs[a_inputId].type == source->m_outputs[a_outputId].type);
-    target->m_inputs[a_inputId].id = a_sourceId;
-    target->m_inputs[a_inputId].slot = a_outputId;
-  } else if (a_sourceId == 0) {
-    // TODO(aljen): Handle this case
-    spaghetti::log::trace("Package connect, package input to element input");
-    target->m_inputs[a_inputId].id = a_sourceId;
-    target->m_inputs[a_inputId].slot = a_outputId;
-  } else if (a_targetId == 0) {
-    // TODO(aljen): Handle this case
-    spaghetti::log::trace("Package connect, element output to package output");
-  }
+  target->m_inputs[a_inputId].id = a_sourceId;
+  target->m_inputs[a_inputId].slot = a_outputId;
 
   spaghetti::log::trace("Notifying {}({})@{} when {}({})@{} changes..", a_targetId, target->name(),
                         static_cast<int32_t>(a_inputId), a_sourceId, source->name(), static_cast<int32_t>(a_outputId));
