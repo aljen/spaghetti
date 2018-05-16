@@ -180,16 +180,12 @@ void Node::advance(int a_phase)
 
 void Node::setElement(Element *const a_element)
 {
-  qDebug() << Q_FUNC_INFO << "ELEMENT:" << m_element << a_element;
+  if (m_element) return;
 
-  if (!m_element) {
-    m_element = a_element;
-    if (m_type == Type::eElement) {
-      qDebug() << "Registering event handler for element:" << m_element->id();
-      m_element->registerEventHandler([this](Event const &a_event) { handleEvent(a_event); });
-    }
-  } else
-    qDebug() << "Already have element!";
+  m_element = a_element;
+
+  if (m_type == Type::eElement)
+    m_element->registerEventHandler([this](Event const &a_event) { handleEvent(a_event); });
 
   auto const &INPUTS = m_element->inputs();
   auto const &OUTPUTS = m_element->outputs();
