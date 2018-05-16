@@ -166,7 +166,6 @@ void Editor::tabCloseRequested(int const a_index)
 
 void Editor::tabChanged(int const a_index)
 {
-  qDebug() << Q_FUNC_INFO << a_index;
   m_packageViewIndex = a_index;
   if (a_index >= 0) {
     auto const view = packageViewForIndex(a_index);
