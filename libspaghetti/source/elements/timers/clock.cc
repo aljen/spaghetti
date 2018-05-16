@@ -43,7 +43,7 @@ void Clock::serialize(Json &a_json)
   properties["duration"] = m_duration.count();
 }
 
-void Clock::deserialize(const Json &a_json)
+void Clock::deserialize(Json const &a_json)
 {
   Element::deserialize(a_json);
 

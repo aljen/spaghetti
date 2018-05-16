@@ -56,7 +56,7 @@ void RandomIntIf::serialize(Json &a_json)
   properties["disabled_max"] = m_disabledMax;
 }
 
-void RandomIntIf::deserialize(const Json &a_json)
+void RandomIntIf::deserialize(Json const &a_json)
 {
   Element::deserialize(a_json);
 

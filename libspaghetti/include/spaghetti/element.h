@@ -137,7 +137,7 @@ class SPAGHETTI_API Element {
 
   size_t id() const noexcept { return m_id; }
 
-  void setName(std::string const a_name);
+  void setName(std::string const &a_name);
 
   std::string name() const noexcept { return m_name; }
 
@@ -146,7 +146,7 @@ class SPAGHETTI_API Element {
     m_position.x = a_x;
     m_position.y = a_y;
   }
-  void setPosition(vec2d const a_position) { m_position = a_position; }
+  void setPosition(vec2d const &a_position) { m_position = a_position; }
   vec2d const &position() const { return m_position; }
 
   void iconify(bool const a_iconify) { m_isIconified = a_iconify; }
@@ -160,13 +160,13 @@ class SPAGHETTI_API Element {
   IOSockets &outputs() { return m_outputs; }
   IOSockets const &outputs() const { return m_outputs; }
 
-  bool addInput(ValueType const a_type, std::string const a_name, uint8_t const a_flags);
-  void setInputName(uint8_t const a_input, std::string const a_name);
+  bool addInput(ValueType const a_type, std::string const &a_name, uint8_t const a_flags);
+  void setInputName(uint8_t const a_input, std::string const &a_name);
   void removeInput();
   void clearInputs();
 
-  bool addOutput(ValueType const a_type, std::string const a_name, uint8_t const a_flags);
-  void setOutputName(uint8_t const a_output, std::string const a_name);
+  bool addOutput(ValueType const a_type, std::string const &a_name, uint8_t const a_flags);
+  void setOutputName(uint8_t const a_output, std::string const &a_name);
   void removeOutput();
   void clearOutputs();
 

@@ -56,7 +56,7 @@ void RandomFloatIf::serialize(Json &a_json)
   properties["disabled_max"] = m_disabledMax;
 }
 
-void RandomFloatIf::deserialize(const Json &a_json)
+void RandomFloatIf::deserialize(Json const &a_json)
 {
   Element::deserialize(a_json);
 

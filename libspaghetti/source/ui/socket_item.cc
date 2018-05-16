@@ -301,7 +301,7 @@ void SocketItem::setColors(QColor const a_signalOff, QColor const a_signalOn)
   m_colorSignalOn = a_signalOn;
 }
 
-void SocketItem::setSignal(const bool a_signal)
+void SocketItem::setSignal(bool const a_signal)
 {
   m_isSignalOn = a_signal;
 

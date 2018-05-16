@@ -51,7 +51,7 @@ void RandomFloat::serialize(Json &a_json)
   properties["max"] = m_max;
 }
 
-void RandomFloat::deserialize(const Json &a_json)
+void RandomFloat::deserialize(Json const &a_json)
 {
   Element::deserialize(a_json);
 

@@ -42,7 +42,7 @@ void ConstBool::serialize(Json &a_json)
   properties["value"] = m_currentValue;
 }
 
-void ConstBool::deserialize(const Json &a_json)
+void ConstBool::deserialize(Json const &a_json)
 {
   Element::deserialize(a_json);
 

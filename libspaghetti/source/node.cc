@@ -231,7 +231,7 @@ void Node::setElement(Element *const a_element)
   calculateBoundingRect();
 }
 
-void Node::setName(QString a_name)
+void Node::setName(QString const &a_name)
 {
   m_name = a_name;
 
@@ -244,7 +244,7 @@ void Node::setName(QString a_name)
     setToolTip(QString("%1").arg(a_name));
 }
 
-void Node::setIcon(QString a_icon)
+void Node::setIcon(QString const &a_icon)
 {
   m_iconPath = a_icon;
   m_icon.load(a_icon);
@@ -495,7 +495,7 @@ void Node::setCentralWidget(QGraphicsItem *a_centralWidget)
   m_centralWidget->setPos(m_centralWidgetPosition);
 }
 
-void Node::propertiesInsertTitle(QString a_title)
+void Node::propertiesInsertTitle(QString const &a_title)
 {
   int const ROW = m_properties->rowCount();
   m_properties->insertRow(ROW);
@@ -508,7 +508,7 @@ void Node::propertiesInsertTitle(QString a_title)
   m_properties->setSpan(ROW, 0, 1, 2);
 }
 
-void Node::changeIOName(IOSocketsType const a_type, int const a_id, QString const a_name)
+void Node::changeIOName(IOSocketsType const a_type, int const a_id, QString const &a_name)
 {
   auto &ios = a_type == IOSocketsType::eInputs ? m_inputs : m_outputs;
   auto &io = ios[a_id];
@@ -576,12 +576,12 @@ void Node::calculateBoundingRect()
   m_boundingRect = QRectF{ 0.0, 0.0, width, height };
 }
 
-void Node::changeInputName(const int a_id, const QString a_name)
+void Node::changeInputName(int const a_id, QString const &a_name)
 {
   changeIOName(IOSocketsType::eInputs, a_id, a_name);
 }
 
-void Node::changeOutputName(const int a_id, const QString a_name)
+void Node::changeOutputName(int const a_id, QString const &a_name)
 {
   changeIOName(IOSocketsType::eOutputs, a_id, a_name);
 }
@@ -623,7 +623,7 @@ void Node::removeInput()
   m_packageView->showProperties();
 }
 
-void Node::setInputName(uint8_t const a_socketId, QString const a_name)
+void Node::setInputName(uint8_t const a_socketId, QString const &a_name)
 {
   m_element->setInputName(a_socketId, a_name.toStdString());
   m_inputs[a_socketId]->setName(a_name, false);
@@ -657,7 +657,7 @@ void Node::removeOutput()
   m_packageView->showProperties();
 }
 
-void Node::setOutputName(uint8_t const a_socketId, QString const a_name)
+void Node::setOutputName(uint8_t const a_socketId, QString const &a_name)
 {
   m_element->setOutputName(a_socketId, a_name.toStdString());
   m_outputs[a_socketId]->setName(a_name, false);
@@ -686,7 +686,7 @@ void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const 
     m_outputs.push_back(socket);
 }
 
-void Node::removeSocket(const Node::SocketType a_type)
+void Node::removeSocket(Node::SocketType const a_type)
 {
   switch (a_type) {
     case SocketType::eInput:

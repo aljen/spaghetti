@@ -96,7 +96,7 @@ void NodesListModel::update(Node *const a_node)
   emit dataChanged(index(INDEX), index(INDEX));
 }
 
-Node *NodesListModel::nodeFor(const QModelIndex &a_index)
+Node *NodesListModel::nodeFor(QModelIndex const &a_index)
 {
   if (!a_index.isValid()) return nullptr;
   auto const ROW = a_index.row();

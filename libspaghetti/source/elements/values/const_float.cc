@@ -42,7 +42,7 @@ void ConstFloat::serialize(Json &a_json)
   properties["value"] = m_currentValue;
 }
 
-void ConstFloat::deserialize(const Json &a_json)
+void ConstFloat::deserialize(Json const &a_json)
 {
   Element::deserialize(a_json);
 

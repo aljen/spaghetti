@@ -34,7 +34,7 @@ Line::Line(QColor const a_color, QGraphicsItem *const a_parent)
   m_boundingRect = QRectF{ 0.0, 0.0, 10.0, m_length };
 }
 
-void Line::paint(QPainter *a_painter, const QStyleOptionGraphicsItem *a_option, QWidget *a_widget)
+void Line::paint(QPainter *a_painter, QStyleOptionGraphicsItem const *a_option, QWidget *a_widget)
 {
   (void)a_option;
   (void)a_widget;

@@ -68,7 +68,7 @@ EditorWidget::EditorWidget(QWidget *const a_parent)
   m_currentValue->setType(Point::Type::eCurrent);
 }
 
-void EditorWidget::setXName(const QString &a_name)
+void EditorWidget::setXName(QString const &a_name)
 {
   m_xAxis->setTitleText(a_name);
 }
@@ -78,7 +78,7 @@ QString EditorWidget::xName() const
   return m_xAxis->titleText();
 }
 
-void EditorWidget::setXMajorTicks(const int a_ticks)
+void EditorWidget::setXMajorTicks(int const a_ticks)
 {
   m_xAxis->setTickCount(a_ticks);
 }
@@ -88,7 +88,7 @@ int EditorWidget::xMajorTicks() const
   return m_xAxis->tickCount();
 }
 
-void EditorWidget::setXMinorTicks(const int a_ticks)
+void EditorWidget::setXMinorTicks(int const a_ticks)
 {
   m_xAxis->setMinorTickCount(a_ticks);
 }
@@ -98,7 +98,7 @@ int EditorWidget::xMinorTicks() const
   return m_xAxis->minorTickCount();
 }
 
-void EditorWidget::setXMinimum(const qreal a_min)
+void EditorWidget::setXMinimum(qreal const a_min)
 {
   m_xAxis->setMin(a_min);
 }
@@ -108,7 +108,7 @@ qreal EditorWidget::xMinimum() const
   return m_xAxis->min();
 }
 
-void EditorWidget::setXMaximum(const qreal a_max)
+void EditorWidget::setXMaximum(qreal const a_max)
 {
   m_xAxis->setMax(a_max);
 }
@@ -118,7 +118,7 @@ qreal EditorWidget::xMaximum() const
   return m_xAxis->max();
 }
 
-void EditorWidget::setYName(const QString &a_name)
+void EditorWidget::setYName(QString const &a_name)
 {
   m_yAxis->setTitleText(a_name);
 }
@@ -128,7 +128,7 @@ QString EditorWidget::yName() const
   return m_yAxis->titleText();
 }
 
-void EditorWidget::setYMajorTicks(const int a_ticks)
+void EditorWidget::setYMajorTicks(int const a_ticks)
 {
   m_yAxis->setTickCount(a_ticks);
 }
@@ -138,7 +138,7 @@ int EditorWidget::yMajorTicks() const
   return m_yAxis->tickCount();
 }
 
-void EditorWidget::setYMinorTicks(const int a_ticks)
+void EditorWidget::setYMinorTicks(int const a_ticks)
 {
   m_yAxis->setMinorTickCount(a_ticks);
 }
@@ -148,7 +148,7 @@ int EditorWidget::yMinorTicks() const
   return m_yAxis->minorTickCount();
 }
 
-void EditorWidget::setYMinimum(const qreal a_min)
+void EditorWidget::setYMinimum(qreal const a_min)
 {
   m_yAxis->setMin(a_min);
 }
@@ -158,7 +158,7 @@ qreal EditorWidget::yMinimum() const
   return m_yAxis->min();
 }
 
-void EditorWidget::setYMaximum(const qreal a_max)
+void EditorWidget::setYMaximum(qreal const a_max)
 {
   m_yAxis->setMax(a_max);
 }
