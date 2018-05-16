@@ -739,15 +739,17 @@ void Node::setSocketType(IOSocketsType const a_socketType, uint8_t const a_socke
 
 void Node::updateOutputs()
 {
-  if (!m_element || m_type != Type::eElement) return;
+  if (!m_element || m_type == Type::eOutputs) return;
 
-  auto const &OUTPUTS = m_element->outputs();
-  size_t const SIZE{ OUTPUTS.size() };
+  auto const IS_ELEMENT = m_type == Type::eElement;
+  auto const &ELEMENT_IOS = IS_ELEMENT ? m_element->outputs() : m_element->inputs();
+  auto const &NODE_IOS = m_outputs;
+  size_t const SIZE{ ELEMENT_IOS.size() };
   for (size_t i = 0; i < SIZE; ++i) {
-    switch (OUTPUTS[i].type) {
+    switch (ELEMENT_IOS[i].type) {
       case ValueType::eBool: {
-        bool const SIGNAL{ std::get<bool>(OUTPUTS[i].value) };
-        m_outputs[static_cast<int>(i)]->setSignal(SIGNAL);
+        bool const SIGNAL{ std::get<bool>(ELEMENT_IOS[i].value) };
+        NODE_IOS[static_cast<int>(i)]->setSignal(SIGNAL);
         break;
       }
       default: break;
