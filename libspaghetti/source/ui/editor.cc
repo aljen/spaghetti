@@ -185,6 +185,8 @@ void Editor::populateLibrary()
                QString::fromStdString(info.icon));
   }
 
+  m_ui->elementsContainer->sortItems(0, Qt::AscendingOrder);
+
   auto const &PACKAGES = REGISTRY.packages();
   for (auto const &PACKAGE : PACKAGES) {
     std::string const FILENAME{ PACKAGE.first };
@@ -201,6 +203,8 @@ void Editor::populateLibrary()
     addPackage(QString::fromStdString(category), QString::fromStdString(FILENAME), QString::fromStdString(PATH),
                QString::fromStdString(ICON));
   }
+
+  m_ui->packagesContainer->sortItems(0, Qt::AscendingOrder);
 }
 
 void Editor::addElement(QString const &a_category, QString const &a_name, QString const &a_type, QString const &a_icon)
