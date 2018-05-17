@@ -160,13 +160,13 @@ PackageView::PackageView(Editor *const a_editor, Package *const a_package)
 
   using NodeType = Node::Type;
   m_inputs->setType(NodeType::eInputs);
-  m_inputs->setPos(-100.0, 0.0);
+  m_inputs->setPos(m_package->inputsPosition().x, m_package->inputsPosition().y);
   m_inputs->setElement(m_package);
   m_inputs->setIcon(":/logic/inputs.png");
   m_inputs->setPackageView(this);
   m_inputs->iconify();
   m_outputs->setType(NodeType::eOutputs);
-  m_outputs->setPos(100.0, 0.0);
+  m_outputs->setPos(m_package->outputsPosition().x, m_package->outputsPosition().y);
   m_outputs->setElement(m_package);
   m_outputs->setIcon(":/logic/outputs.png");
   m_outputs->setPackageView(this);
@@ -176,11 +176,10 @@ PackageView::PackageView(Editor *const a_editor, Package *const a_package)
   m_packageNode->setOutputsNode(m_outputs);
   m_packageNode->setElement(m_package);
 
-  Registry &registry{ Registry::get() };
-
-  m_package->setInputsPosition(m_inputs->x(), m_inputs->y());
-  m_package->setOutputsPosition(m_outputs->x(), m_outputs->y());
-  m_package->setName(registry.elementName("logic/package"));
+  if (m_package->name().empty()) {
+    auto &registry = Registry::get();
+    m_package->setName(registry.elementName("logic/package"));
+  }
 
   m_scene->addItem(m_inputs);
   m_scene->addItem(m_outputs);
