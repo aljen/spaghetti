@@ -312,7 +312,9 @@ void Editor::openOrCreatePackageView(Package *const a_package)
     connect(packageView, &PackageView::requestOpenFile,
             [this](QString const a_filename) { openPackageFile(a_filename); });
 
-    m_packageViewIndex = m_ui->tabWidget->addTab(packageView, "New package");
+    auto const IS_ROOT_PACKAGE = a_package->package() == nullptr;
+    QString const TITLE{ (IS_ROOT_PACKAGE ? "New package" : QString::fromStdString(a_package->name())) };
+    m_packageViewIndex = m_ui->tabWidget->addTab(packageView, TITLE);
     m_openPackages[a_package] = m_packageViewIndex;
   }
 
