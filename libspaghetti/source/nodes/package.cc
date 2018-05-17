@@ -84,7 +84,17 @@ void Package::handleEvent(Event const &a_event)
   if (!(m_inputsNode && m_outputsNode)) return;
 
   switch (a_event.type) {
-    case EventType::eElementNameChanged: break;
+    case EventType::eElementNameChanged: {
+      auto const &EVENT = std::get<EventNameChanged>(a_event.payload);
+      auto const IS_ROOT = m_element->package() == nullptr;
+      if (!IS_ROOT) {
+        auto const packageView = m_inputsNode->packageView();
+        auto const editor = packageView->editor();
+        auto const INDEX = editor->indexForPackageView(packageView);
+        editor->setPackageViewTabName(INDEX, QString::fromStdString(EVENT.to));
+      }
+      break;
+    }
     case EventType::eIONameChanged: {
       auto const &EVENT = std::get<EventIONameChanged>(a_event.payload);
       if (EVENT.input) {
