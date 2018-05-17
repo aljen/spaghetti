@@ -154,8 +154,6 @@ PackageView::PackageView(Editor *const a_editor, Package *const a_package)
   m_inputs->setPropertiesTable(m_properties);
   m_outputs->setPropertiesTable(m_properties);
 
-  // TODO(aljen): Ok, but what if we open package in external packageview, and close it?
-  m_packageNode->setPackageView(this);
   m_packageNode->setPropertiesTable(m_properties);
 
   setAcceptDrops(true);
