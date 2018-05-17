@@ -125,9 +125,9 @@ class SPAGHETTI_API Package final : public Element {
   duration_t m_delta{};
   std::string m_packageDescription{ "A package" };
   std::string m_packagePath{};
-  std::string m_packageIcon{ "icons/unknown.png" };
-  vec2d m_inputsPosition{};
-  vec2d m_outputsPosition{};
+  std::string m_packageIcon{ ":/unknown.png" };
+  vec2d m_inputsPosition{ -400.0, 0.0 };
+  vec2d m_outputsPosition{ 400.0, 0.0 };
   Elements m_elements{};
   Connections m_connections{};
 
