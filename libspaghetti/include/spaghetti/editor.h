@@ -62,6 +62,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   void openOrCreatePackageView(Package *const a_package);
   PackageView *packageView() const { return packageViewForIndex(m_packageViewIndex); }
   int packageViewIndex() const { return m_packageViewIndex; }
+  int indexForPackageView(PackageView *const a_packageView) const;
 
   QListView* elementsList();
   QTableWidget* propertiesTable();

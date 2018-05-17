@@ -321,6 +321,17 @@ void Editor::openOrCreatePackageView(Package *const a_package)
   m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
 }
 
+int Editor::indexForPackageView(PackageView *const a_packageView) const
+{
+  auto const tabWidget = m_ui->tabWidget;
+  auto const SIZE = tabWidget->count();
+  for (int i = 0; i < SIZE; ++i) {
+    auto packageView = qobject_cast<PackageView *const>(tabWidget->widget(i));
+    if (packageView == a_packageView) return i;
+  }
+  return -1;
+}
+
 QListView *Editor::elementsList()
 {
   return m_ui->elementsList;
