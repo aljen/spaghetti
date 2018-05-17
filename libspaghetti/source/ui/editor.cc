@@ -332,6 +332,12 @@ int Editor::indexForPackageView(PackageView *const a_packageView) const
   return -1;
 }
 
+void Editor::setPackageViewTabName(int const a_index, QString const &a_name)
+{
+  auto const tabWidget = m_ui->tabWidget;
+  tabWidget->setTabText(a_index, a_name);
+}
+
 QListView *Editor::elementsList()
 {
   return m_ui->elementsList;
