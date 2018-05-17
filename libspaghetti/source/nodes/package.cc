@@ -85,7 +85,6 @@ void Package::handleEvent(Event const &a_event)
 
   if (!(m_inputsNode && m_outputsNode)) return;
 
-  qDebug() << Q_FUNC_INFO << "package_id:" << m_element->id();
   switch (a_event.type) {
     case EventType::eElementNameChanged: break;
     case EventType::eIONameChanged: {
@@ -146,8 +145,6 @@ void Package::handleEvent(Event const &a_event)
 
 bool Package::open()
 {
-  qDebug() << Q_FUNC_INFO;
-
   auto const editor = m_packageView->editor();
   editor->openOrCreatePackageView(static_cast<spaghetti::Package *>(m_element));
 

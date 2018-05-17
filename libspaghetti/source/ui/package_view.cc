@@ -124,7 +124,6 @@ PackageView::PackageView(Editor *const a_editor, Package *const a_package)
   } else
     m_packageNode = m_package->node<nodes::Package>();
   Q_ASSERT(m_package->node<Node*>());
-  qDebug() << "Creating PackageView standalone:" << m_standalone << "node:" << m_packageNode << "package:" << m_package;
 #ifdef SPAGHETTI_USE_OPENGL
   QGLFormat format{ QGL::DoubleBuffer | QGL::SampleBuffers | QGL::DirectRendering };
   format.setProfile(QGLFormat::CoreProfile);
@@ -274,10 +273,6 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
     auto const stringData = pathString.toLatin1();
     auto const path = stringData.data();
 
-    qDebug() << "IS_PACKAGE:" << mimeData->data("metadata/is_package");
-    qDebug() << "drag isPackage:" << isPackage << "path:" << pathString << "name:" << name << "icon:" << icon
-             << "file:" << file;
-
     auto const DROP_POSITION = mapToScene(a_event->pos());
 
     Registry &registry{ Registry::get() };
@@ -374,7 +369,6 @@ void PackageView::keyReleaseEvent(QKeyEvent *a_event)
   auto const selected = m_scene->selectedItems();
   for (auto &&item : selected) {
     if (item->type() == NODE_TYPE) {
-      //      qDebug() << "Node:" << item;
     }
   }
 }

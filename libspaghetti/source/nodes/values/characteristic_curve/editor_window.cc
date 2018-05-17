@@ -165,8 +165,6 @@ EditorWindow::~EditorWindow()
 
 void EditorWindow::showEvent(QShowEvent *a_event)
 {
-  //  qDebug() << Q_FUNC_INFO;
-
   static bool first{ true };
   if (!first) QWidget::showEvent(a_event);
 
@@ -177,7 +175,6 @@ void EditorWindow::showEvent(QShowEvent *a_event)
 
 void EditorWindow::resizeEvent(QResizeEvent *a_event)
 {
-  //  qDebug() << Q_FUNC_INFO << a_event;
   QWidget::resizeEvent(a_event);
 }
 

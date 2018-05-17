@@ -136,7 +136,6 @@ Editor::~Editor()
 
 void Editor::tabCloseRequested(int const a_index)
 {
-  qDebug() << Q_FUNC_INFO << a_index;
   auto const tab = m_ui->tabWidget;
   auto const widget = tab->widget(a_index);
   auto const packageView = reinterpret_cast<PackageView *>(widget);
@@ -146,12 +145,10 @@ void Editor::tabCloseRequested(int const a_index)
   QString const FILENAME = packageView->filename();
   if (!FILENAME.isEmpty()) m_openFiles.remove(FILENAME);
   m_openPackages.remove(packageView->package());
-  qDebug() << "Removing package view for ptr:" << packageView->package() << "at:" << a_index;
   tab->removeTab(a_index);
   delete packageView;
 
   int const SIZE{ tab->count() };
-  qDebug() << "Opened package views:" << SIZE;
 
   for (int i = 0; i < SIZE; ++i) {
     auto const tempWidget = tab->widget(i);
@@ -159,9 +156,7 @@ void Editor::tabCloseRequested(int const a_index)
     QString const TEMP_FILENAME = tempPackageView->filename();
     if (!TEMP_FILENAME.isEmpty()) m_openFiles[TEMP_FILENAME] = i;
     m_openPackages[tempPackageView->package()] = i;
-    qDebug() << "package ptr:" << tempPackageView->package() << "is at:" << i;
   }
-  qDebug() << "Final size:" << m_openPackages.size();
 }
 
 void Editor::tabChanged(int const a_index)
@@ -210,7 +205,6 @@ void Editor::populateLibrary()
 
 void Editor::addElement(QString const &a_category, QString const &a_name, QString const &a_type, QString const &a_icon)
 {
-  //  qDebug() << "Adding" << a_category << '/' << a_name << "type:" << a_type << "icon:" << a_icon;
   ExpanderWidget *const library{ m_ui->elementsContainer };
 
   ElementsList *list{};
@@ -245,14 +239,6 @@ void Editor::addElement(QString const &a_category, QString const &a_name, QStrin
 void Editor::addPackage(QString const &a_category, QString const &a_filename, QString const &a_path,
                         QString const &a_icon)
 {
-  (void)a_category;
-  (void)a_filename;
-  (void)a_path;
-  (void)a_icon;
-
-  //  qDebug() << "addPackage: category:" << a_category << "filename:" << a_filename << "path:" << a_path << "icon:" <<
-  //  a_icon;
-
   ExpanderWidget *const library{ m_ui->packagesContainer };
 
   ElementsList *list{};
@@ -307,15 +293,11 @@ void Editor::showEvent(QShowEvent *a_event)
 
 void Editor::openOrCreatePackageView(Package *const a_package)
 {
-  qDebug() << "Opening package ptr:" << a_package;
-
   auto const FOUND = m_openPackages.constFind(a_package);
 
-  if (FOUND != m_openPackages.constEnd()) {
-    qDebug() << "Found at:" << FOUND.value();
+  if (FOUND != m_openPackages.constEnd())
     m_packageViewIndex = FOUND.value();
-  } else {
-    qDebug() << "Not found, creating new package view";
+  else {
     auto const packageView = new PackageView{ this, a_package };
     packageView->open();
     packageView->setSelectedNode(nullptr);
@@ -325,7 +307,6 @@ void Editor::openOrCreatePackageView(Package *const a_package)
             [this](QString const a_filename) { openPackageFile(a_filename); });
 
     m_packageViewIndex = m_ui->tabWidget->addTab(packageView, "New package");
-    qDebug() << "Created at index:" << m_packageViewIndex;
     m_openPackages[a_package] = m_packageViewIndex;
   }
 

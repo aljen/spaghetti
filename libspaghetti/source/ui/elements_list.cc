@@ -76,7 +76,6 @@ void ElementsList::startDrag(Qt::DropActions a_supportedActions)
   mimeData->setData("metadata/name", NAME);
   mimeData->setData("metadata/icon", ICON);
   mimeData->setData("metadata/filename", FILE);
-  qDebug() << "mimeData:" << mimeData << "isPackage:" << IS_PACKAGE << "type:" << TYPE << "name:" << NAME << "icon:" << ICON << "file:" << FILE;
 
   auto const drag = new QDrag{ this };
   drag->setMimeData(mimeData);

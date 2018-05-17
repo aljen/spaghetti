@@ -324,7 +324,6 @@ void EditorWidget::updatePoints()
   for (int i = 0; i < SIZE; ++i) {
     auto const POINT = m_series->at(i);
     auto const POINT_POS = chart()->mapToPosition(POINT);
-    qDebug() << "Adding" << POINT << "AT" << POINT_POS;
 
     Point *const point = new Point{ this };
     point->setType(Point::Type::eNormal);
