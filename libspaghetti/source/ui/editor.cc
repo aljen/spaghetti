@@ -243,12 +243,12 @@ void Editor::addElement(QString const &a_category, QString const &a_name, QStrin
 void Editor::addPackage(QString const &a_category, QString const &a_filename, QString const &a_path,
                         QString const &a_icon)
 {
-  ExpanderWidget *const library{ m_ui->packagesContainer };
+  auto const library = m_ui->packagesContainer;
 
   ElementsList *list{};
 
-  int const count{ library->count() };
-  for (int i = 0; i < count; ++i) {
+  int const COUNT{ library->count() };
+  for (int i = 0; i < COUNT; ++i) {
     QString const text{ library->itemText(i) };
     if (text != a_category) continue;
 
