@@ -51,7 +51,7 @@ void RandomInt::serialize(Json &a_json)
   properties["max"] = m_max;
 }
 
-void RandomInt::deserialize(const Json &a_json)
+void RandomInt::deserialize(Json const &a_json)
 {
   Element::deserialize(a_json);
 

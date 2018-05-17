@@ -35,7 +35,7 @@ void Tank::showProperties()
 
   propertiesInsertTitle("Tank");
 
-  auto const tank{ static_cast<elements::pneumatic::Tank *const>(m_element) };
+  auto const tank = static_cast<elements::pneumatic::Tank *>(m_element);
 
   int currentIndex = m_properties->rowCount();
   m_properties->insertRow(currentIndex);
@@ -53,7 +53,7 @@ void Tank::showProperties()
 
   QObject::connect(pressureValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
                    [this](qreal a_value) {
-                     auto const tankElement{ static_cast<elements::pneumatic::Tank *const>(m_element) };
+                     auto const tankElement = static_cast<elements::pneumatic::Tank *>(m_element);
                      tankElement->setInitialPressure(static_cast<float>(a_value));
                    });
 
@@ -72,7 +72,7 @@ void Tank::showProperties()
 
   QObject::connect(volumeValue, static_cast<void (QDoubleSpinBox::*)(qreal)>(&QDoubleSpinBox::valueChanged),
                    [this](qreal a_value) {
-                     auto const tankElement{ static_cast<elements::pneumatic::Tank *const>(m_element) };
+                     auto const tankElement = static_cast<elements::pneumatic::Tank *>(m_element);
                      tankElement->setVolume(static_cast<float>(a_value));
                    });
 }

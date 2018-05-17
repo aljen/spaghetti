@@ -20,57 +20,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/values/random_float.h"
+#pragma once
+#ifndef NODES_PACKAGE_H
+#define NODES_PACKAGE_H
 
-namespace {
-std::random_device g_random{};
-std::mt19937 g_generator{ g_random() };
-} // namespace
+#include "spaghetti/node.h"
 
-namespace spaghetti::elements::values {
+namespace spaghetti::nodes {
 
-RandomFloat::RandomFloat()
-  : Element{}
-{
-  setMinInputs(1);
-  setMaxInputs(1);
-  setMinOutputs(1);
-  setMaxOutputs(1);
+class Package : public Node {
+ public:
+  Package();
 
-  addInput(ValueType::eBool, "Trigger", IOSocket::eCanHoldBool);
+  void setInputsNode(Node *const a_node) { m_inputsNode = a_node; }
+  Node *inputsNode() { return m_inputsNode; }
+  Node const *inputsNode() const { return m_inputsNode; }
 
-  addOutput(ValueType::eFloat, "Value", IOSocket::eCanHoldFloat);
-}
+  void setOutputsNode(Node *const a_node) { m_outputsNode = a_node; }
+  Node *outputsNode() { return m_outputsNode; }
+  Node const *outputsNode() const { return m_outputsNode; }
 
-void RandomFloat::serialize(Json &a_json)
-{
-  Element::serialize(a_json);
+ private:
+  void showProperties() override;
+  void handleEvent(Event const &a_event) override;
+  bool open() override;
 
-  auto &properties = a_json["properties"];
-  properties["min"] = m_min;
-  properties["max"] = m_max;
-}
+ private:
+  Node *m_inputsNode{};
+  Node *m_outputsNode{};
+};
 
-void RandomFloat::deserialize(Json const &a_json)
-{
-  Element::deserialize(a_json);
+} // namespace spaghetti::nodes
 
-  auto const &PROPERTIES = a_json["properties"];
-  m_min = PROPERTIES["min"].get<float>();
-  m_max = PROPERTIES["max"].get<float>();
-
-  updateDistribution();
-}
-
-void RandomFloat::calculate()
-{
-  bool const STATE{ std::get<bool>(m_inputs[0].value) };
-
-  if (STATE != m_state && STATE) {
-    float const VALUE{ m_distrib(g_generator) };
-    m_outputs[0].value = VALUE;
-  }
-  m_state = STATE;
-}
-
-} // namespace spaghetti::elements::values
+#endif // NODES_PACKAGE_H

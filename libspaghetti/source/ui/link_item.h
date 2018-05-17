@@ -38,8 +38,6 @@ class SocketItem;
 
 class LinkItem final : public QGraphicsPathItem {
  public:
-  using ValueType = Element::ValueType;
-
   LinkItem(QGraphicsItem *a_parent = nullptr);
 
   int type() const override { return LINK_TYPE; }

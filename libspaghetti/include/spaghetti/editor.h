@@ -34,9 +34,12 @@ class Editor;
 }
 
 class QGraphicsItem;
+class QListView;
+class QTableWidget;
 
 namespace spaghetti {
 
+class Package;
 class PackageView;
 
 class SPAGHETTI_API Editor final : public QMainWindow {
@@ -50,12 +53,20 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   void tabChanged(int const a_index);
 
   void populateLibrary();
-  void addElement(QString a_category, QString a_name, QString a_type, QString a_icon);
+  void addElement(QString const &a_category, QString const &a_name, QString const &a_type, QString const &a_icon);
+  void addPackage(QString const &a_category, QString const &a_filename, QString const &a_path, QString const &a_icon);
 
   void aboutToQuit();
 
+  void openPackageFile(QString const &a_filename);
+  void openOrCreatePackageView(Package *const a_package);
   PackageView *packageView() const { return packageViewForIndex(m_packageViewIndex); }
   int packageViewIndex() const { return m_packageViewIndex; }
+  int indexForPackageView(PackageView *const a_packageView) const;
+  void setPackageViewTabName(int const a_index, QString const &a_name);
+
+  QListView* elementsList();
+  QTableWidget* propertiesTable();
 
  protected:
   void showEvent(QShowEvent *a_event) override;
@@ -65,7 +76,6 @@ class SPAGHETTI_API Editor final : public QMainWindow {
 
   void newPackage();
   void openPackage();
-  void openPackageFile(QString const a_filename);
   void savePackage();
   void saveAsPackage();
   void closePackage();
@@ -88,6 +98,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   Ui::Editor *const m_ui{};
   int m_packageViewIndex{ -1 };
   QMap<QString, int> m_openFiles{};
+  QMap<Package*, int> m_openPackages{};
 };
 
 } // namespace spaghetti

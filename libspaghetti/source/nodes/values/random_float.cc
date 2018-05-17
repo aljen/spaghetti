@@ -40,7 +40,7 @@ void RandomFloat::showProperties()
   int row = m_properties->rowCount();
   m_properties->insertRow(row);
 
-  auto const randomFloat = static_cast<elements::values::RandomFloat *const>(m_element);
+  auto const randomFloat = static_cast<elements::values::RandomFloat *>(m_element);
 
   QTableWidgetItem *item{};
 

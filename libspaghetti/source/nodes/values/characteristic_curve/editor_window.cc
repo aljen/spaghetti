@@ -165,8 +165,6 @@ EditorWindow::~EditorWindow()
 
 void EditorWindow::showEvent(QShowEvent *a_event)
 {
-  //  qDebug() << Q_FUNC_INFO;
-
   static bool first{ true };
   if (!first) QWidget::showEvent(a_event);
 
@@ -177,7 +175,6 @@ void EditorWindow::showEvent(QShowEvent *a_event)
 
 void EditorWindow::resizeEvent(QResizeEvent *a_event)
 {
-  //  qDebug() << Q_FUNC_INFO << a_event;
   QWidget::resizeEvent(a_event);
 }
 
@@ -240,8 +237,8 @@ void EditorWindow::synchronizeFromNode()
   m_ui->yAxisMinimum->setValue(static_cast<qreal>(element->yMinimum()));
   m_ui->yAxisMaximum->setValue(static_cast<qreal>(element->yMaximum()));
 
-  m_xValueType = element->inputs()[0].type == Element::ValueType::eInt ? ValueType::eInt : ValueType::eDouble;
-  m_yValueType = element->outputs()[0].type == Element::ValueType::eInt ? ValueType::eInt : ValueType::eDouble;
+  m_xValueType = element->inputs()[0].type == spaghetti::ValueType::eInt ? ValueType::eInt : ValueType::eDouble;
+  m_yValueType = element->outputs()[0].type == spaghetti::ValueType::eInt ? ValueType::eInt : ValueType::eDouble;
 
   recreateSeries();
 }
@@ -263,7 +260,7 @@ void EditorWindow::addPoint(int const a_index, QPointF const a_point)
 {
   auto const seriesTable = m_ui->seriesTable;
 
-  auto const BLOCKED{ seriesTable->blockSignals(true) };
+  auto const BLOCKED = seriesTable->blockSignals(true);
 
   seriesTable->insertRow(a_index);
 

@@ -54,7 +54,7 @@ void Tank::serialize(Json &a_json)
   properties["volume"] = m_volume;
 }
 
-void Tank::deserialize(const Json &a_json)
+void Tank::deserialize(Json const &a_json)
 {
   Element::deserialize(a_json);
 
@@ -73,13 +73,13 @@ void Tank::calculate()
   m_outputs[1].value = m_volume;
 }
 
-void Tank::setInitialPressure(const float a_pressure)
+void Tank::setInitialPressure(float const a_pressure)
 {
   m_initialPressure = a_pressure;
   m_pressure = a_pressure;
 }
 
-void Tank::setVolume(const float a_volume)
+void Tank::setVolume(float const a_volume)
 {
   m_volume = a_volume;
 }

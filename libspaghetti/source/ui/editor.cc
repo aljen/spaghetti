@@ -32,6 +32,7 @@
 #include <QDebug>
 #include <QDesktopServices>
 #include <QDir>
+#include <QDirIterator>
 #include <QDockWidget>
 #include <QFileDialog>
 #include <QGraphicsItem>
@@ -54,6 +55,7 @@
 
 #include "elements/logic/all.h"
 #include "spaghetti/node.h"
+#include "spaghetti/package.h"
 #include "spaghetti/registry.h"
 #include "spaghetti/version.h"
 #include "ui/expander_widget.h"
@@ -69,7 +71,8 @@ Editor::Editor(QWidget *const a_parent)
 {
   setObjectName("SpaghettiEditor");
   m_ui->setupUi(this);
-  m_ui->libraryContainer->removeItem(0);
+  m_ui->elementsContainer->removeItem(0);
+  m_ui->packagesContainer->removeItem(0);
   m_ui->tabWidget->removeTab(0);
   m_ui->clearSearchText->setIcon(style()->standardIcon(QStyle::SP_DialogResetButton));
   m_ui->elementsList->setIconSize(QSize(50, 25));
@@ -123,7 +126,6 @@ Editor::Editor(QWidget *const a_parent)
   if (!packagesDir.exists()) packagesDir.mkpath(".");
 
   populateLibrary();
-  newPackage();
 }
 
 Editor::~Editor()
@@ -134,26 +136,26 @@ Editor::~Editor()
 
 void Editor::tabCloseRequested(int const a_index)
 {
-  QTabWidget *const tab{ m_ui->tabWidget };
-  QWidget *const widget{ tab->widget(a_index) };
-  PackageView *const packageView{ reinterpret_cast<PackageView *>(widget) };
+  auto const tab = m_ui->tabWidget;
+  auto const widget = tab->widget(a_index);
+  auto const packageView = reinterpret_cast<PackageView *>(widget);
 
-  if (packageView->canClose()) {
-    QString const FILENAME = packageView->filename();
-    if (!FILENAME.isEmpty()) m_openFiles.remove(FILENAME);
-    tab->removeTab(a_index);
-    delete packageView;
-  }
+  if (!packageView->canClose()) return;
+
+  QString const FILENAME = packageView->filename();
+  if (!FILENAME.isEmpty()) m_openFiles.remove(FILENAME);
+  m_openPackages.remove(packageView->package());
+  tab->removeTab(a_index);
+  delete packageView;
 
   int const SIZE{ tab->count() };
 
   for (int i = 0; i < SIZE; ++i) {
-    QWidget *const tempWidget{ tab->widget(i) };
-    PackageView *const tempPackageView{ reinterpret_cast<PackageView *>(tempWidget) };
-    QString const FILENAME = tempPackageView->filename();
-    if (FILENAME.isEmpty()) continue;
-
-    m_openFiles[FILENAME] = i;
+    auto const tempWidget = tab->widget(i);
+    auto const tempPackageView = reinterpret_cast<PackageView *>(tempWidget);
+    QString const TEMP_FILENAME = tempPackageView->filename();
+    if (!TEMP_FILENAME.isEmpty()) m_openFiles[TEMP_FILENAME] = i;
+    m_openPackages[tempPackageView->package()] = i;
   }
 }
 
@@ -168,11 +170,11 @@ void Editor::tabChanged(int const a_index)
 
 void Editor::populateLibrary()
 {
-  Registry const &registry{ Registry::get() };
-  auto const &SIZE{ registry.size() };
+  auto const &REGISTRY = Registry::get();
 
-  for (size_t i = 0; i < SIZE; ++i) {
-    auto const &info = registry.metaInfoAt(i);
+  auto const &ELEMENTS_SIZE = REGISTRY.size();
+  for (size_t i = 0; i < ELEMENTS_SIZE; ++i) {
+    auto const &info = REGISTRY.metaInfoAt(i);
     std::string const path{ info.type };
     std::string category{ path };
 
@@ -182,11 +184,32 @@ void Editor::populateLibrary()
     addElement(QString::fromStdString(category), QString::fromStdString(info.name), QString::fromStdString(info.type),
                QString::fromStdString(info.icon));
   }
+
+  m_ui->elementsContainer->sortItems(0, Qt::AscendingOrder);
+
+  auto const &PACKAGES = REGISTRY.packages();
+  for (auto const &PACKAGE : PACKAGES) {
+    std::string const FILENAME{ PACKAGE.first };
+    std::string const PATH{ PACKAGE.second.path };
+    std::string const ICON{ PACKAGE.second.icon };
+    std::string category{ PATH };
+
+    if (!category.empty()) {
+      if (auto const it = PATH.find_first_of('/'); it != std::string::npos) category = PATH.substr(0, it);
+      category[0] = static_cast<char>(std::toupper(category[0]));
+    } else
+      category = "Invalid packages";
+
+    addPackage(QString::fromStdString(category), QString::fromStdString(FILENAME), QString::fromStdString(PATH),
+               QString::fromStdString(ICON));
+  }
+
+  m_ui->packagesContainer->sortItems(0, Qt::AscendingOrder);
 }
 
-void Editor::addElement(QString a_category, QString a_name, QString a_type, QString a_icon)
+void Editor::addElement(QString const &a_category, QString const &a_name, QString const &a_type, QString const &a_icon)
 {
-  ExpanderWidget *const library{ m_ui->libraryContainer };
+  ExpanderWidget *const library{ m_ui->elementsContainer };
 
   ElementsList *list{};
 
@@ -206,9 +229,47 @@ void Editor::addElement(QString a_category, QString a_name, QString a_type, QStr
   }
 
   QListWidgetItem *const item{ new QListWidgetItem{ a_name } };
+  item->setData(ElementsList::eMetaDataIsPackage, false);
   item->setData(ElementsList::eMetaDataType, a_type);
   item->setData(ElementsList::eMetaDataName, a_name);
   item->setData(ElementsList::eMetaDataIcon, a_icon);
+  item->setIcon(QIcon(a_icon));
+
+  list->addItem(item);
+  list->doResize();
+  list->sortItems();
+}
+
+void Editor::addPackage(QString const &a_category, QString const &a_filename, QString const &a_path,
+                        QString const &a_icon)
+{
+  auto const library = m_ui->packagesContainer;
+
+  ElementsList *list{};
+
+  int const COUNT{ library->count() };
+  for (int i = 0; i < COUNT; ++i) {
+    QString const text{ library->itemText(i) };
+    if (text != a_category) continue;
+
+    list = qobject_cast<ElementsList *>(library->widget(i));
+    assert(list);
+    break;
+  }
+
+  if (list == nullptr) {
+    list = new ElementsList{ this };
+    library->addItem(list, a_category);
+  }
+
+  const bool INVALID = a_path.isEmpty();
+  auto const NAME = INVALID ? a_filename.right(a_filename.length() - a_filename.lastIndexOf('/') - 1) : a_path;
+  auto const item = new QListWidgetItem{ NAME };
+  item->setData(ElementsList::eMetaDataIsPackage, true);
+  item->setData(ElementsList::eMetaDataType, a_path);
+  item->setData(ElementsList::eMetaDataName, a_path);
+  item->setData(ElementsList::eMetaDataIcon, a_icon);
+  item->setData(ElementsList::eMetaDataFilename, a_filename);
   item->setIcon(QIcon(a_icon));
 
   list->addItem(item);
@@ -224,6 +285,9 @@ void Editor::showEvent(QShowEvent *a_event)
 
   if (s_firstTime) {
     s_firstTime = false;
+    newPackage();
+  //  openPackage();
+
     auto const tab = m_ui->tabWidget;
     auto const index = tab->currentIndex();
     auto packageView = qobject_cast<PackageView *const>(tab->widget(index));
@@ -231,6 +295,57 @@ void Editor::showEvent(QShowEvent *a_event)
   }
 
   QMainWindow::showEvent(a_event);
+}
+
+void Editor::openOrCreatePackageView(Package *const a_package)
+{
+  auto const FOUND = m_openPackages.constFind(a_package);
+
+  if (FOUND != m_openPackages.constEnd())
+    m_packageViewIndex = FOUND.value();
+  else {
+    auto const packageView = new PackageView{ this, a_package };
+    packageView->open();
+    packageView->setSelectedNode(nullptr);
+    packageView->showProperties();
+
+    connect(packageView, &PackageView::requestOpenFile,
+            [this](QString const a_filename) { openPackageFile(a_filename); });
+
+    auto const IS_ROOT_PACKAGE = a_package->package() == nullptr;
+    QString const TITLE{ (IS_ROOT_PACKAGE ? "New package" : QString::fromStdString(a_package->name())) };
+    m_packageViewIndex = m_ui->tabWidget->addTab(packageView, TITLE);
+    m_openPackages[a_package] = m_packageViewIndex;
+  }
+
+  m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
+}
+
+int Editor::indexForPackageView(PackageView *const a_packageView) const
+{
+  auto const tabWidget = m_ui->tabWidget;
+  auto const SIZE = tabWidget->count();
+  for (int i = 0; i < SIZE; ++i) {
+    auto packageView = qobject_cast<PackageView *const>(tabWidget->widget(i));
+    if (packageView == a_packageView) return i;
+  }
+  return -1;
+}
+
+void Editor::setPackageViewTabName(int const a_index, QString const &a_name)
+{
+  auto const tabWidget = m_ui->tabWidget;
+  tabWidget->setTabText(a_index, a_name);
+}
+
+QListView *Editor::elementsList()
+{
+  return m_ui->elementsList;
+}
+
+QTableWidget *Editor::propertiesTable()
+{
+  return m_ui->propertiesTable;
 }
 
 PackageView *Editor::packageViewForIndex(int const a_index) const
@@ -248,14 +363,8 @@ int Editor::openPackageViews() const
 
 void Editor::newPackage()
 {
-  auto const packageView = new PackageView{ m_ui->elementsList, m_ui->propertiesTable };
-  m_packageViewIndex = m_ui->tabWidget->addTab(packageView, "New package");
-  m_ui->tabWidget->setCurrentIndex(m_packageViewIndex);
-  packageView->setSelectedNode(nullptr);
-  packageView->showProperties();
-
-  connect(packageView, &PackageView::requestOpenFile,
-          [this](QString const a_filename) { openPackageFile(a_filename); });
+  auto const package = new Package;
+  openOrCreatePackageView(package);
 }
 
 void Editor::openPackage()
@@ -273,7 +382,7 @@ void Editor::openPackage()
   openPackageFile(FILENAME);
 }
 
-void Editor::openPackageFile(QString const a_filename)
+void Editor::openPackageFile(QString const &a_filename)
 {
   auto const FOUND = m_openFiles.constFind(a_filename);
 
@@ -283,17 +392,16 @@ void Editor::openPackageFile(QString const a_filename)
     return;
   }
 
-  newPackage();
+  auto const package = new Package;
+  package->open(a_filename.toStdString());
+
+  openOrCreatePackageView(package);
 
   auto const packageView = packageViewForIndex(m_packageViewIndex);
   packageView->setFilename(a_filename);
 
   QDir const PACKAGES{ PACKAGES_DIR };
   m_ui->tabWidget->setTabText(m_packageViewIndex, PACKAGES.relativeFilePath(a_filename));
-
-  packageView->open();
-  packageView->setSelectedNode(nullptr);
-  packageView->showProperties();
 
   m_openFiles[a_filename] = m_packageViewIndex;
 }
@@ -349,6 +457,7 @@ void Editor::closePackageView(int const a_index)
   auto const packageView = packageViewForIndex(a_index);
   if (packageView->canClose()) m_ui->tabWidget->removeTab(a_index);
   delete packageView;
+  m_packageViewIndex = m_ui->tabWidget->currentIndex();
 }
 
 void Editor::deleteElement()

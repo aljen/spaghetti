@@ -72,7 +72,7 @@ void ConstFloat::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(row, 0, item);
 
-  auto const CONST_FLOAT = static_cast<elements::values::ConstFloat *const>(m_element);
+  auto const CONST_FLOAT = static_cast<elements::values::ConstFloat *>(m_element);
   float const CURRENT = CONST_FLOAT->currentValue();
 
   QDoubleSpinBox *const value = new QDoubleSpinBox;

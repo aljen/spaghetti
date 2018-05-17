@@ -148,15 +148,15 @@ void Element::deserialize(Json const &a_json)
   for (auto &&socket : OUTPUTS) add_socket(socket, false, outputsCount);
 }
 
-void Element::setName(const std::string a_name)
+void Element::setName(std::string const &a_name)
 {
   auto const OLD_NAME = m_name;
   m_name = a_name;
 
-  onEvent(NameChanged{ OLD_NAME, a_name });
+  handleEvent(Event{ EventType::eElementNameChanged, EventNameChanged{ OLD_NAME, a_name } });
 }
 
-bool Element::addInput(Element::ValueType const a_type, std::string const a_name, uint8_t const a_flags)
+bool Element::addInput(ValueType const a_type, std::string const &a_name, uint8_t const a_flags)
 {
   if (m_inputs.size() + 1 > m_maxInputs) return false;
 
@@ -168,24 +168,26 @@ bool Element::addInput(Element::ValueType const a_type, std::string const a_name
   resetIOSocketValue(input);
   m_inputs.emplace_back(input);
 
-  onEvent(InputAdded{});
+  handleEvent(Event{ EventType::eInputAdded, EventEmpty{} });
 
   return true;
 }
 
-void Element::setInputName(uint8_t const a_input, std::string const a_name)
+void Element::setInputName(uint8_t const a_input, std::string const &a_name)
 {
   auto const OLD_NAME = m_inputs[a_input].name;
+  if (OLD_NAME == a_name) return;
+
   m_inputs[a_input].name = a_name;
 
-  onEvent(IONameChanged{ true, a_input, OLD_NAME, a_name });
+  handleEvent(Event{ EventType::eIONameChanged, EventIONameChanged{ OLD_NAME, a_name, a_input, true } });
 }
 
 void Element::removeInput()
 {
   m_inputs.pop_back();
 
-  onEvent(InputRemoved{});
+  handleEvent(Event{ EventType::eInputRemoved, EventEmpty{} });
 }
 
 void Element::clearInputs()
@@ -193,7 +195,7 @@ void Element::clearInputs()
   m_inputs.clear();
 }
 
-bool Element::addOutput(Element::ValueType const a_type, std::string const a_name, uint8_t const a_flags)
+bool Element::addOutput(ValueType const a_type, std::string const &a_name, uint8_t const a_flags)
 {
   if (m_outputs.size() + 1 > m_maxOutputs) return false;
 
@@ -205,24 +207,26 @@ bool Element::addOutput(Element::ValueType const a_type, std::string const a_nam
   resetIOSocketValue(output);
   m_outputs.emplace_back(output);
 
-  onEvent(OutputAdded{});
+  handleEvent(Event{ EventType::eOutputAdded, EventEmpty{} });
 
   return true;
 }
 
-void Element::setOutputName(uint8_t const a_output, std::string const a_name)
+void Element::setOutputName(uint8_t const a_output, std::string const &a_name)
 {
   auto const OLD_NAME = m_outputs[a_output].name;
+  if (OLD_NAME == a_name) return;
+
   m_outputs[a_output].name = a_name;
 
-  onEvent(IONameChanged{ false, a_output, OLD_NAME, a_name });
+  handleEvent(Event{ EventType::eIONameChanged, EventIONameChanged{ OLD_NAME, a_name, a_output, false } });
 }
 
 void Element::removeOutput()
 {
   m_outputs.pop_back();
 
-  onEvent(OutputRemoved{});
+  handleEvent(Event{ EventType::eOutputRemoved, EventEmpty{} });
 }
 
 void Element::clearOutputs()
@@ -230,14 +234,25 @@ void Element::clearOutputs()
   m_outputs.clear();
 }
 
+void Element::setIOName(bool const a_input, uint8_t const a_id, std::string const &a_name)
+{
+  if (a_input)
+    setInputName(a_id, a_name);
+  else
+    setOutputName(a_id, a_name);
+}
+
 void Element::setIOValueType(bool const a_input, uint8_t const a_id, ValueType const a_type)
 {
   auto &io = a_input ? m_inputs[a_id] : m_outputs[a_id];
   auto const OLD_TYPE = io.type;
+
+  if (OLD_TYPE == a_type) return;
+
   io.type = a_type;
   resetIOSocketValue(io);
 
-  onEvent(IOTypeChanged{ a_input, a_id, OLD_TYPE, a_type });
+  handleEvent(Event{ EventType::eIOTypeChanged, EventIOTypeChanged{ a_input, a_id, OLD_TYPE, a_type } });
 }
 
 bool Element::connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t const a_inputId)
@@ -252,6 +267,12 @@ void Element::resetIOSocketValue(IOSocket &a_io)
     case ValueType::eInt: a_io.value = 0; break;
     case ValueType::eFloat: a_io.value = 0.0f; break;
   }
+}
+
+void Element::handleEvent(Event const &a_event)
+{
+  onEvent(a_event);
+  if (m_handler) m_handler(a_event);
 }
 
 void Element::setMinInputs(uint8_t const a_min)

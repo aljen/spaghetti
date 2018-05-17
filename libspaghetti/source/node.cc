@@ -50,22 +50,22 @@ qreal const ROUNDED_SOCKET_SIZE_2 = ROUNDED_SOCKET_SIZE / 2.0;
 # pragma warning(disable:4715)
 #endif
 // clang-format on
-bool value_type_allowed(uint8_t const a_flags, Element::ValueType const a_type)
+bool value_type_allowed(uint8_t const a_flags, ValueType const a_type)
 {
   switch (a_type) {
-    case Element::ValueType::eBool: return a_flags & Element::IOSocket::eCanHoldBool;
-    case Element::ValueType::eInt: return a_flags & Element::IOSocket::eCanHoldInt;
-    case Element::ValueType::eFloat: return a_flags & Element::IOSocket::eCanHoldFloat;
+    case ValueType::eBool: return a_flags & Element::IOSocket::eCanHoldBool;
+    case ValueType::eInt: return a_flags & Element::IOSocket::eCanHoldInt;
+    case ValueType::eFloat: return a_flags & Element::IOSocket::eCanHoldFloat;
   }
 
   assert(false);
 }
 
-Element::ValueType first_available_type_for_flags(uint8_t const a_flags)
+ValueType first_available_type_for_flags(uint8_t const a_flags)
 {
-  if (a_flags & Element::IOSocket::eCanHoldBool) return Element::ValueType::eBool;
-  if (a_flags & Element::IOSocket::eCanHoldInt) return Element::ValueType::eInt;
-  if (a_flags & Element::IOSocket::eCanHoldFloat) return Element::ValueType::eFloat;
+  if (a_flags & Element::IOSocket::eCanHoldBool) return ValueType::eBool;
+  if (a_flags & Element::IOSocket::eCanHoldInt) return ValueType::eInt;
+  if (a_flags & Element::IOSocket::eCanHoldFloat) return ValueType::eFloat;
 
   assert(false);
 }
@@ -139,12 +139,12 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVariant c
         switch (m_type) {
           case Type::eElement: m_element->setPosition(POSITION.x(), POSITION.y()); break;
           case Type::eInputs: {
-            auto const package = reinterpret_cast<Package *const>(m_element);
+            auto const package = reinterpret_cast<Package *>(m_element);
             package->setInputsPosition(POSITION.x(), POSITION.y());
             break;
           }
           case Type::eOutputs: {
-            auto const package = reinterpret_cast<Package *const>(m_element);
+            auto const package = reinterpret_cast<Package *>(m_element);
             package->setOutputsPosition(POSITION.x(), POSITION.y());
             break;
           }
@@ -180,9 +180,11 @@ void Node::advance(int a_phase)
 
 void Node::setElement(Element *const a_element)
 {
-  if (m_element) qDebug() << "Already have element!";
+  if (m_element) return;
 
   m_element = a_element;
+
+  if (m_type == Type::eElement) m_element->registerEventHandler([this](Event const &a_event) { handleEvent(a_event); });
 
   auto const &INPUTS = m_element->inputs();
   auto const &OUTPUTS = m_element->outputs();
@@ -191,35 +193,32 @@ void Node::setElement(Element *const a_element)
     case Type::eElement:
       for (size_t i = 0; i < INPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(INPUTS[i].name) };
-        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, INPUTS[i].type, false);
+        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, INPUTS[i].type);
       }
       for (size_t i = 0; i < OUTPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(OUTPUTS[i].name) };
-        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type, false);
+        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type);
       }
+
+      m_element->setPosition(x(), y());
+      m_element->iconify(m_mode == Mode::eIconified);
+      m_element->calculate();
+
+      setName(QString::fromStdString(m_element->name()));
+      updateOutputs();
       break;
     case Type::eInputs:
       for (size_t i = 0; i < INPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(INPUTS[i].name) };
-        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, INPUTS[i].type, true);
+        addSocket(SocketType::eOutput, static_cast<uint8_t>(i), NAME, INPUTS[i].type);
       }
       break;
     case Type::eOutputs:
       for (size_t i = 0; i < OUTPUTS.size(); ++i) {
         QString const NAME{ QString::fromStdString(OUTPUTS[i].name) };
-        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type, true);
+        addSocket(SocketType::eInput, static_cast<uint8_t>(i), NAME, OUTPUTS[i].type);
       }
       break;
-  }
-
-  m_element->setPosition(x(), y());
-  m_element->iconify(m_mode == Mode::eIconified);
-
-  m_element->calculate();
-
-  if (m_type == Type::eElement) {
-    setName(QString::fromStdString(m_element->name()));
-    updateOutputs();
   }
 
   elementSet();
@@ -227,7 +226,7 @@ void Node::setElement(Element *const a_element)
   calculateBoundingRect();
 }
 
-void Node::setName(QString a_name)
+void Node::setName(QString const &a_name)
 {
   m_name = a_name;
 
@@ -240,7 +239,7 @@ void Node::setName(QString a_name)
     setToolTip(QString("%1").arg(a_name));
 }
 
-void Node::setIcon(QString a_icon)
+void Node::setIcon(QString const &a_icon)
 {
   m_iconPath = a_icon;
   m_icon.load(a_icon);
@@ -348,8 +347,53 @@ void Node::paintIcon(QPainter *const a_painter)
 void Node::showProperties()
 {
   showCommonProperties();
-  showIOProperties(IOSocketsType::eInputs);
-  showIOProperties(IOSocketsType::eOutputs);
+  switch (m_type) {
+    case Type::eElement:
+      showIOProperties(IOSocketsType::eInputs);
+      showIOProperties(IOSocketsType::eOutputs);
+      break;
+    case Type::eInputs: showIOProperties(IOSocketsType::eInputs); break;
+    case Type::eOutputs: showIOProperties(IOSocketsType::eOutputs); break;
+  }
+}
+
+void Node::handleEvent(Event const &a_event)
+{
+  switch (a_event.type) {
+    case EventType::eElementNameChanged: break;
+    case EventType::eIONameChanged: {
+      auto const &EVENT = std::get<EventIONameChanged>(a_event.payload);
+      changeIOName(EVENT.input ? IOSocketsType::eInputs : IOSocketsType::eOutputs, EVENT.id,
+                   QString::fromStdString(EVENT.to));
+      calculateBoundingRect();
+      break;
+    }
+    case EventType::eIOTypeChanged: break;
+    case EventType::eInputAdded: {
+      auto const &INPUTS = m_element->inputs();
+      auto const SIZE = inputs().size();
+      auto const &INPUT = INPUTS.back();
+      addSocket(SocketType::eInput, static_cast<uint8_t>(SIZE), QString::fromStdString(INPUT.name), INPUT.type);
+      calculateBoundingRect();
+      break;
+    }
+    case EventType::eInputRemoved:
+      removeSocket(SocketType::eInput);
+      calculateBoundingRect();
+      break;
+    case EventType::eOutputAdded: {
+      auto const &OUTPUTS = m_element->outputs();
+      auto const SIZE = outputs().size();
+      auto const &OUTPUT = OUTPUTS.back();
+      addSocket(SocketType::eOutput, static_cast<uint8_t>(SIZE), QString::fromStdString(OUTPUT.name), OUTPUT.type);
+      calculateBoundingRect();
+      break;
+    }
+    case EventType::eOutputRemoved:
+      removeSocket(SocketType::eOutput);
+      calculateBoundingRect();
+      break;
+  }
 }
 
 void Node::showCommonProperties()
@@ -395,16 +439,6 @@ void Node::showCommonProperties()
   QObject::connect(nameEdit, &QLineEdit::textChanged, [this](QString const &a_text) { setName(a_text); });
 }
 
-QString valueType2QString(Element::ValueType a_type)
-{
-  switch (a_type) {
-    case Element::ValueType::eBool: return "Bool";
-    case Element::ValueType::eInt: return "Int";
-    case Element::ValueType::eFloat: return "Float";
-  }
-  return "Unknown";
-}
-
 void Node::showIOProperties(IOSocketsType const a_type)
 {
   bool const INPUTS{ a_type == IOSocketsType::eInputs };
@@ -447,8 +481,9 @@ void Node::showIOProperties(IOSocketsType const a_type)
 
     if (IO.flags & Element::IOSocket::eCanChangeName) {
       QLineEdit *const ioName{ new QLineEdit{ QString::fromStdString(IO.name) } };
-      QObject::connect(ioName, &QLineEdit::editingFinished,
-                       [a_type, i, ioName, this]() { changeIOName(a_type, i, ioName->text()); });
+      QObject::connect(ioName, &QLineEdit::editingFinished, [a_type, i, ioName, this]() {
+        m_element->setIOName(a_type == IOSocketsType::eInputs, static_cast<uint8_t>(i), ioName->text().toStdString());
+      });
       m_properties->setCellWidget(row, 0, ioName);
     } else {
       item = new QTableWidgetItem{ QString::fromStdString(IO.name) };
@@ -456,13 +491,13 @@ void Node::showIOProperties(IOSocketsType const a_type)
       m_properties->setItem(row, 0, item);
     }
 
-    auto const comboBox{ new QComboBox };
+    auto const comboBox = new QComboBox;
     if (IO.flags & Element::IOSocket::eCanHoldBool)
-      comboBox->addItem(valueType2QString(ValueType::eBool), static_cast<int>(ValueType::eBool));
+      comboBox->addItem(ValueType_to_QString(ValueType::eBool), static_cast<int>(ValueType::eBool));
     if (IO.flags & Element::IOSocket::eCanHoldInt)
-      comboBox->addItem(valueType2QString(ValueType::eInt), static_cast<int>(ValueType::eInt));
+      comboBox->addItem(ValueType_to_QString(ValueType::eInt), static_cast<int>(ValueType::eInt));
     if (IO.flags & Element::IOSocket::eCanHoldFloat)
-      comboBox->addItem(valueType2QString(ValueType::eFloat), static_cast<int>(ValueType::eFloat));
+      comboBox->addItem(ValueType_to_QString(ValueType::eFloat), static_cast<int>(ValueType::eFloat));
     int const INDEX{ comboBox->findData(static_cast<int>(IO.type)) };
     comboBox->setCurrentIndex(INDEX);
     m_properties->setCellWidget(row, 1, comboBox);
@@ -482,7 +517,7 @@ void Node::setCentralWidget(QGraphicsItem *a_centralWidget)
   m_centralWidget->setPos(m_centralWidgetPosition);
 }
 
-void Node::propertiesInsertTitle(QString a_title)
+void Node::propertiesInsertTitle(QString const &a_title)
 {
   int const ROW = m_properties->rowCount();
   m_properties->insertRow(ROW);
@@ -495,11 +530,17 @@ void Node::propertiesInsertTitle(QString a_title)
   m_properties->setSpan(ROW, 0, 1, 2);
 }
 
-void Node::changeIOName(IOSocketsType const a_type, int const a_id, QString const a_name)
+void Node::changeIOName(IOSocketsType const a_type, int const a_id, QString const &a_name)
 {
-  auto &ios = a_type == IOSocketsType::eInputs ? m_inputs : m_outputs;
-  auto &io = ios[a_id];
-  io->setName(a_name, false);
+  bool const INPUTS{ a_type == IOSocketsType::eInputs };
+
+  SocketItem *socket{};
+  if (m_type == Type::eElement)
+    socket = INPUTS ? m_inputs[a_id] : m_outputs[a_id];
+  else
+    socket = m_type == Type::eInputs ? m_outputs[a_id] : m_inputs[a_id];
+
+  socket->setName(a_name);
   calculateBoundingRect();
 }
 
@@ -563,41 +604,48 @@ void Node::calculateBoundingRect()
   m_boundingRect = QRectF{ 0.0, 0.0, width, height };
 }
 
-void Node::changeInputName(const int a_id, const QString a_name)
+void Node::changeInputName(int const a_id, QString const &a_name)
 {
   changeIOName(IOSocketsType::eInputs, a_id, a_name);
 }
 
-void Node::changeOutputName(const int a_id, const QString a_name)
+void Node::changeOutputName(int const a_id, QString const &a_name)
 {
   changeIOName(IOSocketsType::eOutputs, a_id, a_name);
+}
+
+QString nodetype2string(Node::Type a_type)
+{
+  switch (a_type) {
+    case Node::Type::eElement: return "Element";
+    case Node::Type::eInputs: return "Inputs";
+    case Node::Type::eOutputs: return "Outputs";
+  }
+
+  return "UNKNOWN TYPE";
 }
 
 void Node::addInput()
 {
   uint8_t const SIZE{ static_cast<uint8_t>(m_element->inputs().size()) };
-  QString const INPUT_NAME{ QString("#%1").arg(SIZE) };
+  QString const INPUT_NAME{ QString("#%1").arg(SIZE + 1) };
 
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewInputFlags()) };
   m_element->addInput(TYPE, INPUT_NAME.toStdString(), m_element->defaultNewInputFlags());
-  addSocket(SocketType::eInput, SIZE, INPUT_NAME, TYPE, false);
 
-  calculateBoundingRect();
   m_packageView->showProperties();
 }
 
 void Node::removeInput()
 {
   m_element->removeInput();
-  removeSocket(SocketType::eInput);
-  calculateBoundingRect();
   m_packageView->showProperties();
 }
 
-void Node::setInputName(uint8_t const a_socketId, QString const a_name)
+void Node::setInputName(uint8_t const a_socketId, QString const &a_name)
 {
   m_element->setInputName(a_socketId, a_name.toStdString());
-  m_inputs[a_socketId]->setName(a_name, false);
+  m_inputs[a_socketId]->setName(a_name);
   calculateBoundingRect();
   m_packageView->showProperties();
 }
@@ -605,40 +653,35 @@ void Node::setInputName(uint8_t const a_socketId, QString const a_name)
 void Node::addOutput()
 {
   uint8_t const SIZE{ static_cast<uint8_t>(m_element->outputs().size()) };
-  QString const NAME{ QString("#%1").arg(SIZE) };
+  QString const OUTPUT_NAME{ QString("#%1").arg(SIZE + 1) };
 
   ValueType const TYPE{ first_available_type_for_flags(m_element->defaultNewOutputFlags()) };
-  m_element->addOutput(TYPE, NAME.toStdString(), m_element->defaultNewOutputFlags());
-  addSocket(SocketType::eOutput, SIZE, NAME, TYPE, false);
+  m_element->addOutput(TYPE, OUTPUT_NAME.toStdString(), m_element->defaultNewOutputFlags());
 
-  calculateBoundingRect();
   m_packageView->showProperties();
 }
 
 void Node::removeOutput()
 {
   m_element->removeOutput();
-  removeSocket(SocketType::eOutput);
-  calculateBoundingRect();
   m_packageView->showProperties();
 }
 
-void Node::setOutputName(uint8_t const a_socketId, QString const a_name)
+void Node::setOutputName(uint8_t const a_socketId, QString const &a_name)
 {
   m_element->setOutputName(a_socketId, a_name.toStdString());
-  m_outputs[a_socketId]->setName(a_name, false);
+  m_outputs[a_socketId]->setName(a_name);
   calculateBoundingRect();
   m_packageView->showProperties();
 }
 
-void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType,
-                     bool const a_swapped)
+void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const &a_name, ValueType const a_valueType)
 {
-  auto const socket{ new SocketItem{ this, a_type } };
-  socket->setElementId(m_element->id());
+  auto const socket = new SocketItem{ this, a_type };
+  socket->setElementId(m_type == Type::eElement ? m_element->id() : 0);
   socket->setSocketId(a_id);
 
-  socket->setName(a_name, a_swapped);
+  socket->setName(a_name);
   socket->setValueType(a_valueType);
 
   if (m_mode == Mode::eIconified)
@@ -652,7 +695,7 @@ void Node::addSocket(SocketType const a_type, uint8_t const a_id, QString const 
     m_outputs.push_back(socket);
 }
 
-void Node::removeSocket(const Node::SocketType a_type)
+void Node::removeSocket(Node::SocketType const a_type)
 {
   switch (a_type) {
     case SocketType::eInput:
@@ -675,13 +718,18 @@ void Node::setSocketType(IOSocketsType const a_socketType, uint8_t const a_socke
 
   if (!value_type_allowed(io.flags, a_type)) {
     spaghetti::log::error("Changing io's {}@{} type to {} is not allowed.", m_element->id(), io.id,
-                          valueType2QString(a_type).toStdString());
+                          ValueType_to_QString(a_type).toStdString());
     return;
   }
 
-  if (io.type == a_type) return;
+  SocketItem *socket{};
+  if (m_type == Type::eElement)
+    socket = INPUTS ? m_inputs[a_socketId] : m_outputs[a_socketId];
+  else
+    socket = m_type == Type::eInputs ? m_outputs[a_socketId] : m_inputs[a_socketId];
 
-  auto &socket = INPUTS ? m_inputs[a_socketId] : m_outputs[a_socketId];
+  if (socket->valueType() == a_type) return;
+
   socket->disconnectAll();
 
   m_element->setIOValueType(INPUTS, a_socketId, a_type);
@@ -691,15 +739,17 @@ void Node::setSocketType(IOSocketsType const a_socketType, uint8_t const a_socke
 
 void Node::updateOutputs()
 {
-  if (!m_element || m_type != Type::eElement) return;
+  if (!m_element || m_type == Type::eOutputs) return;
 
-  auto const &OUTPUTS = m_element->outputs();
-  size_t const SIZE{ OUTPUTS.size() };
+  auto const IS_ELEMENT = m_type == Type::eElement;
+  auto const &ELEMENT_IOS = IS_ELEMENT ? m_element->outputs() : m_element->inputs();
+  auto const &NODE_IOS = m_outputs;
+  size_t const SIZE{ ELEMENT_IOS.size() };
   for (size_t i = 0; i < SIZE; ++i) {
-    switch (OUTPUTS[i].type) {
+    switch (ELEMENT_IOS[i].type) {
       case ValueType::eBool: {
-        bool const SIGNAL{ std::get<bool>(OUTPUTS[i].value) };
-        m_outputs[static_cast<int>(i)]->setSignal(SIGNAL);
+        bool const SIGNAL{ std::get<bool>(ELEMENT_IOS[i].value) };
+        NODE_IOS[static_cast<int>(i)]->setSignal(SIGNAL);
         break;
       }
       default: break;

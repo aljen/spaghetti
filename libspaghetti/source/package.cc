@@ -36,11 +36,8 @@ Package::Package()
 {
   m_elements.push_back(this);
 
-  addInput(ValueType::eBool, "#1", IOSocket::eDefaultFlags);
-  addInput(ValueType::eBool, "#2", IOSocket::eDefaultFlags);
-  addInput(ValueType::eBool, "#3", IOSocket::eDefaultFlags);
-
-  addOutput(ValueType::eBool, "#1", IOSocket::eDefaultFlags);
+  setDefaultNewInputFlags(IOSocket::eDefaultFlags);
+  setDefaultNewOutputFlags(IOSocket::eDefaultFlags);
 }
 
 Package::~Package()
@@ -64,38 +61,42 @@ void Package::serialize(Element::Json &a_json)
   jsonPackage["path"] = m_packagePath;
   jsonPackage["icon"] = m_packageIcon;
 
-  auto jsonElements = Json::array();
-  // TODO(aljen): fix holes
-  size_t const DATA_SIZE{ m_elements.size() };
-  for (size_t i = 1; i < DATA_SIZE; ++i) {
-    auto const element = m_elements[i];
-    if (element == nullptr) continue;
+  if (!m_isExternal) {
+    auto jsonElements = Json::array();
+    // TODO(aljen): fix holes
+    size_t const DATA_SIZE{ m_elements.size() };
+    for (size_t i = 1; i < DATA_SIZE; ++i) {
+      auto const element = m_elements[i];
+      if (element == nullptr) continue;
 
-    Json jsonElement{};
-    element->serialize(jsonElement);
-    jsonElements.push_back(jsonElement);
+      Json jsonElement{};
+      element->serialize(jsonElement);
+      jsonElements.push_back(jsonElement);
+    }
+    jsonPackage["elements"] = jsonElements;
+
+    auto jsonConnections = Json::array();
+    for (auto const &CONNECTION : m_connections) {
+      Json jsonConnection{}, jsonConnect{}, jsonTo{};
+
+      jsonConnect["id"] = CONNECTION.from_id;
+      jsonConnect["socket"] = CONNECTION.from_socket;
+      jsonTo["id"] = CONNECTION.to_id;
+      jsonTo["socket"] = CONNECTION.to_socket;
+
+      jsonConnection["connect"] = jsonConnect;
+      jsonConnection["to"] = jsonTo;
+      jsonConnections.push_back(jsonConnection);
+    }
+    jsonPackage["connections"] = jsonConnections;
   }
-  jsonPackage["elements"] = jsonElements;
-
-  auto jsonConnections = Json::array();
-  for (auto const &CONNECTION : m_connections) {
-    Json jsonConnection{}, jsonConnect{}, jsonTo{};
-
-    jsonConnect["id"] = CONNECTION.from_id;
-    jsonConnect["socket"] = CONNECTION.from_socket;
-    jsonTo["id"] = CONNECTION.to_id;
-    jsonTo["socket"] = CONNECTION.to_socket;
-
-    jsonConnection["connect"] = jsonConnect;
-    jsonConnection["to"] = jsonTo;
-    jsonConnections.push_back(jsonConnection);
-  }
-  jsonPackage["connections"] = jsonConnections;
 }
 
 void Package::deserialize(Json const &a_json)
 {
   Element::deserialize(a_json);
+
+  auto const IS_ROOT = m_package == nullptr;
 
   auto const &NODE = a_json["node"];
   auto const INPUTS_POSITION = NODE["inputs_position"];
@@ -106,11 +107,43 @@ void Package::deserialize(Json const &a_json)
   auto const OUTPUTS_POSITION_Y = OUTPUTS_POSITION["y"].get<double>();
 
   auto const &PACKAGE = a_json["package"];
-  auto const &ELEMENTS = PACKAGE["elements"];
-  auto const &CONNECTIONS = PACKAGE["connections"];
   auto const &DESCRIPTION = PACKAGE["description"].get<std::string>();
   auto const &ICON = PACKAGE["icon"].get<std::string>();
   auto const &PATH = PACKAGE["path"].get<std::string>();
+
+  m_isExternal = !IS_ROOT && !PATH.empty();
+
+  spaghetti::log::debug("deserialize root? {} isExternal? {}", IS_ROOT, m_isExternal);
+
+  Json json{};
+
+  if (m_isExternal) {
+    log::debug("Package is external one, looking for real one registered as '{}'", PATH);
+
+    auto const &REGISTRY = Registry::get();
+    auto const &PACKAGES = REGISTRY.packages();
+
+    std::string filename{};
+
+    for (auto const &PACKAGE_INFO : PACKAGES) {
+      if (PACKAGE_INFO.second.path == PATH) {
+        filename = PACKAGE_INFO.second.filename;
+        log::debug("Found one, '{}' is at '{}'", PATH, filename);
+        break;
+      }
+    }
+
+    assert(!filename.empty() && "Can't find external package");
+
+    std::ifstream file{ filename };
+    if (!file.is_open()) return;
+
+    file >> json;
+  }
+
+  auto const &REAL_PACKAGE = m_isExternal ? json["package"] : PACKAGE;
+  auto const &ELEMENTS = REAL_PACKAGE["elements"];
+  auto const &CONNECTIONS = REAL_PACKAGE["connections"];
 
   setPackageDescription(DESCRIPTION);
   setPackageIcon(ICON);
@@ -139,6 +172,28 @@ void Package::deserialize(Json const &a_json)
     auto const &TO_ID = remappedIds[TO["id"].get<size_t>()];
     auto const &TO_SOCKET = TO["socket"].get<uint8_t>();
     connect(FROM_ID, FROM_SOCKET, TO_ID, TO_SOCKET);
+  }
+}
+
+void Package::calculate()
+{
+  for (auto &&connection : m_connections) {
+    Element *const source{ get(connection.from_id) };
+    Element *const target{ get(connection.to_id) };
+
+    auto const IS_SOURCE_SELF = connection.from_id == 0;
+    auto const IS_TARGET_SELF = connection.to_id == 0;
+
+    auto const &SOURCE_IO = IS_SOURCE_SELF ? source->inputs() : source->outputs();
+    auto &targetIO = IS_TARGET_SELF ? target->outputs() : target->inputs();
+    targetIO[connection.to_socket].value = SOURCE_IO[connection.from_socket].value;
+  }
+
+  for (auto &&element : m_elements) {
+    if (!element || element == this) continue;
+
+    element->update(m_delta);
+    element->calculate();
   }
 }
 
@@ -202,26 +257,14 @@ bool Package::connect(size_t const a_sourceId, uint8_t const a_outputId, size_t 
 {
   pauseDispatchThread();
 
-  Element *const source{ get(a_sourceId) };
-  Element *const target{ get(a_targetId) };
+  auto const source = get(a_sourceId);
+  auto const target = get(a_targetId);
 
   spaghetti::log::debug("Connecting source: {}@{} to target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
                         a_targetId, static_cast<int>(a_inputId));
 
-  if (a_sourceId != 0 && a_targetId != 0) {
-    spaghetti::log::trace("Normal connect, element to element");
-    assert(target->m_inputs[a_inputId].type == source->m_outputs[a_outputId].type);
-    target->m_inputs[a_inputId].id = a_sourceId;
-    target->m_inputs[a_inputId].slot = a_outputId;
-  } else if (a_sourceId == 0) {
-    // TODO(aljen): Handle this case
-    spaghetti::log::trace("Package connect, package input to element input");
-    target->m_inputs[a_inputId].id = a_sourceId;
-    target->m_inputs[a_inputId].slot = a_outputId;
-  } else if (a_targetId == 0) {
-    // TODO(aljen): Handle this case
-    spaghetti::log::trace("Package connect, element output to package output");
-  }
+  target->m_inputs[a_inputId].id = a_sourceId;
+  target->m_inputs[a_inputId].slot = a_outputId;
 
   spaghetti::log::trace("Notifying {}({})@{} when {}({})@{} changes..", a_targetId, target->name(),
                         static_cast<int32_t>(a_inputId), a_sourceId, source->name(), static_cast<int32_t>(a_outputId));
@@ -276,21 +319,9 @@ void Package::dispatchThreadFunction()
   while (!m_quit) {
     auto const NOW = clock_t::now();
     auto const DELTA = NOW - last;
-    for (auto &&connection : m_connections) {
-      Element *const source{ get(connection.from_id) };
-      Element *const target{ get(connection.to_id) };
 
-      auto const &SOURCE_OUTPUTS = source->outputs();
-      auto &targetInputs = target->inputs();
-      targetInputs[connection.to_socket].value = SOURCE_OUTPUTS[connection.from_socket].value;
-    }
-
-    for (auto &&element : m_elements) {
-      if (!element) continue;
-
-      element->update(DELTA);
-      element->calculate();
-    }
+    update(DELTA);
+    calculate();
 
     last = NOW;
 
@@ -339,6 +370,8 @@ void Package::quitDispatchThread()
 
 void Package::pauseDispatchThread()
 {
+  if (!m_dispatchThreadStarted) return;
+
   m_pauseCount++;
 
   spaghetti::log::trace("Trying to pause dispatch thread ({})..", m_pauseCount.load());
@@ -353,6 +386,8 @@ void Package::pauseDispatchThread()
 
 void Package::resumeDispatchThread()
 {
+  if (!m_dispatchThreadStarted) return;
+
   m_pauseCount--;
 
   spaghetti::log::trace("Trying to resume dispatch thread ({})..", m_pauseCount.load());
@@ -368,15 +403,18 @@ void Package::open(std::string const &a_filename)
 {
   spaghetti::log::debug("Opening package {}", a_filename);
 
-  pauseDispatchThread();
-
   std::ifstream file{ a_filename };
   if (!file.is_open()) return;
+
+  pauseDispatchThread();
 
   Json json{};
   file >> json;
 
   deserialize(json);
+
+  m_isExternal = m_package != nullptr;
+  spaghetti::log::debug("{} Is external: {}", a_filename, m_isExternal);
 
   resumeDispatchThread();
 }
@@ -394,6 +432,23 @@ void Package::save(std::string const &a_filename)
   file << json.dump(2);
 
   resumeDispatchThread();
+}
+
+Registry::PackageInfo Package::getInfoFor(std::string const &a_filename)
+{
+  Registry::PackageInfo type{};
+
+  std::ifstream file{ a_filename };
+  if (!file.is_open()) return type;
+
+  Json json{};
+  file >> json;
+
+  type.filename = a_filename;
+  type.icon = json["package"]["icon"];
+  type.path = json["package"]["path"];
+
+  return type;
 }
 
 } // namespace spaghetti

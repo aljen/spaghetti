@@ -33,6 +33,7 @@
 #include <cassert>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <type_traits>
 
 #include <spaghetti/api.h>
@@ -56,12 +57,20 @@ class SPAGHETTI_API Registry final {
   };
 
  public:
+  struct PackageInfo {
+    std::string filename{};
+    std::string path{};
+    std::string icon{};
+  };
+  using Packages = std::unordered_map<std::string, PackageInfo>;
+
   static Registry &get();
 
   ~Registry();
 
   void registerInternalElements();
   void loadPlugins();
+  void loadPackages();
 
   template<typename ElementDerived, typename NodeDerived = Node>
   typename std::enable_if_t<(std::is_base_of_v<Element, ElementDerived> && std::is_base_of_v<Node, NodeDerived>)>
@@ -95,6 +104,8 @@ class SPAGHETTI_API Registry final {
   size_t size() const;
   MetaInfo const &metaInfoFor(string::hash_t const a_hash) const;
   MetaInfo const &metaInfoAt(size_t const a_index) const;
+
+  Packages const &packages() const;
 
   std::string appPath() const;
   std::string systemPluginsPath() const;

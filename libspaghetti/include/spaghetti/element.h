@@ -48,13 +48,50 @@ namespace spaghetti {
 
 class Package;
 
+enum class ValueType { eBool, eInt, eFloat };
+
+struct EventNameChanged {
+  std::string from;
+  std::string to;
+};
+struct EventIONameChanged {
+  std::string from;
+  std::string to;
+  uint8_t id;
+  bool input;
+};
+struct EventIOTypeChanged {
+  bool input;
+  uint8_t id;
+  ValueType from;
+  ValueType to;
+};
+struct EventEmpty {
+};
+using EventValue = std::variant<EventNameChanged, EventIONameChanged, EventIOTypeChanged, EventEmpty>;
+enum class EventType {
+  eElementNameChanged,
+  eIONameChanged,
+  eIOTypeChanged,
+  eInputAdded,
+  eInputRemoved,
+  eOutputAdded,
+  eOutputRemoved
+};
+
+struct Event {
+  EventType type{};
+  EventValue payload{};
+};
+
+using EventCallback = std::function<void(Event const &)>;
+
 class SPAGHETTI_API Element {
  public:
   using duration_t = std::chrono::duration<double, std::milli>;
 
   using Json = nlohmann::json;
   using Value = std::variant<bool, int32_t, float>;
-  enum class ValueType { eBool, eInt, eFloat };
   template<typename T>
   struct Vec2 {
     T x{};
@@ -100,7 +137,7 @@ class SPAGHETTI_API Element {
 
   size_t id() const noexcept { return m_id; }
 
-  void setName(std::string const a_name);
+  void setName(std::string const &a_name);
 
   std::string name() const noexcept { return m_name; }
 
@@ -109,7 +146,7 @@ class SPAGHETTI_API Element {
     m_position.x = a_x;
     m_position.y = a_y;
   }
-  void setPosition(vec2d const a_position) { m_position = a_position; }
+  void setPosition(vec2d const &a_position) { m_position = a_position; }
   vec2d const &position() const { return m_position; }
 
   void iconify(bool const a_iconify) { m_isIconified = a_iconify; }
@@ -123,16 +160,17 @@ class SPAGHETTI_API Element {
   IOSockets &outputs() { return m_outputs; }
   IOSockets const &outputs() const { return m_outputs; }
 
-  bool addInput(ValueType const a_type, std::string const a_name, uint8_t const a_flags);
-  void setInputName(uint8_t const a_input, std::string const a_name);
+  bool addInput(ValueType const a_type, std::string const &a_name, uint8_t const a_flags);
+  void setInputName(uint8_t const a_input, std::string const &a_name);
   void removeInput();
   void clearInputs();
 
-  bool addOutput(ValueType const a_type, std::string const a_name, uint8_t const a_flags);
-  void setOutputName(uint8_t const a_output, std::string const a_name);
+  bool addOutput(ValueType const a_type, std::string const &a_name, uint8_t const a_flags);
+  void setOutputName(uint8_t const a_output, std::string const &a_name);
   void removeOutput();
   void clearOutputs();
 
+  void setIOName(bool const a_input, uint8_t const a_id, std::string const &a_name);
   void setIOValueType(bool const a_input, uint8_t const a_id, ValueType const a_type);
 
   bool connect(size_t const a_sourceId, uint8_t const a_outputId, uint8_t const a_inputId);
@@ -148,34 +186,18 @@ class SPAGHETTI_API Element {
 
   void resetIOSocketValue(IOSocket &a_io);
 
- protected:
-  struct NameChanged {
-    std::string from;
-    std::string to;
-  };
-  struct IONameChanged {
-    bool input;
-    uint8_t id;
-    std::string from;
-    std::string to;
-  };
-  struct IOTypeChanged {
-    bool input;
-    uint8_t id;
-    ValueType from;
-    ValueType to;
-  };
-  struct InputAdded {
-  };
-  struct InputRemoved {
-  };
-  struct OutputAdded {
-  };
-  struct OutputRemoved {
-  };
-  using Event =
-      std::variant<NameChanged, IONameChanged, IOTypeChanged, InputAdded, InputRemoved, OutputAdded, OutputRemoved>;
+  void setNode(void *const a_node) { m_node = a_node; }
 
+  template<typename T>
+  T *node()
+  {
+    return static_cast<T *>(m_node);
+  }
+
+  void registerEventHandler(EventCallback const &a_handler) { m_handler = a_handler; }
+
+ protected:
+  void handleEvent(Event const &a_event);
   virtual void onEvent(Event const &a_event) { (void)a_event; }
 
   void setMinInputs(uint8_t const a_min);
@@ -205,6 +227,8 @@ class SPAGHETTI_API Element {
   uint8_t m_maxOutputs{ std::numeric_limits<uint8_t>::max() };
   uint8_t m_defaultNewInputFlags{};
   uint8_t m_defaultNewOutputFlags{};
+  EventCallback m_handler{};
+  void *m_node{};
 };
 
 template<typename T>

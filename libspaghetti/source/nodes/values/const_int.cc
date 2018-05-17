@@ -70,7 +70,7 @@ void ConstInt::showProperties()
   item->setFlags(item->flags() & ~Qt::ItemIsEditable);
   m_properties->setItem(row, 0, item);
 
-  auto const CONST_INT = static_cast<elements::values::ConstInt *const>(m_element);
+  auto const CONST_INT = static_cast<elements::values::ConstInt *>(m_element);
   int const CURRENT = CONST_INT->currentValue();
 
   QSpinBox *const value = new QSpinBox;

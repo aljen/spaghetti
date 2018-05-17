@@ -31,6 +31,7 @@
 #endif
 // clang-format on
 
+#include <algorithm>
 #include <vector>
 
 #include "filesystem.h"
@@ -70,6 +71,7 @@ struct Registry::PIMPL {
   using MetaInfos = std::vector<MetaInfo>;
   MetaInfos metaInfos{};
   Plugins plugins{};
+  Packages packages{};
   fs::path app_path{};
   fs::path system_plugins_path{};
   fs::path user_plugins_path{};
@@ -110,8 +112,9 @@ Registry::Registry()
   fs::path const HOME_PATH{ getenv("HOME") };
 
   fs::path const LIB_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../lib" }) };
+  fs::path const PACKAGES_PATH{ fs::canonical(fs::path{ APP_PATH.string() + "/../packages" }) };
   fs::path const SYSTEM_PLUGINS_PATH{ LIB_PATH / "spaghetti" };
-  fs::path const SYSTEM_PACKAGES_PATH{ "" };
+  fs::path const SYSTEM_PACKAGES_PATH{ PACKAGES_PATH };
 
   fs::path const USER_PLUGINS_PATH{ fs::absolute(HOME_PATH / ".config/spaghetti/plugins") };
   fs::path const USER_PACKAGES_PATH{ fs::absolute(HOME_PATH / ".config/spaghetti/packages") };
@@ -133,7 +136,7 @@ void Registry::registerInternalElements()
 
   using namespace elements;
 
-  registerElement<Package>("Package", ":/logic/package.png");
+  registerElement<Package, nodes::Package>("Package", ":/logic/package.png");
 
   registerElement<gates::And>("AND (Bool)", ":/gates/and.png");
   registerElement<gates::Nand>("NAND (Bool)", ":/gates/nand.png");
@@ -217,9 +220,11 @@ void Registry::registerInternalElements()
   registerElement<values::ConstInt, nodes::values::ConstInt>("Const value (Int)", ":/values/const_int.png");
   registerElement<values::RandomBool>("Random value (Bool)", ":/values/random_value.png");
   registerElement<values::RandomFloat, nodes::values::RandomFloat>("Random value (Float)", ":/values/random_value.png");
-  registerElement<values::RandomFloatIf, nodes::values::RandomFloatIf>("Random value If (Float)", ":/values/random_value.png");
+  registerElement<values::RandomFloatIf, nodes::values::RandomFloatIf>("Random value If (Float)",
+                                                                       ":/values/random_value.png");
   registerElement<values::RandomInt, nodes::values::RandomInt>("Random value (Int)", ":/values/random_value.png");
-  registerElement<values::RandomIntIf, nodes::values::RandomIntIf>("Random value If (Int)", ":/values/random_value.png");
+  registerElement<values::RandomIntIf, nodes::values::RandomIntIf>("Random value If (Int)",
+                                                                   ":/values/random_value.png");
 
   registerElement<values::Degree2Radian>("Convert angle (Deg2Rad)", ":/unknown.png");
   registerElement<values::Radian2Degree>("Convert angle (Rad2Deg)", ":/unknown.png");
@@ -234,13 +239,13 @@ void Registry::registerInternalElements()
   registerElement<values::ClampFloat>("Clamp value (Float)", ":/unknown.png");
   registerElement<values::ClampInt>("Clamp value (Int)", ":/unknown.png");
 
-// clang-format off
+  // clang-format off
   registerElement<values::CharacteristicCurve
 #ifdef SPAGHETTI_USE_CHARTS
                   , nodes::values::CharacteristicCurve
 #endif
                   >("Characteristic Curve", ":/unknown.png");
-// clang-format on
+  // clang-format on
 }
 
 void Registry::loadPlugins()
@@ -267,8 +272,50 @@ void Registry::loadPlugins()
   auto const ADDITIONAL_PLUGINS_PATH = getenv("SPAGHETTI_ADDITIONAL_PLUGINS_PATH");
   if (ADDITIONAL_PLUGINS_PATH) loadFrom(fs::path{ ADDITIONAL_PLUGINS_PATH });
 
-  loadFrom(m_pimpl->user_plugins_path);
   loadFrom(m_pimpl->system_plugins_path);
+  loadFrom(m_pimpl->user_plugins_path);
+}
+
+std::vector<fs::path> scan_for_dirs(fs::path const &a_path)
+{
+  std::vector<fs::path> ret{};
+
+  for (auto const &ENTRY : fs::directory_iterator(a_path)) {
+    if (fs::is_directory(ENTRY)) {
+      auto temp = scan_for_dirs(ENTRY);
+      ret.insert(std::end(ret), std::begin(temp), std::end(temp));
+      ret.push_back(ENTRY);
+    }
+  }
+
+  return ret;
+}
+
+void Registry::loadPackages()
+{
+  Packages packages{};
+
+  auto loadFrom = [&packages](fs::path const &a_path) {
+    auto directories = scan_for_dirs(a_path);
+    directories.push_back(a_path);
+    std::sort(std::begin(directories), std::end(directories));
+    for (auto const &DIRECTORY : directories) {
+      for (auto const &ENTRY : fs::directory_iterator(DIRECTORY)) {
+        if (fs::is_directory(ENTRY)) continue;
+        auto const FILENAME = ENTRY.path().string();
+        log::warn("Loading package '{}'", FILENAME);
+        packages[FILENAME] = Package::getInfoFor(FILENAME);
+      }
+    }
+  };
+
+  loadFrom(m_pimpl->system_packages_path);
+  loadFrom(m_pimpl->user_packages_path);
+
+  log::warn("Loaded {} packages", packages.size());
+  for (auto const &PACKAGE : packages) log::warn("{} as '{}'", PACKAGE.first, PACKAGE.second.path);
+
+  m_pimpl->packages = packages;
 }
 
 Element *Registry::createElement(string::hash_t const a_hash)
@@ -330,6 +377,11 @@ Registry::MetaInfo const &Registry::metaInfoAt(size_t const a_index) const
 {
   auto const &META_INFOS = m_pimpl->metaInfos;
   return META_INFOS[a_index];
+}
+
+Registry::Packages const &Registry::packages() const
+{
+  return m_pimpl->packages;
 }
 
 std::string Registry::appPath() const

@@ -35,9 +35,14 @@ class QSortFilterProxyModel;
 
 namespace spaghetti {
 
+namespace nodes {
+class Package;
+}
+
 class Package;
 class Node;
 class LinkItem;
+class Editor;
 
 class NodesListModel : public QAbstractListModel {
   Q_OBJECT
@@ -64,8 +69,7 @@ class PackageView final : public QGraphicsView {
  public:
   using Nodes = QHash<size_t, Node *>;
 
-  explicit PackageView(QListView *const a_elements, QTableWidget *const a_properties,
-                       Package *const a_package = nullptr);
+  explicit PackageView(Editor *const a_editor, Package *const a_package);
   ~PackageView() override;
 
   void open();
@@ -85,6 +89,8 @@ class PackageView final : public QGraphicsView {
   void acceptDragLink() { m_dragLink = nullptr; }
   void cancelDragLink();
 
+  Editor const *editor() const { return m_editor; }
+  Editor *editor() { return m_editor; }
   Package const *package() const { return m_package; }
   Package *package() { return m_package; }
 
@@ -119,6 +125,7 @@ class PackageView final : public QGraphicsView {
   void updateGrid(qreal const a_scale);
 
  private:
+  Editor *const m_editor{};
   QListView *const m_elements{};
   QTableWidget *const m_properties{};
   NodesListModel *const m_nodesModel{};
@@ -129,7 +136,7 @@ class PackageView final : public QGraphicsView {
   QTimer m_timer{};
   Node *const m_inputs{};
   Node *const m_outputs{};
-  Node *const m_packageNode{};
+  nodes::Package *m_packageNode{};
   Node *m_dragNode{};
   Node *m_selectedNode{};
   LinkItem *m_dragLink{};

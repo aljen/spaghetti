@@ -40,6 +40,16 @@ constexpr int NODE_TYPE{ QGraphicsItem::UserType + 1 };
 
 class PackageView;
 
+inline QString ValueType_to_QString(ValueType const a_type)
+{
+  switch (a_type) {
+    case ValueType::eBool: return "Bool";
+    case ValueType::eInt: return "Int";
+    case ValueType::eFloat: return "Float";
+  }
+  return "Unknown";
+}
+
 class SPAGHETTI_API Node : public QGraphicsItem {
  public:
   using Sockets = QVector<SocketItem *>;
@@ -57,7 +67,6 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   enum class Type { eElement, eInputs, eOutputs };
   enum class IOSocketsType { eInputs, eOutputs };
   using SocketType = SocketItem::Type;
-  using ValueType = Element::ValueType;
 
   void setType(Type const a_type) { m_type = a_type; }
 
@@ -66,13 +75,13 @@ class SPAGHETTI_API Node : public QGraphicsItem {
 
   void setElement(Element *const a_element);
 
-  void setName(QString a_name);
+  void setName(QString const &a_name);
   QString name() const { return m_name; }
 
-  void setPath(QString a_path) { m_path = a_path; }
+  void setPath(QString const &a_path) { m_path = a_path; }
   QString path() const { return m_path; }
 
-  void setIcon(QString a_icon);
+  void setIcon(QString const &a_icon);
   QPixmap icon() const { return m_icon; }
   QString iconPath() const { return m_iconPath; }
 
@@ -95,6 +104,7 @@ class SPAGHETTI_API Node : public QGraphicsItem {
   virtual void showProperties();
   virtual void refreshCentralWidget() {}
   virtual void elementSet() {}
+  virtual void handleEvent(Event const &a_event);
   virtual bool open() { return false; }
 
   void showCommonProperties();
@@ -102,27 +112,26 @@ class SPAGHETTI_API Node : public QGraphicsItem {
 
   void calculateBoundingRect();
 
-  void changeInputName(int const a_id, QString const a_name);
-  void changeOutputName(int const a_id, QString const a_name);
+  void changeInputName(int const a_id, QString const &a_name);
+  void changeOutputName(int const a_id, QString const &a_name);
+  void addSocket(SocketType const a_type, uint8_t const a_id, QString const &a_name, ValueType const a_valueType);
+  void removeSocket(SocketType const a_type);
+  void setSocketType(IOSocketsType const a_socketType, uint8_t const a_socketId, ValueType const a_type);
 
  protected:
   void setCentralWidget(QGraphicsItem *a_centralWidget);
-  void propertiesInsertTitle(QString a_title);
-  void changeIOName(IOSocketsType const a_type, int const a_id, QString const a_name);
+  void propertiesInsertTitle(QString const &a_title);
+  void changeIOName(IOSocketsType const a_type, int const a_id, QString const &a_name);
 
  private:
   void addInput();
   void removeInput();
-  void setInputName(uint8_t const a_socketId, QString const a_name);
+  void setInputName(uint8_t const a_socketId, QString const &a_name);
 
   void addOutput();
   void removeOutput();
-  void setOutputName(uint8_t const a_socketId, QString const a_name);
+  void setOutputName(uint8_t const a_socketId, QString const &a_name);
 
-  void addSocket(SocketType const a_type, uint8_t const a_id, QString const a_name, ValueType const a_valueType,
-                 bool const a_swapped);
-  void removeSocket(SocketType const a_type);
-  void setSocketType(IOSocketsType const a_socketType, uint8_t const a_socketId, ValueType const a_type);
   void updateOutputs();
 
  protected:

@@ -151,7 +151,7 @@ void SocketItem::dragEnterEvent(QGraphicsSceneDragDropEvent *a_event)
     return;
   }
 
-  PackageView *const view{ reinterpret_cast<PackageView *const>(scene()->views()[0]) };
+  auto const view = reinterpret_cast<PackageView *>(scene()->views()[0]);
 
   LinkItem *const linkItem{ view->dragLink() };
   if (!linkItem || m_valueType != linkItem->valueType()) {
@@ -169,9 +169,9 @@ void SocketItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *a_event)
 
   m_isDrop = false;
 
-  PackageView *const view{ reinterpret_cast<PackageView *const>(scene()->views()[0]) };
+  auto const view = reinterpret_cast<PackageView *>(scene()->views()[0]);
 
-  LinkItem *const linkItem{ view->dragLink() };
+  auto const linkItem = view->dragLink();
   if (!linkItem) return;
   linkItem->setTo(nullptr);
 }
@@ -185,9 +185,9 @@ void SocketItem::dropEvent(QGraphicsSceneDragDropEvent *a_event)
 {
   Q_UNUSED(a_event);
 
-  PackageView *const packageView{ reinterpret_cast<PackageView *const>(scene()->views()[0]) };
+  auto const packageView = reinterpret_cast<PackageView *>(scene()->views()[0]);
 
-  LinkItem *const linkItem{ packageView->dragLink() };
+  auto const linkItem = packageView->dragLink();
   if (!linkItem) return;
 
   m_links.push_back(linkItem);
@@ -224,12 +224,11 @@ void SocketItem::mouseMoveEvent(QGraphicsSceneMouseEvent *a_event)
       QApplication::startDragDistance())
     return;
 
-  QDrag *const drag = new QDrag(a_event->widget());
-
-  QMimeData *const mime = new QMimeData;
+  auto const mime = new QMimeData;
+  auto const drag = new QDrag(a_event->widget());
   drag->setMimeData(mime);
 
-  LinkItem *linkItem{ new LinkItem };
+  auto linkItem = new LinkItem;
   linkItem->setColors(m_colorSignalOff, m_colorSignalOn);
   linkItem->setValueType(m_valueType);
   linkItem->setFrom(this);
@@ -238,7 +237,7 @@ void SocketItem::mouseMoveEvent(QGraphicsSceneMouseEvent *a_event)
   scene()->addItem(linkItem);
   m_links.push_back(linkItem);
 
-  PackageView *const view{ reinterpret_cast<PackageView *const>(scene()->views()[0]) };
+  auto const view = reinterpret_cast<PackageView *>(scene()->views()[0]);
   view->setDragLink(linkItem);
 
   Qt::DropAction const action{ drag->exec() };
@@ -269,24 +268,9 @@ QVariant SocketItem::itemChange(QGraphicsItem::GraphicsItemChange a_change, QVar
   return QGraphicsItem::itemChange(a_change, a_value);
 }
 
-void SocketItem::setName(QString a_name, bool const a_swapped)
+void SocketItem::setName(QString const &a_name)
 {
   m_name = a_name;
-
-  auto const element = m_node->element();
-  assert(element);
-
-  if (m_type == Type::eInput) {
-    if (!a_swapped)
-      element->setInputName(m_socketId, a_name.toStdString());
-    else
-      element->setOutputName(m_socketId, a_name.toStdString());
-  } else if (m_type == Type::eOutput) {
-    if (!a_swapped)
-      element->setOutputName(m_socketId, a_name.toStdString());
-    else
-      element->setInputName(m_socketId, a_name.toStdString());
-  }
 }
 
 int SocketItem::nameWidth() const
@@ -301,7 +285,7 @@ void SocketItem::setColors(QColor const a_signalOff, QColor const a_signalOn)
   m_colorSignalOn = a_signalOn;
 }
 
-void SocketItem::setSignal(const bool a_signal)
+void SocketItem::setSignal(bool const a_signal)
 {
   m_isSignalOn = a_signal;
 

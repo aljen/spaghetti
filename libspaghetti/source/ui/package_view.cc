@@ -39,11 +39,13 @@
 #endif
 // clang-format on
 
+#include "spaghetti/editor.h"
 #include "spaghetti/node.h"
 #include "spaghetti/package.h"
 #include "spaghetti/registry.h"
 #include "ui/elements_list.h"
 #include "ui/link_item.h"
+#include "nodes/package.h"
 
 namespace spaghetti {
 
@@ -94,7 +96,7 @@ void NodesListModel::update(Node *const a_node)
   emit dataChanged(index(INDEX), index(INDEX));
 }
 
-Node *NodesListModel::nodeFor(const QModelIndex &a_index)
+Node *NodesListModel::nodeFor(QModelIndex const &a_index)
 {
   if (!a_index.isValid()) return nullptr;
   auto const ROW = a_index.row();
@@ -103,19 +105,25 @@ Node *NodesListModel::nodeFor(const QModelIndex &a_index)
   return m_nodes[ROW];
 }
 
-PackageView::PackageView(QListView *const a_elements, QTableWidget *const a_properties, Package *const a_package)
+PackageView::PackageView(Editor *const a_editor, Package *const a_package)
   : QGraphicsView{ new QGraphicsScene }
-  , m_elements{ a_elements }
-  , m_properties{ a_properties }
+  , m_editor{ a_editor }
+  , m_elements{ a_editor->elementsList() }
+  , m_properties{ a_editor->propertiesTable() }
   , m_nodesModel{ new NodesListModel{ this } }
   , m_nodesProxyModel{ new QSortFilterProxyModel{ this } }
-  , m_package{ (a_package ? a_package : new Package) }
+  , m_package{ a_package }
   , m_scene{ scene() }
   , m_inputs{ new Node }
   , m_outputs{ new Node }
-  , m_packageNode{ Registry::get().createNode("logic/package") }
-  , m_standalone{ !a_package }
+  , m_standalone{ m_package->package() == nullptr }
 {
+  if (m_standalone) {
+    m_packageNode = static_cast<nodes::Package *>(Registry::get().createNode("logic/package"));
+    m_package->setNode(m_packageNode);
+  } else
+    m_packageNode = m_package->node<nodes::Package>();
+  Q_ASSERT(m_package->node<Node*>());
 #ifdef SPAGHETTI_USE_OPENGL
   QGLFormat format{ QGL::DoubleBuffer | QGL::SampleBuffers | QGL::DirectRendering };
   format.setProfile(QGLFormat::CoreProfile);
@@ -146,29 +154,31 @@ PackageView::PackageView(QListView *const a_elements, QTableWidget *const a_prop
   m_outputs->setPropertiesTable(m_properties);
 
   m_packageNode->setPropertiesTable(m_properties);
-  m_packageNode->setElement(m_package);
 
   setAcceptDrops(true);
 
   using NodeType = Node::Type;
-  m_inputs->setPos(-600.0, 0.0);
   m_inputs->setType(NodeType::eInputs);
+  m_inputs->setPos(m_package->inputsPosition().x, m_package->inputsPosition().y);
   m_inputs->setElement(m_package);
   m_inputs->setIcon(":/logic/inputs.png");
   m_inputs->setPackageView(this);
   m_inputs->iconify();
-  m_outputs->setPos(600.0, 0.0);
   m_outputs->setType(NodeType::eOutputs);
+  m_outputs->setPos(m_package->outputsPosition().x, m_package->outputsPosition().y);
   m_outputs->setElement(m_package);
   m_outputs->setIcon(":/logic/outputs.png");
   m_outputs->setPackageView(this);
   m_outputs->iconify();
 
-  Registry &registry{ Registry::get() };
+  m_packageNode->setInputsNode(m_inputs);
+  m_packageNode->setOutputsNode(m_outputs);
+  m_packageNode->setElement(m_package);
 
-  m_package->setInputsPosition(m_inputs->x(), m_inputs->y());
-  m_package->setOutputsPosition(m_outputs->x(), m_outputs->y());
-  m_package->setName(registry.elementName("logic/package"));
+  if (m_package->name().empty()) {
+    auto &registry = Registry::get();
+    m_package->setName(registry.elementName("logic/package"));
+  }
 
   m_scene->addItem(m_inputs);
   m_scene->addItem(m_outputs);
@@ -178,10 +188,7 @@ PackageView::PackageView(QListView *const a_elements, QTableWidget *const a_prop
   connect(&m_timer, &QTimer::timeout, [this]() { m_scene->advance(); });
   m_timer.start();
 
-  m_package->startDispatchThread();
-
-  m_inputs->hide();
-  m_outputs->hide();
+  if (m_standalone) m_package->startDispatchThread();
 }
 
 PackageView::~PackageView()
@@ -195,8 +202,6 @@ PackageView::~PackageView()
 
 void PackageView::open()
 {
-  m_package->open(m_filename.toStdString());
-
   auto const &inputsPosition = m_package->inputsPosition();
   auto const &outputsPosition = m_package->outputsPosition();
   m_inputs->setPos(inputsPosition.x, inputsPosition.y);
@@ -213,6 +218,7 @@ void PackageView::open()
     auto const nodeIcon = QString::fromStdString(registry.elementIcon(element->hash()));
     auto const nodePath = QString::fromLocal8Bit(element->type());
 
+    element->setNode(node);
     m_nodes[element->id()] = node;
 
     element->isIconified() ? node->iconify() : node->expand();
@@ -231,10 +237,15 @@ void PackageView::open()
 
   auto const &connections = m_package->connections();
   for (auto const &connection : connections) {
-    auto const source = getNode(connection.from_id);
-    auto const target = getNode(connection.to_id);
-    auto const sourceSocket = source->outputs()[connection.from_socket];
-    auto const targetSocket = target->inputs()[connection.to_socket];
+    auto const SOURCE_ID = connection.from_id;
+    auto const SOURCE_SOCKET = connection.from_socket;
+    auto const TARGET_ID = connection.to_id;
+    auto const TARGET_SOCKET = connection.to_socket;
+
+    auto const source = SOURCE_ID != 0 ? getNode(SOURCE_ID) : m_packageNode->inputsNode();
+    auto const target = TARGET_ID != 0 ? getNode(TARGET_ID) : m_packageNode->outputsNode();
+    auto const sourceSocket = source->outputs()[SOURCE_SOCKET];
+    auto const targetSocket = target->inputs()[TARGET_SOCKET];
     sourceSocket->connect(targetSocket);
   }
 }
@@ -248,14 +259,21 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
 {
   auto const mimeData = a_event->mimeData();
 
+  //  mimeData->setData("metadata/is_package", IS_PACKAGE);
+  //  mimeData->setData("metadata/name", NAME);
+  //  mimeData->setData("metadata/icon", ICON);
+  //  mimeData->setData("metadata/filename", FILE);
+
   if (mimeData->hasFormat("metadata/name") && mimeData->hasFormat("metadata/icon")) {
-    auto const pathString = mimeData->text();
+    auto const isPackage = mimeData->data("metadata/is_package") == "true";
+    auto const pathString = isPackage ? QString{ "logic/package" } : mimeData->text();
     auto const name = mimeData->data("metadata/name");
     auto const icon = mimeData->data("metadata/icon");
+    auto const file = mimeData->data("metadata/filename");
     auto const stringData = pathString.toLatin1();
     auto const path = stringData.data();
 
-    auto const dropPosition = mapToScene(a_event->pos());
+    auto const DROP_POSITION = mapToScene(a_event->pos());
 
     Registry &registry{ Registry::get() };
 
@@ -264,9 +282,9 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
     m_dragNode->setPackageView(this);
     m_dragNode->setPropertiesTable(m_properties);
     m_dragNode->setName(name);
-    m_dragNode->setPath(pathString);
+    m_dragNode->setPath(isPackage ? name : "");
     m_dragNode->setIcon(icon);
-    m_dragNode->setPos(dropPosition);
+    m_dragNode->setPos(DROP_POSITION);
     m_scene->addItem(m_dragNode);
     m_dragNode->calculateBoundingRect();
     a_event->accept();
@@ -304,12 +322,19 @@ void PackageView::dropEvent(QDropEvent *a_event)
     emit requestOpenFile(STRIPPED);
     a_event->accept();
   } else if (mimeData->hasFormat("metadata/name") && mimeData->hasFormat("metadata/icon")) {
+    auto const isPackage = mimeData->data("metadata/is_package") == "true";
+    auto const file = mimeData->data("metadata/filename");
     auto const pathString = a_event->mimeData()->text();
     auto const stringData = pathString.toLatin1();
-    char const *const path{ stringData.data() };
+    char const *const path{ isPackage ? "logic/package" : stringData.data() };
 
     auto const element = m_package->add(path);
+    element->setNode(m_dragNode);
     if (element->name().empty()) element->setName(m_dragNode->name().toStdString());
+    if (isPackage) {
+      auto const package = static_cast<Package *>(element);
+      package->open(QString{ file }.toStdString());
+    }
     m_dragNode->setElement(element);
     m_dragNode->iconify();
 
@@ -344,7 +369,6 @@ void PackageView::keyReleaseEvent(QKeyEvent *a_event)
   auto const selected = m_scene->selectedItems();
   for (auto &&item : selected) {
     if (item->type() == NODE_TYPE) {
-      //      qDebug() << "Node:" << item;
     }
   }
 }
@@ -373,8 +397,8 @@ void PackageView::wheelEvent(QWheelEvent *a_event)
     else
       m_scheduledScalings++;
     if (sender()) sender()->deleteLater();
-    qreal const realScale = matrix().m11();
-    updateGrid(realScale);
+    auto const REAL_SCALE = matrix().m11();
+    updateGrid(REAL_SCALE);
   });
 
   animation->start();
@@ -450,7 +474,7 @@ void PackageView::deleteElement()
   for (auto &&item : selectedItems) {
     switch (item->type()) {
       case NODE_TYPE: {
-        auto const node = reinterpret_cast<Node *const>(item);
+        auto const node = reinterpret_cast<Node *>(item);
         auto const ID = node->element()->id();
         m_nodes.remove(ID);
         m_nodesModel->remove(node);
@@ -461,7 +485,7 @@ void PackageView::deleteElement()
         break;
       }
       case LINK_TYPE: {
-        auto const link = reinterpret_cast<LinkItem *const>(item);
+        auto const link = reinterpret_cast<LinkItem *>(item);
         auto const from = link->from();
         auto const to = link->to();
 

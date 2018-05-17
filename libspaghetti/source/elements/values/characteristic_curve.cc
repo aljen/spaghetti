@@ -67,8 +67,8 @@ void CharacteristicCurve::calculate()
 
   assert(previousPtr);
   assert(currentPtr);
-  auto const PREVIOUS{ *previousPtr };
-  auto const CURRENT{ *currentPtr };
+  auto const PREVIOUS = *previousPtr;
+  auto const CURRENT = *currentPtr;
 
   float value{};
 

@@ -28,5 +28,6 @@
 #include "nodes/pneumatic/all.h"
 #include "nodes/ui/all.h"
 #include "nodes/values/all.h"
+#include "nodes/package.h"
 
 #endif // NODES_ALL_H

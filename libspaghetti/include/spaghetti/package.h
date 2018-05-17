@@ -37,6 +37,7 @@
 #include <spaghetti/api.h>
 #include <spaghetti/element.h>
 #include <spaghetti/strings.h>
+#include <spaghetti/registry.h>
 
 // clang-format off
 #define PACKAGE_SPP_MAP 1
@@ -71,17 +72,20 @@ class SPAGHETTI_API Package final : public Element {
   char const *type() const noexcept override { return TYPE; }
   string::hash_t hash() const noexcept override { return HASH; }
 
-  std::string_view packageDescription() const { return m_packageDescription; }
-  void setPackageDescription(std::string a_description) { m_packageDescription = a_description; }
-
-  std::string_view packagePath() const { return m_packagePath; }
-  void setPackagePath(std::string a_path) { m_packagePath = a_path; }
-
-  std::string_view packageIcon() const { return m_packageIcon; }
-  void setPackageIcon(std::string a_icon) { m_packageIcon = a_icon; }
-
   void serialize(Json &a_json) override;
   void deserialize(Json const &a_json) override;
+
+  void calculate() override;
+  void update(duration_t const &a_delta) override { m_delta = a_delta; }
+
+  std::string_view packageDescription() const { return m_packageDescription; }
+  void setPackageDescription(std::string const &a_description) { m_packageDescription = a_description; }
+
+  std::string_view packagePath() const { return m_packagePath; }
+  void setPackagePath(std::string const &a_path) { m_packagePath = a_path; }
+
+  std::string_view packageIcon() const { return m_packageIcon; }
+  void setPackageIcon(std::string const &a_icon) { m_packageIcon = a_icon; }
 
   Element *add(char const *const a_name) { return add(string::hash(a_name)); }
   Element *add(string::hash_t const a_hash);
@@ -115,12 +119,15 @@ class SPAGHETTI_API Package final : public Element {
   void open(std::string const &a_filename);
   void save(std::string const &a_filename);
 
+  static Registry::PackageInfo getInfoFor(std::string const &a_filename);
+
  private:
+  duration_t m_delta{};
   std::string m_packageDescription{ "A package" };
-  std::string m_packagePath{ "packages/unknown_package" };
-  std::string m_packageIcon{ "icons/unknown.png" };
-  vec2d m_inputsPosition{};
-  vec2d m_outputsPosition{};
+  std::string m_packagePath{};
+  std::string m_packageIcon{ ":/unknown.png" };
+  vec2d m_inputsPosition{ -400.0, 0.0 };
+  vec2d m_outputsPosition{ 400.0, 0.0 };
   Elements m_elements{};
   Connections m_connections{};
 
@@ -139,6 +146,7 @@ class SPAGHETTI_API Package final : public Element {
   std::atomic_bool m_pause{};
   std::atomic_bool m_paused{};
   std::atomic_uint32_t m_pauseCount{};
+  bool m_isExternal{};
 };
 
 inline void Package::setInputsPosition(double const a_x, double const a_y)
