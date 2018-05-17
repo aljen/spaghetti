@@ -262,7 +262,9 @@ void Editor::addPackage(QString const &a_category, QString const &a_filename, QS
     library->addItem(list, a_category);
   }
 
-  QListWidgetItem *const item{ new QListWidgetItem{ (a_path.isEmpty() ? "Invalid" : a_path) } };
+  const bool INVALID = a_path.isEmpty();
+  auto const NAME = INVALID ? a_filename.right(a_filename.length() - a_filename.lastIndexOf('/') - 1) : a_path;
+  auto const item = new QListWidgetItem{ NAME };
   item->setData(ElementsList::eMetaDataIsPackage, true);
   item->setData(ElementsList::eMetaDataType, a_path);
   item->setData(ElementsList::eMetaDataName, a_path);
