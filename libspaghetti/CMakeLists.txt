@@ -331,6 +331,7 @@ target_include_directories(Spaghetti
   PRIVATE source
   )
 target_include_directories(Spaghetti SYSTEM PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/include
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
   )
