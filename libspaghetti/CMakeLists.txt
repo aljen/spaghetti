@@ -370,6 +370,12 @@ foreach(HEADER ${VENDOR_FREE_STANDING_HEADERS})
     COMPONENT SDK
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
 endforeach ()
+foreach(HEADER ${VENDOR_SPARSEPP_HEADERS})
+  configure_file(${VENDOR_ROOT}/sparsepp/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/sparsepp/${HEADER} COPYONLY)
+endforeach ()
+install(DIRECTORY ${VENDOR_ROOT}/sparsepp
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
 foreach(HEADER ${VENDOR_SPDLOG_HEADERS})
   configure_file(${VENDOR_ROOT}/spdlog/include/spdlog/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/spdlog/${HEADER} COPYONLY)
 endforeach ()
