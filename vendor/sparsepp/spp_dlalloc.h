@@ -6,8 +6,8 @@
    see: http://g.oswego.edu/dl/html/malloc.html
 */
 
-#include <sparsepp/spp_utils.h>
-#include <sparsepp/spp_smartptr.h>
+#include <spaghetti/vendor/sparsepp/spp_utils.h>
+#include <spaghetti/vendor/sparsepp/spp_smartptr.h>
 
 
 #ifndef SPP_FORCEINLINE
