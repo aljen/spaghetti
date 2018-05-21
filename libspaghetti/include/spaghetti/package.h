@@ -30,7 +30,7 @@
 #ifdef _MSC_VER
 # include <unordered_map>
 #else
-# include <sparsepp/spp.h>
+# include <spaghetti/vendor/sparsepp/spp.h>
 #endif
 // clang-format on
 

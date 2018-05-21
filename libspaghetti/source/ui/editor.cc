@@ -53,13 +53,14 @@
 #include <typeinfo>
 #include <vector>
 
-#include "elements/logic/all.h"
+#include <spaghetti/elements/logic/all.h>
 #include "spaghetti/node.h"
 #include "spaghetti/package.h"
 #include "spaghetti/registry.h"
 #include "spaghetti/version.h"
 #include "ui/expander_widget.h"
 #include "ui/package_view.h"
+#include "filesystem.h"
 
 QString const PACKAGES_DIR{ "../packages" };
 
@@ -503,10 +504,13 @@ void Editor::about()
               "Used libraries:<br>"
               "<a href='https://github.com/nlohmann/json'>JSON for Modern C++</a> by <b>Niels Lohmann</b><br>"
               "<a href='https://github.com/cameron314/concurrentqueue'>An industrial-strength lock-free queue for "
-              "C++</a> by <b>cameron314</b><br>"
+              "C++</a> by <b>Cameron Desrochers</b><br>"
               "<a href='https://github.com/greg7mdp/sparsepp'>A fast, memory efficient hash map for C++</a> by "
               "<b>Gregory Popovitch</b><br>"
-              "<a href='http://www.boost.org/'>Boost libraries</a><br>")
+#if SPAGHETTI_FS_IMPLEMENTATION == SPAGHETTI_FS_BOOST_FILESYSTEM
+              "<a href='http://www.boost.org/'>Boost libraries</a><br>"
+#endif
+              )
           .arg(version::STRING)
           .arg(__DATE__)
           .arg(__TIME__)

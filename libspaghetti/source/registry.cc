@@ -37,10 +37,10 @@
 #include "filesystem.h"
 #include "shared_library.h"
 
-#include "elements/all.h"
+#include <spaghetti/elements/all.h>
 #include "nodes/all.h"
-#include "spaghetti/logger.h"
-#include "spaghetti/version.h"
+#include <spaghetti/logger.h>
+#include <spaghetti/version.h>
 
 inline void init_resources()
 {

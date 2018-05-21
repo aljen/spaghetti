@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/logic/trigger_falling.h"
+#include <spaghetti/elements/logic/trigger_falling.h>
 
 namespace spaghetti::elements::logic {
 

@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/values/random_float.h"
-#include "elements/values/random_float.h"
+#include <spaghetti/elements/values/random_float.h>
 
 #include <QDoubleSpinBox>
 #include <QTableWidget>

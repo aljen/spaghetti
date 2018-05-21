@@ -1,6 +1,17 @@
 set(VENDOR_FREE_STANDING_HEADERS
   json.hpp
   )
+set(VENDOR_SPARSEPP_HEADERS
+  spp_stdint.h
+  spp_timer.h
+  spp.h
+  spp_memory.h
+  spp_smartptr.h
+  spp_config.h
+  spp_utils.h
+  spp_dlalloc.h
+  spp_traits.h
+  )
 set(VENDOR_SPDLOG_HEADERS
   details/async_logger_impl.h
   details/async_log_helper.h

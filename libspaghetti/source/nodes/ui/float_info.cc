@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/ui/float_info.h"
-#include "elements/ui/float_info.h"
+#include <spaghetti/elements/ui/float_info.h>
 
 #include <QGraphicsSimpleTextItem>
 #include <QTableWidget>

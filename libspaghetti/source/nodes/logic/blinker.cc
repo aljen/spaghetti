@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/logic/blinker.h"
-#include "elements/logic/blinker.h"
+#include <spaghetti/elements/logic/blinker.h>
 
 #include <QTableWidget>
 

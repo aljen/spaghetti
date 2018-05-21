@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/logic/pid.h"
+#include <spaghetti/elements/logic/pid.h>
 
 namespace spaghetti::elements::logic {
 

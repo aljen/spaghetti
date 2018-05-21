@@ -22,7 +22,7 @@
 
 #include <algorithm>
 
-#include "elements/values/clamp_float.h"
+#include <spaghetti/elements/values/clamp_float.h>
 
 namespace spaghetti::elements::values {
 

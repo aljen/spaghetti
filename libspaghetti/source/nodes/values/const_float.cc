@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/values/const_float.h"
-#include "elements/values/const_float.h"
+#include <spaghetti/elements/values/const_float.h>
 
 #include <QDebug>
 #include <QDoubleSpinBox>

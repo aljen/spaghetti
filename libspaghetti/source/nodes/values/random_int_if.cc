@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/values/random_int_if.h"
-#include "elements/values/random_int_if.h"
+#include <spaghetti/elements/values/random_int_if.h>
 
 #include <QSpinBox>
 #include <QTableWidget>

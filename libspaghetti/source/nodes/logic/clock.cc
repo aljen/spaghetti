@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/logic/clock.h"
-#include "elements/timers/clock.h"
+#include <spaghetti/elements/timers/clock.h>
 
 #include <QSpinBox>
 #include <QTableWidget>

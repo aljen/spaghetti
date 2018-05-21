@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/pneumatic/tank.h"
-#include "elements/pneumatic/tank.h"
+#include <spaghetti/elements/pneumatic/tank.h>
 
 #include <QDoubleSpinBox>
 #include <QTableWidget>

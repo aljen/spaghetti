@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/ui/seven_segment_display.h"
-#include "elements/ui/seven_segment_display.h"
+#include <spaghetti/elements/ui/seven_segment_display.h>
 
 #include <QTableWidget>
 

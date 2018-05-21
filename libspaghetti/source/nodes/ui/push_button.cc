@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/ui/push_button.h"
-#include "elements/ui/push_button.h"
+#include <spaghetti/elements/ui/push_button.h>
 
 #include <QCheckBox>
 #include <QTableWidget>

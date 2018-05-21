@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #include "nodes/ui/toggle_button.h"
-#include "elements/ui/toggle_button.h"
 #include "ui/colors.h"
+#include <spaghetti/elements/ui/toggle_button.h>
 
 #include <QCheckBox>
 #include <QTableWidget>

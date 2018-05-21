@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/values/radian_to_degree.h"
-#include "spaghetti/utils.h"
+#include <spaghetti/elements/values/radian_to_degree.h>
+#include <spaghetti/utils.h>
 
 namespace spaghetti::elements::values {
 
