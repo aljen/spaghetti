@@ -353,7 +353,6 @@ target_include_directories(Spaghetti
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-  PUBLIC $<INSTALL_INTERFACE:include>
   PRIVATE source
   )
 target_include_directories(Spaghetti SYSTEM PUBLIC
