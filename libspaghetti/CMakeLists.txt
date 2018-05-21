@@ -22,7 +22,106 @@ endif ()
 configure_file(source/filesystem.h.in include/filesystem.h)
 configure_file(include/spaghetti/version.h.in include/spaghetti/version.h)
 
-set(LIBSPAGHETTI_PUBLIC_HEADERS
+set(LIBSPAGHETTI_PUBLIC_GATES_HEADERS
+  include/spaghetti/elements/gates/all.h
+  include/spaghetti/elements/gates/and.h
+  include/spaghetti/elements/gates/nand.h
+  include/spaghetti/elements/gates/nor.h
+  include/spaghetti/elements/gates/not.h
+  include/spaghetti/elements/gates/or.h
+  )
+set(LIBSPAGHETTI_PUBLIC_LOGIC_HEADERS
+  include/spaghetti/elements/logic/all.h
+  include/spaghetti/elements/logic/assign_float.h
+  include/spaghetti/elements/logic/assign_int.h
+  include/spaghetti/elements/logic/blinker.h
+  include/spaghetti/elements/logic/counter_down.h
+  include/spaghetti/elements/logic/counter_up.h
+  include/spaghetti/elements/logic/counter_up_down.h
+  include/spaghetti/elements/logic/demultiplexer_int.h
+  include/spaghetti/elements/logic/if_equal.h
+  include/spaghetti/elements/logic/if_greater.h
+  include/spaghetti/elements/logic/if_greater_equal.h
+  include/spaghetti/elements/logic/if_lower.h
+  include/spaghetti/elements/logic/if_lower_equal.h
+  include/spaghetti/elements/logic/latch.h
+  include/spaghetti/elements/logic/memory_difference.h
+  include/spaghetti/elements/logic/memory_reset_set.h
+  include/spaghetti/elements/logic/memory_set_reset.h
+  include/spaghetti/elements/logic/multiplexer_int.h
+  include/spaghetti/elements/logic/pid.h
+  include/spaghetti/elements/logic/snapshot_float.h
+  include/spaghetti/elements/logic/snapshot_int.h
+  include/spaghetti/elements/logic/switch.h
+  include/spaghetti/elements/logic/trigger_falling.h
+  include/spaghetti/elements/logic/trigger_rising.h
+  )
+set(LIBSPAGHETTI_PUBLIC_MATH_HEADERS
+  include/spaghetti/elements/math/abs.h
+  include/spaghetti/elements/math/add.h
+  include/spaghetti/elements/math/add_if.h
+  include/spaghetti/elements/math/all.h
+  include/spaghetti/elements/math/bcd.h
+  include/spaghetti/elements/math/cos.h
+  include/spaghetti/elements/math/divide.h
+  include/spaghetti/elements/math/divide_if.h
+  include/spaghetti/elements/math/lerp.h
+  include/spaghetti/elements/math/multiply.h
+  include/spaghetti/elements/math/multiply_if.h
+  include/spaghetti/elements/math/sign.h
+  include/spaghetti/elements/math/sin.h
+  include/spaghetti/elements/math/square_root.h
+  include/spaghetti/elements/math/subtract.h
+  include/spaghetti/elements/math/subtract_if.h
+  )
+set(LIBSPAGHETTI_PUBLIC_PNEUMATIC_HEADERS
+  include/spaghetti/elements/pneumatic/all.h
+  include/spaghetti/elements/pneumatic/tank.h
+  include/spaghetti/elements/pneumatic/valve.h
+  )
+set(LIBSPAGHETTI_PUBLIC_TIMERS_HEADERS
+  include/spaghetti/elements/timers/all.h
+  include/spaghetti/elements/timers/clock.h
+  include/spaghetti/elements/timers/delta_time.h
+  include/spaghetti/elements/timers/t_off.h
+  include/spaghetti/elements/timers/t_on.h
+  include/spaghetti/elements/timers/t_pulse.h
+  )
+set(LIBSPAGHETTI_PUBLIC_UI_HEADERS
+  include/spaghetti/elements/ui/all.h
+  include/spaghetti/elements/ui/bcd_to_seven_segment_display.h
+  include/spaghetti/elements/ui/float_info.h
+  include/spaghetti/elements/ui/int_info.h
+  include/spaghetti/elements/ui/push_button.h
+  include/spaghetti/elements/ui/toggle_button.h
+  include/spaghetti/elements/ui/seven_segment_display.h
+  )
+set(LIBSPAGHETTI_PUBLIC_VALUES_HEADERS
+  include/spaghetti/elements/values/all.h
+  include/spaghetti/elements/values/characteristic_curve.h
+  include/spaghetti/elements/values/clamp_float.h
+  include/spaghetti/elements/values/clamp_int.h
+  include/spaghetti/elements/values/const_bool.h
+  include/spaghetti/elements/values/const_float.h
+  include/spaghetti/elements/values/const_int.h
+  include/spaghetti/elements/values/degree_to_radian.h
+  include/spaghetti/elements/values/float_to_int.h
+  include/spaghetti/elements/values/int_to_float.h
+  include/spaghetti/elements/values/max_float.h
+  include/spaghetti/elements/values/max_int.h
+  include/spaghetti/elements/values/min_float.h
+  include/spaghetti/elements/values/min_int.h
+  include/spaghetti/elements/values/radian_to_degree.h
+  include/spaghetti/elements/values/random_bool.h
+  include/spaghetti/elements/values/random_float.h
+  include/spaghetti/elements/values/random_float_if.h
+  include/spaghetti/elements/values/random_int.h
+  include/spaghetti/elements/values/random_int_if.h
+  )
+set(LIBSPAGHETTI_PUBLIC_ELEMENTS_ALL_HEADERS
+  include/spaghetti/elements/all.h
+  )
+set(LIBSPAGHETTI_PUBLIC_COMMON_HEADERS
   include/spaghetti/api.h
   include/spaghetti/editor.h
   include/spaghetti/element.h
@@ -34,6 +133,17 @@ set(LIBSPAGHETTI_PUBLIC_HEADERS
   include/spaghetti/strings.h
   include/spaghetti/utils.h
   )
+set(LIBSPAGHETTI_PUBLIC_HEADERS
+  ${LIBSPAGHETTI_PUBLIC_GATES_HEADERS}
+  ${LIBSPAGHETTI_PUBLIC_LOGIC_HEADERS}
+  ${LIBSPAGHETTI_PUBLIC_MATH_HEADERS}
+  ${LIBSPAGHETTI_PUBLIC_PNEUMATIC_HEADERS}
+  ${LIBSPAGHETTI_PUBLIC_TIMERS_HEADERS}
+  ${LIBSPAGHETTI_PUBLIC_UI_HEADERS}
+  ${LIBSPAGHETTI_PUBLIC_VALUES_HEADERS}
+  ${LIBSPAGHETTI_PUBLIC_ELEMENTS_ALL_HEADERS}
+  ${LIBSPAGHETTI_PUBLIC_COMMON_HEADERS}
+  )
 
 set(LIBSPAGHETTI_GENERATED_SOURCES
   ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
@@ -44,171 +154,87 @@ set(LIBSPAGHETTI_SOURCES
   ${LIBSPAGHETTI_PUBLIC_HEADERS}
   include/spaghetti/version.h.in
 
-  source/elements/gates/all.h
   source/elements/gates/and.cc
-  source/elements/gates/and.h
   source/elements/gates/nand.cc
-  source/elements/gates/nand.h
   source/elements/gates/nor.cc
-  source/elements/gates/nor.h
   source/elements/gates/not.cc
-  source/elements/gates/not.h
   source/elements/gates/or.cc
-  source/elements/gates/or.h
 
-  source/elements/logic/all.h
   source/elements/logic/assign_float.cc
-  source/elements/logic/assign_float.h
   source/elements/logic/assign_int.cc
-  source/elements/logic/assign_int.h
   source/elements/logic/blinker.cc
-  source/elements/logic/blinker.h
   source/elements/logic/counter_down.cc
-  source/elements/logic/counter_down.h
   source/elements/logic/counter_up.cc
-  source/elements/logic/counter_up.h
   source/elements/logic/counter_up_down.cc
-  source/elements/logic/counter_up_down.h
   source/elements/logic/demultiplexer_int.cc
-  source/elements/logic/demultiplexer_int.h
   source/elements/logic/if_equal.cc
-  source/elements/logic/if_equal.h
   source/elements/logic/if_greater.cc
-  source/elements/logic/if_greater.h
   source/elements/logic/if_greater_equal.cc
-  source/elements/logic/if_greater_equal.h
   source/elements/logic/if_lower.cc
-  source/elements/logic/if_lower.h
   source/elements/logic/if_lower_equal.cc
-  source/elements/logic/if_lower_equal.h
   source/elements/logic/latch.cc
-  source/elements/logic/latch.h
   source/elements/logic/memory_difference.cc
-  source/elements/logic/memory_difference.h
   source/elements/logic/memory_reset_set.cc
-  source/elements/logic/memory_reset_set.h
   source/elements/logic/memory_set_reset.cc
-  source/elements/logic/memory_set_reset.h
   source/elements/logic/multiplexer_int.cc
-  source/elements/logic/multiplexer_int.h
   source/elements/logic/pid.cc
-  source/elements/logic/pid.h
   source/elements/logic/snapshot_float.cc
-  source/elements/logic/snapshot_float.h
   source/elements/logic/snapshot_int.cc
-  source/elements/logic/snapshot_int.h
   source/elements/logic/switch.cc
-  source/elements/logic/switch.h
   source/elements/logic/trigger_falling.cc
-  source/elements/logic/trigger_falling.h
   source/elements/logic/trigger_rising.cc
-  source/elements/logic/trigger_rising.h
 
   source/elements/math/abs.cc
-  source/elements/math/abs.h
   source/elements/math/add.cc
-  source/elements/math/add.h
   source/elements/math/add_if.cc
-  source/elements/math/add_if.h
-  source/elements/math/all.h
   source/elements/math/bcd.cc
-  source/elements/math/bcd.h
   source/elements/math/cos.cc
-  source/elements/math/cos.h
   source/elements/math/divide.cc
-  source/elements/math/divide.h
   source/elements/math/divide_if.cc
-  source/elements/math/divide_if.h
   source/elements/math/lerp.cc
-  source/elements/math/lerp.h
   source/elements/math/multiply.cc
-  source/elements/math/multiply.h
   source/elements/math/multiply_if.cc
-  source/elements/math/multiply_if.h
   source/elements/math/sign.cc
-  source/elements/math/sign.h
   source/elements/math/sin.cc
-  source/elements/math/sin.h
   source/elements/math/square_root.cc
-  source/elements/math/square_root.h
   source/elements/math/subtract.cc
-  source/elements/math/subtract.h
   source/elements/math/subtract_if.cc
-  source/elements/math/subtract_if.h
 
-  source/elements/pneumatic/all.h
   source/elements/pneumatic/tank.cc
-  source/elements/pneumatic/tank.h
   source/elements/pneumatic/valve.cc
-  source/elements/pneumatic/valve.h
 
-  source/elements/timers/all.h
   source/elements/timers/clock.cc
-  source/elements/timers/clock.h
   source/elements/timers/delta_time.cc
-  source/elements/timers/delta_time.h
   source/elements/timers/t_off.cc
-  source/elements/timers/t_off.h
   source/elements/timers/t_on.cc
-  source/elements/timers/t_on.h
   source/elements/timers/t_pulse.cc
-  source/elements/timers/t_pulse.h
 
-  source/elements/ui/all.h
   source/elements/ui/bcd_to_seven_segment_display.cc
-  source/elements/ui/bcd_to_seven_segment_display.h
   source/elements/ui/float_info.cc
-  source/elements/ui/float_info.h
   source/elements/ui/int_info.cc
-  source/elements/ui/int_info.h
   source/elements/ui/push_button.cc
-  source/elements/ui/push_button.h
   source/elements/ui/toggle_button.cc
-  source/elements/ui/toggle_button.h
   source/elements/ui/seven_segment_display.cc
-  source/elements/ui/seven_segment_display.h
 
-  source/elements/values/all.h
   source/elements/values/characteristic_curve.cc
-  source/elements/values/characteristic_curve.h
   source/elements/values/clamp_float.cc
-  source/elements/values/clamp_float.h
   source/elements/values/clamp_int.cc
-  source/elements/values/clamp_int.h
   source/elements/values/const_bool.cc
-  source/elements/values/const_bool.h
   source/elements/values/const_float.cc
-  source/elements/values/const_float.h
   source/elements/values/const_int.cc
-  source/elements/values/const_int.h
   source/elements/values/degree_to_radian.cc
-  source/elements/values/degree_to_radian.h
   source/elements/values/float_to_int.cc
-  source/elements/values/float_to_int.h
   source/elements/values/int_to_float.cc
-  source/elements/values/int_to_float.h
   source/elements/values/max_float.cc
-  source/elements/values/max_float.h
   source/elements/values/max_int.cc
-  source/elements/values/max_int.h
   source/elements/values/min_float.cc
-  source/elements/values/min_float.h
   source/elements/values/min_int.cc
-  source/elements/values/min_int.h
   source/elements/values/radian_to_degree.cc
-  source/elements/values/radian_to_degree.h
   source/elements/values/random_bool.cc
-  source/elements/values/random_bool.h
   source/elements/values/random_float.cc
-  source/elements/values/random_float.h
   source/elements/values/random_float_if.cc
-  source/elements/values/random_float_if.h
   source/elements/values/random_int.cc
-  source/elements/values/random_int.h
   source/elements/values/random_int_if.cc
-  source/elements/values/random_int_if.h
-
-  source/elements/all.h
 
   source/icons/icons.qrc
 
@@ -352,9 +378,34 @@ install(TARGETS Spaghetti
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   )
-install(FILES ${LIBSPAGHETTI_PUBLIC_HEADERS}
+install(FILES ${LIBSPAGHETTI_PUBLIC_GATES_HEADERS}
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/elements/gates)
+install(FILES ${LIBSPAGHETTI_PUBLIC_LOGIC_HEADERS}
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/elements/logic)
+install(FILES ${LIBSPAGHETTI_PUBLIC_MATH_HEADERS}
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/elements/math)
+install(FILES ${LIBSPAGHETTI_PUBLIC_PNEUMATIC_HEADERS}
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/elements/pneumatic)
+install(FILES ${LIBSPAGHETTI_PUBLIC_TIMERS_HEADERS}
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/elements/timers)
+install(FILES ${LIBSPAGHETTI_PUBLIC_UI_HEADERS}
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/elements/ui)
+install(FILES ${LIBSPAGHETTI_PUBLIC_VALUES_HEADERS}
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/elements/values)
+install(FILES ${LIBSPAGHETTI_PUBLIC_ELEMENTS_ALL_HEADERS}
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/elements)
+install(FILES ${LIBSPAGHETTI_PUBLIC_COMMON_HEADERS}
   COMPONENT SDK
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
+
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
   COMPONENT SDK
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
