@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/values/float_to_int.h"
+#include <spaghetti/elements/values/float_to_int.h>
 
 namespace spaghetti::elements::values {
 

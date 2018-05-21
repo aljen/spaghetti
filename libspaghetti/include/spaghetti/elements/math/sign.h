@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_MATH_SIGN_H
-#define ELEMENTS_MATH_SIGN_H
+#ifndef SPAGHETTI_ELEMENTS_MATH_SIGN_H
+#define SPAGHETTI_ELEMENTS_MATH_SIGN_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::math {
 
@@ -43,4 +43,4 @@ class Sign final : public Element {
 
 } // namespace spaghetti::elements::math
 
-#endif // ELEMENTS_MATH_SIGN_H
+#endif // SPAGHETTI_ELEMENTS_MATH_SIGN_H

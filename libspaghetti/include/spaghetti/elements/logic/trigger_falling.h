@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_TRIGGER_FALLING_H
-#define ELEMENTS_LOGIC_TRIGGER_FALLING_H
+#ifndef SPAGHETTI_ELEMENTS_LOGIC_TRIGGER_FALLING_H
+#define SPAGHETTI_ELEMENTS_LOGIC_TRIGGER_FALLING_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::logic {
 
@@ -48,4 +48,4 @@ class TriggerFalling final : public Element {
 
 } // namespace spaghetti::elements::logic
 
-#endif // ELEMENTS_LOGIC_TRIGGER_FALLING_H
+#endif // SPAGHETTI_ELEMENTS_LOGIC_TRIGGER_FALLING_H

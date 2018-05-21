@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/math/add_if.h"
+#include <spaghetti/elements/math/add_if.h>
 
 namespace spaghetti::elements::math {
 

@@ -21,12 +21,12 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_TIMERS_DELTA_TIME_H
-#define ELEMENTS_TIMERS_DELTA_TIME_H
+#ifndef SPAGHETTI_ELEMENTS_TIMERS_DELTA_TIME_H
+#define SPAGHETTI_ELEMENTS_TIMERS_DELTA_TIME_H
 
 #include <chrono>
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::timers {
 
@@ -48,4 +48,4 @@ class DeltaTime final : public Element {
 
 } // namespace spaghetti::elements::timers
 
-#endif // ELEMENTS_TIMERS_DELTA_TIME_H
+#endif // SPAGHETTI_ELEMENTS_TIMERS_DELTA_TIME_H

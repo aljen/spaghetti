@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_PNEUMATIC_TANK_H
-#define ELEMENTS_PNEUMATIC_TANK_H
+#ifndef SPAGHETTI_ELEMENTS_PNEUMATIC_TANK_H
+#define SPAGHETTI_ELEMENTS_PNEUMATIC_TANK_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::pneumatic {
 
@@ -57,4 +57,4 @@ class Tank final : public Element {
 
 } // namespace spaghetti::elements::pneumatic
 
-#endif // ELEMENTS_PNEUMATIC_TANK_H
+#endif // SPAGHETTI_ELEMENTS_PNEUMATIC_TANK_H

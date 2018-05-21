@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_COUNTER_DOWN_H
-#define ELEMENTS_LOGIC_COUNTER_DOWN_H
+#ifndef SPAGHETTI_ELEMENTS_LOGIC_COUNTER_DOWN_H
+#define SPAGHETTI_ELEMENTS_LOGIC_COUNTER_DOWN_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::logic {
 
@@ -50,4 +50,4 @@ class CounterDown final : public Element {
 
 } // namespace spaghetti::elements::logic
 
-#endif // ELEMENTS_LOGIC_COUNTER_DOWN_H
+#endif // SPAGHETTI_ELEMENTS_LOGIC_COUNTER_DOWN_H

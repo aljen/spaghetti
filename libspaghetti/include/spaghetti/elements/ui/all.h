@@ -21,14 +21,14 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_UI_ALL_H
-#define ELEMENTS_UI_ALL_H
+#ifndef SPAGHETTI_ELEMENTS_UI_ALL_H
+#define SPAGHETTI_ELEMENTS_UI_ALL_H
 
-#include "elements/ui/bcd_to_seven_segment_display.h"
-#include "elements/ui/float_info.h"
-#include "elements/ui/int_info.h"
-#include "elements/ui/push_button.h"
-#include "elements/ui/seven_segment_display.h"
-#include "elements/ui/toggle_button.h"
+#include <spaghetti/elements/ui/bcd_to_seven_segment_display.h>
+#include <spaghetti/elements/ui/float_info.h>
+#include <spaghetti/elements/ui/int_info.h>
+#include <spaghetti/elements/ui/push_button.h>
+#include <spaghetti/elements/ui/seven_segment_display.h>
+#include <spaghetti/elements/ui/toggle_button.h>
 
-#endif // ELEMENTS_UI_ALL_H
+#endif // SPAGHETTI_ELEMENTS_UI_ALL_H

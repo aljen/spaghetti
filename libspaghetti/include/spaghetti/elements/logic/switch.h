@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_SWITCH_H
-#define ELEMENTS_LOGIC_SWITCH_H
+#ifndef SPAGHETTI_ELEMENTS_LOGIC_SWITCH_H
+#define SPAGHETTI_ELEMENTS_LOGIC_SWITCH_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::logic {
 
@@ -44,4 +44,4 @@ class Switch final : public Element {
 
 } // namespace spaghetti::elements::logic
 
-#endif // ELEMENTS_LOGIC_SWITCH_H
+#endif // SPAGHETTI_ELEMENTS_LOGIC_SWITCH_H

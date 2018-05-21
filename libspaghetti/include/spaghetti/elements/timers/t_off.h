@@ -21,12 +21,12 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_TIMERS_T_OFF_H
-#define ELEMENTS_TIMERS_T_OFF_H
+#ifndef SPAGHETTI_ELEMENTS_TIMERS_T_OFF_H
+#define SPAGHETTI_ELEMENTS_TIMERS_T_OFF_H
 
 #include <chrono>
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::timers {
 
@@ -54,4 +54,4 @@ class TimerOff final : public Element {
 
 } // namespace spaghetti::elements::timers
 
-#endif // ELEMENTS_TIMERS_T_OFF_H
+#endif // SPAGHETTI_ELEMENTS_TIMERS_T_OFF_H

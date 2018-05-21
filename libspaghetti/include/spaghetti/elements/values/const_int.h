@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_VALUES_CONST_INT_H
-#define ELEMENTS_VALUES_CONST_INT_H
+#ifndef SPAGHETTI_ELEMENTS_VALUES_CONST_INT_H
+#define SPAGHETTI_ELEMENTS_VALUES_CONST_INT_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::values {
 
@@ -51,4 +51,4 @@ class ConstInt final : public Element {
 
 } // namespace spaghetti::elements::values
 
-#endif // ELEMENTS_VALUES_CONST_INT_H
+#endif // SPAGHETTI_ELEMENTS_VALUES_CONST_INT_H

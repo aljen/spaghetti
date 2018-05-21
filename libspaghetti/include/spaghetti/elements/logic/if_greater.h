@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_IF_GREATER_H
-#define ELEMENTS_LOGIC_IF_GREATER_H
+#ifndef SPAGHETTI_ELEMENTS_LOGIC_IF_GREATER_H
+#define SPAGHETTI_ELEMENTS_LOGIC_IF_GREATER_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::logic {
 
@@ -43,4 +43,4 @@ class IfGreater final : public Element {
 
 } // namespace spaghetti::elements::logic
 
-#endif // ELEMENTS_LOGIC_IF_GREATER_H
+#endif // SPAGHETTI_ELEMENTS_LOGIC_IF_GREATER_H

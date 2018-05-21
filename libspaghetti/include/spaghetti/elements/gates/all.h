@@ -21,13 +21,13 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_GATES_ALL_H
-#define ELEMENTS_GATES_ALL_H
+#ifndef SPAGHETTI_ELEMENTS_GATES_ALL_H
+#define SPAGHETTI_ELEMENTS_GATES_ALL_H
 
-#include "elements/gates/and.h"
-#include "elements/gates/nand.h"
-#include "elements/gates/nor.h"
-#include "elements/gates/not.h"
-#include "elements/gates/or.h"
+#include <spaghetti/elements/gates/and.h>
+#include <spaghetti/elements/gates/nand.h>
+#include <spaghetti/elements/gates/nor.h>
+#include <spaghetti/elements/gates/not.h>
+#include <spaghetti/elements/gates/or.h>
 
-#endif // ELEMENTS_GATES_ALL_H
+#endif // SPAGHETTI_ELEMENTS_GATES_ALL_H

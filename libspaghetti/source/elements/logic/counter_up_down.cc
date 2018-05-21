@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/logic/counter_up_down.h"
+#include <spaghetti/elements/logic/counter_up_down.h>
 
 namespace spaghetti::elements::logic {
 

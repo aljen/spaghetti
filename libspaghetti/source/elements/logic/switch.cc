@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/logic/switch.h"
+#include <spaghetti/elements/logic/switch.h>
 
 namespace spaghetti::elements::logic {
 

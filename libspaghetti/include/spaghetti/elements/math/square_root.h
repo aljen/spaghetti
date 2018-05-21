@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_MATH_SQUARE_ROOT_H
-#define ELEMENTS_MATH_SQUARE_ROOT_H
+#ifndef SPAGHETTI_ELEMENTS_MATH_SQUARE_ROOT_H
+#define SPAGHETTI_ELEMENTS_MATH_SQUARE_ROOT_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::math {
 
@@ -43,4 +43,4 @@ class SQRT final : public Element {
 
 } // namespace spaghetti::elements::math
 
-#endif // ELEMENTS_MATH_SQUARE_ROOT_H
+#endif // SPAGHETTI_ELEMENTS_MATH_SQUARE_ROOT_H

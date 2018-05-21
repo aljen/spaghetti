@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_VALUES_RADIAN_TO_DEGREE_H
-#define ELEMENTS_VALUES_RADIAN_TO_DEGREE_H
+#ifndef SPAGHETTI_ELEMENTS_VALUES_RADIAN_TO_DEGREE_H
+#define SPAGHETTI_ELEMENTS_VALUES_RADIAN_TO_DEGREE_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::values {
 
@@ -43,4 +43,4 @@ class Radian2Degree final : public Element {
 
 } // namespace spaghetti::elements::values
 
-#endif // ELEMENTS_VALUES_RADIAN_TO_DEGREE_H
+#endif // SPAGHETTI_ELEMENTS_VALUES_RADIAN_TO_DEGREE_H

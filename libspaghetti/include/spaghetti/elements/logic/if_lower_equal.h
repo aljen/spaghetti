@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_IF_LOWER_EQUAL_H
-#define ELEMENTS_LOGIC_IF_LOWER_EQUAL_H
+#ifndef SPAGHETTI_ELEMENTS_LOGIC_IF_LOWER_EQUAL_H
+#define SPAGHETTI_ELEMENTS_LOGIC_IF_LOWER_EQUAL_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::logic {
 
@@ -43,4 +43,4 @@ class IfLowerEqual final : public Element {
 
 } // namespace spaghetti::elements::logic
 
-#endif // ELEMENTS_LOGIC_IF_LOWER_EQUAL_H
+#endif // SPAGHETTI_ELEMENTS_LOGIC_IF_LOWER_EQUAL_H

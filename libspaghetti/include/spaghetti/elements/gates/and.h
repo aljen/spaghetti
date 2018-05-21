@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_GATES_AND_H
-#define ELEMENTS_GATES_AND_H
+#ifndef SPAGHETTI_ELEMENTS_GATES_AND_H
+#define SPAGHETTI_ELEMENTS_GATES_AND_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::gates {
 
@@ -43,4 +43,4 @@ class And final : public Element {
 
 } // namespace spaghetti::elements::gates
 
-#endif // ELEMENTS_GATES_AND_H
+#endif // SPAGHETTI_ELEMENTS_GATES_AND_H

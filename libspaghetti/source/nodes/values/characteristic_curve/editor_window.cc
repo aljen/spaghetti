@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/values/characteristic_curve/editor_window.h"
-#include "elements/values/characteristic_curve.h"
+#include <spaghetti/elements/values/characteristic_curve.h>
 #include "nodes/values/characteristic_curve.h"
 #include "nodes/values/characteristic_curve/ui_editor_window.h"
 

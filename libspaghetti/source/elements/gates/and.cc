@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/gates/and.h"
+#include <spaghetti/elements/gates/and.h>
 
 namespace spaghetti::elements::gates {
 

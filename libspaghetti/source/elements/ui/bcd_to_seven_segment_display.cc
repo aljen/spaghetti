@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/ui/bcd_to_seven_segment_display.h"
+#include <spaghetti/elements/ui/bcd_to_seven_segment_display.h>
 
 namespace spaghetti::elements::ui {
 

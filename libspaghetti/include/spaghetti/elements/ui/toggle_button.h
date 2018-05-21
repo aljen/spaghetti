@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_UI_TOGGLE_BUTTON_H
-#define ELEMENTS_UI_TOGGLE_BUTTON_H
+#ifndef SPAGHETTI_ELEMENTS_UI_TOGGLE_BUTTON_H
+#define SPAGHETTI_ELEMENTS_UI_TOGGLE_BUTTON_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::ui {
 
@@ -49,4 +49,4 @@ class ToggleButton final : public Element {
 
 } // namespace spaghetti::elements::ui
 
-#endif // ELEMENTS_UI_TOGGLE_BUTTON_H
+#endif // SPAGHETTI_ELEMENTS_UI_TOGGLE_BUTTON_H

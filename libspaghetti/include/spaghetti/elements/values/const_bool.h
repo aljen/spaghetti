@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_VALUES_CONST_BOOL_H
-#define ELEMENTS_VALUES_CONST_BOOL_H
+#ifndef SPAGHETTI_ELEMENTS_VALUES_CONST_BOOL_H
+#define SPAGHETTI_ELEMENTS_VALUES_CONST_BOOL_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::values {
 
@@ -52,4 +52,4 @@ class ConstBool final : public Element {
 
 } // namespace spaghetti::elements::values
 
-#endif // ELEMENTS_VALUES_CONST_BOOL_H
+#endif // SPAGHETTI_ELEMENTS_VALUES_CONST_BOOL_H

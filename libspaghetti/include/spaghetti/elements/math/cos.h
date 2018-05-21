@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_MATH_COS_H
-#define ELEMENTS_MATH_COS_H
+#ifndef SPAGHETTI_ELEMENTS_MATH_COS_H
+#define SPAGHETTI_ELEMENTS_MATH_COS_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::math {
 
@@ -43,4 +43,4 @@ class Cos final : public Element {
 
 } // namespace spaghetti::elements::math
 
-#endif // ELEMENTS_MATH_COS_H
+#endif // SPAGHETTI_ELEMENTS_MATH_COS_H

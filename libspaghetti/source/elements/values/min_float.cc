@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/values/min_float.h"
+#include <spaghetti/elements/values/min_float.h>
 
 namespace spaghetti::elements::values {
 

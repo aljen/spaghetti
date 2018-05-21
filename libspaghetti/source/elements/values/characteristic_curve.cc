@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/values/characteristic_curve.h"
+#include <spaghetti/elements/values/characteristic_curve.h>
 
 namespace spaghetti::elements::values {
 

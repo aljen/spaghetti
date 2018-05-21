@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/logic/if_greater.h"
+#include <spaghetti/elements/logic/if_greater.h>
 
 namespace spaghetti::elements::logic {
 

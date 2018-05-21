@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/values/random_int.h"
+#include <spaghetti/elements/values/random_int.h>
 
 namespace {
 std::random_device g_random{};

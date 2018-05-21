@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_MULTIPLEXER_INT_H
-#define ELEMENTS_LOGIC_MULTIPLEXER_INT_H
+#ifndef SPAGHETTI_ELEMENTS_LOGIC_MULTIPLEXER_INT_H
+#define SPAGHETTI_ELEMENTS_LOGIC_MULTIPLEXER_INT_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::logic {
 
@@ -43,4 +43,4 @@ class MultiplexerInt final : public Element {
 
 } // namespace spaghetti::elements::logic
 
-#endif // ELEMENTS_LOGIC_MULTIPLEXER_INT_H
+#endif // SPAGHETTI_ELEMENTS_LOGIC_MULTIPLEXER_INT_H

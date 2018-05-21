@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_SNAPSHOT_FLOAT_H
-#define ELEMENTS_LOGIC_SNAPSHOT_FLOAT_H
+#ifndef SPAGHETTI_ELEMENTS_LOGIC_SNAPSHOT_FLOAT_H
+#define SPAGHETTI_ELEMENTS_LOGIC_SNAPSHOT_FLOAT_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::logic {
 
@@ -46,4 +46,4 @@ class SnapshotFloat final : public Element {
 
 } // namespace spaghetti::elements::logic
 
-#endif // ELEMENTS_LOGIC_SNAPSHOT_FLOAT_H
+#endif // SPAGHETTI_ELEMENTS_LOGIC_SNAPSHOT_FLOAT_H

@@ -21,13 +21,12 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_VALUES_RANDOM_INT_H
-#define ELEMENTS_VALUES_RANDOM_INT_H
+#ifndef SPAGHETTI_ELEMENTS_VALUES_RANDOM_INT_H
+#define SPAGHETTI_ELEMENTS_VALUES_RANDOM_INT_H
 
 #include <random>
 
-#include "spaghetti/element.h"
-#include "spaghetti/logger.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::values {
 
@@ -55,7 +54,6 @@ class RandomInt final : public Element {
   {
     m_min = std::min<int32_t>(a_min, a_max);
     m_max = std::max<int32_t>(a_min, a_max);
-    spaghetti::log::info("min: {} max: {} / min: {} max: {}", a_min, a_max, m_min, m_max);
 
     updateDistribution();
   }
@@ -72,4 +70,4 @@ class RandomInt final : public Element {
 
 } // namespace spaghetti::elements::values
 
-#endif // ELEMENTS_VALUES_RANDOM_INT_H
+#endif // SPAGHETTI_ELEMENTS_VALUES_RANDOM_INT_H

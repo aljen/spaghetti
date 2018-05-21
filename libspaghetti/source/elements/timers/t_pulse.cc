@@ -20,9 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/timers/t_pulse.h"
-
-#include "spaghetti/logger.h"
+#include <spaghetti/elements/timers/t_pulse.h>
+#include <spaghetti/logger.h>
 
 namespace spaghetti::elements::timers {
 

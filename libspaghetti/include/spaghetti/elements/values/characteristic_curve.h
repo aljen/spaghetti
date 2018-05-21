@@ -21,11 +21,11 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_VALUES_CHARACTERISTIC_CURVE_H
-#define ELEMENTS_VALUES_CHARACTERISTIC_CURVE_H
+#ifndef SPAGHETTI_ELEMENTS_VALUES_CHARACTERISTIC_CURVE_H
+#define SPAGHETTI_ELEMENTS_VALUES_CHARACTERISTIC_CURVE_H
 
-#include "spaghetti/element.h"
-#include "spaghetti/utils.h"
+#include <spaghetti/element.h>
+#include <spaghetti/utils.h>
 
 namespace spaghetti::elements::values {
 
@@ -92,4 +92,4 @@ class CharacteristicCurve : public Element {
 
 } // namespace spaghetti::elements::values
 
-#endif // ELEMENTS_VALUES_CHARACTERISTIC_CURVE_H
+#endif // SPAGHETTI_ELEMENTS_VALUES_CHARACTERISTIC_CURVE_H

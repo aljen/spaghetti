@@ -21,13 +21,13 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_TIMERS_ALL_H
-#define ELEMENTS_TIMERS_ALL_H
+#ifndef SPAGHETTI_ELEMENTS_TIMERS_ALL_H
+#define SPAGHETTI_ELEMENTS_TIMERS_ALL_H
 
-#include "elements/timers/clock.h"
-#include "elements/timers/delta_time.h"
-#include "elements/timers/t_off.h"
-#include "elements/timers/t_on.h"
-#include "elements/timers/t_pulse.h"
+#include <spaghetti/elements/timers/clock.h>
+#include <spaghetti/elements/timers/delta_time.h>
+#include <spaghetti/elements/timers/t_off.h>
+#include <spaghetti/elements/timers/t_on.h>
+#include <spaghetti/elements/timers/t_pulse.h>
 
-#endif // ELEMENTS_TIMERS_ALL_H
+#endif // SPAGHETTI_ELEMENTS_TIMERS_ALL_H

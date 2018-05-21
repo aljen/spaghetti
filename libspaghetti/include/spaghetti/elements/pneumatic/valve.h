@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_PNEUMATIC_VALVE_H
-#define ELEMENTS_PNEUMATIC_VALVE_H
+#ifndef SPAGHETTI_ELEMENTS_PNEUMATIC_VALVE_H
+#define SPAGHETTI_ELEMENTS_PNEUMATIC_VALVE_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::pneumatic {
 
@@ -49,4 +49,4 @@ class Valve final : public Element {
 
 } // namespace spaghetti::elements::pneumatic
 
-#endif // ELEMENTS_PNEUMATIC_VALVE_H
+#endif // SPAGHETTI_ELEMENTS_PNEUMATIC_VALVE_H

@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/ui/int_info.h"
-#include "elements/ui/int_info.h"
+#include <spaghetti/elements/ui/int_info.h>
 
 #include <QGraphicsSimpleTextItem>
 #include <QTableWidget>

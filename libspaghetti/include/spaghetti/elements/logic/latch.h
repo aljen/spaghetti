@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_LATCH_H
-#define ELEMENTS_LOGIC_LATCH_H
+#ifndef SPAGHETTI_ELEMENTS_LOGIC_LATCH_H
+#define SPAGHETTI_ELEMENTS_LOGIC_LATCH_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::logic {
 
@@ -47,4 +47,4 @@ class Latch final : public Element {
 
 } // namespace spaghetti::elements::logic
 
-#endif // ELEMENTS_LOGIC_LATCH_H
+#endif // SPAGHETTI_ELEMENTS_LOGIC_LATCH_H

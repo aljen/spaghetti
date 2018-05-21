@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/math/lerp.h"
-#include "spaghetti/utils.h"
+#include <spaghetti/elements/math/lerp.h>
+#include <spaghetti/utils.h>
 
 namespace spaghetti::elements::math {
 

@@ -21,16 +21,16 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_ALL_H
-#define ELEMENTS_ALL_H
+#ifndef SPAGHETTI_ELEMENTS_ALL_H
+#define SPAGHETTI_ELEMENTS_ALL_H
 
-#include "elements/gates/all.h"
-#include "elements/logic/all.h"
-#include "elements/math/all.h"
-#include "elements/pneumatic/all.h"
-#include "elements/timers/all.h"
-#include "elements/ui/all.h"
-#include "elements/values/all.h"
-#include "spaghetti/package.h"
+#include <spaghetti/elements/gates/all.h>
+#include <spaghetti/elements/logic/all.h>
+#include <spaghetti/elements/math/all.h>
+#include <spaghetti/elements/pneumatic/all.h>
+#include <spaghetti/elements/timers/all.h>
+#include <spaghetti/elements/ui/all.h>
+#include <spaghetti/elements/values/all.h>
+#include <spaghetti/package.h>
 
-#endif // ELEMENTS_ALL_H
+#endif // SPAGHETTI_ELEMENTS_ALL_H

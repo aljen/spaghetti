@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_VALUES_CONST_FLOAT_H
-#define ELEMENTS_VALUES_CONST_FLOAT_H
+#ifndef SPAGHETTI_ELEMENTS_VALUES_CONST_FLOAT_H
+#define SPAGHETTI_ELEMENTS_VALUES_CONST_FLOAT_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::values {
 
@@ -51,4 +51,4 @@ class ConstFloat final : public Element {
 
 } // namespace spaghetti::elements::values
 
-#endif // ELEMENTS_VALUES_CONST_FLOAT_H
+#endif // SPAGHETTI_ELEMENTS_VALUES_CONST_FLOAT_H

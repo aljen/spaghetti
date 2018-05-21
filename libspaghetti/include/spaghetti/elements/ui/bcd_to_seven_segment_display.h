@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_UI_BCD_TO_SEVEN_SEGMENT_DISPLAY_H
-#define ELEMENTS_UI_BCD_TO_SEVEN_SEGMENT_DISPLAY_H
+#ifndef SPAGHETTI_ELEMENTS_UI_BCD_TO_SEVEN_SEGMENT_DISPLAY_H
+#define SPAGHETTI_ELEMENTS_UI_BCD_TO_SEVEN_SEGMENT_DISPLAY_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::ui {
 
@@ -47,4 +47,4 @@ class BCDToSevenSegmentDisplay final : public Element {
 
 } // namespace spaghetti::elements::ui
 
-#endif // ELEMENTS_UI_BCD_TO_SEVEN_SEGMENT_DISPLAY_H
+#endif // SPAGHETTI_ELEMENTS_UI_BCD_TO_SEVEN_SEGMENT_DISPLAY_H

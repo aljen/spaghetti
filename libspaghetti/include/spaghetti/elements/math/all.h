@@ -21,23 +21,23 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_MATH_ALL_H
-#define ELEMENTS_MATH_ALL_H
+#ifndef SPAGHETTI_ELEMENTS_MATH_ALL_H
+#define SPAGHETTI_ELEMENTS_MATH_ALL_H
 
-#include "elements/math/abs.h"
-#include "elements/math/add.h"
-#include "elements/math/add_if.h"
-#include "elements/math/bcd.h"
-#include "elements/math/cos.h"
-#include "elements/math/divide.h"
-#include "elements/math/divide_if.h"
-#include "elements/math/lerp.h"
-#include "elements/math/multiply.h"
-#include "elements/math/multiply_if.h"
-#include "elements/math/sign.h"
-#include "elements/math/sin.h"
-#include "elements/math/square_root.h"
-#include "elements/math/subtract.h"
-#include "elements/math/subtract_if.h"
+#include <spaghetti/elements/math/abs.h>
+#include <spaghetti/elements/math/add.h>
+#include <spaghetti/elements/math/add_if.h>
+#include <spaghetti/elements/math/bcd.h>
+#include <spaghetti/elements/math/cos.h>
+#include <spaghetti/elements/math/divide.h>
+#include <spaghetti/elements/math/divide_if.h>
+#include <spaghetti/elements/math/lerp.h>
+#include <spaghetti/elements/math/multiply.h>
+#include <spaghetti/elements/math/multiply_if.h>
+#include <spaghetti/elements/math/sign.h>
+#include <spaghetti/elements/math/sin.h>
+#include <spaghetti/elements/math/square_root.h>
+#include <spaghetti/elements/math/subtract.h>
+#include <spaghetti/elements/math/subtract_if.h>
 
-#endif // ELEMENTS_MATH_ALL_H
+#endif // SPAGHETTI_ELEMENTS_MATH_ALL_H

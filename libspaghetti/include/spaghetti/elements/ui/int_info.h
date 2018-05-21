@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_UI_INT_INFO_H
-#define ELEMENTS_UI_INT_INFO_H
+#ifndef SPAGHETTI_ELEMENTS_UI_INT_INFO_H
+#define SPAGHETTI_ELEMENTS_UI_INT_INFO_H
 
-#include "spaghetti/element.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::ui {
 
@@ -41,4 +41,4 @@ class IntInfo final : public Element {
 
 } // namespace spaghetti::elements::ui
 
-#endif // ELEMENTS_UI_INT_INFO_H
+#endif // SPAGHETTI_ELEMENTS_UI_INT_INFO_H

@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/values/const_bool.h"
-#include "elements/values/const_bool.h"
+#include <spaghetti/elements/values/const_bool.h>
 
 #include <QCheckBox>
 #include <QTableWidget>

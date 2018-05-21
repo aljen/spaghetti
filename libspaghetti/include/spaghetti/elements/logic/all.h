@@ -21,31 +21,31 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_LOGIC_ALL_H
-#define ELEMENTS_LOGIC_ALL_H
+#ifndef SPAGHETTI_ELEMENTS_LOGIC_ALL_H
+#define SPAGHETTI_ELEMENTS_LOGIC_ALL_H
 
-#include "elements/logic/assign_float.h"
-#include "elements/logic/assign_int.h"
-#include "elements/logic/blinker.h"
-#include "elements/logic/counter_down.h"
-#include "elements/logic/counter_up.h"
-#include "elements/logic/counter_up_down.h"
-#include "elements/logic/demultiplexer_int.h"
-#include "elements/logic/if_equal.h"
-#include "elements/logic/if_greater.h"
-#include "elements/logic/if_greater_equal.h"
-#include "elements/logic/if_lower.h"
-#include "elements/logic/if_lower_equal.h"
-#include "elements/logic/latch.h"
-#include "elements/logic/memory_difference.h"
-#include "elements/logic/memory_reset_set.h"
-#include "elements/logic/memory_set_reset.h"
-#include "elements/logic/multiplexer_int.h"
-#include "elements/logic/pid.h"
-#include "elements/logic/snapshot_float.h"
-#include "elements/logic/snapshot_int.h"
-#include "elements/logic/switch.h"
-#include "elements/logic/trigger_falling.h"
-#include "elements/logic/trigger_rising.h"
+#include <spaghetti/elements/logic/assign_float.h>
+#include <spaghetti/elements/logic/assign_int.h>
+#include <spaghetti/elements/logic/blinker.h>
+#include <spaghetti/elements/logic/counter_down.h>
+#include <spaghetti/elements/logic/counter_up.h>
+#include <spaghetti/elements/logic/counter_up_down.h>
+#include <spaghetti/elements/logic/demultiplexer_int.h>
+#include <spaghetti/elements/logic/if_equal.h>
+#include <spaghetti/elements/logic/if_greater.h>
+#include <spaghetti/elements/logic/if_greater_equal.h>
+#include <spaghetti/elements/logic/if_lower.h>
+#include <spaghetti/elements/logic/if_lower_equal.h>
+#include <spaghetti/elements/logic/latch.h>
+#include <spaghetti/elements/logic/memory_difference.h>
+#include <spaghetti/elements/logic/memory_reset_set.h>
+#include <spaghetti/elements/logic/memory_set_reset.h>
+#include <spaghetti/elements/logic/multiplexer_int.h>
+#include <spaghetti/elements/logic/pid.h>
+#include <spaghetti/elements/logic/snapshot_float.h>
+#include <spaghetti/elements/logic/snapshot_int.h>
+#include <spaghetti/elements/logic/switch.h>
+#include <spaghetti/elements/logic/trigger_falling.h>
+#include <spaghetti/elements/logic/trigger_rising.h>
 
-#endif // ELEMENTS_LOGIC_ALL_H
+#endif // SPAGHETTI_ELEMENTS_LOGIC_ALL_H

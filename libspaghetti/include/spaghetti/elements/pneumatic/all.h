@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_PNEUMATIC_ALL_H
-#define ELEMENTS_PNEUMATIC_ALL_H
+#ifndef SPAGHETTI_ELEMENTS_PNEUMATIC_ALL_H
+#define SPAGHETTI_ELEMENTS_PNEUMATIC_ALL_H
 
-#include "elements/pneumatic/tank.h"
-#include "elements/pneumatic/valve.h"
+#include <spaghetti/elements/pneumatic/tank.h>
+#include <spaghetti/elements/pneumatic/valve.h>
 
-#endif // ELEMENTS_PNEUMATIC_ALL_H
+#endif // SPAGHETTI_ELEMENTS_PNEUMATIC_ALL_H

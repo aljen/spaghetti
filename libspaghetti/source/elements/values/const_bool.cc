@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/values/const_bool.h"
+#include <spaghetti/elements/values/const_bool.h>
 
 namespace spaghetti::elements::values {
 

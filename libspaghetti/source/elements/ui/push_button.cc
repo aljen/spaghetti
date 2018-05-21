@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "elements/ui/push_button.h"
+#include <spaghetti/elements/ui/push_button.h>
 
 namespace spaghetti::elements::ui {
 

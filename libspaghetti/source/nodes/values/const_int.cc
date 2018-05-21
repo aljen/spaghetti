@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "nodes/values/const_int.h"
-#include "elements/values/const_int.h"
+#include <spaghetti/elements/values/const_int.h>
 
 #include <QSpinBox>
 #include <QTableWidget>

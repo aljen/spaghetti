@@ -21,13 +21,12 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef ELEMENTS_VALUES_RANDOM_FLOAT_H
-#define ELEMENTS_VALUES_RANDOM_FLOAT_H
+#ifndef SPAGHETTI_ELEMENTS_VALUES_RANDOM_FLOAT_H
+#define SPAGHETTI_ELEMENTS_VALUES_RANDOM_FLOAT_H
 
 #include <random>
 
-#include "spaghetti/element.h"
-#include "spaghetti/logger.h"
+#include <spaghetti/element.h>
 
 namespace spaghetti::elements::values {
 
@@ -71,4 +70,4 @@ class RandomFloat final : public Element {
 
 } // namespace spaghetti::elements::values
 
-#endif // ELEMENTS_VALUES_RANDOM_FLOAT_H
+#endif // SPAGHETTI_ELEMENTS_VALUES_RANDOM_FLOAT_H

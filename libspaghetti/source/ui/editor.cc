@@ -53,7 +53,7 @@
 #include <typeinfo>
 #include <vector>
 
-#include "elements/logic/all.h"
+#include <spaghetti/elements/logic/all.h>
 #include "spaghetti/node.h"
 #include "spaghetti/package.h"
 #include "spaghetti/registry.h"
