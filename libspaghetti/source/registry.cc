@@ -35,17 +35,12 @@
 #include <vector>
 
 #include "filesystem.h"
+
 #include "shared_library.h"
 
 #include <spaghetti/elements/all.h>
-#include "nodes/all.h"
 #include <spaghetti/logger.h>
 #include <spaghetti/version.h>
-
-inline void init_resources()
-{
-  Q_INIT_RESOURCE(icons);
-}
 
 static std::string get_application_path()
 {
@@ -132,120 +127,110 @@ Registry::Registry()
 
 void Registry::registerInternalElements()
 {
-  init_resources();
-
   using namespace elements;
 
-  registerElement<Package, nodes::Package>("Package", ":/logic/package.png");
+  registerElement<Package>();
 
-  registerElement<gates::And>("AND (Bool)", ":/gates/and.png");
-  registerElement<gates::Nand>("NAND (Bool)", ":/gates/nand.png");
-  registerElement<gates::Nor>("NOR (Bool)", ":/gates/nor.png");
-  registerElement<gates::Not>("NOT (Bool)", ":/gates/not.png");
-  registerElement<gates::Or>("OR (Bool)", ":/gates/or.png");
+  registerElement<gates::And>();
+  registerElement<gates::Nand>();
+  registerElement<gates::Nor>();
+  registerElement<gates::Not>();
+  registerElement<gates::Or>();
 
-  registerElement<logic::AssignFloat>("Assign (Float)", ":/unknown.png");
-  registerElement<logic::AssignInt>("Assign (Int)", ":/unknown.png");
+  registerElement<logic::AssignFloat>();
+  registerElement<logic::AssignInt>();
 
-  registerElement<logic::CounterDown>("Counter Down (Int)", ":/unknown.png");
-  registerElement<logic::CounterUp>("Counter Up (Int)", ":/unknown.png");
-  registerElement<logic::CounterUpDown>("Counter Up/Down (Int)", ":/unknown.png");
+  registerElement<logic::CounterDown>();
+  registerElement<logic::CounterUp>();
+  registerElement<logic::CounterUpDown>();
 
-  registerElement<logic::IfGreaterEqual>("If A >= B (Float)", ":/unknown.png");
-  registerElement<logic::IfGreater>("If A > B (Float)", ":/unknown.png");
-  registerElement<logic::IfEqual>("If A == B (Float)", ":/unknown.png");
-  registerElement<logic::IfLower>("If A < B (Float)", ":/unknown.png");
-  registerElement<logic::IfLowerEqual>("If A <= B (Float)", ":/unknown.png");
+  registerElement<logic::IfGreaterEqual>();
+  registerElement<logic::IfGreater>();
+  registerElement<logic::IfEqual>();
+  registerElement<logic::IfLower>();
+  registerElement<logic::IfLowerEqual>();
 
-  registerElement<logic::Latch>("Latch (Bool)", ":/unknown.png");
+  registerElement<logic::Latch>();
 
-  registerElement<logic::MemoryDifference>("Memory Difference (Int)", ":/unknown.png");
-  registerElement<logic::MemoryResetSet>("Memory RS (Bool)", ":/unknown.png");
-  registerElement<logic::MemorySetReset>("Memory SR (Bool)", ":/unknown.png");
+  registerElement<logic::MemoryDifference>();
+  registerElement<logic::MemoryResetSet>();
+  registerElement<logic::MemorySetReset>();
 
-  registerElement<logic::MultiplexerInt>("Multiplexer (Int)", ":/unknown.png");
-  registerElement<logic::DemultiplexerInt>("Demultiplexer (Int)", ":/unknown.png");
+  registerElement<logic::MultiplexerInt>();
+  registerElement<logic::DemultiplexerInt>();
 
-  registerElement<logic::Blinker, nodes::logic::Blinker>("Blinker (Bool)", ":/unknown.png");
-  registerElement<logic::Switch>("Switch (Int)", ":/logic/switch.png");
+  registerElement<logic::Blinker>();
+  registerElement<logic::Switch>();
 
-  registerElement<logic::TriggerFalling>("Trigger Falling (Bool)", ":/unknown.png");
-  registerElement<logic::TriggerRising>("Trigger Rising (Bool)", ":/unknown.png");
+  registerElement<logic::TriggerFalling>();
+  registerElement<logic::TriggerRising>();
 
-  registerElement<logic::PID>("PID", ":/unknown.png");
+  registerElement<logic::PID>();
 
-  registerElement<logic::SnapshotFloat>("Snapshot (Float)", ":/unknown.png");
-  registerElement<logic::SnapshotInt>("Snapshot (Int)", ":/unknown.png");
+  registerElement<logic::SnapshotFloat>();
+  registerElement<logic::SnapshotInt>();
 
-  registerElement<math::Abs>("Abs (Float)", ":/unknown.png");
-  registerElement<math::BCD>("BCD", ":/unknown.png");
-  registerElement<math::SQRT>("Square Root (Float)", ":/unknown.png");
+  registerElement<math::Abs>();
+  registerElement<math::BCD>();
+  registerElement<math::SQRT>();
 
-  registerElement<math::Add>("Add (Float)", ":/unknown.png");
-  registerElement<math::AddIf>("Add If (Float)", ":/unknown.png");
-  registerElement<math::Subtract>("Subtract (Float)", ":/unknown.png");
-  registerElement<math::SubtractIf>("Subtract If (Float)", ":/unknown.png");
-  registerElement<math::Divide>("Divide (Float)", ":/unknown.png");
-  registerElement<math::DivideIf>("Divide If (Float)", ":/unknown.png");
-  registerElement<math::Multiply>("Multiply (Float)", ":/unknown.png");
-  registerElement<math::MultiplyIf>("Multiply If (Float)", ":/unknown.png");
+  registerElement<math::Add>();
+  registerElement<math::AddIf>();
+  registerElement<math::Subtract>();
+  registerElement<math::SubtractIf>();
+  registerElement<math::Divide>();
+  registerElement<math::DivideIf>();
+  registerElement<math::Multiply>();
+  registerElement<math::MultiplyIf>();
 
-  registerElement<math::Cos>("Cos (Rad)", ":/unknown.png");
-  registerElement<math::Sin>("Sin (Rad)", ":/unknown.png");
+  registerElement<math::Cos>();
+  registerElement<math::Sin>();
 
-  registerElement<math::Lerp>("Lerp (Float)", ":/unknown.png");
-  registerElement<math::Sign>("Sign (Float)", ":/unknown.png");
+  registerElement<math::Lerp>();
+  registerElement<math::Sign>();
 
-  registerElement<pneumatic::Tank, nodes::pneumatic::Tank>("Tank", ":/unknown.png");
-  registerElement<pneumatic::Valve>("Valve", ":/unknown.png");
+  registerElement<pneumatic::Tank>();
+  registerElement<pneumatic::Valve>();
 
-  registerElement<timers::DeltaTime>("Delta Time (ms)", ":/logic/clock.png");
-  registerElement<timers::Clock, nodes::timers::Clock>("Clock (ms)", ":/logic/clock.png");
-  registerElement<timers::TimerOn>("T_ON", ":/logic/clock.png");
-  registerElement<timers::TimerOff>("T_OFF", ":/logic/clock.png");
-  registerElement<timers::TimerPulse>("T_PULSE", ":/logic/clock.png");
+  registerElement<timers::DeltaTime>();
+  registerElement<timers::Clock>();
+  registerElement<timers::TimerOn>();
+  registerElement<timers::TimerOff>();
+  registerElement<timers::TimerPulse>();
 
-  registerElement<ui::BCDToSevenSegmentDisplay>("BCD -> 7SD", ":/unknown.png");
+  registerElement<ui::BCDToSevenSegmentDisplay>();
 
-  registerElement<ui::FloatInfo, nodes::ui::FloatInfo>("Info (Float)", ":/values/const_float.png");
-  registerElement<ui::IntInfo, nodes::ui::IntInfo>("Info (Int)", ":/values/const_int.png");
+  registerElement<ui::FloatInfo>();
+  registerElement<ui::IntInfo>();
 
-  registerElement<ui::PushButton, nodes::ui::PushButton>("Push Button (Bool)", ":/ui/push_button.png");
-  registerElement<ui::ToggleButton, nodes::ui::ToggleButton>("Toggle Button (Bool)", ":/ui/toggle_button.png");
+  registerElement<ui::PushButton>();
+  registerElement<ui::ToggleButton>();
 
-  registerElement<ui::SevenSegmentDisplay, nodes::ui::SevenSegmentDisplay>("7 Segment Display", ":/unknown.png");
+  registerElement<ui::SevenSegmentDisplay>();
 
-  registerElement<values::ConstBool, nodes::values::ConstBool>("Const value (Bool)", ":/values/const_bool.png");
-  registerElement<values::ConstFloat, nodes::values::ConstFloat>("Const value (Float)", ":/values/const_float.png");
-  registerElement<values::ConstInt, nodes::values::ConstInt>("Const value (Int)", ":/values/const_int.png");
-  registerElement<values::RandomBool>("Random value (Bool)", ":/values/random_value.png");
-  registerElement<values::RandomFloat, nodes::values::RandomFloat>("Random value (Float)", ":/values/random_value.png");
-  registerElement<values::RandomFloatIf, nodes::values::RandomFloatIf>("Random value If (Float)",
-                                                                       ":/values/random_value.png");
-  registerElement<values::RandomInt, nodes::values::RandomInt>("Random value (Int)", ":/values/random_value.png");
-  registerElement<values::RandomIntIf, nodes::values::RandomIntIf>("Random value If (Int)",
-                                                                   ":/values/random_value.png");
+  registerElement<values::ConstBool>();
+  registerElement<values::ConstFloat>();
+  registerElement<values::ConstInt>();
+  registerElement<values::RandomBool>();
+  registerElement<values::RandomFloat>();
+  registerElement<values::RandomFloatIf>();
+  registerElement<values::RandomInt>();
+  registerElement<values::RandomIntIf>();
 
-  registerElement<values::Degree2Radian>("Convert angle (Deg2Rad)", ":/unknown.png");
-  registerElement<values::Radian2Degree>("Convert angle (Rad2Deg)", ":/unknown.png");
-  registerElement<values::Int2Float>("Convert value (Int2Float)", ":/unknown.png");
-  registerElement<values::Float2Int>("Convert value (Float2Int)", ":/unknown.png");
+  registerElement<values::Degree2Radian>();
+  registerElement<values::Radian2Degree>();
+  registerElement<values::Int2Float>();
+  registerElement<values::Float2Int>();
 
-  registerElement<values::MinInt>("Minimum value (Int)", ":/unknown.png");
-  registerElement<values::MaxInt>("Maximum value (Int)", ":/unknown.png");
-  registerElement<values::MinFloat>("Minimum value (Float)", ":/unknown.png");
-  registerElement<values::MaxFloat>("Maximum value (Float)", ":/unknown.png");
+  registerElement<values::MinInt>();
+  registerElement<values::MaxInt>();
+  registerElement<values::MinFloat>();
+  registerElement<values::MaxFloat>();
 
-  registerElement<values::ClampFloat>("Clamp value (Float)", ":/unknown.png");
-  registerElement<values::ClampInt>("Clamp value (Int)", ":/unknown.png");
+  registerElement<values::ClampFloat>();
+  registerElement<values::ClampInt>();
 
-  // clang-format off
-  registerElement<values::CharacteristicCurve
-#ifdef SPAGHETTI_USE_CHARTS
-                  , nodes::values::CharacteristicCurve
-#endif
-                  >("Characteristic Curve", ":/unknown.png");
-  // clang-format on
+  registerElement<values::CharacteristicCurve>();
 }
 
 void Registry::loadPlugins()
@@ -322,27 +307,8 @@ void Registry::loadPackages()
 Element *Registry::createElement(string::hash_t const a_hash)
 {
   auto const &META_INFO = metaInfoFor(a_hash);
-  assert(META_INFO.cloneElement);
-  return META_INFO.cloneElement();
-}
-
-Node *Registry::createNode(string::hash_t const a_hash)
-{
-  auto const &META_INFO = metaInfoFor(a_hash);
-  assert(META_INFO.cloneNode);
-  return META_INFO.cloneNode();
-}
-
-std::string Registry::elementName(string::hash_t const a_hash)
-{
-  auto const &META_INFO = metaInfoFor(a_hash);
-  return META_INFO.name;
-}
-
-std::string Registry::elementIcon(string::hash_t const a_hash)
-{
-  auto const &META_INFO = metaInfoFor(a_hash);
-  return META_INFO.icon;
+  assert(META_INFO.clone);
+  return META_INFO.clone();
 }
 
 void Registry::addElement(MetaInfo &a_metaInfo)

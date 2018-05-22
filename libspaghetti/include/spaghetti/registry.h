@@ -42,18 +42,14 @@
 namespace spaghetti {
 
 class Element;
-class Node;
 
 class SPAGHETTI_API Registry final {
   struct MetaInfo {
     string::hash_t hash{};
     std::string type{};
-    std::string name{};
-    std::string icon{};
     template<typename T>
     using CloneFunc = T *(*)();
-    CloneFunc<Element> cloneElement{};
-    CloneFunc<Node> cloneNode{};
+    CloneFunc<Element> clone{};
   };
 
  public:
@@ -72,32 +68,18 @@ class SPAGHETTI_API Registry final {
   void loadPlugins();
   void loadPackages();
 
-  template<typename ElementDerived, typename NodeDerived = Node>
-  typename std::enable_if_t<(std::is_base_of_v<Element, ElementDerived> && std::is_base_of_v<Node, NodeDerived>)>
-  registerElement(std::string a_name, std::string a_icon)
+  template<typename ElementDerived>
+  typename std::enable_if_t<std::is_base_of_v<Element, ElementDerived>>
+  registerElement()
   {
-    string::hash_t const hash{ ElementDerived::HASH };
-    assert(!hasElement(hash));
-    MetaInfo info{ hash,
-                   ElementDerived::TYPE,
-                   std::move(a_name),
-                   std::move(a_icon),
-                   &cloneElement<ElementDerived>,
-                   &cloneNode<NodeDerived> };
+    auto const HASH = ElementDerived::HASH;
+    assert(!hasElement(HASH));
+    MetaInfo info{ HASH, ElementDerived::TYPE, &clone<ElementDerived> };
     addElement(info);
   }
 
   Element *createElement(char const *const a_name) { return createElement(string::hash(a_name)); }
   Element *createElement(string::hash_t const a_hash);
-
-  Node *createNode(char const *const a_name) { return createNode(string::hash(a_name)); }
-  Node *createNode(string::hash_t const a_hash);
-
-  std::string elementName(char const *const a_name) { return elementName(string::hash(a_name)); }
-  std::string elementName(string::hash_t const a_hash);
-
-  std::string elementIcon(char const *const a_name) { return elementIcon(string::hash(a_name)); }
-  std::string elementIcon(string::hash_t const a_hash);
 
   bool hasElement(string::hash_t const a_hash) const;
 
@@ -119,13 +101,7 @@ class SPAGHETTI_API Registry final {
   void addElement(MetaInfo &a_metaInfo);
 
   template<typename T>
-  static Element *cloneElement()
-  {
-    return new T;
-  }
-
-  template<typename T>
-  static Node *cloneNode()
+  static Element *clone()
   {
     return new T;
   }
