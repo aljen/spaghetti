@@ -3,13 +3,6 @@ cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 project(libSpaghetti VERSION ${Spaghetti_VERSION} LANGUAGES C CXX)
 
 find_package(Threads REQUIRED)
-find_package(Qt5 REQUIRED COMPONENTS Widgets)
-if (SPAGHETTI_USE_OPENGL)
-  find_package(Qt5 REQUIRED COMPONENTS OpenGL)
-endif ()
-if (SPAGHETTI_USE_CHARTS)
-  find_package(Qt5 REQUIRED COMPONENTS Charts)
-endif ()
 
 if (HAVE_CXX_FILESYSTEM)
   set(SPAGHETTI_FILESYSTEM_IMPLEMENTATION SPAGHETTI_FS_STD_FILESYSTEM)
@@ -236,88 +229,13 @@ set(LIBSPAGHETTI_SOURCES
   source/elements/values/random_int.cc
   source/elements/values/random_int_if.cc
 
-  source/icons/icons.qrc
-
-  source/nodes/logic/all.h
-  source/nodes/logic/blinker.cc
-  source/nodes/logic/blinker.h
-  source/nodes/logic/clock.cc
-  source/nodes/logic/clock.h
-
-  source/nodes/pneumatic/all.h
-  source/nodes/pneumatic/tank.cc
-  source/nodes/pneumatic/tank.h
-
-  source/nodes/ui/all.h
-  source/nodes/ui/float_info.cc
-  source/nodes/ui/float_info.h
-  source/nodes/ui/int_info.cc
-  source/nodes/ui/int_info.h
-  source/nodes/ui/push_button.cc
-  source/nodes/ui/push_button.h
-  source/nodes/ui/toggle_button.cc
-  source/nodes/ui/toggle_button.h
-  source/nodes/ui/seven_segment_display.cc
-  source/nodes/ui/seven_segment_display.h
-
-  source/nodes/values/all.h
-  source/nodes/values/const_bool.cc
-  source/nodes/values/const_bool.h
-  source/nodes/values/const_float.cc
-  source/nodes/values/const_float.h
-  source/nodes/values/const_int.cc
-  source/nodes/values/const_int.h
-  source/nodes/values/random_float.cc
-  source/nodes/values/random_float.h
-  source/nodes/values/random_float_if.cc
-  source/nodes/values/random_float_if.h
-  source/nodes/values/random_int.cc
-  source/nodes/values/random_int.h
-  source/nodes/values/random_int_if.cc
-  source/nodes/values/random_int_if.h
-
-  source/nodes/all.h
-  source/nodes/package.cc
-  source/nodes/package.h
-
-  source/ui/colors.cc
-  source/ui/colors.h
-  source/ui/editor.cc
-  source/ui/editor.ui
-  source/ui/elements_list.cc
-  source/ui/elements_list.h
-  source/ui/expander_widget.cc
-  source/ui/expander_widget.h
-  source/ui/link_item.cc
-  source/ui/link_item.h
-  source/ui/package_view.cc
-  source/ui/package_view.h
-  source/ui/socket_item.cc
-
   source/element.cc
   source/logger.cc
-  source/node.cc
   source/package.cc
   source/registry.cc
   source/shared_library.cc
   source/shared_library.h
   source/filesystem.h.in
-  )
-
-set(LIBSPAGHETTI_CHARTS_SOURCES
-  source/nodes/values/characteristic_curve/editor_widget.cc
-  source/nodes/values/characteristic_curve/editor_widget.h
-  source/nodes/values/characteristic_curve/editor_window.cc
-  source/nodes/values/characteristic_curve/editor_window.h
-  source/nodes/values/characteristic_curve/editor_window.ui
-  source/nodes/values/characteristic_curve/generators.cc
-  source/nodes/values/characteristic_curve/generators.h
-  source/nodes/values/characteristic_curve/line.cc
-  source/nodes/values/characteristic_curve/line.h
-  source/nodes/values/characteristic_curve/point.cc
-  source/nodes/values/characteristic_curve/point.h
-  source/nodes/values/characteristic_curve.cc
-  source/nodes/values/characteristic_curve.h
   )
 
 set(LIBSPAGHETTI_ALL_SOURCES
@@ -326,19 +244,15 @@ set(LIBSPAGHETTI_ALL_SOURCES
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${LIBSPAGHETTI_SOURCES})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${LIBSPAGHETTI_CHARTS_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${LIBSPAGHETTI_GENERATED_SOURCES})
 
 add_library(Spaghetti SHARED ${LIBSPAGHETTI_ALL_SOURCES})
-target_sources(Spaghetti PRIVATE $<$<BOOL:${SPAGHETTI_USE_CHARTS}>:${LIBSPAGHETTI_CHARTS_SOURCES}>)
 target_compile_features(Spaghetti PUBLIC cxx_std_17)
 target_compile_definitions(Spaghetti
   PUBLIC SPAGHETTI_SHARED
   PRIVATE SPAGHETTI_EXPORTS ${SPAGHETTI_DEFINITIONS}
   PRIVATE $<$<CONFIG:Debug>:${SPAGHETTI_DEFINITIONS_DEBUG}>
   PRIVATE $<$<CONFIG:Release>:${SPAGHETTI_DEFINITIONS_RELEASE}>
-  PRIVATE $<$<BOOL:${SPAGHETTI_USE_OPENGL}>:SPAGHETTI_USE_OPENGL>
-  PRIVATE $<$<BOOL:${SPAGHETTI_USE_CHARTS}>:SPAGHETTI_USE_CHARTS>
   )
 target_compile_options(Spaghetti
   PRIVATE ${SPAGHETTI_FLAGS}
@@ -361,10 +275,7 @@ target_include_directories(Spaghetti SYSTEM PRIVATE
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
   )
 target_link_libraries(Spaghetti
-  PUBLIC ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets
   PRIVATE ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
-  PRIVATE $<$<BOOL:${SPAGHETTI_USE_OPENGL}>:Qt5::OpenGL>
-  PRIVATE $<$<BOOL:${SPAGHETTI_USE_CHARTS}>:Qt5::Charts>
 )
 if (CLANG)
   target_link_libraries(Spaghetti PUBLIC -stdlib=libc++)
