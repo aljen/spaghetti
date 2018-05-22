@@ -38,13 +38,13 @@ set(VENDOR_ROOT ${PROJECT_SOURCE_DIR}/vendor)
 
 add_subdirectory(libspaghetti)
 
-if (SPAGHETTI_BUILD_EDITOR)
-  add_subdirectory(editor)
-endif ()
+#if (SPAGHETTI_BUILD_EDITOR)
+#  add_subdirectory(editor)
+#endif ()
 
-if (SPAGHETTI_BUILD_EXAMPLE_PLUGIN)
-  add_subdirectory(plugins)
-endif ()
+#if (SPAGHETTI_BUILD_EXAMPLE_PLUGIN)
+#  add_subdirectory(plugins)
+#endif ()
 
 if (SPAGHETTI_ENABLE_CPACK)
   include(InstallRequiredSystemLibraries)
