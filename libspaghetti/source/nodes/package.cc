@@ -54,9 +54,8 @@ void Package::showProperties()
   QLineEdit *pathEdit = new QLineEdit{ PATH };
   pathEdit->setPlaceholderText("<path>");
   m_properties->setCellWidget(row, 1, pathEdit);
-  QObject::connect(pathEdit, &QLineEdit::textChanged, [this, package](QString const &a_text) {
-    package->setPackagePath(a_text.toStdString());
-  });
+  QObject::connect(pathEdit, &QLineEdit::textChanged,
+                   [this, package](QString const &a_text) { package->setPackagePath(a_text.toStdString()); });
 
   row = m_properties->rowCount();
   m_properties->insertRow(row);

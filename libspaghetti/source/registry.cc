@@ -296,6 +296,7 @@ void Registry::loadPackages()
   Packages packages{};
 
   auto loadFrom = [&packages](fs::path const &a_path) {
+    log::warn("Loading packages from {}", a_path.string());
     auto directories = scan_for_dirs(a_path);
     directories.push_back(a_path);
     std::sort(std::begin(directories), std::end(directories));

@@ -322,6 +322,8 @@ void PackageView::dropEvent(QDropEvent *a_event)
     emit requestOpenFile(STRIPPED);
     a_event->accept();
   } else if (mimeData->hasFormat("metadata/name") && mimeData->hasFormat("metadata/icon")) {
+    m_package->pauseDispatchThread();
+
     auto const isPackage = mimeData->data("metadata/is_package") == "true";
     auto const file = mimeData->data("metadata/filename");
     auto const pathString = a_event->mimeData()->text();
@@ -343,6 +345,8 @@ void PackageView::dropEvent(QDropEvent *a_event)
     m_nodesProxyModel->sort(0);
 
     m_dragNode = nullptr;
+
+    m_package->resumeDispatchThread();
   }
 
   QGraphicsView::dropEvent(a_event);

@@ -95,7 +95,8 @@ class SPAGHETTI_API Package final : public Element {
 
   Element *get(size_t const a_id) const;
 
-  bool connect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId, uint8_t const a_inputId);
+  bool connect(size_t const a_sourceId, uint8_t const a_sourceSocket, size_t const a_targetId,
+               uint8_t const a_targetSocket);
   bool disconnect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId, uint8_t const a_inputId);
 
   void dispatchThreadFunction();

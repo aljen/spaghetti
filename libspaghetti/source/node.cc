@@ -202,7 +202,6 @@ void Node::setElement(Element *const a_element)
 
       m_element->setPosition(x(), y());
       m_element->iconify(m_mode == Mode::eIconified);
-      m_element->calculate();
 
       setName(QString::fromStdString(m_element->name()));
       updateOutputs();
@@ -399,7 +398,6 @@ void Node::handleEvent(Event const &a_event)
 void Node::showCommonProperties()
 {
   m_properties->setRowCount(0);
-  //  m_properties->clear();
   propertiesInsertTitle("Element");
 
   QTableWidgetItem *item{};

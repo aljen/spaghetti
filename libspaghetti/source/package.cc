@@ -252,24 +252,32 @@ Element *Package::get(size_t const a_id) const
   return m_elements[a_id];
 }
 
-bool Package::connect(size_t const a_sourceId, uint8_t const a_outputId, size_t const a_targetId,
-                      uint8_t const a_inputId)
+bool Package::connect(size_t const a_sourceId, uint8_t const a_sourceSocket, size_t const a_targetId,
+                      uint8_t const a_targetSocket)
 {
   pauseDispatchThread();
 
   auto const source = get(a_sourceId);
   auto const target = get(a_targetId);
 
-  spaghetti::log::debug("Connecting source: {}@{} to target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
-                        a_targetId, static_cast<int>(a_inputId));
+  spaghetti::log::debug("Connecting source: {}@{} to target: {}@{}", a_sourceId, static_cast<int>(a_sourceSocket),
+                        a_targetId, static_cast<int>(a_targetSocket));
 
-  target->m_inputs[a_inputId].id = a_sourceId;
-  target->m_inputs[a_inputId].slot = a_outputId;
+  auto const &SOURCE = a_sourceId != 0 ? source->m_outputs : source->m_inputs;
+  auto &TARGET = a_targetId != 0 ? target->m_inputs : target->m_outputs;
+  auto const SOURCE_SIZE = SOURCE.size();
+  auto const TARGET_SIZE = TARGET.size();
+  assert(a_sourceSocket < SOURCE_SIZE && "Socket ID don't exist");
+  assert(a_targetSocket < TARGET_SIZE && "Socket ID don't exist");
 
-  spaghetti::log::trace("Notifying {}({})@{} when {}({})@{} changes..", a_targetId, target->name(),
-                        static_cast<int32_t>(a_inputId), a_sourceId, source->name(), static_cast<int32_t>(a_outputId));
+  TARGET[a_targetSocket].id = a_sourceId;
+  TARGET[a_targetSocket].slot = a_sourceSocket;
 
-  m_connections.emplace_back(Connection{ a_sourceId, a_outputId, a_targetId, a_inputId });
+  spaghetti::log::debug("Notifying {}({})@{} when {}({})@{} changes..", a_targetId, target->name(),
+                        static_cast<int32_t>(a_targetSocket), a_sourceId, source->name(),
+                        static_cast<int32_t>(a_sourceSocket));
+
+  m_connections.emplace_back(Connection{ a_sourceId, a_sourceSocket, a_targetId, a_targetSocket });
 
   auto &dependencies = m_dependencies[a_sourceId];
   auto const IT = std::find(std::begin(dependencies), std::end(dependencies), a_targetId);
@@ -370,6 +378,11 @@ void Package::quitDispatchThread()
 
 void Package::pauseDispatchThread()
 {
+  if (m_package) {
+    m_package->pauseDispatchThread();
+    return;
+  }
+
   if (!m_dispatchThreadStarted) return;
 
   m_pauseCount++;
@@ -386,6 +399,11 @@ void Package::pauseDispatchThread()
 
 void Package::resumeDispatchThread()
 {
+  if (m_package) {
+    m_package->resumeDispatchThread();
+    return;
+  }
+
   if (!m_dispatchThreadStarted) return;
 
   m_pauseCount--;
