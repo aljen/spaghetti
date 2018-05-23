@@ -62,7 +62,7 @@ namespace spaghetti {
 struct Registry::PIMPL {
   using Plugins = std::vector<std::shared_ptr<SharedLibrary>>;
   using MetaInfos = std::vector<MetaInfo>;
-  MetaInfos metaInfos{};
+  MetaInfos meta_infos{};
   Plugins plugins{};
   Packages packages{};
   fs::path app_path{};
@@ -311,13 +311,13 @@ Element *Registry::createElement(string::hash_t const a_hash)
 
 void Registry::addElement(MetaInfo &a_metaInfo)
 {
-  auto &metaInfos = m_pimpl->metaInfos;
+  auto &metaInfos = m_pimpl->meta_infos;
   metaInfos.push_back(std::move(a_metaInfo));
 }
 
 bool Registry::hasElement(string::hash_t const a_hash) const
 {
-  auto const &META_INFOS = m_pimpl->metaInfos;
+  auto const &META_INFOS = m_pimpl->meta_infos;
   auto const IT = std::find_if(std::begin(META_INFOS), std::end(META_INFOS),
                                [a_hash](auto const &a_metaInfo) { return a_metaInfo.hash == a_hash; });
   return IT != std::end(META_INFOS);
@@ -325,13 +325,13 @@ bool Registry::hasElement(string::hash_t const a_hash) const
 
 size_t Registry::size() const
 {
-  auto const &META_INFOS = m_pimpl->metaInfos;
+  auto const &META_INFOS = m_pimpl->meta_infos;
   return META_INFOS.size();
 }
 
 Registry::MetaInfo const &Registry::metaInfoFor(string::hash_t const a_hash) const
 {
-  auto &metaInfos = m_pimpl->metaInfos;
+  auto &metaInfos = m_pimpl->meta_infos;
   assert(hasElement(a_hash));
   auto const IT = std::find_if(std::begin(metaInfos), std::end(metaInfos),
                                [a_hash](auto const &a_metaInfo) { return a_metaInfo.hash == a_hash; });
@@ -340,7 +340,7 @@ Registry::MetaInfo const &Registry::metaInfoFor(string::hash_t const a_hash) con
 
 Registry::MetaInfo const &Registry::metaInfoAt(size_t const a_index) const
 {
-  auto const &META_INFOS = m_pimpl->metaInfos;
+  auto const &META_INFOS = m_pimpl->meta_infos;
   return META_INFOS[a_index];
 }
 
