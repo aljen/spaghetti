@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "shared_library.h"
+#include "spaghetti/shared_library.h"
 
 // clang-format off
 #if defined(_WIN64) || defined(_WIN32)

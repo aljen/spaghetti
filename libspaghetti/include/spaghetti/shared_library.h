@@ -25,7 +25,7 @@
 #define SPAGHETTI_SHARED_LIBRARY_H
 
 #include <system_error>
-#include "filesystem.h"
+#include <spaghetti/filesystem.h>
 
 namespace spaghetti {
 
