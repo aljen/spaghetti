@@ -12,7 +12,7 @@ elseif (HAVE_BOOST_FILESYSTEM)
   set(SPAGHETTI_FILESYSTEM_IMPLEMENTATION SPAGHETTI_FS_BOOST_FILESYSTEM)
 endif ()
 
-configure_file(source/filesystem.h.in include/filesystem.h)
+configure_file(include/spaghetti/filesystem.h.in include/spaghetti/filesystem.h)
 configure_file(include/spaghetti/version.h.in include/spaghetti/version.h)
 
 set(LIBSPAGHETTI_PUBLIC_GATES_HEADERS
@@ -116,14 +116,12 @@ set(LIBSPAGHETTI_PUBLIC_ELEMENTS_ALL_HEADERS
   )
 set(LIBSPAGHETTI_PUBLIC_COMMON_HEADERS
   include/spaghetti/api.h
-  include/spaghetti/editor.h
   include/spaghetti/element.h
   include/spaghetti/logger.h
-  include/spaghetti/node.h
   include/spaghetti/package.h
   include/spaghetti/registry.h
-  include/spaghetti/socket_item.h
   include/spaghetti/strings.h
+  include/spaghetti/shared_library.h
   include/spaghetti/utils.h
   )
 set(LIBSPAGHETTI_PUBLIC_HEADERS
@@ -139,12 +137,13 @@ set(LIBSPAGHETTI_PUBLIC_HEADERS
   )
 
 set(LIBSPAGHETTI_GENERATED_SOURCES
+  ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/filesystem.h
   ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
-  ${CMAKE_CURRENT_BINARY_DIR}/include/filesystem.h
   )
 
 set(LIBSPAGHETTI_SOURCES
   ${LIBSPAGHETTI_PUBLIC_HEADERS}
+  include/spaghetti/filesystem.h.in
   include/spaghetti/version.h.in
 
   source/elements/gates/and.cc
@@ -234,8 +233,6 @@ set(LIBSPAGHETTI_SOURCES
   source/package.cc
   source/registry.cc
   source/shared_library.cc
-  source/shared_library.h
-  source/filesystem.h.in
   )
 
 set(LIBSPAGHETTI_ALL_SOURCES
@@ -317,6 +314,9 @@ install(FILES ${LIBSPAGHETTI_PUBLIC_COMMON_HEADERS}
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
+  COMPONENT SDK
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/filesystem.h
   COMPONENT SDK
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
 install(EXPORT SpaghettiConfig
