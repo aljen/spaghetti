@@ -274,7 +274,7 @@ target_include_directories(Spaghetti SYSTEM PRIVATE
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
   )
 target_link_libraries(Spaghetti
-  PRIVATE ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
+  PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
 )
 if (CLANG)
   target_link_libraries(Spaghetti PUBLIC -stdlib=libc++)
