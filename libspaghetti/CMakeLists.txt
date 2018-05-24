@@ -119,6 +119,7 @@ set(LIBSPAGHETTI_PUBLIC_COMMON_HEADERS
   include/spaghetti/element.h
   include/spaghetti/logger.h
   include/spaghetti/package.h
+  include/spaghetti/paths.h
   include/spaghetti/registry.h
   include/spaghetti/strings.h
   include/spaghetti/shared_library.h
@@ -231,6 +232,7 @@ set(LIBSPAGHETTI_SOURCES
   source/element.cc
   source/logger.cc
   source/package.cc
+  source/paths.cc
   source/registry.cc
   source/shared_library.cc
   )
