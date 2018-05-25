@@ -101,4 +101,15 @@ std::string_view system_plugins_path()
   return SYSTEM_PLUGINS_PATH;
 }
 
+std::string_view user_plugins_path()
+{
+  static std::string const USER_PLUGINS_PATH = [] {
+    fs::path PLUGINS_PATH{ fs::absolute(fs::path{ app_data_path() } / "plugins") };
+    fs::create_directories(PLUGINS_PATH);
+    return PLUGINS_PATH.string();
+  }();
+
+  return USER_PLUGINS_PATH;
+}
+
 } // namespace spaghetti
