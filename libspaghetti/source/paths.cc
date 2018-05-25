@@ -85,4 +85,20 @@ std::string_view app_data_path()
   return APP_DATA_PATH;
 }
 
+std::string_view system_plugins_path()
+{
+  static std::string const SYSTEM_PLUGINS_PATH = [] {
+    fs::path const APP_PATH{ fs::path{ app_path() }.parent_path() };
+#if defined(_WIN64) || defined(_WIN32)
+    fs::path const PLUGINS_PATH{ fs::canonical(APP_PATH / "../lib") };
+    return fs::absolute(fs::canonical(APP_PATH / "plugins")).string();
+#else
+    fs::path const LIB_PATH{ fs::canonical(APP_PATH / "../lib") };
+    return fs::absolute(LIB_PATH / "spaghetti").string();
+#endif
+  }();
+
+  return SYSTEM_PLUGINS_PATH;
+}
+
 } // namespace spaghetti
