@@ -128,4 +128,15 @@ std::string_view system_packages_path()
   return SYSTEM_PACKAGES_PATH;
 }
 
+std::string_view user_packages_path()
+{
+  static std::string const USER_PACKAGES_PATH = [] {
+    fs::path PACKAGES_PATH{ fs::absolute(fs::path{ app_data_path() } / "packages") };
+    fs::create_directories(PACKAGES_PATH);
+    return PACKAGES_PATH.string();
+  }();
+
+  return USER_PACKAGES_PATH;
+}
+
 } // namespace spaghetti
