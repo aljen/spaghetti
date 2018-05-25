@@ -26,173 +26,129 @@
 #include <algorithm>
 #include <vector>
 
-#include <spaghetti/filesystem.h>
-#include <spaghetti/shared_library.h>
 #include <spaghetti/elements/all.h>
+#include <spaghetti/filesystem.h>
 #include <spaghetti/logger.h>
+#include <spaghetti/shared_library.h>
 #include <spaghetti/version.h>
 
 namespace spaghetti {
 
-struct Registry::PIMPL {
-  using Plugins = std::vector<std::shared_ptr<SharedLibrary>>;
-  using MetaInfos = std::vector<MetaInfo>;
-  MetaInfos meta_infos{};
-  Plugins plugins{};
-  Packages packages{};
-};
-
-Registry &Registry::get()
+template<>
+SPAGHETTI_API Registry &Registry::get()
 {
   static Registry s_registry{};
   return s_registry;
 }
 
-Registry::~Registry() = default;
-
-Registry::Registry()
-  : m_pimpl{ std::make_unique<PIMPL>() }
-{
-  log::init();
-
-  log::info("Spaghetti version: {}, git: {}@{}, build date: {}, {}", version::STRING, version::BRANCH,
-            version::COMMIT_SHORT_HASH, __DATE__, __TIME__);
-}
-
-void Registry::registerInternalElements()
+void register_internal_elements()
 {
   using namespace elements;
 
-  registerElement<Package>();
+  auto &registry = Registry::get();
 
-  registerElement<gates::And>();
-  registerElement<gates::Nand>();
-  registerElement<gates::Nor>();
-  registerElement<gates::Not>();
-  registerElement<gates::Or>();
+  registry.registerType<Package>();
 
-  registerElement<logic::AssignFloat>();
-  registerElement<logic::AssignInt>();
+  registry.registerType<gates::And>();
+  registry.registerType<gates::Nand>();
+  registry.registerType<gates::Nor>();
+  registry.registerType<gates::Not>();
+  registry.registerType<gates::Or>();
 
-  registerElement<logic::CounterDown>();
-  registerElement<logic::CounterUp>();
-  registerElement<logic::CounterUpDown>();
+  registry.registerType<logic::AssignFloat>();
+  registry.registerType<logic::AssignInt>();
 
-  registerElement<logic::IfGreaterEqual>();
-  registerElement<logic::IfGreater>();
-  registerElement<logic::IfEqual>();
-  registerElement<logic::IfLower>();
-  registerElement<logic::IfLowerEqual>();
+  registry.registerType<logic::CounterDown>();
+  registry.registerType<logic::CounterUp>();
+  registry.registerType<logic::CounterUpDown>();
 
-  registerElement<logic::Latch>();
+  registry.registerType<logic::IfGreaterEqual>();
+  registry.registerType<logic::IfGreater>();
+  registry.registerType<logic::IfEqual>();
+  registry.registerType<logic::IfLower>();
+  registry.registerType<logic::IfLowerEqual>();
 
-  registerElement<logic::MemoryDifference>();
-  registerElement<logic::MemoryResetSet>();
-  registerElement<logic::MemorySetReset>();
+  registry.registerType<logic::Latch>();
 
-  registerElement<logic::MultiplexerInt>();
-  registerElement<logic::DemultiplexerInt>();
+  registry.registerType<logic::MemoryDifference>();
+  registry.registerType<logic::MemoryResetSet>();
+  registry.registerType<logic::MemorySetReset>();
 
-  registerElement<logic::Blinker>();
-  registerElement<logic::Switch>();
+  registry.registerType<logic::MultiplexerInt>();
+  registry.registerType<logic::DemultiplexerInt>();
 
-  registerElement<logic::TriggerFalling>();
-  registerElement<logic::TriggerRising>();
+  registry.registerType<logic::Blinker>();
+  registry.registerType<logic::Switch>();
 
-  registerElement<logic::PID>();
+  registry.registerType<logic::TriggerFalling>();
+  registry.registerType<logic::TriggerRising>();
 
-  registerElement<logic::SnapshotFloat>();
-  registerElement<logic::SnapshotInt>();
+  registry.registerType<logic::PID>();
 
-  registerElement<math::Abs>();
-  registerElement<math::BCD>();
-  registerElement<math::SQRT>();
+  registry.registerType<logic::SnapshotFloat>();
+  registry.registerType<logic::SnapshotInt>();
 
-  registerElement<math::Add>();
-  registerElement<math::AddIf>();
-  registerElement<math::Subtract>();
-  registerElement<math::SubtractIf>();
-  registerElement<math::Divide>();
-  registerElement<math::DivideIf>();
-  registerElement<math::Multiply>();
-  registerElement<math::MultiplyIf>();
+  registry.registerType<math::Abs>();
+  registry.registerType<math::BCD>();
+  registry.registerType<math::SQRT>();
 
-  registerElement<math::Cos>();
-  registerElement<math::Sin>();
+  registry.registerType<math::Add>();
+  registry.registerType<math::AddIf>();
+  registry.registerType<math::Subtract>();
+  registry.registerType<math::SubtractIf>();
+  registry.registerType<math::Divide>();
+  registry.registerType<math::DivideIf>();
+  registry.registerType<math::Multiply>();
+  registry.registerType<math::MultiplyIf>();
 
-  registerElement<math::Lerp>();
-  registerElement<math::Sign>();
+  registry.registerType<math::Cos>();
+  registry.registerType<math::Sin>();
 
-  registerElement<pneumatic::Tank>();
-  registerElement<pneumatic::Valve>();
+  registry.registerType<math::Lerp>();
+  registry.registerType<math::Sign>();
 
-  registerElement<timers::DeltaTime>();
-  registerElement<timers::Clock>();
-  registerElement<timers::TimerOn>();
-  registerElement<timers::TimerOff>();
-  registerElement<timers::TimerPulse>();
+  registry.registerType<pneumatic::Tank>();
+  registry.registerType<pneumatic::Valve>();
 
-  registerElement<ui::BCDToSevenSegmentDisplay>();
+  registry.registerType<timers::DeltaTime>();
+  registry.registerType<timers::Clock>();
+  registry.registerType<timers::TimerOn>();
+  registry.registerType<timers::TimerOff>();
+  registry.registerType<timers::TimerPulse>();
 
-  registerElement<ui::FloatInfo>();
-  registerElement<ui::IntInfo>();
+  registry.registerType<ui::BCDToSevenSegmentDisplay>();
 
-  registerElement<ui::PushButton>();
-  registerElement<ui::ToggleButton>();
+  registry.registerType<ui::FloatInfo>();
+  registry.registerType<ui::IntInfo>();
 
-  registerElement<ui::SevenSegmentDisplay>();
+  registry.registerType<ui::PushButton>();
+  registry.registerType<ui::ToggleButton>();
 
-  registerElement<values::ConstBool>();
-  registerElement<values::ConstFloat>();
-  registerElement<values::ConstInt>();
-  registerElement<values::RandomBool>();
-  registerElement<values::RandomFloat>();
-  registerElement<values::RandomFloatIf>();
-  registerElement<values::RandomInt>();
-  registerElement<values::RandomIntIf>();
+  registry.registerType<ui::SevenSegmentDisplay>();
 
-  registerElement<values::Degree2Radian>();
-  registerElement<values::Radian2Degree>();
-  registerElement<values::Int2Float>();
-  registerElement<values::Float2Int>();
+  registry.registerType<values::ConstBool>();
+  registry.registerType<values::ConstFloat>();
+  registry.registerType<values::ConstInt>();
+  registry.registerType<values::RandomBool>();
+  registry.registerType<values::RandomFloat>();
+  registry.registerType<values::RandomFloatIf>();
+  registry.registerType<values::RandomInt>();
+  registry.registerType<values::RandomIntIf>();
 
-  registerElement<values::MinInt>();
-  registerElement<values::MaxInt>();
-  registerElement<values::MinFloat>();
-  registerElement<values::MaxFloat>();
+  registry.registerType<values::Degree2Radian>();
+  registry.registerType<values::Radian2Degree>();
+  registry.registerType<values::Int2Float>();
+  registry.registerType<values::Float2Int>();
 
-  registerElement<values::ClampFloat>();
-  registerElement<values::ClampInt>();
+  registry.registerType<values::MinInt>();
+  registry.registerType<values::MaxInt>();
+  registry.registerType<values::MinFloat>();
+  registry.registerType<values::MaxFloat>();
 
-  registerElement<values::CharacteristicCurve>();
-}
+  registry.registerType<values::ClampFloat>();
+  registry.registerType<values::ClampInt>();
 
-void Registry::loadPlugins()
-{
-  auto loadFrom = [this](fs::path const &a_path) {
-    spaghetti::log::info("Loading plugins from {}", a_path.string());
-    if (!fs::is_directory(a_path)) return;
-    for (auto const &ENTRY : fs::directory_iterator(a_path)) {
-      spaghetti::log::info("Loading {}..", ENTRY.path().string());
-      if (!(fs::is_regular_file(ENTRY) || fs::is_symlink(ENTRY))) continue;
-
-      std::error_code error{};
-      auto plugin = std::make_shared<SharedLibrary>(ENTRY, error);
-
-      if (error.value() != 0 || !plugin->has("register_plugin")) continue;
-
-      auto registerPlugin = plugin->get<void(Registry &)>("register_plugin");
-      registerPlugin(*this);
-
-      m_pimpl->plugins.emplace_back(std::move(plugin));
-    }
-  };
-
-  auto const ADDITIONAL_PLUGINS_PATH = getenv("SPAGHETTI_ADDITIONAL_PLUGINS_PATH");
-  if (ADDITIONAL_PLUGINS_PATH) loadFrom(fs::path{ ADDITIONAL_PLUGINS_PATH });
-
-  loadFrom(system_plugins_path());
-  loadFrom(user_plugins_path());
+  registry.registerType<values::CharacteristicCurve>();
 }
 
 std::vector<fs::path> scan_for_dirs(fs::path const &a_path)
@@ -210,7 +166,7 @@ std::vector<fs::path> scan_for_dirs(fs::path const &a_path)
   return ret;
 }
 
-void Registry::loadPackages()
+void load_packages()
 {
   Packages packages{};
 
@@ -234,55 +190,19 @@ void Registry::loadPackages()
 
   log::warn("Loaded {} packages", packages.size());
   for (auto const &PACKAGE : packages) log::warn("{} as '{}'", PACKAGE.first, PACKAGE.second.path);
-
-  m_pimpl->packages = packages;
 }
 
-Element *Registry::createElement(string::hash_t const a_hash)
+void initialize()
 {
-  auto const &META_INFO = metaInfoFor(a_hash);
-  assert(META_INFO.clone);
-  return META_INFO.clone();
-}
+  log::init();
 
-void Registry::addElement(MetaInfo &a_metaInfo)
-{
-  auto &metaInfos = m_pimpl->meta_infos;
-  metaInfos.push_back(std::move(a_metaInfo));
-}
+  log::info("Spaghetti version: {}, git: {}@{}, build date: {}, {}", version::STRING, version::BRANCH,
+            version::COMMIT_SHORT_HASH, __DATE__, __TIME__);
 
-bool Registry::hasElement(string::hash_t const a_hash) const
-{
-  auto const &META_INFOS = m_pimpl->meta_infos;
-  auto const IT = std::find_if(std::begin(META_INFOS), std::end(META_INFOS),
-                               [a_hash](auto const &a_metaInfo) { return a_metaInfo.hash == a_hash; });
-  return IT != std::end(META_INFOS);
-}
+//  register_internal_elements();
 
-size_t Registry::size() const
-{
-  auto const &META_INFOS = m_pimpl->meta_infos;
-  return META_INFOS.size();
-}
-
-Registry::MetaInfo const &Registry::metaInfoFor(string::hash_t const a_hash) const
-{
-  auto &metaInfos = m_pimpl->meta_infos;
-  assert(hasElement(a_hash));
-  auto const IT = std::find_if(std::begin(metaInfos), std::end(metaInfos),
-                               [a_hash](auto const &a_metaInfo) { return a_metaInfo.hash == a_hash; });
-  return *IT;
-}
-
-Registry::MetaInfo const &Registry::metaInfoAt(size_t const a_index) const
-{
-  auto const &META_INFOS = m_pimpl->meta_infos;
-  return META_INFOS[a_index];
-}
-
-Registry::Packages const &Registry::packages() const
-{
-  return m_pimpl->packages;
+//  auto &registry = Registry::get();
+//  registry.loadPlugins();
 }
 
 } // namespace spaghetti

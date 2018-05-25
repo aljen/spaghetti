@@ -35,81 +35,125 @@
 #include <string>
 #include <unordered_map>
 #include <type_traits>
+#include <vector>
 
 #include <spaghetti/api.h>
+#include <spaghetti/logger.h>
 #include <spaghetti/strings.h>
+#include <spaghetti/shared_library.h>
+#include <spaghetti/paths.h>
+#include <spaghetti/version.h>
 
 namespace spaghetti {
 
 class Element;
 
-class SPAGHETTI_API Registry final {
-  struct MetaInfo {
-    string::hash_t hash{};
-    std::string type{};
-    template<typename T>
-    using CloneFunc = T *(*)();
-    CloneFunc<Element> clone{};
-  };
+SPAGHETTI_API void register_internal_elements();
+SPAGHETTI_API void load_packages();
 
+
+struct PackageInfo {
+  std::string filename{};
+  std::string path{};
+  std::string icon{};
+};
+using Packages = std::unordered_map<std::string, PackageInfo>;
+
+struct TRegistryUserData {};
+template<typename TType, typename TUserData = TRegistryUserData>
+class TRegistry final {
  public:
-  struct PackageInfo {
-    std::string filename{};
-    std::string path{};
-    std::string icon{};
-  };
-  using Packages = std::unordered_map<std::string, PackageInfo>;
-
-  static Registry &get();
-
-  ~Registry();
-
-  void registerInternalElements();
-  void loadPlugins();
-  void loadPackages();
-
-  template<typename ElementDerived>
-  typename std::enable_if_t<std::is_base_of_v<Element, ElementDerived>>
-  registerElement()
-  {
-    auto const HASH = ElementDerived::HASH;
-    assert(!hasElement(HASH));
-    MetaInfo info{ HASH, ElementDerived::TYPE, &clone<ElementDerived> };
-    addElement(info);
-  }
-
-  Element *createElement(char const *const a_name) { return createElement(string::hash(a_name)); }
-  Element *createElement(string::hash_t const a_hash);
-
-  bool hasElement(string::hash_t const a_hash) const;
-
-  size_t size() const;
-  MetaInfo const &metaInfoFor(string::hash_t const a_hash) const;
-  MetaInfo const &metaInfoAt(size_t const a_index) const;
-
-  Packages const &packages() const;
-
-  std::string appPath() const;
-  std::string systemPluginsPath() const;
-  std::string userPluginsPath() const;
-  std::string systemPackagesPath() const;
-  std::string userPackagesPath() const;
+  template<typename T>
+  using CloneFunc = T *(*)();
+  using Types = std::unordered_map<string::hash_t, CloneFunc<TType>>;
 
  private:
-  Registry();
+  using Plugins = std::vector<std::shared_ptr<SharedLibrary>>;
 
-  void addElement(MetaInfo &a_metaInfo);
+ public:
+  static TRegistry &get();
+
+  ~TRegistry() = default;
+
+  void loadPlugins()
+  {
+    auto load_from = [this](fs::path const &a_path) {
+      spaghetti::log::info("Loading plugins from {}", a_path.string());
+      if (!fs::is_directory(a_path)) return;
+      for (auto const &ENTRY : fs::directory_iterator(a_path)) {
+        spaghetti::log::info("Loading {}..", ENTRY.path().string());
+        if (!(fs::is_regular_file(ENTRY) || fs::is_symlink(ENTRY))) continue;
+
+        std::error_code error{};
+        auto plugin = std::make_shared<SharedLibrary>(ENTRY, error);
+
+        if (error.value() != 0 || !plugin->has("register_plugin")) continue;
+
+        auto registerPlugin = plugin->get<void(TRegistry<TType, TUserData> &)>("register_plugin");
+        registerPlugin(*this);
+
+        m_plugins.emplace_back(std::move(plugin));
+      }
+    };
+
+    auto const ADDITIONAL_PLUGINS_PATH = getenv("SPAGHETTI_ADDITIONAL_PLUGINS_PATH");
+    if (ADDITIONAL_PLUGINS_PATH) load_from(fs::path{ ADDITIONAL_PLUGINS_PATH });
+
+    load_from(system_plugins_path());
+    load_from(user_plugins_path());
+  }
+
+  template<typename TTypeDerived>
+  typename std::enable_if_t<std::is_base_of_v<TType, TTypeDerived>>
+  registerType()
+  {
+    auto const HASH = TTypeDerived::HASH;
+    assert(!has(HASH));
+    m_types[HASH] = &clone<TTypeDerived>;
+  }
+
+  TType *create(char const *const a_name) { return create(string::hash(a_name)); }
+
+  TType *create(string::hash_t const a_hash)
+  {
+    assert(has(a_hash));
+    auto const createFunction = m_types.at(a_hash);
+    assert(createFunction);
+    return createFunction();
+  }
+
+  bool has(string::hash_t const a_hash) const
+  {
+    return m_types.count(a_hash) == 1;
+  }
+
+  size_t size() const
+  {
+    return m_types.size();
+  }
+
+  TUserData &data() { return m_data; }
+  TUserData const &data() const { return m_data; }
+
+ private:
+  TRegistry() = default;
 
   template<typename T>
-  static Element *clone()
+  static TType *clone()
   {
     return new T;
   }
 
  private:
-  struct PIMPL;
-  std::unique_ptr<PIMPL> m_pimpl;
+  Types m_types{};
+  Plugins m_plugins{};
+  TUserData m_data{};
 };
+
+struct UserData {};
+using Registry = TRegistry<Element, UserData>;
+
+SPAGHETTI_API void initialize();
 
 } // namespace spaghetti
 

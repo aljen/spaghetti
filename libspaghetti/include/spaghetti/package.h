@@ -120,7 +120,7 @@ class SPAGHETTI_API Package final : public Element {
   void open(std::string const &a_filename);
   void save(std::string const &a_filename);
 
-  static Registry::PackageInfo getInfoFor(std::string const &a_filename);
+  static PackageInfo getInfoFor(std::string const &a_filename);
 
  private:
   duration_t m_delta{};

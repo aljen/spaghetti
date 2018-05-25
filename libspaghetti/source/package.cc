@@ -117,6 +117,7 @@ void Package::deserialize(Json const &a_json)
 
   Json json{};
 
+#if 0
   if (m_isExternal) {
     log::debug("Package is external one, looking for real one registered as '{}'", PATH);
 
@@ -140,6 +141,7 @@ void Package::deserialize(Json const &a_json)
 
     file >> json;
   }
+#endif
 
   auto const &REAL_PACKAGE = m_isExternal ? json["package"] : PACKAGE;
   auto const &ELEMENTS = REAL_PACKAGE["elements"];
@@ -205,7 +207,7 @@ Element *Package::add(string::hash_t const a_hash)
 
   spaghetti::Registry &registry{ spaghetti::Registry::get() };
 
-  Element *const element{ registry.createElement(a_hash) };
+  Element *const element{ registry.create(a_hash) };
   assert(element);
 
   size_t index{};
@@ -452,9 +454,9 @@ void Package::save(std::string const &a_filename)
   resumeDispatchThread();
 }
 
-Registry::PackageInfo Package::getInfoFor(std::string const &a_filename)
+PackageInfo Package::getInfoFor(std::string const &a_filename)
 {
-  Registry::PackageInfo type{};
+  PackageInfo type{};
 
   std::ifstream file{ a_filename };
   if (!file.is_open()) return type;
