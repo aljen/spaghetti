@@ -31,6 +31,7 @@
 namespace spaghetti {
 
 SPAGHETTI_API std::string_view app_path();
+SPAGHETTI_API std::string_view app_data_path();
 
 } // namespace spaghetti
 

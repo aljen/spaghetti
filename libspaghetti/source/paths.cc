@@ -22,12 +22,22 @@
 
 #include "spaghetti/paths.h"
 
+#include <cassert>
 #include <cstring>
 #include <string>
 
-#if defined(__linux__)
-#include <unistd.h>
+// clang-format off
+#if defined(_WIN64) || defined(_WIN32)
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h>
+# include <shlobj.h>
+# include <sstream>
+#elif defined(__linux__)
+# include <unistd.h>
 #endif
+// clang-format on
+
+#include "spaghetti/filesystem.h"
 
 namespace spaghetti {
 
@@ -50,6 +60,29 @@ std::string_view app_path()
   }();
 
   return APP_PATH;
+}
+
+std::string_view app_data_path()
+{
+  static std::string const APP_DATA_PATH = [] {
+#if defined(_WIN64) || defined(_WIN32)
+  wchar_t *appDataPath{};
+  HRESULT result = SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_DEFAULT, nullptr, &appDataPath);
+  std::wstringstream ss{};
+  ss << appDataPath;
+  CoTaskMemFree(static_cast<void *>(appDataPath));
+  fs::path const TEMP_APP_DATA_PATH{ ss.str() };
+  return fs::absolute(TEMP_APP_DATA_PATH / "Spaghetti").string();
+#else
+  auto const HOME_ENV = getenv("HOME");
+  assert(HOME_ENV);
+  fs::path const DATA_PATH = fs::absolute(fs::path{ HOME_ENV } / ".config/spaghetti");
+  fs::create_directories(DATA_PATH);
+  return DATA_PATH.string();
+#endif
+  }();
+
+  return APP_DATA_PATH;
 }
 
 } // namespace spaghetti
