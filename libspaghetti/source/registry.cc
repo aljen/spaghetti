@@ -199,10 +199,10 @@ void initialize()
   log::info("Spaghetti version: {}, git: {}@{}, build date: {}, {}", version::STRING, version::BRANCH,
             version::COMMIT_SHORT_HASH, __DATE__, __TIME__);
 
-//  register_internal_elements();
+  register_internal_elements();
 
-//  auto &registry = Registry::get();
-//  registry.loadPlugins();
+  auto &registry = Registry::get();
+  registry.loadPlugins();
 }
 
 } // namespace spaghetti
