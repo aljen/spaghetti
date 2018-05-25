@@ -34,6 +34,7 @@ SPAGHETTI_API std::string_view app_path();
 SPAGHETTI_API std::string_view app_data_path();
 SPAGHETTI_API std::string_view system_plugins_path();
 SPAGHETTI_API std::string_view user_plugins_path();
+SPAGHETTI_API std::string_view system_packages_path();
 
 } // namespace spaghetti
 
