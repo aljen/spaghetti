@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class Sin final : public Element {
+class SPAGHETTI_API Sin final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/sin" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

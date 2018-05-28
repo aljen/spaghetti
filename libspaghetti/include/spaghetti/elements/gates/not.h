@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::gates {
 
-class Not final : public Element {
+class SPAGHETTI_API Not final : public Element {
  public:
   static constexpr char const *const TYPE{ "gates/not" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

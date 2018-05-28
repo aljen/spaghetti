@@ -30,7 +30,7 @@
 
 namespace spaghetti::elements::timers {
 
-class TimerOff final : public Element {
+class SPAGHETTI_API TimerOff final : public Element {
  public:
   static constexpr char const *const TYPE{ "timers/t_off" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

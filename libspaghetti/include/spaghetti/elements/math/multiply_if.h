@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class MultiplyIf final : public Element {
+class SPAGHETTI_API MultiplyIf final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/multiply_if" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

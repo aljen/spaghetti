@@ -30,7 +30,7 @@
 
 namespace spaghetti::elements::values {
 
-class RandomIntIf final : public Element {
+class SPAGHETTI_API RandomIntIf final : public Element {
  public:
   static constexpr char const *const TYPE{ "values/random_int_if" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

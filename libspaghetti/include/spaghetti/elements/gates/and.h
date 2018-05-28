@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::gates {
 
-class And final : public Element {
+class SPAGHETTI_API And final : public Element {
  public:
   static constexpr char const *const TYPE{ "gates/and" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

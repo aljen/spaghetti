@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::pneumatic {
 
-class Valve final : public Element {
+class SPAGHETTI_API Valve final : public Element {
  public:
   static constexpr char const *const TYPE{ "pneumatic/valve" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

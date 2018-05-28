@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class Switch final : public Element {
+class SPAGHETTI_API Switch final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/switch" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

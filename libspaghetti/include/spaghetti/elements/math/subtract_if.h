@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class SubtractIf final : public Element {
+class SPAGHETTI_API SubtractIf final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/subtract_if" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

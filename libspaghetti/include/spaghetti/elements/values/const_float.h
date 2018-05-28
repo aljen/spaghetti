@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::values {
 
-class ConstFloat final : public Element {
+class SPAGHETTI_API ConstFloat final : public Element {
  public:
   static constexpr char const *const TYPE{ "values/const_float" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

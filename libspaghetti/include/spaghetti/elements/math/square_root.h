@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class SQRT final : public Element {
+class SPAGHETTI_API SQRT final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/sqrt" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

@@ -30,7 +30,7 @@
 
 namespace spaghetti::elements::timers {
 
-class TimerOn final : public Element {
+class SPAGHETTI_API TimerOn final : public Element {
  public:
   static constexpr char const *const TYPE{ "timers/t_on" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

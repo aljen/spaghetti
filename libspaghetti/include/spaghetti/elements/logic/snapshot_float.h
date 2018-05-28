@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class SnapshotFloat final : public Element {
+class SPAGHETTI_API SnapshotFloat final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/snapshot_float" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

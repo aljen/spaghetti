@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class CounterUp final : public Element {
+class SPAGHETTI_API CounterUp final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/counter_up" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

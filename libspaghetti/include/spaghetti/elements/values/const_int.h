@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::values {
 
-class ConstInt final : public Element {
+class SPAGHETTI_API ConstInt final : public Element {
  public:
   static constexpr char const *const TYPE{ "values/const_int" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

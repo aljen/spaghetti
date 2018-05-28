@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::values {
 
-class RandomBool final : public Element {
+class SPAGHETTI_API RandomBool final : public Element {
  public:
   static constexpr char const *const TYPE{ "values/random_bool" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::ui {
 
-class SevenSegmentDisplay final : public Element {
+class SPAGHETTI_API SevenSegmentDisplay final : public Element {
  public:
   static constexpr char const *const TYPE{ "ui/seven_segment_display" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

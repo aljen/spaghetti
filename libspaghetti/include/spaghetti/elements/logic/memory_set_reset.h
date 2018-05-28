@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class MemorySetReset final : public Element {
+class SPAGHETTI_API MemorySetReset final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/memory_set_reset" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

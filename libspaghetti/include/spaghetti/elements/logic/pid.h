@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class PID final : public Element {
+class SPAGHETTI_API PID final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/pid" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

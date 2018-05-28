@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::values {
 
-class MaxFloat final : public Element {
+class SPAGHETTI_API MaxFloat final : public Element {
  public:
   static constexpr char const *const TYPE{ "values/max_float" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

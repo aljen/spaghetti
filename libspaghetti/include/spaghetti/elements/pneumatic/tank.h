@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::pneumatic {
 
-class Tank final : public Element {
+class SPAGHETTI_API Tank final : public Element {
  public:
   static constexpr char const *const TYPE{ "pneumatic/tank" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

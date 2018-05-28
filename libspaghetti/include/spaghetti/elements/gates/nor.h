@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::gates {
 
-class Nor final : public Element {
+class SPAGHETTI_API Nor final : public Element {
  public:
   static constexpr char const *const TYPE{ "gates/nor" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

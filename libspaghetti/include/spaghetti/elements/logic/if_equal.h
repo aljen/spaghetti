@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class IfEqual final : public Element {
+class SPAGHETTI_API IfEqual final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/if_equal" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

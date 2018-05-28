@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class CounterUpDown final : public Element {
+class SPAGHETTI_API CounterUpDown final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/counter_up_down" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

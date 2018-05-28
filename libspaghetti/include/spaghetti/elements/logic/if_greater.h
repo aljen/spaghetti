@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class IfGreater final : public Element {
+class SPAGHETTI_API IfGreater final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/if_greater" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

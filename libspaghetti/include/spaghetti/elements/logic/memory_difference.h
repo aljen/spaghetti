@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class MemoryDifference final : public Element {
+class SPAGHETTI_API MemoryDifference final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/memory_difference" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class TriggerRising final : public Element {
+class SPAGHETTI_API TriggerRising final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/trigger_rising" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

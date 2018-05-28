@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::gates {
 
-class Or final : public Element {
+class SPAGHETTI_API Or final : public Element {
  public:
   static constexpr char const *const TYPE{ "gates/or" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

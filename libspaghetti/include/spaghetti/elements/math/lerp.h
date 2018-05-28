@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class Lerp final : public Element {
+class SPAGHETTI_API Lerp final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/lerp" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

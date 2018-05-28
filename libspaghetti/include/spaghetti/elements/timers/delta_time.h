@@ -30,7 +30,7 @@
 
 namespace spaghetti::elements::timers {
 
-class DeltaTime final : public Element {
+class SPAGHETTI_API DeltaTime final : public Element {
  public:
   static constexpr char const *const TYPE{ "timers/delta_time" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

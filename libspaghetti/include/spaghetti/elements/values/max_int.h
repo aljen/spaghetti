@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::values {
 
-class MaxInt final : public Element {
+class SPAGHETTI_API MaxInt final : public Element {
  public:
   static constexpr char const *const TYPE{ "values/max_int" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

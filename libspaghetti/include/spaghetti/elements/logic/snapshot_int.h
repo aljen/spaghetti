@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class SnapshotInt final : public Element {
+class SPAGHETTI_API SnapshotInt final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/snapshot_int" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
