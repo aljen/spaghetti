@@ -53,10 +53,9 @@ int main(int argc, char **argv)
 
   std::locale::global(std::locale("C"));
 
-  auto &registry = spaghetti::Registry::get();
-  registry.registerInternalElements();
-  registry.loadPlugins();
-  registry.loadPackages();
+  spaghetti::initialize();
+  spaghetti::log::init_from_plugin();
+  spaghetti::load_packages();
 
   spaghetti::Editor editor{};
   QObject::connect(&app, &QApplication::aboutToQuit, &editor, &spaghetti::Editor::aboutToQuit);
