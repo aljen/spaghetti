@@ -27,7 +27,7 @@
 #include <QMainWindow>
 #include <QMap>
 
-#include <spaghetti/api.h>
+#include "nodes_registry.h"
 
 namespace Ui {
 class Editor;
@@ -42,7 +42,7 @@ namespace spaghetti {
 class Package;
 class PackageView;
 
-class SPAGHETTI_API Editor final : public QMainWindow {
+class Editor final : public QMainWindow {
   Q_OBJECT
 
  public:
@@ -68,7 +68,7 @@ class SPAGHETTI_API Editor final : public QMainWindow {
   QListView* elementsList();
   QTableWidget* propertiesTable();
 
- protected:
+ private:
   void showEvent(QShowEvent *a_event) override;
 
   PackageView *packageViewForIndex(int const a_index = -1) const;
@@ -96,9 +96,10 @@ class SPAGHETTI_API Editor final : public QMainWindow {
 
  private:
   Ui::Editor *const m_ui{};
-  int m_packageViewIndex{ -1 };
+  spaghetti::NodesRegistry &m_registry;
   QMap<QString, int> m_openFiles{};
   QMap<Package*, int> m_openPackages{};
+  int m_packageViewIndex{ -1 };
 };
 
 } // namespace spaghetti

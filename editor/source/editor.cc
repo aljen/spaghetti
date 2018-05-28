@@ -69,6 +69,7 @@ namespace spaghetti {
 Editor::Editor(QWidget *const a_parent)
   : QMainWindow{ a_parent }
   , m_ui{ new Ui::Editor }
+  , m_registry{ spaghetti::NodesRegistry::get() }
 {
   setObjectName("SpaghettiEditor");
   m_ui->setupUi(this);
@@ -125,6 +126,9 @@ Editor::Editor(QWidget *const a_parent)
 
   QDir packagesDir{ PACKAGES_DIR };
   if (!packagesDir.exists()) packagesDir.mkpath(".");
+
+  spaghetti::load_internal_nodes();
+  spaghetti::load_nodes_plugins();
 
   populateLibrary();
 }
