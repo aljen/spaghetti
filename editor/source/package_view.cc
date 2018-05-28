@@ -119,7 +119,7 @@ PackageView::PackageView(Editor *const a_editor, Package *const a_package)
   , m_standalone{ m_package->package() == nullptr }
 {
   if (m_standalone) {
-    m_packageNode = static_cast<nodes::Package *>(Registry::get().createNode("logic/package"));
+//    m_packageNode = static_cast<nodes::Package *>(Registry::get().createNode("logic/package"));
     m_package->setNode(m_packageNode);
   } else
     m_packageNode = m_package->node<nodes::Package>();
@@ -176,8 +176,8 @@ PackageView::PackageView(Editor *const a_editor, Package *const a_package)
   m_packageNode->setElement(m_package);
 
   if (m_package->name().empty()) {
-    auto &registry = Registry::get();
-    m_package->setName(registry.elementName("logic/package"));
+//    auto &registry = Registry::get();
+//    m_package->setName(registry.elementName("logic/package"));
   }
 
   m_scene->addItem(m_inputs);
@@ -202,6 +202,7 @@ PackageView::~PackageView()
 
 void PackageView::open()
 {
+#if 0
   auto const &inputsPosition = m_package->inputsPosition();
   auto const &outputsPosition = m_package->outputsPosition();
   m_inputs->setPos(inputsPosition.x, inputsPosition.y);
@@ -248,6 +249,7 @@ void PackageView::open()
     auto const targetSocket = target->inputs()[TARGET_SOCKET];
     sourceSocket->connect(targetSocket);
   }
+#endif
 }
 
 void PackageView::save()
@@ -257,6 +259,7 @@ void PackageView::save()
 
 void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
 {
+#if 0
   auto const mimeData = a_event->mimeData();
 
   //  mimeData->setData("metadata/is_package", IS_PACKAGE);
@@ -278,7 +281,7 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
     Registry &registry{ Registry::get() };
 
     assert(m_dragNode == nullptr);
-    m_dragNode = registry.createNode(path);
+//    m_dragNode = registry.createNode(path);
     m_dragNode->setPackageView(this);
     m_dragNode->setPropertiesTable(m_properties);
     m_dragNode->setName(name);
@@ -289,6 +292,7 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
     m_dragNode->calculateBoundingRect();
     a_event->accept();
   } else
+#endif
     QGraphicsView::dragEnterEvent(a_event);
 }
 

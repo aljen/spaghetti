@@ -175,6 +175,7 @@ void Editor::tabChanged(int const a_index)
 
 void Editor::populateLibrary()
 {
+#if 0
   auto const &REGISTRY = Registry::get();
 
   auto const &ELEMENTS_SIZE = REGISTRY.size();
@@ -210,6 +211,7 @@ void Editor::populateLibrary()
   }
 
   m_ui->packagesContainer->sortItems(0, Qt::AscendingOrder);
+#endif
 }
 
 void Editor::addElement(QString const &a_category, QString const &a_name, QString const &a_type, QString const &a_icon)
