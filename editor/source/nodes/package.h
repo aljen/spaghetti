@@ -24,7 +24,7 @@
 #ifndef NODES_PACKAGE_H
 #define NODES_PACKAGE_H
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 namespace spaghetti::nodes {
 

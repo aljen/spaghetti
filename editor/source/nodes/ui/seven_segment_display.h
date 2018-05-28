@@ -24,7 +24,7 @@
 #ifndef NODES_UI_SEVEN_SEGMENT_DISPLAY_H
 #define NODES_UI_SEVEN_SEGMENT_DISPLAY_H
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 namespace spaghetti::nodes::ui {
 

@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "ui/elements_list.h"
+#include "elements_list.h"
 
-#include "spaghetti/editor.h"
-#include "ui/package_view.h"
+#include "spaghetti/editor/editor.h"
+#include "package_view.h"
 
 #include <QDebug>
 #include <QDrag>

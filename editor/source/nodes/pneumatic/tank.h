@@ -24,7 +24,7 @@
 #ifndef NODES_PNEUMATIC_TANK_H
 #define NODES_PNEUMATIC_TANK_H
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 namespace spaghetti::nodes::pneumatic {
 

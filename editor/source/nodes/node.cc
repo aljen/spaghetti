@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 #include <bitset>
 #include <cmath>
@@ -36,8 +36,8 @@
 
 #include "spaghetti/logger.h"
 #include "spaghetti/package.h"
-#include "ui/colors.h"
-#include "ui/package_view.h"
+#include "colors.h"
+#include "package_view.h"
 
 namespace spaghetti {
 

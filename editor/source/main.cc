@@ -25,8 +25,9 @@
 #include <QStyleFactory>
 #include <iostream>
 
-#include <spaghetti/editor.h>
+#include <spaghetti/editor/editor.h>
 #include <spaghetti/registry.h>
+#include "nodes_registry.h"
 
 int main(int argc, char **argv)
 {

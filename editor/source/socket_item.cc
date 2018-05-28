@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "spaghetti/socket_item.h"
+#include "spaghetti/editor/socket_item.h"
 
 #include <QApplication>
 #include <QCursor>
@@ -31,11 +31,11 @@
 #include <QMimeData>
 #include <QWidget>
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 #include "spaghetti/package.h"
-#include "ui/colors.h"
-#include "ui/link_item.h"
-#include "ui/package_view.h"
+#include "colors.h"
+#include "link_item.h"
+#include "package_view.h"
 
 namespace spaghetti {
 

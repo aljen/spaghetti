@@ -20,13 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "spaghetti/editor.h"
+#include "spaghetti/editor/editor.h"
 #include "ui_editor.h"
 
-#include "spaghetti/socket_item.h"
-#include "ui/colors.h"
-#include "ui/elements_list.h"
-#include "ui/link_item.h"
+#include "spaghetti/editor/socket_item.h"
+#include "colors.h"
+#include "elements_list.h"
+#include "link_item.h"
 
 #include <QAction>
 #include <QDebug>
@@ -54,13 +54,13 @@
 #include <vector>
 
 #include <spaghetti/elements/logic/all.h>
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 #include "spaghetti/package.h"
 #include "spaghetti/registry.h"
 #include "spaghetti/version.h"
-#include "ui/expander_widget.h"
-#include "ui/package_view.h"
-#include "filesystem.h"
+#include "expander_widget.h"
+#include "package_view.h"
+#include "spaghetti/filesystem.h"
 
 QString const PACKAGES_DIR{ "../packages" };
 

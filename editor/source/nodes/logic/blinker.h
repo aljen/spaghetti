@@ -24,7 +24,7 @@
 #ifndef NODES_LOGIC_BLINKER_H
 #define NODES_LOGIC_BLINKER_H
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 namespace spaghetti::nodes::logic {
 

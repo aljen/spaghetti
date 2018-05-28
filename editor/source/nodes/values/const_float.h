@@ -24,7 +24,7 @@
 #ifndef NODES_VALUES_CONST_FLOAT_H
 #define NODES_VALUES_CONST_FLOAT_H
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 namespace spaghetti::nodes::values {
 

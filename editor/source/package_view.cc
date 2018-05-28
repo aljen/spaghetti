@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "ui/package_view.h"
+#include "package_view.h"
 
 #include <QDebug>
 #include <QDragEnterEvent>
@@ -39,12 +39,12 @@
 #endif
 // clang-format on
 
-#include "spaghetti/editor.h"
-#include "spaghetti/node.h"
+#include "spaghetti/editor/editor.h"
+#include "spaghetti/editor/node.h"
 #include "spaghetti/package.h"
 #include "spaghetti/registry.h"
-#include "ui/elements_list.h"
-#include "ui/link_item.h"
+#include "elements_list.h"
+#include "link_item.h"
 #include "nodes/package.h"
 
 namespace spaghetti {
