@@ -310,7 +310,7 @@
   <customwidget>
    <class>ExpanderWidget</class>
    <extends>QTreeWidget</extends>
-   <header>ui/expander_widget.h</header>
+   <header>expander_widget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
