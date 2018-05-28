@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 
 project(SpaghettiEditor VERSION ${Spaghetti_VERSION} LANGUAGES C CXX)
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
 
 add_executable(SpaghettiEditor main.cc)
