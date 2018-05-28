@@ -29,6 +29,11 @@
 namespace spaghetti::nodes::pneumatic {
 
 class Tank : public Node {
+ public:
+  static constexpr char const *const TYPE{ "pneumatic/tank" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+ private:
   void showProperties() override;
 };
 

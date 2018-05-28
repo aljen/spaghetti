@@ -29,6 +29,11 @@
 namespace spaghetti::nodes::timers {
 
 class Clock : public Node {
+ public:
+  static constexpr char const *const TYPE{ "timers/clock" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+ private:
   void showProperties() override;
 };
 

@@ -37,6 +37,9 @@ void load_internal_nodes()
   auto &registry = NodesRegistry::get();
 
   registry.registerType<nodes::Package>();
+  registry.registerType<nodes::logic::Blinker>();
+  registry.registerType<nodes::timers::Clock>();
+  registry.registerType<nodes::pneumatic::Tank>();
 }
 
 void load_nodes_plugins()
