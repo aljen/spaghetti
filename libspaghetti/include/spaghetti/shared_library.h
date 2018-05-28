@@ -25,11 +25,12 @@
 #define SPAGHETTI_SHARED_LIBRARY_H
 
 #include <system_error>
+#include <spaghetti/api.h>
 #include <spaghetti/filesystem.h>
 
 namespace spaghetti {
 
-class SharedLibrary final {
+class SPAGHETTI_API SharedLibrary final {
  public:
   SharedLibrary(fs::path const &a_file, std::error_code &a_errorCode);
   ~SharedLibrary();
