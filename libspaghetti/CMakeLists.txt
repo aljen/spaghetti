@@ -269,8 +269,8 @@ target_include_directories(Spaghetti
   )
 target_include_directories(Spaghetti SYSTEM PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/include
-  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
-  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
+#  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
+#  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
   )
 target_link_libraries(Spaghetti
   PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
@@ -305,8 +305,8 @@ if (SPAGHETTI_DONT_USE_CXX11_ABI)
     )
   target_include_directories(SpaghettiOldABI SYSTEM PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/include
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
+#    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
+#    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
     )
   target_link_libraries(SpaghettiOldABI
     PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
@@ -375,22 +375,22 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/filesystem.h
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
 
 # Copy vendor headers to libspaghetti/include
-message (STATUS "Synchronizing vendor headers...")
-foreach(HEADER ${VENDOR_FREE_STANDING_HEADERS})
-  configure_file(${VENDOR_ROOT}/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/${HEADER} COPYONLY)
-  install(FILES ${VENDOR_ROOT}/${HEADER}
-    COMPONENT SDK
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
-endforeach ()
-foreach(HEADER ${VENDOR_SPARSEPP_HEADERS})
-  configure_file(${VENDOR_ROOT}/sparsepp/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/sparsepp/${HEADER} COPYONLY)
-endforeach ()
-install(DIRECTORY ${VENDOR_ROOT}/sparsepp
-  COMPONENT SDK
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
-foreach(HEADER ${VENDOR_SPDLOG_HEADERS})
-  configure_file(${VENDOR_ROOT}/spdlog/include/spdlog/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/spdlog/${HEADER} COPYONLY)
-endforeach ()
-install(DIRECTORY ${VENDOR_ROOT}/spdlog/include/spdlog
-  COMPONENT SDK
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
+#message (STATUS "Synchronizing vendor headers...")
+#foreach(HEADER ${VENDOR_FREE_STANDING_HEADERS})
+#  configure_file(${VENDOR_ROOT}/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/${HEADER} COPYONLY)
+#  install(FILES ${VENDOR_ROOT}/${HEADER}
+#    COMPONENT SDK
+#    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
+#endforeach ()
+#foreach(HEADER ${VENDOR_SPARSEPP_HEADERS})
+#  configure_file(${VENDOR_ROOT}/sparsepp/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/sparsepp/${HEADER} COPYONLY)
+#endforeach ()
+#install(DIRECTORY ${VENDOR_ROOT}/sparsepp
+#  COMPONENT SDK
+#  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
+#foreach(HEADER ${VENDOR_SPDLOG_HEADERS})
+#  configure_file(${VENDOR_ROOT}/spdlog/include/spdlog/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/spdlog/${HEADER} COPYONLY)
+#endforeach ()
+#install(DIRECTORY ${VENDOR_ROOT}/spdlog/include/spdlog
+#  COMPONENT SDK
+#  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)

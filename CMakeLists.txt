@@ -14,7 +14,7 @@ include(CompilerType)
 include(CompilerFlags)
 include(DetectCxxFilesystem)
 include(GetRepoInfo)
-include(VendorHeaders)
+#include(VendorHeaders)
 
 option(SPAGHETTI_BUILD_EDITOR "Build editor" ON)
 option(SPAGHETTI_BUILD_EXAMPLE_PLUGIN "Build example plugin" ON)
@@ -37,7 +37,7 @@ if (SPAGHETTI_USE_CLANG_TIDY)
   set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=-cppcoreguidelines-pro-type-const-cast")
 endif ()
 
-set(VENDOR_ROOT ${PROJECT_SOURCE_DIR}/vendor)
+#set(VENDOR_ROOT ${PROJECT_SOURCE_DIR}/vendor)
 
 add_subdirectory(libspaghetti)
 
