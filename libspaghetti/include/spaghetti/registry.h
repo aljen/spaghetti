@@ -65,7 +65,11 @@ class TRegistry final {
  public:
   template<typename T>
   using CloneFunc = T *(*)();
-  using Types = std::unordered_map<string::hash_t, CloneFunc<TType>>;
+  struct Info {
+    std::string type{};
+    CloneFunc<TType> clone{};
+  };
+  using Types = std::unordered_map<string::hash_t, Info>;
 
  private:
   using Plugins = std::vector<std::shared_ptr<SharedLibrary>>;
@@ -108,8 +112,9 @@ class TRegistry final {
   registerType()
   {
     auto const HASH = TTypeDerived::HASH;
+    auto const TYPE = TTypeDerived::TYPE;
     assert(!has(HASH));
-    m_types[HASH] = &clone<TTypeDerived>;
+    m_types[HASH] = { TYPE, &clone<TTypeDerived> };
   }
 
   TType *create(char const *const a_name) { return create(string::hash(a_name)); }
@@ -117,7 +122,7 @@ class TRegistry final {
   TType *create(string::hash_t const a_hash)
   {
     assert(has(a_hash));
-    auto const createFunction = m_types.at(a_hash);
+    auto const createFunction = m_types.at(a_hash).clone;
     assert(createFunction);
     return createFunction();
   }
