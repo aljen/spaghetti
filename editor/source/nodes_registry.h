@@ -26,13 +26,29 @@
 
 #include <spaghetti/editor/node.h>
 #include <spaghetti/registry.h>
+#include <spaghetti/strings.h>
 
 namespace spaghetti {
 
-using NodesRegistry = TRegistry<Node>;
+struct NodeInfo {
+  QString type{};
+  QString name{};
+  QString icon{};
+};
+
+struct NodesInfo {
+  std::unordered_map<string::hash_t, NodeInfo> nodes{};
+};
+
+using NodesRegistry = TRegistry<Node, NodesInfo>;
 
 void load_internal_nodes();
 void load_nodes_plugins();
+void load_nodes_meta_data();
+
+Node *create_node_for(string::hash_t const a_hash);
+QString node_name_for(string::hash_t const a_hash);
+QString node_icon_for(string::hash_t const a_hash);
 
 } // namespace spaghetti
 

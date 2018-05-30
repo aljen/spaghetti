@@ -129,6 +129,7 @@ Editor::Editor(QWidget *const a_parent)
 
   spaghetti::load_internal_nodes();
   spaghetti::load_nodes_plugins();
+  spaghetti::load_nodes_meta_data();
 
   populateLibrary();
 }
@@ -175,24 +176,29 @@ void Editor::tabChanged(int const a_index)
 
 void Editor::populateLibrary()
 {
-#if 0
+#if 1
   auto const &REGISTRY = Registry::get();
 
-  auto const &ELEMENTS_SIZE = REGISTRY.size();
-  for (size_t i = 0; i < ELEMENTS_SIZE; ++i) {
-    auto const &info = REGISTRY.metaInfoAt(i);
+  auto const &TYPES = REGISTRY.types();
+  for (auto const &TYPE : TYPES) {
+    auto const &info = TYPE.second;
     std::string const path{ info.type };
     std::string category{ path };
 
     if (auto const it = path.find_first_of('/'); it != std::string::npos) category = path.substr(0, it);
     category[0] = static_cast<char>(std::toupper(category[0]));
 
-    addElement(QString::fromStdString(category), QString::fromStdString(info.name), QString::fromStdString(info.type),
-               QString::fromStdString(info.icon));
+    auto const ELEMENT_TYPE = QString::fromStdString(path);
+    auto const ELEMENT_NAME = node_name_for(TYPE.first);
+    auto const ELEMENT_ICON = node_icon_for(TYPE.first);
+
+    addElement(QString::fromStdString(category), ELEMENT_NAME, ELEMENT_TYPE, ELEMENT_ICON);
   }
 
   m_ui->elementsContainer->sortItems(0, Qt::AscendingOrder);
+#endif
 
+#if 0
   auto const &PACKAGES = REGISTRY.packages();
   for (auto const &PACKAGE : PACKAGES) {
     std::string const FILENAME{ PACKAGE.first };

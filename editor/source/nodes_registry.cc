@@ -21,6 +21,9 @@
 // SOFTWARE.
 
 #include "nodes_registry.h"
+
+#include <spaghetti/logger.h>
+
 #include "nodes/all.h"
 
 namespace spaghetti {
@@ -46,6 +49,40 @@ void load_nodes_plugins()
 {
   auto &registry = NodesRegistry::get();
   registry.loadPlugins();
+}
+
+void load_nodes_meta_data()
+{
+  auto const &REGISTRY = Registry::get();
+  auto &nodesRegistry = NodesRegistry::get();
+}
+
+Node *create_node_for(string::hash_t const a_hash)
+{
+  auto &registry = NodesRegistry::get();
+
+  if (registry.has(a_hash))
+    return registry.create(a_hash);
+
+  return new Node;
+}
+
+QString node_name_for(string::hash_t const a_hash)
+{
+  auto const &REGISTRY = NodesRegistry::get();
+
+  assert(REGISTRY.has(a_hash));
+
+  return REGISTRY.data().nodes.at(a_hash).name;
+}
+
+QString node_icon_for(string::hash_t const a_hash)
+{
+  auto const &REGISTRY = NodesRegistry::get();
+
+  assert(REGISTRY.has(a_hash));
+
+  return REGISTRY.data().nodes.at(a_hash).icon;
 }
 
 } // namespace spaghetti

@@ -46,6 +46,7 @@
 #include "elements_list.h"
 #include "link_item.h"
 #include "nodes/package.h"
+#include "nodes_registry.h"
 
 namespace spaghetti {
 
@@ -119,7 +120,7 @@ PackageView::PackageView(Editor *const a_editor, Package *const a_package)
   , m_standalone{ m_package->package() == nullptr }
 {
   if (m_standalone) {
-//    m_packageNode = static_cast<nodes::Package *>(Registry::get().createNode("logic/package"));
+    m_packageNode = static_cast<nodes::Package *>(NodesRegistry::get().create("logic/package"));
     m_package->setNode(m_packageNode);
   } else
     m_packageNode = m_package->node<nodes::Package>();
@@ -202,22 +203,22 @@ PackageView::~PackageView()
 
 void PackageView::open()
 {
-#if 0
   auto const &inputsPosition = m_package->inputsPosition();
   auto const &outputsPosition = m_package->outputsPosition();
   m_inputs->setPos(inputsPosition.x, inputsPosition.y);
   m_outputs->setPos(outputsPosition.x, outputsPosition.y);
 
-  Registry &registry{ Registry::get() };
+  auto &registry = NodesRegistry::get();
 
   auto const &elements = m_package->elements();
   size_t const SIZE{ elements.size() };
   for (size_t i = 1; i < SIZE; ++i) {
     auto const element = elements[i];
-    auto const node = registry.createNode(element->hash());
-    auto const nodeName = QString::fromStdString(registry.elementName(element->hash()));
-    auto const nodeIcon = QString::fromStdString(registry.elementIcon(element->hash()));
+    auto const node = create_node_for(element->hash());
+    auto const nodeName = node_name_for(element->hash()); //QString::fromStdString(element->type()); //QString::fromStdString(registry.elementName(element->type()));
+    auto const nodeIcon = node_icon_for(element->hash()); // "icon"; //QString::fromStdString(registry.elementIcon(element->hash()));
     auto const nodePath = QString::fromLocal8Bit(element->type());
+    qDebug() << "nodeIcon:" << nodeIcon;
 
     element->setNode(node);
     m_nodes[element->id()] = node;
@@ -249,7 +250,6 @@ void PackageView::open()
     auto const targetSocket = target->inputs()[TARGET_SOCKET];
     sourceSocket->connect(targetSocket);
   }
-#endif
 }
 
 void PackageView::save()
@@ -259,7 +259,6 @@ void PackageView::save()
 
 void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
 {
-#if 0
   auto const mimeData = a_event->mimeData();
 
   //  mimeData->setData("metadata/is_package", IS_PACKAGE);
@@ -278,10 +277,10 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
 
     auto const DROP_POSITION = mapToScene(a_event->pos());
 
-    Registry &registry{ Registry::get() };
+    qDebug() << "path:" << path << "pathString:" << pathString;
 
     assert(m_dragNode == nullptr);
-//    m_dragNode = registry.createNode(path);
+    m_dragNode = create_node_for(0); // registry.createNode(path);
     m_dragNode->setPackageView(this);
     m_dragNode->setPropertiesTable(m_properties);
     m_dragNode->setName(name);
@@ -292,7 +291,6 @@ void PackageView::dragEnterEvent(QDragEnterEvent *a_event)
     m_dragNode->calculateBoundingRect();
     a_event->accept();
   } else
-#endif
     QGraphicsView::dragEnterEvent(a_event);
 }
 
