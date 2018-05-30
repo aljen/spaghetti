@@ -28,7 +28,6 @@
 #include <QPainter>
 #include <QVector>
 
-#include <spaghetti/api.h>
 #include <spaghetti/element.h>
 #include <spaghetti/editor/socket_item.h>
 
@@ -50,7 +49,7 @@ inline QString ValueType_to_QString(ValueType const a_type)
   return "Unknown";
 }
 
-class SPAGHETTI_API Node : public QGraphicsItem {
+class Node : public QGraphicsItem {
  public:
   using Sockets = QVector<SocketItem *>;
 

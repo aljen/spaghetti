@@ -24,6 +24,12 @@
 #ifndef SPAGHETTI_SHARED_LIBRARY_H
 #define SPAGHETTI_SHARED_LIBRARY_H
 
+// clang-format off
+#ifdef _MSC_VER
+# pragma warning(disable:4251)
+#endif
+// clang-format on
+
 #include <system_error>
 #include <spaghetti/api.h>
 #include <spaghetti/filesystem.h>

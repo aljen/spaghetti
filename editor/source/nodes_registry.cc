@@ -26,7 +26,7 @@
 namespace spaghetti {
 
 template<>
-SPAGHETTI_API NodesRegistry &NodesRegistry::get()
+NodesRegistry &NodesRegistry::get()
 {
   static NodesRegistry s_registry{};
   return s_registry;
