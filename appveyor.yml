@@ -1,4 +1,4 @@
-version: 18.2.16.{build}
+version: 18.5.30.{build}
 image: Visual Studio 2017
 test: off
 
