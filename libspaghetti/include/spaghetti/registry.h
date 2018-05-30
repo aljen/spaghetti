@@ -143,6 +143,8 @@ class TRegistry final {
     return m_types.size();
   }
 
+  Types const &types() const { return m_types; }
+
   TUserData &data() { return m_data; }
   TUserData const &data() const { return m_data; }
 
