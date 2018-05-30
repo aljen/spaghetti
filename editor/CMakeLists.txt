@@ -34,6 +34,7 @@ set(SPAGHETTI_CHARTS_SOURCES
   )
 
 add_executable(SpaghettiEditor
+  icons/icons.qrc
   include/spaghetti/editor/editor.h
   include/spaghetti/editor/node.h
   include/spaghetti/editor/socket_item.h
