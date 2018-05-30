@@ -1,6 +1,4 @@
-set(VENDOR_FREE_STANDING_HEADERS
-  json.hpp
-  )
+set(VENDOR_JSON_HEADER nlohmann/json.hpp)
 set(VENDOR_SPARSEPP_HEADERS
   spp_stdint.h
   spp_timer.h

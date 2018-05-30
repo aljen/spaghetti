@@ -267,14 +267,14 @@ target_include_directories(Spaghetti
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
   )
-target_include_directories(Spaghetti SYSTEM PRIVATE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/include
-#  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
-#  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
-  )
-target_link_libraries(Spaghetti
-  PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
-)
+target_include_directories(Spaghetti SYSTEM PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/include)
+if (SPAGHETTI_BUNDLE_JSON)
+  target_include_directories(Spaghetti SYSTEM PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>)
+endif ()
+if (SPAGHETTI_BUNDLE_SPDLOG)
+  target_include_directories(Spaghetti SYSTEM PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>)
+endif ()
+target_link_libraries(Spaghetti PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS})
 if (CLANG)
   target_link_libraries(Spaghetti PUBLIC -stdlib=libc++)
 endif ()
@@ -303,14 +303,15 @@ if (SPAGHETTI_DONT_USE_CXX11_ABI)
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     )
-  target_include_directories(SpaghettiOldABI SYSTEM PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/include
-#    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
-#    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
-    )
-  target_link_libraries(SpaghettiOldABI
-    PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
-  )
+  target_include_directories(SpaghettiOldABI SYSTEM PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/include)
+  if (SPAGHETTI_BUNDLE_JSON)
+    target_include_directories(SpaghettiOldABI SYSTEM PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>)
+  endif ()
+  if (SPAGHETTI_BUNDLE_SPDLOG)
+    target_include_directories(SpaghettiOldABI SYSTEM PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>)
+  endif ()
+  target_link_libraries(SpaghettiOldABI PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS})
 endif ()
 
 install(TARGETS Spaghetti
@@ -375,22 +376,32 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/filesystem.h
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
 
 # Copy vendor headers to libspaghetti/include
-#message (STATUS "Synchronizing vendor headers...")
-#foreach(HEADER ${VENDOR_FREE_STANDING_HEADERS})
-#  configure_file(${VENDOR_ROOT}/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/${HEADER} COPYONLY)
-#  install(FILES ${VENDOR_ROOT}/${HEADER}
-#    COMPONENT SDK
-#    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
-#endforeach ()
+if (SPAGHETTI_BUNDLE_JSON OR SPAGHETTI_BUNDLE_SPDLOG)
+  message (STATUS "Synchronizing vendor headers...")
+endif ()
+if (SPAGHETTI_BUNDLE_JSON)
+  configure_file(
+    ${VENDOR_ROOT}/${VENDOR_JSON_HEADER}
+    ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/${VENDOR_JSON_HEADER}
+    COPYONLY
+    )
+  install(FILES ${VENDOR_ROOT}/${VENDOR_JSON_HEADER}
+    COMPONENT SDK
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
+endif ()
+if (SPAGHETTI_BUNDLE_SPDLOG)
+  foreach(HEADER ${VENDOR_SPDLOG_HEADERS})
+    configure_file(
+      ${VENDOR_ROOT}/spdlog/include/spdlog/${HEADER}
+      ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/spdlog/${HEADER}
+      COPYONLY)
+  endforeach ()
+  install(DIRECTORY ${VENDOR_ROOT}/spdlog/include/spdlog COMPONENT SDK DESTINATION
+    ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
+endif ()
 #foreach(HEADER ${VENDOR_SPARSEPP_HEADERS})
 #  configure_file(${VENDOR_ROOT}/sparsepp/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/sparsepp/${HEADER} COPYONLY)
 #endforeach ()
 #install(DIRECTORY ${VENDOR_ROOT}/sparsepp
-#  COMPONENT SDK
-#  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
-#foreach(HEADER ${VENDOR_SPDLOG_HEADERS})
-#  configure_file(${VENDOR_ROOT}/spdlog/include/spdlog/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/spdlog/${HEADER} COPYONLY)
-#endforeach ()
-#install(DIRECTORY ${VENDOR_ROOT}/spdlog/include/spdlog
 #  COMPONENT SDK
 #  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
