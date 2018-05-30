@@ -127,6 +127,12 @@ class TRegistry final {
     return createFunction();
   }
 
+  std::string typeFor(string::hash_t const a_hash) const
+  {
+    assert(has(a_hash));
+    return m_types.at(a_hash).type;
+  }
+
   bool has(string::hash_t const a_hash) const
   {
     return m_types.count(a_hash) == 1;
