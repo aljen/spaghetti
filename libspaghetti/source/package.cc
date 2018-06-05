@@ -417,7 +417,10 @@ void Package::open(std::string const &a_filename)
   spaghetti::log::debug("Opening package {}", a_filename);
 
   std::ifstream file{ a_filename };
-  if (!file.is_open()) return;
+  if (!file.is_open()) {
+    spaghetti::log::error("Can't open package {}", a_filename);
+    return;
+  }
 
   pauseDispatchThread();
 
