@@ -51,7 +51,6 @@ class Element;
 SPAGHETTI_API void register_internal_elements();
 SPAGHETTI_API void load_packages();
 
-
 struct PackageInfo {
   std::string filename{};
   std::string path{};
@@ -79,14 +78,14 @@ class TRegistry final {
 
   ~TRegistry() = default;
 
-  void loadPlugins()
+  void loadPlugins(fs::path const &a_prefix = "")
   {
     auto load_from = [this](fs::path const &a_path) {
       spaghetti::log::info("Loading plugins from {}", a_path.string());
       if (!fs::is_directory(a_path)) return;
       for (auto const &ENTRY : fs::directory_iterator(a_path)) {
-        spaghetti::log::info("Loading {}..", ENTRY.path().string());
         if (!(fs::is_regular_file(ENTRY) || fs::is_symlink(ENTRY))) continue;
+        spaghetti::log::info("Loading {}..", ENTRY.path().string());
 
         std::error_code error{};
         auto plugin = std::make_shared<SharedLibrary>(ENTRY, error);
@@ -103,8 +102,8 @@ class TRegistry final {
     auto const ADDITIONAL_PLUGINS_PATH = getenv("SPAGHETTI_ADDITIONAL_PLUGINS_PATH");
     if (ADDITIONAL_PLUGINS_PATH) load_from(fs::path{ ADDITIONAL_PLUGINS_PATH });
 
-    load_from(system_plugins_path());
-    load_from(user_plugins_path());
+    load_from(system_plugins_path() / a_prefix);
+    load_from(user_plugins_path() / a_prefix);
   }
 
   template<typename TTypeDerived>
