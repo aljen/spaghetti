@@ -320,9 +320,10 @@ bool Package::disconnect(size_t const a_sourceId, uint8_t const a_outputId, size
 void Package::dispatchThreadFunction()
 {
   using clock_t = std::chrono::high_resolution_clock;
-  auto last = clock_t::now();
 
   auto const ONE_MILLISECOND = std::chrono::milliseconds(1);
+
+  auto last = clock_t::now() - ONE_MILLISECOND;
 
   while (!m_quit) {
     auto const NOW = clock_t::now();
