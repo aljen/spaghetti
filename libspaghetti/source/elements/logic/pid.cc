@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 #include <spaghetti/elements/logic/pid.h>
+#include <spaghetti/utils.h>
 
 namespace spaghetti::elements::logic {
 
@@ -60,7 +61,7 @@ void PID::calculate()
 
   float const ERROR{ SP - PV };
 
-  m_integral += (ERROR * m_delta) / KI;
+  if (!nearly_equal(KI, 0.0f)) m_integral += (ERROR * m_delta) / KI;
   m_integral = std::clamp(m_integral, CV_LOW, CV_HIGH);
 
   float const P{ KP * ERROR };
