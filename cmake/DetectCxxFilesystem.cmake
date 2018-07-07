@@ -54,7 +54,7 @@ if (NOT HAVE_CXX_FILESYSTEM)
   endif ()
 endif ()
 
-if (NOT HAVE_CXX_EXPERIMENTAL_FILESYSTEM)
+if (NOT HAVE_CXX_FILESYSTEM AND NOT HAVE_CXX_EXPERIMENTAL_FILESYSTEM)
   message(STATUS "Detecting CXX boost::filesystem support")
   find_package(Boost QUIET COMPONENTS filesystem system)
   if (Boost_FOUND STREQUAL "1")
