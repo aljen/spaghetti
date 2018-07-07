@@ -12,7 +12,7 @@ matrix:
           update: true
           sources:
             - ubuntu-toolchain-r-test
-            - opt-qt-5.10.1-trusty
+            - sourceline: 'ppa:beineri/opt-qt-5.10.1-trusty'
           packages:
             - g++-8
             - qt510-meta-full
