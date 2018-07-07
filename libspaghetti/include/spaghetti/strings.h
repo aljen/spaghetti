@@ -30,14 +30,14 @@
 #define HASH_SIZE_64 64
 #define HASH_SIZE HASH_SIZE_32
 
-namespace spaghetti::string {
+namespace spaghetti { namespace string {
 
 constexpr size_t length(char const *const a_string)
 {
   return *a_string ? 1 + length(a_string + 1) : 0;
 }
 
-  // fnv1a hash
+// fnv1a hash
 
 #if HASH_SIZE == HASH_SIZE_32
 using hash_t = uint32_t;
@@ -61,6 +61,6 @@ constexpr hash_t hash(char const *const a_key, hash_t const &a_offset = FNV_OFFS
   return value;
 }
 
-} // namespace spaghetti::string
+}} // namespace spaghetti::string
 
 #endif // SPAGHETTI_STRINGS_H
