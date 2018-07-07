@@ -58,9 +58,12 @@ struct PackageInfo {
 };
 using Packages = std::unordered_map<std::string, PackageInfo>;
 
-struct TRegistryUserData {};
+struct TRegistryUserData {
+};
 template<typename TType, typename TUserData = TRegistryUserData>
 class TRegistry final {
+  using Plugins = std::vector<std::shared_ptr<SharedLibrary>>;
+
  public:
   template<typename T>
   using CloneFunc = T *(*)();
@@ -70,16 +73,12 @@ class TRegistry final {
   };
   using Types = std::unordered_map<string::hash_t, Info>;
 
- private:
-  using Plugins = std::vector<std::shared_ptr<SharedLibrary>>;
-
- public:
   static TRegistry &get();
 
   TRegistry(TRegistry const &a_other) = delete;
   TRegistry(TRegistry &&a_other) = delete;
-  TRegistry& operator=(TRegistry const &a_other) = delete;
-  TRegistry& operator=(TRegistry &&a_other) = delete;
+  TRegistry &operator=(TRegistry const &a_other) = delete;
+  TRegistry &operator=(TRegistry &&a_other) = delete;
 
   ~TRegistry() = default;
 
@@ -112,8 +111,7 @@ class TRegistry final {
   }
 
   template<typename TTypeDerived>
-  typename std::enable_if_t<std::is_base_of_v<TType, TTypeDerived>>
-  registerType()
+  typename std::enable_if_t<std::is_base_of_v<TType, TTypeDerived>> registerType()
   {
     auto const HASH = TTypeDerived::HASH;
     auto const TYPE = TTypeDerived::TYPE;
@@ -137,15 +135,9 @@ class TRegistry final {
     return m_types.at(a_hash).type;
   }
 
-  bool has(string::hash_t const a_hash) const
-  {
-    return m_types.count(a_hash) == 1;
-  }
+  bool has(string::hash_t const a_hash) const { return m_types.count(a_hash) == 1; }
 
-  size_t size() const
-  {
-    return m_types.size();
-  }
+  size_t size() const { return m_types.size(); }
 
   Types const &types() const { return m_types; }
 
@@ -167,7 +159,8 @@ class TRegistry final {
   TUserData m_data{};
 };
 
-struct UserData {};
+struct UserData {
+};
 using Registry = TRegistry<Element, UserData>;
 
 SPAGHETTI_API void initialize();
