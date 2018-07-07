@@ -2,9 +2,9 @@ language: cpp
 group: travis_latest
 sudo: false
 cache:
+  ccache: true
   directories:
     - .git/lfs
-  - ccache
 
 script: cmake
 
