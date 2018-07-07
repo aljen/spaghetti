@@ -1,8 +1,15 @@
 language: cpp
 group: travis_latest
 sudo: false
-cache: ccache
+cache:
+  directories:
+    - .git/lfs
+  - ccache
+
 script: cmake
+
+git:
+  lfs_skip_smudge: true
 
 matrix:
   include:
@@ -33,6 +40,9 @@ matrix:
 before_install:
   - eval "${MATRIX_EVAL}"
   - sudo pip install cmake
+
+install:
+  - git lfs pull
 
 before_script:
   - QTDIR="/opt/qt510"
