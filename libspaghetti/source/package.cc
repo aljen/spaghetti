@@ -205,7 +205,7 @@ Element *Package::add(string::hash_t const a_hash)
 
   log::debug("Adding element..");
 
-  spaghetti::Registry &registry{ spaghetti::Registry::get() };
+  auto &registry = Registry::get();
 
   Element *const element{ registry.create(a_hash) };
   assert(element);
