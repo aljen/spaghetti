@@ -15,7 +15,7 @@ matrix:
             - sourceline: 'ppa:beineri/opt-qt-5.10.1-trusty'
           packages:
             - g++-8
-            - qt510-meta-full
+            - qt510-meta-minimal
             - qt510charts-no-lgpl
       env:
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
