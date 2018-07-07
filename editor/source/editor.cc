@@ -20,13 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "spaghetti/editor.h"
+#include "spaghetti/editor/editor.h"
 #include "ui_editor.h"
 
-#include "spaghetti/socket_item.h"
-#include "ui/colors.h"
-#include "ui/elements_list.h"
-#include "ui/link_item.h"
+#include "spaghetti/editor/socket_item.h"
+#include "colors.h"
+#include "elements_list.h"
+#include "link_item.h"
 
 #include <QAction>
 #include <QDebug>
@@ -54,13 +54,13 @@
 #include <vector>
 
 #include <spaghetti/elements/logic/all.h>
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 #include "spaghetti/package.h"
 #include "spaghetti/registry.h"
 #include "spaghetti/version.h"
-#include "ui/expander_widget.h"
-#include "ui/package_view.h"
-#include "filesystem.h"
+#include "expander_widget.h"
+#include "package_view.h"
+#include "spaghetti/filesystem.h"
 
 QString const PACKAGES_DIR{ "../packages" };
 
@@ -69,6 +69,7 @@ namespace spaghetti {
 Editor::Editor(QWidget *const a_parent)
   : QMainWindow{ a_parent }
   , m_ui{ new Ui::Editor }
+  , m_registry{ spaghetti::NodesRegistry::get() }
 {
   setObjectName("SpaghettiEditor");
   m_ui->setupUi(this);
@@ -126,6 +127,10 @@ Editor::Editor(QWidget *const a_parent)
   QDir packagesDir{ PACKAGES_DIR };
   if (!packagesDir.exists()) packagesDir.mkpath(".");
 
+  spaghetti::load_internal_nodes();
+  spaghetti::load_nodes_plugins();
+  spaghetti::load_nodes_meta_data();
+
   populateLibrary();
 }
 
@@ -171,23 +176,29 @@ void Editor::tabChanged(int const a_index)
 
 void Editor::populateLibrary()
 {
+#if 1
   auto const &REGISTRY = Registry::get();
 
-  auto const &ELEMENTS_SIZE = REGISTRY.size();
-  for (size_t i = 0; i < ELEMENTS_SIZE; ++i) {
-    auto const &info = REGISTRY.metaInfoAt(i);
+  auto const &TYPES = REGISTRY.types();
+  for (auto const &TYPE : TYPES) {
+    auto const &info = TYPE.second;
     std::string const path{ info.type };
     std::string category{ path };
 
     if (auto const it = path.find_first_of('/'); it != std::string::npos) category = path.substr(0, it);
     category[0] = static_cast<char>(std::toupper(category[0]));
 
-    addElement(QString::fromStdString(category), QString::fromStdString(info.name), QString::fromStdString(info.type),
-               QString::fromStdString(info.icon));
+    auto const ELEMENT_TYPE = QString::fromStdString(path);
+    auto const ELEMENT_NAME = node_name_for(TYPE.first);
+    auto const ELEMENT_ICON = node_icon_for(TYPE.first);
+
+    addElement(QString::fromStdString(category), ELEMENT_NAME, ELEMENT_TYPE, ELEMENT_ICON);
   }
 
   m_ui->elementsContainer->sortItems(0, Qt::AscendingOrder);
+#endif
 
+#if 0
   auto const &PACKAGES = REGISTRY.packages();
   for (auto const &PACKAGE : PACKAGES) {
     std::string const FILENAME{ PACKAGE.first };
@@ -206,6 +217,7 @@ void Editor::populateLibrary()
   }
 
   m_ui->packagesContainer->sortItems(0, Qt::AscendingOrder);
+#endif
 }
 
 void Editor::addElement(QString const &a_category, QString const &a_name, QString const &a_type, QString const &a_icon)

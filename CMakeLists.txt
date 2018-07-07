@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 
 project(Spaghetti
-  VERSION 18.05.21
+  VERSION 18.05.30
   DESCRIPTION "Graphical logic editor/simulator"
   LANGUAGES C CXX
 )
@@ -16,6 +16,14 @@ include(DetectCxxFilesystem)
 include(GetRepoInfo)
 include(VendorHeaders)
 
+if (WIN32)
+  set(DEFAULT_BUNDLE_JSON ON)
+  set(DEFAULT_BUNDLE_SPDLOG ON)
+else ()
+  set(DEFAULT_BUNDLE_JSON OFF)
+  set(DEFAULT_BUNDLE_SPDLOG OFF)
+endif ()
+
 option(SPAGHETTI_BUILD_EDITOR "Build editor" ON)
 option(SPAGHETTI_BUILD_EXAMPLE_PLUGIN "Build example plugin" ON)
 option(SPAGHETTI_ENABLE_CPACK "Enable CPack" OFF)
@@ -23,6 +31,11 @@ option(SPAGHETTI_ENABLE_ALL_WARNINGS "Enable all warnings" OFF)
 option(SPAGHETTI_TREAT_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(SPAGHETTI_USE_OPENGL "Use OpenGL in QGraphicsView" OFF)
 option(SPAGHETTI_USE_CHARTS "Use Qt::Charts in Spaghetti Editor" OFF)
+option(SPAGHETTI_BUNDLE_JSON "Bundle nlohmann's JSON" DEFAULT_BUNDLE_JSON)
+option(SPAGHETTI_BUNDLE_SPDLOG "Bundle gabime's spdlog" DEFAULT_BUNDLE_SPDLOG)
+if (GCC AND UNIX)
+  option(SPAGHETTI_DONT_USE_CXX11_ABI "Don't use C++11 ABI" OFF)
+endif ()
 option(BUILD_SHARED_LIBS "Build shared libs" ON)
 if (GCC OR CLANG)
   option(SPAGHETTI_BUILD_NATIVE "Build native" OFF)
@@ -38,9 +51,9 @@ set(VENDOR_ROOT ${PROJECT_SOURCE_DIR}/vendor)
 
 add_subdirectory(libspaghetti)
 
-#if (SPAGHETTI_BUILD_EDITOR)
-#  add_subdirectory(editor)
-#endif ()
+if (SPAGHETTI_BUILD_EDITOR)
+  add_subdirectory(editor)
+endif ()
 
 #if (SPAGHETTI_BUILD_EXAMPLE_PLUGIN)
 #  add_subdirectory(plugins)

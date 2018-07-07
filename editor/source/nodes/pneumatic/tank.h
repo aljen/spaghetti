@@ -24,11 +24,16 @@
 #ifndef NODES_PNEUMATIC_TANK_H
 #define NODES_PNEUMATIC_TANK_H
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 namespace spaghetti::nodes::pneumatic {
 
 class Tank : public Node {
+ public:
+  static constexpr char const *const TYPE{ "pneumatic/tank" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+ private:
   void showProperties() override;
 };
 

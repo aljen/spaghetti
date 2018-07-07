@@ -266,18 +266,55 @@ target_include_directories(Spaghetti
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-  PRIVATE source
   )
-target_include_directories(Spaghetti SYSTEM PRIVATE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/include
-  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>
-  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>
-  )
-target_link_libraries(Spaghetti
-  PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS}
-)
+target_include_directories(Spaghetti SYSTEM PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/include)
+if (SPAGHETTI_BUNDLE_JSON)
+  target_include_directories(Spaghetti SYSTEM PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>)
+endif ()
+if (SPAGHETTI_BUNDLE_SPDLOG)
+  target_include_directories(Spaghetti SYSTEM PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>)
+endif ()
+if (WIN32)
+  target_include_directories(Spaghetti PUBLIC $<INSTALL_INTERFACE:include>)
+endif ()
+target_link_libraries(Spaghetti PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS})
 if (CLANG)
   target_link_libraries(Spaghetti PUBLIC -stdlib=libc++)
+endif ()
+
+if (SPAGHETTI_DONT_USE_CXX11_ABI)
+  add_library(SpaghettiOldABI SHARED ${LIBSPAGHETTI_ALL_SOURCES})
+  target_compile_features(SpaghettiOldABI PUBLIC cxx_std_17)
+  target_compile_definitions(SpaghettiOldABI
+    PUBLIC SPAGHETTI_SHARED
+    PRIVATE SPAGHETTI_EXPORTS ${SPAGHETTI_DEFINITIONS}
+    PRIVATE $<$<CONFIG:Debug>:${SPAGHETTI_DEFINITIONS_DEBUG}>
+    PRIVATE $<$<CONFIG:Release>:${SPAGHETTI_DEFINITIONS_RELEASE}>
+    PUBLIC _GLIBCXX_USE_CXX11_ABI=0
+    )
+  target_compile_options(SpaghettiOldABI
+    PRIVATE ${SPAGHETTI_FLAGS}
+    PRIVATE ${SPAGHETTI_FLAGS_C}
+    PRIVATE ${SPAGHETTI_FLAGS_CXX}
+    PRIVATE ${SPAGHETTI_FLAGS_LINKER}
+    PRIVATE $<$<CONFIG:Debug>:${SPAGHETTI_FLAGS_DEBUG}>
+    PRIVATE $<$<CONFIG:Debug>:${SPAGHETTI_WARNINGS}>
+    PRIVATE $<$<CONFIG:Release>:${SPAGHETTI_FLAGS_RELEASE}>
+    )
+  target_include_directories(SpaghettiOldABI
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+    )
+  target_include_directories(SpaghettiOldABI SYSTEM PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/include)
+  if (SPAGHETTI_BUNDLE_JSON)
+    target_include_directories(SpaghettiOldABI SYSTEM PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor>)
+  endif ()
+  if (SPAGHETTI_BUNDLE_SPDLOG)
+    target_include_directories(SpaghettiOldABI SYSTEM PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/vendor/spdlog/include>)
+  endif ()
+  target_link_libraries(SpaghettiOldABI PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${CXX_FILESYSTEM_LIBS})
 endif ()
 
 install(TARGETS Spaghetti
@@ -287,6 +324,25 @@ install(TARGETS Spaghetti
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   )
+install(EXPORT SpaghettiConfig
+  COMPONENT SDK
+  DESTINATION share/Spaghetti/cmake)
+export(TARGETS Spaghetti FILE SpaghettiConfig.cmake)
+
+if (SPAGHETTI_DONT_USE_CXX11_ABI)
+  install(TARGETS SpaghettiOldABI
+    COMPONENT SDK
+    EXPORT SpaghettiOldABIConfig
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+  install(EXPORT SpaghettiOldABIConfig
+    COMPONENT SDK
+    DESTINATION share/SpaghettiOldABI/cmake)
+  export(TARGETS SpaghettiOldABI FILE SpaghettiOldABIConfig.cmake)
+endif ()
+
 install(FILES ${LIBSPAGHETTI_PUBLIC_GATES_HEADERS}
   COMPONENT SDK
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/elements/gates)
@@ -321,28 +377,34 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/version.h
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/filesystem.h
   COMPONENT SDK
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti)
-install(EXPORT SpaghettiConfig
-  COMPONENT SDK
-  DESTINATION share/Spaghetti/cmake)
-export(TARGETS Spaghetti FILE SpaghettiConfig.cmake)
 
 # Copy vendor headers to libspaghetti/include
-message (STATUS "Synchronizing vendor headers...")
-foreach(HEADER ${VENDOR_FREE_STANDING_HEADERS})
-  configure_file(${VENDOR_ROOT}/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/${HEADER} COPYONLY)
-  install(FILES ${VENDOR_ROOT}/${HEADER}
+if (SPAGHETTI_BUNDLE_JSON OR SPAGHETTI_BUNDLE_SPDLOG)
+  message (STATUS "Synchronizing vendor headers...")
+endif ()
+if (SPAGHETTI_BUNDLE_JSON)
+  configure_file(
+    ${VENDOR_ROOT}/${VENDOR_JSON_HEADER}
+    ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/${VENDOR_JSON_HEADER}
+    COPYONLY
+    )
+  install(FILES ${VENDOR_ROOT}/${VENDOR_JSON_HEADER}
     COMPONENT SDK
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
-endforeach ()
-foreach(HEADER ${VENDOR_SPARSEPP_HEADERS})
-  configure_file(${VENDOR_ROOT}/sparsepp/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/sparsepp/${HEADER} COPYONLY)
-endforeach ()
-install(DIRECTORY ${VENDOR_ROOT}/sparsepp
-  COMPONENT SDK
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
-foreach(HEADER ${VENDOR_SPDLOG_HEADERS})
-  configure_file(${VENDOR_ROOT}/spdlog/include/spdlog/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/spdlog/${HEADER} COPYONLY)
-endforeach ()
-install(DIRECTORY ${VENDOR_ROOT}/spdlog/include/spdlog
-  COMPONENT SDK
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
+endif ()
+if (SPAGHETTI_BUNDLE_SPDLOG)
+  foreach(HEADER ${VENDOR_SPDLOG_HEADERS})
+    configure_file(
+      ${VENDOR_ROOT}/spdlog/include/spdlog/${HEADER}
+      ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/spdlog/${HEADER}
+      COPYONLY)
+  endforeach ()
+  install(DIRECTORY ${VENDOR_ROOT}/spdlog/include/spdlog COMPONENT SDK DESTINATION
+    ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)
+endif ()
+#foreach(HEADER ${VENDOR_SPARSEPP_HEADERS})
+#  configure_file(${VENDOR_ROOT}/sparsepp/${HEADER} ${CMAKE_CURRENT_BINARY_DIR}/include/spaghetti/vendor/sparsepp/${HEADER} COPYONLY)
+#endforeach ()
+#install(DIRECTORY ${VENDOR_ROOT}/sparsepp
+#  COMPONENT SDK
+#  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spaghetti/vendor)

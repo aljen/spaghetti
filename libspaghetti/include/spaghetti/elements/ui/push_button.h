@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::ui {
 
-class PushButton final : public Element {
+class SPAGHETTI_API PushButton final : public Element {
  public:
   static constexpr char const *const TYPE{ "ui/push_button" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

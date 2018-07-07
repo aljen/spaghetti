@@ -202,7 +202,12 @@ void initialize()
   register_internal_elements();
 
   auto &registry = Registry::get();
+
+#if _GLIBCXX_USE_CXX11_ABI == 0
+  registry.loadPlugins("old_abi");
+#else
   registry.loadPlugins();
+#endif
 }
 
 } // namespace spaghetti

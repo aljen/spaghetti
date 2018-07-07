@@ -47,7 +47,7 @@
 #include <QVBoxLayout>
 #include <QtCharts/QLineSeries>
 
-#include "ui/package_view.h"
+#include "package_view.h"
 
 template<class T>
 class VPtr {

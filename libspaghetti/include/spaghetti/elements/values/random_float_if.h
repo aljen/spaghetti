@@ -30,7 +30,7 @@
 
 namespace spaghetti::elements::values {
 
-class RandomFloatIf final : public Element {
+class SPAGHETTI_API RandomFloatIf final : public Element {
  public:
   static constexpr char const *const TYPE{ "values/random_float_if" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

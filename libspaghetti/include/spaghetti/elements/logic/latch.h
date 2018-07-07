@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class Latch final : public Element {
+class SPAGHETTI_API Latch final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/latch" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

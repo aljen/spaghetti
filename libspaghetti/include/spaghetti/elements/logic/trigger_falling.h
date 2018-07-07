@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class TriggerFalling final : public Element {
+class SPAGHETTI_API TriggerFalling final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/trigger_falling" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

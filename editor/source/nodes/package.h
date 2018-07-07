@@ -24,12 +24,15 @@
 #ifndef NODES_PACKAGE_H
 #define NODES_PACKAGE_H
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 namespace spaghetti::nodes {
 
 class Package : public Node {
  public:
+  static constexpr char const *const TYPE{ "logic/package" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
   Package();
 
   void setInputsNode(Node *const a_node) { m_inputsNode = a_node; }

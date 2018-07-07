@@ -24,12 +24,19 @@
 #ifndef SPAGHETTI_SHARED_LIBRARY_H
 #define SPAGHETTI_SHARED_LIBRARY_H
 
+// clang-format off
+#ifdef _MSC_VER
+# pragma warning(disable:4251)
+#endif
+// clang-format on
+
 #include <system_error>
+#include <spaghetti/api.h>
 #include <spaghetti/filesystem.h>
 
 namespace spaghetti {
 
-class SharedLibrary final {
+class SPAGHETTI_API SharedLibrary final {
  public:
   SharedLibrary(fs::path const &a_file, std::error_code &a_errorCode);
   ~SharedLibrary();

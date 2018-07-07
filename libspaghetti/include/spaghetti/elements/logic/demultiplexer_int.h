@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class DemultiplexerInt final : public Element {
+class SPAGHETTI_API DemultiplexerInt final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/demultiplexer_int" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

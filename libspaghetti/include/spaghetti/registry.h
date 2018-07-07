@@ -51,7 +51,6 @@ class Element;
 SPAGHETTI_API void register_internal_elements();
 SPAGHETTI_API void load_packages();
 
-
 struct PackageInfo {
   std::string filename{};
   std::string path{};
@@ -65,7 +64,11 @@ class TRegistry final {
  public:
   template<typename T>
   using CloneFunc = T *(*)();
-  using Types = std::unordered_map<string::hash_t, CloneFunc<TType>>;
+  struct Info {
+    std::string type{};
+    CloneFunc<TType> clone{};
+  };
+  using Types = std::unordered_map<string::hash_t, Info>;
 
  private:
   using Plugins = std::vector<std::shared_ptr<SharedLibrary>>;
@@ -75,14 +78,14 @@ class TRegistry final {
 
   ~TRegistry() = default;
 
-  void loadPlugins()
+  void loadPlugins(fs::path const &a_prefix = "")
   {
     auto load_from = [this](fs::path const &a_path) {
       spaghetti::log::info("Loading plugins from {}", a_path.string());
       if (!fs::is_directory(a_path)) return;
       for (auto const &ENTRY : fs::directory_iterator(a_path)) {
-        spaghetti::log::info("Loading {}..", ENTRY.path().string());
         if (!(fs::is_regular_file(ENTRY) || fs::is_symlink(ENTRY))) continue;
+        spaghetti::log::info("Loading {}..", ENTRY.path().string());
 
         std::error_code error{};
         auto plugin = std::make_shared<SharedLibrary>(ENTRY, error);
@@ -99,8 +102,8 @@ class TRegistry final {
     auto const ADDITIONAL_PLUGINS_PATH = getenv("SPAGHETTI_ADDITIONAL_PLUGINS_PATH");
     if (ADDITIONAL_PLUGINS_PATH) load_from(fs::path{ ADDITIONAL_PLUGINS_PATH });
 
-    load_from(system_plugins_path());
-    load_from(user_plugins_path());
+    load_from(system_plugins_path() / a_prefix);
+    load_from(user_plugins_path() / a_prefix);
   }
 
   template<typename TTypeDerived>
@@ -108,8 +111,9 @@ class TRegistry final {
   registerType()
   {
     auto const HASH = TTypeDerived::HASH;
+    auto const TYPE = TTypeDerived::TYPE;
     assert(!has(HASH));
-    m_types[HASH] = &clone<TTypeDerived>;
+    m_types[HASH] = { TYPE, &clone<TTypeDerived> };
   }
 
   TType *create(char const *const a_name) { return create(string::hash(a_name)); }
@@ -117,9 +121,15 @@ class TRegistry final {
   TType *create(string::hash_t const a_hash)
   {
     assert(has(a_hash));
-    auto const createFunction = m_types.at(a_hash);
+    auto const createFunction = m_types.at(a_hash).clone;
     assert(createFunction);
     return createFunction();
+  }
+
+  std::string typeFor(string::hash_t const a_hash) const
+  {
+    assert(has(a_hash));
+    return m_types.at(a_hash).type;
   }
 
   bool has(string::hash_t const a_hash) const
@@ -131,6 +141,8 @@ class TRegistry final {
   {
     return m_types.size();
   }
+
+  Types const &types() const { return m_types; }
 
   TUserData &data() { return m_data; }
   TUserData const &data() const { return m_data; }

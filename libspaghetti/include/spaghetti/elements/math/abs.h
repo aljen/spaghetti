@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class Abs final : public Element {
+class SPAGHETTI_API Abs final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/abs" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

@@ -26,14 +26,6 @@
 
 #include <atomic>
 
-// clang-format off
-#ifdef _MSC_VER
-# include <unordered_map>
-#else
-# include <spaghetti/vendor/sparsepp/spp.h>
-#endif
-// clang-format on
-
 #include <spaghetti/api.h>
 #include <spaghetti/element.h>
 #include <spaghetti/strings.h>
@@ -134,13 +126,6 @@ class SPAGHETTI_API Package final : public Element {
 
   std::vector<size_t> m_free{};
 
-#if PACKAGE_MAP == PACKAGE_SPP_MAP
-  using Callbacks = spp::sparse_hash_map<size_t, std::vector<size_t>>;
-#elif PACKAGE_MAP == PACKAGE_STD_UNORDERED_MAP
-  using Callbacks = std::unordered_map<size_t, std::vector<size_t>>;
-#endif
-
-  Callbacks m_dependencies{};
   std::thread m_dispatchThread{};
   std::atomic_bool m_dispatchThreadStarted{};
   std::atomic_bool m_quit{};

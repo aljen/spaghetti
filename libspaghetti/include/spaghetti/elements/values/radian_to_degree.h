@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::values {
 
-class Radian2Degree final : public Element {
+class SPAGHETTI_API Radian2Degree final : public Element {
  public:
   static constexpr char const *const TYPE{ "values/radian_to_degree" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

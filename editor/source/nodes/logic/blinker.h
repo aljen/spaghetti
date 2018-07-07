@@ -24,11 +24,16 @@
 #ifndef NODES_LOGIC_BLINKER_H
 #define NODES_LOGIC_BLINKER_H
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 namespace spaghetti::nodes::logic {
 
 class Blinker : public Node {
+ public:
+  static constexpr char const *const TYPE{ "logic/blinker" };
+  static constexpr string::hash_t const HASH{ string::hash(TYPE) };
+
+ private:
   void showProperties() override;
 };
 

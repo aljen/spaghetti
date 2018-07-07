@@ -24,7 +24,7 @@
 #ifndef NODES_VALUES_RANDOM_INT_H
 #define NODES_VALUES_RANDOM_INT_H
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 namespace spaghetti::nodes::values {
 

@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::gates {
 
-class Nand final : public Element {
+class SPAGHETTI_API Nand final : public Element {
  public:
   static constexpr char const *const TYPE{ "gates/nand" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

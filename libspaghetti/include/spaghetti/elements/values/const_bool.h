@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::values {
 
-class ConstBool final : public Element {
+class SPAGHETTI_API ConstBool final : public Element {
  public:
   static constexpr char const *const TYPE{ "values/const_bool" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

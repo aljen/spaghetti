@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::ui {
 
-class BCDToSevenSegmentDisplay final : public Element {
+class SPAGHETTI_API BCDToSevenSegmentDisplay final : public Element {
  public:
   static constexpr char const *const TYPE{ "ui/bcd_to_seven_segment_display" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

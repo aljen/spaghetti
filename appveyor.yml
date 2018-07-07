@@ -1,4 +1,4 @@
-version: 18.2.16.{build}
+version: 18.5.30.{build}
 image: Visual Studio 2017
 test: off
 
@@ -20,7 +20,7 @@ before_build:
 
     cmake --version
 
-    cmake .. -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=C:\Qt\5.10.1\msvc2017_64
+    cmake .. -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=C:\Qt\5.10.1\msvc2017_64 -DSPAGHETTI_BUNDLE_JSON=ON -DSPAGHETTI_BUNDLE_SPDLOG=ON
 
 build:
   project: c:\projects\spaghetti\build\Spaghetti.sln

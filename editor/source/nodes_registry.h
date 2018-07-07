@@ -21,21 +21,35 @@
 // SOFTWARE.
 
 #pragma once
-#ifndef NODES_VALUES_RANDOM_FLOAT_H
-#define NODES_VALUES_RANDOM_FLOAT_H
+#ifndef SPAGHETTI_NODES_REGISTRY_H
+#define SPAGHETTI_NODES_REGISTRY_H
 
-#include "spaghetti/editor/node.h"
+#include <spaghetti/editor/node.h>
+#include <spaghetti/registry.h>
+#include <spaghetti/strings.h>
 
-namespace spaghetti::nodes::values {
+namespace spaghetti {
 
-class RandomFloat : public Node {
- public:
-  RandomFloat();
-
- private:
-  void showProperties() override;
+struct NodeInfo {
+  QString type{};
+  QString name{};
+  QString icon{};
 };
 
-} // namespace spaghetti::nodes::values
+struct NodesInfo {
+  std::unordered_map<string::hash_t, NodeInfo> nodes{};
+};
 
-#endif // NODES_VALUES_RANDOM_FLOAT_H
+using NodesRegistry = TRegistry<Node, NodesInfo>;
+
+void load_internal_nodes();
+void load_nodes_plugins();
+void load_nodes_meta_data();
+
+Node *create_node_for(string::hash_t const a_hash);
+QString node_name_for(string::hash_t const a_hash);
+QString node_icon_for(string::hash_t const a_hash);
+
+} // namespace spaghetti
+
+#endif // SPAGHETTI_NODES_REGISTRY_H

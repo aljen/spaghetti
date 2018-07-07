@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class Divide final : public Element {
+class SPAGHETTI_API Divide final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/divide" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

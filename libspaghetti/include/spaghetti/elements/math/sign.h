@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class Sign final : public Element {
+class SPAGHETTI_API Sign final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/sign" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

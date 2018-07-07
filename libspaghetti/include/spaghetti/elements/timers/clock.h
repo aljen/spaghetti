@@ -30,7 +30,7 @@
 
 namespace spaghetti::elements::timers {
 
-class Clock final : public Element {
+class SPAGHETTI_API Clock final : public Element {
  public:
   static constexpr char const *const TYPE{ "timers/clock" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

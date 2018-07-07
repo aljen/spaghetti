@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class Add final : public Element {
+class SPAGHETTI_API Add final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/add" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

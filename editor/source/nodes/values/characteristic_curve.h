@@ -24,7 +24,7 @@
 #ifndef NODES_VALUES_CHARACTERISTIC_CURVE_H
 #define NODES_VALUES_CHARACTERISTIC_CURVE_H
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 namespace QtCharts {
 class QChart;

@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class AssignInt final : public Element {
+class SPAGHETTI_API AssignInt final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/assign_int" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

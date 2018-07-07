@@ -9,6 +9,7 @@ matrix:
     - os: linux
       addons:
         apt:
+          update: true
           sources:
             - ubuntu-toolchain-r-test
           packages:
@@ -36,13 +37,16 @@ before_install:
   - $CC --version
   - which cmake
   - cmake --version
+  - which moc
+  - moc --version
 
 before_script:
+- ls -lah
 - mkdir -p build/{debug,release}
 - cd build/debug
-- cmake -DCMAKE_BUILD_TYPE=Debug ../..
+- cmake -DCMAKE_BUILD_TYPE=Debug -DSPAGHETTI_BUNDLE_JSON=ON -DSPAGHETTI_BUNDLE_SPDLOG=ON ../..
 - cd ../release
-- cmake -DCMAKE_BUILD_TYPE=Release ../..
+- cmake -DCMAKE_BUILD_TYPE=Release -DSPAGHETTI_BUNDLE_JSON=ON -DSPAGHETTI_BUNDLE_SPDLOG=ON ../..
 - cd ..
 
 script:

@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::ui {
 
-class IntInfo final : public Element {
+class SPAGHETTI_API IntInfo final : public Element {
  public:
   static constexpr char const *const TYPE{ "ui/int_info" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

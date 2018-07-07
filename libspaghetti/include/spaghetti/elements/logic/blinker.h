@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::logic {
 
-class Blinker final : public Element {
+class SPAGHETTI_API Blinker final : public Element {
  public:
   static constexpr char const *const TYPE{ "logic/blinker" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

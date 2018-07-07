@@ -24,7 +24,7 @@
 #ifndef NODES_UI_TOGGLE_BUTTON_H
 #define NODES_UI_TOGGLE_BUTTON_H
 
-#include "spaghetti/node.h"
+#include "spaghetti/editor/node.h"
 
 namespace spaghetti::nodes::ui {
 

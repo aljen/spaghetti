@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class AddIf final : public Element {
+class SPAGHETTI_API AddIf final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/add_if" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

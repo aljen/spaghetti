@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::ui {
 
-class FloatInfo final : public Element {
+class SPAGHETTI_API FloatInfo final : public Element {
  public:
   static constexpr char const *const TYPE{ "ui/float_info" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::values {
 
-class ClampInt final : public Element {
+class SPAGHETTI_API ClampInt final : public Element {
  public:
   static constexpr char const *const TYPE{ "values/clamp_int" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

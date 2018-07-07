@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class Multiply final : public Element {
+class SPAGHETTI_API Multiply final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/multiply" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

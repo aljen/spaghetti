@@ -281,10 +281,6 @@ bool Package::connect(size_t const a_sourceId, uint8_t const a_sourceSocket, siz
 
   m_connections.emplace_back(Connection{ a_sourceId, a_sourceSocket, a_targetId, a_targetSocket });
 
-  auto &dependencies = m_dependencies[a_sourceId];
-  auto const IT = std::find(std::begin(dependencies), std::end(dependencies), a_targetId);
-  if (IT == std::end(dependencies)) dependencies.push_back(a_targetId);
-
   resumeDispatchThread();
 
   return true;
@@ -310,9 +306,6 @@ bool Package::disconnect(size_t const a_sourceId, uint8_t const a_outputId, size
            a_connection.to_id == a_targetId && a_connection.to_socket == a_inputId;
   });
   m_connections.erase(it, std::end(m_connections));
-
-  auto &dependencies = m_dependencies[a_sourceId];
-  dependencies.erase(std::find(std::begin(dependencies), std::end(dependencies), a_targetId), std::end(dependencies));
 
   resumeDispatchThread();
 
@@ -424,7 +417,10 @@ void Package::open(std::string const &a_filename)
   spaghetti::log::debug("Opening package {}", a_filename);
 
   std::ifstream file{ a_filename };
-  if (!file.is_open()) return;
+  if (!file.is_open()) {
+    spaghetti::log::error("Can't open package {}", a_filename);
+    return;
+  }
 
   pauseDispatchThread();
 

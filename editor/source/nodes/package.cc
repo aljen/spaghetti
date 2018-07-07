@@ -25,9 +25,9 @@
 #include <QTableWidget>
 
 #include "nodes/package.h"
-#include "spaghetti/editor.h"
+#include "spaghetti/editor/editor.h"
 #include "spaghetti/package.h"
-#include "ui/package_view.h"
+#include "package_view.h"
 
 namespace spaghetti::nodes {
 

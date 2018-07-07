@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::ui {
 
-class ToggleButton final : public Element {
+class SPAGHETTI_API ToggleButton final : public Element {
  public:
   static constexpr char const *const TYPE{ "ui/toggle_button" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };

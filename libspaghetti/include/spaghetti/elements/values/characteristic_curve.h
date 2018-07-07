@@ -29,7 +29,7 @@
 
 namespace spaghetti::elements::values {
 
-class CharacteristicCurve : public Element {
+class SPAGHETTI_API CharacteristicCurve : public Element {
  public:
   using Series = std::vector<vec2f>;
 

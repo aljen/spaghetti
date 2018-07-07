@@ -28,7 +28,7 @@
 
 namespace spaghetti::elements::math {
 
-class Cos final : public Element {
+class SPAGHETTI_API Cos final : public Element {
  public:
   static constexpr char const *const TYPE{ "math/cos" };
   static constexpr string::hash_t const HASH{ string::hash(TYPE) };
