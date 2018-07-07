@@ -76,6 +76,11 @@ class TRegistry final {
  public:
   static TRegistry &get();
 
+  TRegistry(TRegistry const &a_other) = delete;
+  TRegistry(TRegistry &&a_other) = delete;
+  TRegistry& operator=(TRegistry const &a_other) = delete;
+  TRegistry& operator=(TRegistry &&a_other) = delete;
+
   ~TRegistry() = default;
 
   void loadPlugins(fs::path const &a_prefix = "")
