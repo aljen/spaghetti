@@ -12,11 +12,13 @@ matrix:
           update: true
           sources:
             - ubuntu-toolchain-r-test
+            - opt-qt-5.10.1-trusty
           packages:
-            - qt5-default
-            - g++-7
+            - g++-8
+            - qt510-meta-full
+            - qt510charts-no-lgpl
       env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
 
     #- os: linux
       #addons:
@@ -41,16 +43,28 @@ before_install:
   - moc --version
 
 before_script:
+- QTDIR="/opt/qt510"
+- PATH="$QTDIR/bin:$PATH"
+- CMAKE_COMMON_FLAGS=-DSPAGHETTI_BUNDLE_JSON=ON -DSPAGHETTI_BUNDLE_SPDLOG=ON -DSPAGHETTI_USE_CHARTS=ON
+- source /opt/qt510/bin/qt510-env.sh
+- which $CXX
+- $CXX --version
+- which $CC
+- $CC --version
+- which cmake
+- cmake --version
+- which moc
+- moc --version
 - ls -lah
 - mkdir -p build/{debug,release}
 - cd build/debug
-- cmake -DCMAKE_BUILD_TYPE=Debug -DSPAGHETTI_BUNDLE_JSON=ON -DSPAGHETTI_BUNDLE_SPDLOG=ON ../..
+- cmake $CMAKE_COMMON_FLAGS -DCMAKE_BUILD_TYPE=Debug ../..
 - cd ../release
-- cmake -DCMAKE_BUILD_TYPE=Release -DSPAGHETTI_BUNDLE_JSON=ON -DSPAGHETTI_BUNDLE_SPDLOG=ON ../..
+- cmake $CMAKE_COMMON_FLAGS -DCMAKE_BUILD_TYPE=Release ../..
 - cd ..
 
 script:
   - cd debug
-  - cmake --build . -- -j2
+  - cmake --build . -- -j4
   - cd ../release
-  - cmake --build . -- -j2
+  - cmake --build . -- -j4
