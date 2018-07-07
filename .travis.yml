@@ -33,6 +33,12 @@ matrix:
 before_install:
   - eval "${MATRIX_EVAL}"
   - sudo pip install cmake
+
+before_script:
+  - QTDIR="/opt/qt510"
+  - PATH="$QTDIR/bin:$PATH"
+  - CMAKE_COMMON_FLAGS=-DSPAGHETTI_BUNDLE_JSON=ON -DSPAGHETTI_BUNDLE_SPDLOG=ON -DSPAGHETTI_USE_CHARTS=ON
+  - source /opt/qt510/bin/qt510-env.sh
   - which $CXX
   - $CXX --version
   - which $CC
@@ -41,27 +47,13 @@ before_install:
   - cmake --version
   - which moc
   - moc --version
-
-before_script:
-- QTDIR="/opt/qt510"
-- PATH="$QTDIR/bin:$PATH"
-- CMAKE_COMMON_FLAGS=-DSPAGHETTI_BUNDLE_JSON=ON -DSPAGHETTI_BUNDLE_SPDLOG=ON -DSPAGHETTI_USE_CHARTS=ON
-- source /opt/qt510/bin/qt510-env.sh
-- which $CXX
-- $CXX --version
-- which $CC
-- $CC --version
-- which cmake
-- cmake --version
-- which moc
-- moc --version
-- ls -lah
-- mkdir -p build/{debug,release}
-- cd build/debug
-- cmake $CMAKE_COMMON_FLAGS -DCMAKE_BUILD_TYPE=Debug ../..
-- cd ../release
-- cmake $CMAKE_COMMON_FLAGS -DCMAKE_BUILD_TYPE=Release ../..
-- cd ..
+  - ls -lah
+  - mkdir -p build/{debug,release}
+  - cd build/debug
+  - cmake $CMAKE_COMMON_FLAGS -DCMAKE_BUILD_TYPE=Debug ../..
+  - cd ../release
+  - cmake $CMAKE_COMMON_FLAGS -DCMAKE_BUILD_TYPE=Release ../..
+  - cd ..
 
 script:
   - cd debug
