@@ -113,7 +113,7 @@ void Package::deserialize(Json const &a_json)
 
   m_isExternal = !IS_ROOT && !PATH.empty();
 
-  spaghetti::log::debug("deserialize root? {} isExternal? {}", IS_ROOT, m_isExternal);
+  log::debug("deserialize root? {} isExternal? {}", IS_ROOT, m_isExternal);
 
   Json json{};
 
@@ -203,7 +203,7 @@ Element *Package::add(string::hash_t const a_hash)
 {
   pauseDispatchThread();
 
-  spaghetti::log::debug("Adding element..");
+  log::debug("Adding element..");
 
   spaghetti::Registry &registry{ spaghetti::Registry::get() };
 
@@ -234,7 +234,7 @@ void Package::remove(size_t const a_id)
 {
   pauseDispatchThread();
 
-  spaghetti::log::debug("Removing element {}..", a_id);
+  log::debug("Removing element {}..", a_id);
 
   assert(a_id > 0);
   assert(a_id < m_elements.size());
@@ -262,8 +262,8 @@ bool Package::connect(size_t const a_sourceId, uint8_t const a_sourceSocket, siz
   auto const source = get(a_sourceId);
   auto const target = get(a_targetId);
 
-  spaghetti::log::debug("Connecting source: {}@{} to target: {}@{}", a_sourceId, static_cast<int>(a_sourceSocket),
-                        a_targetId, static_cast<int>(a_targetSocket));
+  log::debug("Connecting source: {}@{} to target: {}@{}", a_sourceId, static_cast<int>(a_sourceSocket), a_targetId,
+             static_cast<int>(a_targetSocket));
 
   auto const &SOURCE = a_sourceId != 0 ? source->m_outputs : source->m_inputs;
   auto &TARGET = a_targetId != 0 ? target->m_inputs : target->m_outputs;
@@ -275,9 +275,8 @@ bool Package::connect(size_t const a_sourceId, uint8_t const a_sourceSocket, siz
   TARGET[a_targetSocket].id = a_sourceId;
   TARGET[a_targetSocket].slot = a_sourceSocket;
 
-  spaghetti::log::debug("Notifying {}({})@{} when {}({})@{} changes..", a_targetId, target->name(),
-                        static_cast<int32_t>(a_targetSocket), a_sourceId, source->name(),
-                        static_cast<int32_t>(a_sourceSocket));
+  log::debug("Notifying {}({})@{} when {}({})@{} changes..", a_targetId, target->name(),
+             static_cast<int32_t>(a_targetSocket), a_sourceId, source->name(), static_cast<int32_t>(a_sourceSocket));
 
   m_connections.emplace_back(Connection{ a_sourceId, a_sourceSocket, a_targetId, a_targetSocket });
 
@@ -293,8 +292,8 @@ bool Package::disconnect(size_t const a_sourceId, uint8_t const a_outputId, size
 
   Element *const target{ get(a_targetId) };
 
-  spaghetti::log::debug("Disconnecting source: {}@{} from target: {}@{}", a_sourceId, static_cast<int>(a_outputId),
-                        a_targetId, static_cast<int>(a_inputId));
+  log::debug("Disconnecting source: {}@{} from target: {}@{}", a_sourceId, static_cast<int>(a_outputId), a_targetId,
+             static_cast<int>(a_inputId));
 
   auto &targetInput = target->m_inputs[a_inputId];
   targetInput.id = 0;
@@ -332,12 +331,12 @@ void Package::dispatchThreadFunction()
     while ((clock_t::now() - WAIT_START) < ONE_MILLISECOND) std::this_thread::sleep_for(ONE_MILLISECOND);
 
     if (m_pause) {
-      spaghetti::log::trace("Pause requested..");
+      log::trace("Pause requested..");
       m_paused = true;
-      spaghetti::log::trace("Pausing..");
+      log::trace("Pausing..");
       while (m_pause) std::this_thread::yield();
       m_paused = false;
-      spaghetti::log::trace("Pause stopped..");
+      log::trace("Pause stopped..");
     }
   }
 }
@@ -346,7 +345,7 @@ void Package::startDispatchThread()
 {
   if (m_dispatchThreadStarted) return;
 
-  spaghetti::log::trace("Starting dispatch thread..");
+  log::trace("Starting dispatch thread..");
   m_dispatchThread = std::thread(&Package::dispatchThreadFunction, this);
   m_dispatchThreadStarted = true;
 }
@@ -355,18 +354,18 @@ void Package::quitDispatchThread()
 {
   if (!m_dispatchThreadStarted) return;
 
-  spaghetti::log::trace("Quitting dispatch thread..");
+  log::trace("Quitting dispatch thread..");
 
   if (m_pause) {
-    spaghetti::log::trace("Dispatch thread paused, waiting..");
+    log::trace("Dispatch thread paused, waiting..");
     while (m_pause) std::this_thread::yield();
   }
 
   m_quit = true;
   if (m_dispatchThread.joinable()) {
-    spaghetti::log::trace("Waiting for dispatch thread join..");
+    log::trace("Waiting for dispatch thread join..");
     m_dispatchThread.join();
-    spaghetti::log::trace("After dispatch thread join..");
+    log::trace("After dispatch thread join..");
   }
   m_dispatchThreadStarted = false;
 }
@@ -382,13 +381,13 @@ void Package::pauseDispatchThread()
 
   m_pauseCount++;
 
-  spaghetti::log::trace("Trying to pause dispatch thread ({})..", m_pauseCount.load());
+  log::trace("Trying to pause dispatch thread ({})..", m_pauseCount.load());
 
   if (m_pauseCount > 1) return;
 
   m_pause = true;
 
-  spaghetti::log::trace("Pausing dispatch thread ({})..", m_pauseCount.load());
+  log::trace("Pausing dispatch thread ({})..", m_pauseCount.load());
   while (!m_paused) std::this_thread::yield();
 }
 
@@ -403,18 +402,18 @@ void Package::resumeDispatchThread()
 
   m_pauseCount--;
 
-  spaghetti::log::trace("Trying to resume dispatch thread ({})..", m_pauseCount.load());
+  log::trace("Trying to resume dispatch thread ({})..", m_pauseCount.load());
 
   if (m_pauseCount > 0) return;
 
-  spaghetti::log::trace("Resuming dispatch thread ({})..", m_pauseCount.load());
+  log::trace("Resuming dispatch thread ({})..", m_pauseCount.load());
 
   m_pause = false;
 }
 
 void Package::open(std::string const &a_filename)
 {
-  spaghetti::log::debug("Opening package {}", a_filename);
+  log::debug("Opening package {}", a_filename);
 
   std::ifstream file{ a_filename };
   if (!file.is_open()) {
@@ -430,14 +429,14 @@ void Package::open(std::string const &a_filename)
   deserialize(json);
 
   m_isExternal = m_package != nullptr;
-  spaghetti::log::debug("{} Is external: {}", a_filename, m_isExternal);
+  log::debug("{} Is external: {}", a_filename, m_isExternal);
 
   resumeDispatchThread();
 }
 
 void Package::save(std::string const &a_filename)
 {
-  spaghetti::log::debug("Saving package {}", a_filename);
+  log::debug("Saving package {}", a_filename);
 
   pauseDispatchThread();
 

@@ -86,11 +86,11 @@ class TRegistry final {
   void loadPlugins(fs::path const &a_prefix = "")
   {
     auto load_from = [this](fs::path const &a_path) {
-      spaghetti::log::info("Loading plugins from {}", a_path.string());
+      log::info("Loading plugins from {}", a_path.string());
       if (!fs::is_directory(a_path)) return;
       for (auto const &ENTRY : fs::directory_iterator(a_path)) {
+        log::info("Loading {}..", ENTRY.path().string());
         if (!(fs::is_regular_file(ENTRY) || fs::is_symlink(ENTRY))) continue;
-        spaghetti::log::info("Loading {}..", ENTRY.path().string());
 
         std::error_code error{};
         auto plugin = std::make_shared<SharedLibrary>(ENTRY, error);
